@@ -1,0 +1,231 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 196 71% 66%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 260 100% 83%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 196 71% 66%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 196 71% 66%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 260 100% 83%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 196 71% 66%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Estilos para o ReactMarkdown */
+.prose h1 {
+  @apply text-2xl font-bold text-[#333333] mb-4 mt-6;
+}
+
+.prose h2 {
+  @apply text-xl font-bold text-[#333333] mb-3 mt-5;
+}
+
+.prose h3 {
+  @apply text-lg font-bold text-[#333333] mb-2 mt-4;
+}
+
+.prose p {
+  @apply mb-4 text-[#666666];
+}
+
+.prose ul {
+  @apply list-disc pl-5 mb-4;
+}
+
+.prose ol {
+  @apply list-decimal pl-5 mb-4;
+}
+
+.prose li {
+  @apply mb-1;
+}
+
+.prose a {
+  @apply text-[#6EC1E4] hover:underline;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-[#6EC1E4] pl-4 italic my-4;
+}
+
+.prose code {
+  @apply bg-gray-100 px-1 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+}
+
+.prose table {
+  @apply w-full border-collapse my-4;
+}
+
+.prose th, .prose td {
+  @apply border border-gray-300 p-2;
+}
+
+.prose th {
+  @apply bg-gray-100;
+}
+
+/* Forçar duas imagens por linha em qualquer grid */
+.prose .grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 1.5rem !important;
+}
+
+.prose .grid-cols-1,
+.prose .md\:grid-cols-3,
+.prose .md\:grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
+@media (max-width: 768px) {
+  .prose .grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Estilos padronizados para contêineres de imagens */
+.bg-white.p-3.rounded-lg.shadow-sm {
+  max-width: 20rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: 0.75rem !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.3s ease !important;
+}
+
+.bg-white.p-3.rounded-lg.shadow-sm:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-2px) !important;
+}
+
+.bg-white.p-3.rounded-lg.shadow-sm .relative {
+  height: 11rem !important;
+  width: 100% !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.bg-white.p-3.rounded-lg.shadow-sm .relative img {
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+  transition: transform 0.3s ease !important;
+}
+
+.bg-white.p-3.rounded-lg.shadow-sm .relative img:hover {
+  transform: scale(1.05) !important;
+}
+
+.bg-white.p-3.rounded-lg.shadow-sm .text-sm.text-center.text-gray-600.italic {
+  font-size: 0.875rem !important;
+  text-align: center !important;
+  color: #4b5563 !important;
+  font-style: italic !important;
+  margin-top: 0.5rem !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+/* Adicionar regras para otimização de imagens */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+}
+
+/* Melhorar a transição e carregamento de imagens */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+img.fade-in {
+  animation: fadeIn 0.5s ease-in forwards;
+}
+
+/* Assegurar que imagens responsivas mantêm proporção correta */
+.img-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.img-container img {
+  transition: transform 0.3s ease;
+}
+
+.img-container:hover img {
+  transform: scale(1.05);
+}
+
+/* Otimizar para dispositivos de diferentes tamanhos */
+@media (max-width: 768px) {
+  .prose img {
+    max-height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .bg-white.p-3.rounded-lg.shadow-sm {
+    max-width: 100% !important;
+  }
+}
