@@ -21,30 +21,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/temas/[slug]/page.js"
     ],
+    "/provas/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/provas/page.js"
+    ],
     "/documentos/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/documentos/page.js"
-    ],
-    "/prova-geral/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/prova-geral/page.js"
-    ],
-    "/api/pdf-ocr/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/pdf-ocr/route.js"
-    ],
-    "/api/generate-quiz/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/generate-quiz/route.js"
-    ],
-    "/quiz/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/quiz/page.js"
     ]
   }
 }

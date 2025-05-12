@@ -98,11 +98,11 @@ export const topics: Topic[] = [
       }
     ],
     content: `
-      <div class="mb-8">
-        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4">
-          <img src="/images/reflexos/bebe-sentado.jpg" alt="Bebê em posição sentada com apoio" class="object-cover w-full h-full" />
+      <div class="my-8">
+        <div class="relative h-[200px] md:h-[280px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/bebe-sentado.jpg" alt="Bebê em posição sentada com apoio" class="object-contain w-full h-full max-h-full" style="object-fit: scale-down;" />
         </div>
-        <p class="text-sm text-center text-gray-600 italic">Bebê desenvolvendo controle postural com apoio do terapeuta</p>
+        <p class="text-sm text-center text-gray-600 italic">Desenvolvimento do controle postural em posição sentada com apoio</p>
       </div>
 
       <h2>Desenvolvimento Neuropsicomotor do Bebê: Primeiro ao Sexto Mês de Vida</h2>
@@ -354,7 +354,372 @@ export const topics: Topic[] = [
     title: "Reflexos de 7 a 15 meses",
     description: "Desenvolvimento dos reflexos em bebês de 7 a 15 meses de idade.",
     icon: <Baby className="h-10 w-10 text-[#B9A9FF]" />,
-    content: "Conteúdo detalhado sobre reflexos de 7 a 15 meses será adicionado aqui.",
+    images: [
+      {
+        src: "/images/reflexos/bebe-sentado-7m.jpg",
+        alt: "Bebê sentado sem apoio aos 7 meses",
+        caption: "Desenvolvimento do controle postural sentado"
+      },
+      {
+        src: "/images/reflexos/bebe-engatinhando.jpg",
+        alt: "Bebê engatinhando aos 9 meses",
+        caption: "Evolução do engatinhar"
+      },
+      {
+        src: "/images/reflexos/bebe-puxando.jpg",
+        alt: "Bebê puxando para ficar em pé",
+        caption: "Apoio para ficar em pé"
+      },
+      {
+        src: "/images/reflexos/bebe-andando-moveis.jpg",
+        alt: "Bebê andando com apoio de móveis",
+        caption: "Marcha lateral com apoio"
+      },
+      {
+        src: "/images/reflexos/bebe-em-pe.jpg",
+        alt: "Bebê em pé sem apoio",
+        caption: "Equilíbrio em pé"
+      },
+      {
+        src: "/images/reflexos/primeiros-passos.jpg",
+        alt: "Bebê dando primeiros passos",
+        caption: "Primeiros passos independentes"
+      },
+      {
+        src: "/images/reflexos/bebe-agachando.jpg",
+        alt: "Bebê agachando para pegar brinquedo",
+        caption: "Controle de agachamento"
+      },
+      {
+        src: "/images/reflexos/bebe-pinsa.jpg",
+        alt: "Bebê usando preensão em pinça",
+        caption: "Desenvolvimento da preensão em pinça"
+      },
+      {
+        src: "/images/reflexos/bebe-alimentando.jpg",
+        alt: "Bebê se alimentando sozinho",
+        caption: "Desenvolvimento da autonomia"
+      },
+      {
+        src: "/images/reflexos/bebe-interacao.jpg",
+        alt: "Bebê interagindo com brinquedos",
+        caption: "Interação com objetos"
+      },
+      {
+        src: "/images/reflexos/bebe-brincando.jpg",
+        alt: "Bebê brincando com blocos",
+        caption: "Desenvolvimento da coordenação motora fina"
+      },
+      {
+        src: "/images/reflexos/bebe-explorando.jpg",
+        alt: "Bebê explorando o ambiente",
+        caption: "Exploração do ambiente"
+      }
+    ],
+    content: `
+      <h2>Desenvolvimento Neuropsicomotor do Bebê: Sétimo ao Décimo Quinto Mês de Vida</h2>
+      
+      <h3>Conceitos Essenciais</h3>
+      <p>Entre os 7 e 15 meses, o desenvolvimento motor do bebê é caracterizado pela maturação do sistema neurológico e pela aquisição de habilidades motoras complexas. Este período contempla conquistas importantes como:</p>
+
+      <div class="my-6">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/bebe-engatinhando.webp" alt="Evolução de bebê engatinhando" class="object-contain w-full h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">Progressão do engatinhar, fundamental para o desenvolvimento neuropsicomotor</p>
+      </div>
+
+      <ol>
+        <li><strong>Sedestação independente:</strong> Que se consolida do sétimo ao oitavo mês, com o desenvolvimento da musculatura paravertebral.</li>
+        <li><strong>Engatinhar:</strong> Geralmente estabelecido entre o oitavo e décimo mês, importante para o desenvolvimento do equilíbrio e coordenação.</li>
+        <li><strong>Postura bípede:</strong> Com apoio inicialmente (9-10 meses) e depois de forma independente (12-15 meses).</li>
+        <li><strong>Marcha autônoma:</strong> Que se inicia normalmente entre o décimo segundo e décimo quinto mês.</li>
+      </ol>
+      <p>O acompanhamento do desenvolvimento nesta fase considera aquisições motoras globais e refinamento da motricidade fina, mantendo a avaliação da simetria e qualidade dos movimentos.</p>
+
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/bebe-progresso-motor.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">Evolução do desenvolvimento motor dos 7 aos 15 meses</p>
+      </div>
+      
+      <h3 id="setimo-mes">Sétimo Mês: Mobilidade e Interação Aumentadas</h3>
+      <ul>
+        <li><strong>Aspectos Clínicos Detalhados:</strong> A criança demonstra grande desejo de se movimentar e explorar o ambiente. Observa-se o desenvolvimento da reação de apoio lateral, crucial para a proteção em quedas laterais.</li>
+        <li><strong>Padrões de Movimento:</strong> A criança não permanece muito tempo em supino, preferindo virar para o lado ou rolar para prono. Em prono, pode rastejar ou deslizar para trás, elevando um pouco a pelve para tentar se mover para frente.</li>
+        <li><strong>Transições Posturais:</strong> Inicia a transição de sentada para "quatro apoios". A postura de "quatro apoios" pode não ser estável de início.</li>
+        <li><strong>Preensão:</strong> A preensão torna-se mais voluntária, utilizando preferencialmente o lado radial da mão. Inicia a pinça digital inferior, pegando objetos entre o polegar, o indicador e o dedo médio.</li>
+        <li><strong>Exemplo Prático:</strong> Coloque a criança sentada no chão, com brinquedos ao alcance lateral. Observe se ela consegue se apoiar com uma das mãos para alcançar o brinquedo, demonstrando a reação de apoio lateral. Observe também se ela tenta passar da posição sentada para a posição de "quatro apoios", mesmo que ainda com dificuldade.</li>
+        <li><strong>Comunicação:</strong> A criança balbucia, imita sons e gestos e começa a reconhecer algumas palavras. Agita-se e fica feliz ao ouvir "mamadeira", dirigindo o olhar ao objeto quando alguém diz "olha".</li>
+        <li><strong>Sinais de Alerta:</strong> Dificuldade em realizar transferências de peso lateralmente ou não demonstrar interesse em explorar objetos.</li>
+      </ul>
+      <p><em>Orientação para os pais:</em> Estimular a postura sentada com apoio frontal e lateral gradualmente reduzido. Oferecer brinquedos para transferência entre as mãos.</p>
+      
+      <div class="my-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 max-w-md mx-auto">
+          <div class="relative h-44 w-full rounded-lg overflow-hidden mb-3">
+            <img src="/images/reflexos/bebe-transferencia-objeto.jpg" alt="Bebê transferindo objeto" class="object-cover w-full h-full" />
+          </div>
+          <p class="text-sm text-center text-gray-600 italic">Estimular a postura sentada com o apoio lateral.</p>
+        </div>
+        
+        <div class="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 max-w-md mx-auto">
+          <div class="relative h-44 w-full rounded-lg overflow-hidden mb-3">
+            <img src="/images/reflexos/bebe-sentado-estavel.jpg" alt="Bebê sentado estável" class="object-cover w-full h-full" />
+          </div>
+          <p class="text-sm text-center text-gray-600 italic">O interesse pelo brinquedo é um estímulo para a transição da postura sentada para "quatro apoios".</p>
+          <p class="text-sm text-center text-gray-600 italic">Na segunda imagem, nota-se a orientação para a criança se manter em "quatro apoios".</p>
+        </div>
+      </div>
+
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/bebe-incentivo.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">O interesse em se deslocar para alcançar um objeto deve ser incentivado, assim como a postura de "quatro apoios".</p>
+      </div>
+
+      <h3 id="oitavo-mes">Oitavo Mês: Transições e Noções Espaciais</h3>
+      <ul>
+        <li><strong>Aspectos Clínicos Detalhados:</strong> A criança realiza transições posturais com mais facilidade e começa a adquirir noções espaciais. A reação de apoio lateral está presente, e a reação de apoio posterior começa a se desenvolver.</li>
+        <li><strong>Padrões de Movimento:</strong> Passa rapidamente de prono para "quatro apoios", pode engatinhar "em bloco" ou passar para "sentado de lado" e atingir a postura sentada.</li>
+        <li><strong>Engatinhar:</strong> O engatinhar, mesmo que ainda com pouca rotação de tronco, é importante para a estimulação sensorial das mãos, desenvolvimento dos arcos palmares, aquisição da noção de espaço e preparo para a marcha.</li>
+        <li><strong>Preensão:</strong> A preensão é voluntária, com pinça digital inferior ou pinça lateral (variante um pouco melhorada da pinça inferior).</li>
+        <li><strong>Exemplo Prático:</strong> Coloque a criança em prono no chão. Observe se ela consegue passar para a posição de "quatro apoios" e engatinhar em direção a um brinquedo. Observe também a preensão ao oferecer pequenos objetos, como blocos, e como ela os manipula.</li>
+        <li><strong>Comunicação:</strong> A criança gosta de brincar com gestos e de esconder, emite sons ainda sem significado simbólico, mas começa a perceber que, com esses sons, consegue chamar a atenção de alguém.</li>
+        <li><strong>Sinais de Alerta:</strong> Não demonstrar tentativas de engatinhar ou usar apenas um lado do corpo para se locomover.</li>
+      </ul>
+      <p><em>Orientação para os pais:</em> Encorajar movimentos que iniciam o engatinhar, como balancear na posição de quatro apoios. Oferecer brinquedos que estimulem a preensão mais refinada.</p>
+      
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/bebe-quatro-apoios.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full max-h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">A criança se locomove em "quatro apoios", brinca na postura de joelhos e a postura de pé deve ser incentivada, com apoio na pelve ou nos joelhos, se necessário, e mantendo os pés totalmente apoiados na superfície. Utiliza as posturas ajoelhada e semiajoelhada como transição para a postura ortostática.</p>
+      </div>
+      
+      <h3 id="nono-mes">Nono Mês: Domínio do Engatinhar e Equilíbrio</h3>
+      <ul>
+        <li><strong>Aspectos Clínicos Detalhados:</strong> A criança adora as novas descobertas e experimenta todas as mudanças posturais com movimentos mais controlados e harmônicos. O engatinhar é seu principal meio de locomoção.</li>
+        <li><strong>Reações de Equilíbrio:</strong> A reação de apoio posterior está presente, e as habilidades de equilíbrio estão mais aprimoradas, permitindo a investigação do espaço ao seu redor.</li>
+        <li><strong>Padrões de Movimento:</strong> A postura sentada é estável, passa para "quatro apoios", ajoelhada, semiajoelhada e consegue voltar para sentado ou passar para a postura de pé.</li>
+        <li><strong>Engatinhar:</strong> Engatinha com rotação do tronco.</li>
+        <li><strong>Exemplo Prático:</strong> Observe a criança engatinhando em diferentes superfícies e direções. Veja se ela consegue mudar de direção sem perder o equilíbrio. Incentive a brincar na postura semi-ajoelhada, colocando brinquedos em um nível mais alto.</li>
+        <li><strong>Comunicação:</strong> A criança diz "papa" e "mama" ainda sem especificidade, expressa-se com linguagem corporal e gestual, "dá tchau". Compreende a função dos objetos e inicia "bater palminhas".</li>
+        <li><strong>Sinais de Alerta:</strong> Incapacidade de manter a postura sentada sem apoio ou não demonstrar reações de proteção ao perder o equilíbrio.</li>
+      </ul>
+      <p><em>Orientação para os pais:</em> Estimular a transição entre as posturas e oferecer brinquedos em diferentes alturas para incentivar mudanças posturais.</p>
+      
+      <div class="my-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 max-w-md mx-auto">
+          <div class="relative h-44 w-full rounded-lg overflow-hidden mb-3">
+            <img src="/images/reflexos/bebe-sentado-3.jpg" alt="Bebê transferindo objeto" class="object-cover w-full h-full" />
+          </div>
+          <p class="text-sm text-center text-gray-600 italic">Idade em que a criançase mantém brincando sentada de lado (side sitting).</p>
+        </div>
+        
+        <div class="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 max-w-md mx-auto">
+          <div class="relative h-44 w-full rounded-lg overflow-hidden mb-3">
+            <img src="/images/reflexos/passos-laterais.jpg" alt="Bebê puxando para ficar em pé" class="object-cover w-full h-full" />
+          </div>
+          <p class="text-sm text-center text-gray-600 italic">O interesse pelo brinquedo motiva a realização dos passos laterais.</p>
+        </div>
+      </div>
+
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/passos-laterais-2.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full max-h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">Orientações incentivando a criança a passar pela postura semiajoelhada. Interação com o brinquedo e exploração do mesmo com o dedo indicador.</p>
+      </div>      
+      
+      <h3 id="decimo-mes">Décimo Mês: Aprimoramento e Motricidade Fina</h3>
+      <ul>
+        <li><strong>Aspectos Clínicos Detalhados:</strong> A criança explora cada vez mais o ambiente e aprimora as suas habilidades nas áreas de motricidade, coordenação, linguagem e social.</li>
+        <li><strong>Padrões de Movimento:</strong> Atinge a postura sentada com total equilíbrio. Consegue ficar de joelhos sem apoio, brinca na postura semi-ajoelhada e passa de semi-ajoelhada para a postura de pé.</li>
+        <li><strong>Motricidade Fina:</strong> Segura o objeto com as polpas dos dedos indicador e polegar. Inspeciona os brinquedos, usa o dedo indicador para apontar, "cutucar" e colocar o objeto em buracos pequenos (movimento seletivo do indicador).</li>
+        <li><strong>Exemplo Prático:</strong> Ofereça pequenos objetos, como grãos de feijão ou pequenos cubos, e observe como a criança os pega e manipula. Incentive a colocar os objetos dentro de um recipiente e a retirá-los, trabalhando a coordenação motora fina.</li>
+        <li><strong>Comunicação:</strong> Compreende seu nome e usa "mamá" e "papá" com significado adequado e de forma consciente.</li>
+        <li><strong>Sinais de Alerta:</strong> Dificuldade em manipular objetos pequenos ou não demonstrar interesse em explorar o ambiente.</li>
+      </ul>
+      <p><em>Orientação para os pais:</em> Proporcionar móveis seguros para o bebê praticar a marcha lateral e oferecer atividades que estimulem a motricidade fina, como encaixar objetos em recipientes.</p>
+      
+      <div class="my-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 max-w-md mx-auto">
+          <div class="relative h-44 w-full rounded-lg overflow-hidden mb-3">
+            <img src="/images/reflexos/pinça.jpg" alt="Bebê andando lateralmente" class="object-cover w-full h-full" />
+          </div>
+          <p class="text-sm text-center text-gray-600 italic">Avaliação da motricidade fina com a pinça bidigital</p>
+        </div>
+      </div>
+      
+      <h3 id="decimo-primeiro-mes">Décimo Primeiro Mês: Refinamento e Primeiras Palavras</h3>
+      <ul>
+        <li><strong>Aspectos Clínicos Detalhados:</strong> A criança aprimora cada vez mais as habilidades dos estágios anteriores.</li>
+        <li><strong>Padrões de Movimento:</strong> Engatinhar ainda é o principal meio de locomoção, pode engatinhar "tipo urso" e pode passar para a posição de cócoras ou para de pé sem apoio.</li>
+        <li><strong>Coordenação e Equilíbrio:</strong> Pode se manter de pé sem o apoio das mãos, com a base de sustentação ampla, e consegue abaixar e passar para a postura de cócoras.</li>
+        <li><strong>Preensão:</strong> Pinça digital superior, a criança alcança e pega o objeto pequeno colocado sobre a mesa por cima e com precisão, com as polpas dos dedos polegar e indicador.</li>
+        <li><strong>Exemplo Prático:</strong> Incentive a criança a caminhar segurando em móveis, transferindo o peso de um lado para o outro. Observe se ela consegue se abaixar para pegar um brinquedo no chão e se levantar novamente sem apoio.</li>
+        <li><strong>Comunicação:</strong> Emite a primeira palavra, caso ainda não tenha o feito.</li>
+        <li><strong>Sinais de Alerta:</strong> Não demonstrar tentativas de ficar em pé ou não emitir nenhuma palavra.</li>
+      </ul>
+      <p><em>Orientação para os pais:</em> Incentivar o bebê a dar passos com apoio nas duas mãos e posteriormente em apenas uma. Oferecer jogos de encaixe e empilhamento simples.</p>
+      
+      <div class="my-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 max-w-md mx-auto">
+          <div class="relative h-44 w-full rounded-lg overflow-hidden mb-3">
+            <img src="/images/reflexos/bebe-em-pe.jpg" alt="Bebê dando passos com ajuda" class="object-cover w-full h-full" />
+          </div>
+          <p class="text-sm text-center text-gray-600 italic">De pé, com a base de sustentação aumentada.</p>
+        </div>
+        
+        <div class="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 max-w-md mx-auto">
+          <div class="relative h-44 w-full rounded-lg overflow-hidden mb-3">
+            <img src="/images/reflexos/bebe-em-pe-2.jpg" alt="Bebê encaixando objetos" class="object-cover w-full h-full" />
+          </div>
+          <p class="text-sm text-center text-gray-600 italic">De frente para a criança e oferecendo apoio nas suas mãos, ela se sente mais segura para experimentar os passos para frente.</p>
+        </div>
+      </div>
+      
+      <h3 id="decimo-segundo-ao-decimo-quinto-mes">Décimo Segundo ao Décimo Quinto Mês: Primeiros Passos e Autonomia</h3>
+      <ul>
+        <li><strong>Aspectos Clínicos Detalhados:</strong> A criança interage cada vez mais com o meio, gosta de escalar, planeja e executa uma atividade. Demonstra desejo de explorar e curiosidade nas novas descobertas e elabora estratégias.</li>
+        <li><strong>Marcha:</strong> Pode iniciar a marcha independente com passos curtos e fixação dos ombros.</li>
+        <li><strong>Motricidade Fina:</strong> Coloca um cubo sobre o outro, faz torre de dois cubos, coloca um cubo ao lado do outro e solta o cubo e o coloca dentro do recipiente com agilidade.</li>
+        <li><strong>Exemplo Prático:</strong> Ofereça um carrinho ou brinquedo de empurrar para incentivar a marcha. Crie um ambiente seguro para que a criança possa explorar e praticar seus primeiros passos.</li>
+        <li><strong>Comunicação:</strong> Aumenta a frequência do balbucio e inicia a produção das primeiras palavras, pode falar duas a três palavras, identifica mais alguns objetos, animais e partes do corpo.</li>
+        <li><strong>Sinais de Alerta:</strong> Não andar com 18 meses ou não falar palavras simples.</li>
+      </ul>
+      <p><em>Orientação para os pais:</em> Estimular a marcha em diferentes superfícies e incentivar a autonomia na alimentação com utensílios adaptados.</p>
+      
+      <div class="my-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 max-w-md mx-auto">
+          <div class="relative h-44 w-full rounded-lg overflow-hidden mb-3">
+            <img src="/images/reflexos/bebe-degraus.jpg" alt="Bebê andando sozinho" class="object-cover w-full h-full" />
+          </div>
+          <p class="text-sm text-center text-gray-600 italic">Em "quatro apoios", sob supervisão, a criança escala degraus. </p>
+        </div>
+      </div>
+        
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/bebe-carrinho.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full max-h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">Orientações incentivando a criança a passar pela postura semiajoelhada. Interação com o brinquedo e exploração do mesmo com o dedo indicador.</p>
+      </div>
+
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/bebe-carrinho-2.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full max-h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">Orientações incentivando a criança a passar pela postura semiajoelhada. Interação com o brinquedo e exploração do mesmo com o dedo indicador.</p>
+      </div>      
+      </div>
+
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/tabela-av-visao.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full max-h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">Esta tabela apresenta os comportamentos esperados em diferentes idades e como avaliar a função visual da criança</p>
+      </div>      
+      </div>     
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/tabela-aud.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full max-h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">Esta tabela apresenta os marcos do desenvolvimento da audição e da linguagem que devem ser acompanhados até os 3 anos de idade</p>
+      </div>      
+      </div>          
+      
+      <div class="my-8">
+        <div class="relative h-[300px] md:h-[400px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50">
+          <img src="/images/reflexos/tabela-prosposta.jpg" alt="Tabela de evolução motora" class="object-contain w-full h-full max-h-full" style="object-fit: scale-down;" />
+        </div>
+        <p class="text-sm text-center text-gray-600 italic">Esta tabela apresenta uma proposta inicial de conduta para crianças com atraso no desenvolvimento neuropsicomotor, considerando as áreas de avaliação (motora, coordenação, social e linguagem)</p>
+      </div>      
+      </div>            
+
+      <div class="my-8 p-6 bg-[#FFF8F8] border border-[#FFDBDB] rounded-xl shadow-sm">
+        <h3 class="text-xl font-semibold text-[#D03131] mb-4">Sinais de Alerta</h3>
+        <ul class="space-y-2">
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Pobreza ou excesso de movimentos, movimentos anormais e assimetria</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Mãos persistentemente fechadas ou dedos do pé em garra</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Controle pobre da cabeça além dos 3 meses</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Ombros para cima, para frente ou para trás</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Jogar-se constantemente para trás quando sentado</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Usar somente um lado do corpo ou apenas os membros superiores para arrastar-se</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Dificuldade para se manter nas posturas de acordo com a faixa etária e alteração do tônus muscular</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Marcha exclusivamente ou preferencialmente na ponta dos pés</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Não sorrir aos 3 meses</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Não reagir a sons, não vocalizar aos 3 ou 4 meses e não balbuciar aos 6 meses</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Ausência do reflexo pupilar à luz</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Não olhar, fixar e seguir objeto após 6 semanas</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Choro extremo ou irritabilidade</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Não conseguir se manter alerta</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>Fechamento das suturas cranianas antes dos 6 meses de idade com alteração do crescimento do perímetro cefálico</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-[#D03131] mr-2">•</span>
+            <span>De acordo com as áreas de avaliação do neurodesenvolvimento (motora, coordenação, social e linguagem), podemos considerar a Tabela 3 como uma proposta inicial</span>
+          </li>
+        </ul>
+      </div>
+
+      <h3>Considerações Adicionais</h3>
+      <ul>
+        <li><strong>Variabilidade Normal:</strong> É importante lembrar que existe uma ampla variação normal no desenvolvimento. Alguns bebês engatinham primeiro, enquanto outros vão direto para a marcha. A sequência e qualidade das aquisições são mais importantes que a idade exata.</li>
+        <li><strong>Adaptação para Prematuridade:</strong> Lembre-se sempre de adaptar as atividades e avaliações à idade corrigida da criança, especialmente em casos de prematuridade.</li>
+        <li><strong>Acompanhamento Profissional:</strong> O acompanhamento regular com um profissional de saúde é fundamental para identificar precocemente qualquer desvio no desenvolvimento e garantir a intervenção adequada.</li>
+        <li><strong>Desenvolvimento Integrado:</strong> O desenvolvimento infantil é integrado, com a motricidade, cognição, linguagem e socialização evoluindo de forma interrelacionada.</li>
+      </ul>
+      <p>A estimulação adequada e um ambiente enriquecedor são fundamentais para potencializar todas as áreas do desenvolvimento do bebê nesta fase de intensas aquisições motoras e cognitivas.</p>
+
+    `,
   },
   {
     id: "reacoes-0-15",
