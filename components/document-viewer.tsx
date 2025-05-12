@@ -454,103 +454,103 @@ export default function DocumentViewer() {
                 onError={(error) => setExtractionError(error)} 
               />
             ) : (
-              <div className="mt-4 border rounded-lg p-4 max-h-[500px] overflow-y-auto bg-gray-50">
-                <pre className="whitespace-pre-wrap font-sans text-sm">
-                  {documentData?.text || "Nenhum texto extraído"}
-                </pre>
-              </div>
+            <div className="mt-4 border rounded-lg p-4 max-h-[500px] overflow-y-auto bg-gray-50">
+              <pre className="whitespace-pre-wrap font-sans text-sm">
+                {documentData?.text || "Nenhum texto extraído"}
+              </pre>
+            </div>
             )}
           </div>
 
           {/* Painel de análise */}
           {(!isPdf || viewMode !== "original") && (
-            <div className="flex-1 border rounded-lg p-4">
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <Search className="h-5 w-5 mr-2 text-[#B9A9FF]" />
-                Análise com IA
-              </h2>
+          <div className="flex-1 border rounded-lg p-4">
+            <h2 className="text-xl font-semibold mb-4 flex items-center">
+              <Search className="h-5 w-5 mr-2 text-[#B9A9FF]" />
+              Análise com IA
+            </h2>
 
-              <div className="flex flex-wrap gap-2 mb-4">
-                <button
-                  onClick={() => handleAnalyzeAction("resumir")}
-                  disabled={isAnalyzing}
-                  className={`px-4 py-2 rounded-lg transition-all ${
-                    action === "resumir"
-                      ? "bg-[#6EC1E4] text-white"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  Resumir
-                </button>
-                <button
-                  onClick={() => handleAnalyzeAction("explicar")}
-                  disabled={isAnalyzing}
-                  className={`px-4 py-2 rounded-lg transition-all ${
-                    action === "explicar"
-                      ? "bg-[#6EC1E4] text-white"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  Explicar conceitos
-                </button>
-                <button
-                  onClick={() => setAction(action === "perguntar" ? null : "perguntar")}
-                  disabled={isAnalyzing}
-                  className={`px-4 py-2 rounded-lg transition-all ${
-                    action === "perguntar"
-                      ? "bg-[#6EC1E4] text-white"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  Fazer pergunta
-                </button>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <button
+                onClick={() => handleAnalyzeAction("resumir")}
+                disabled={isAnalyzing}
+                className={`px-4 py-2 rounded-lg transition-all ${
+                  action === "resumir"
+                    ? "bg-[#6EC1E4] text-white"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                }`}
+              >
+                Resumir
+              </button>
+              <button
+                onClick={() => handleAnalyzeAction("explicar")}
+                disabled={isAnalyzing}
+                className={`px-4 py-2 rounded-lg transition-all ${
+                  action === "explicar"
+                    ? "bg-[#6EC1E4] text-white"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                }`}
+              >
+                Explicar conceitos
+              </button>
+              <button
+                onClick={() => setAction(action === "perguntar" ? null : "perguntar")}
+                disabled={isAnalyzing}
+                className={`px-4 py-2 rounded-lg transition-all ${
+                  action === "perguntar"
+                    ? "bg-[#6EC1E4] text-white"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                }`}
+              >
+                Fazer pergunta
+              </button>
+            </div>
+
+            {action === "perguntar" && (
+              <div className="mb-4">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    placeholder="Digite sua pergunta sobre o documento..."
+                    className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EC1E4]"
+                  />
+                  <button
+                    onClick={() => handleAnalyzeAction("perguntar")}
+                    disabled={isAnalyzing || !question.trim()}
+                    className="px-4 py-2 bg-gradient-to-r from-[#6EC1E4] to-[#5BA8CB] text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
+                  >
+                    <MessageSquare className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
+            )}
 
-              {action === "perguntar" && (
-                <div className="mb-4">
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={question}
-                      onChange={(e) => setQuestion(e.target.value)}
-                      placeholder="Digite sua pergunta sobre o documento..."
-                      className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EC1E4]"
-                    />
-                    <button
-                      onClick={() => handleAnalyzeAction("perguntar")}
-                      disabled={isAnalyzing || !question.trim()}
-                      className="px-4 py-2 bg-gradient-to-r from-[#6EC1E4] to-[#5BA8CB] text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
-                    >
-                      <MessageSquare className="h-5 w-5" />
-                    </button>
-                  </div>
+            {isAnalyzing ? (
+              <div className="flex flex-col items-center justify-center p-12">
+                <Loader2 className="h-8 w-8 text-[#6EC1E4] animate-spin mb-4" />
+                <p className="text-md font-medium">Analisando o documento...</p>
+              </div>
+            ) : analysisResult ? (
+              <div className="border rounded-lg p-4 bg-white max-h-[500px] overflow-y-auto">
+                <div className="prose prose-sm max-w-none">
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]} 
+                    rehypePlugins={[rehypeRaw, rehypeSanitize]}
+                  >
+                    {analysisResult}
+                  </ReactMarkdown>
                 </div>
-              )}
-
-              {isAnalyzing ? (
-                <div className="flex flex-col items-center justify-center p-12">
-                  <Loader2 className="h-8 w-8 text-[#6EC1E4] animate-spin mb-4" />
-                  <p className="text-md font-medium">Analisando o documento...</p>
-                </div>
-              ) : analysisResult ? (
-                <div className="border rounded-lg p-4 bg-white max-h-[500px] overflow-y-auto">
-                  <div className="prose prose-sm max-w-none">
-                    <ReactMarkdown 
-                      remarkPlugins={[remarkGfm]} 
-                      rehypePlugins={[rehypeRaw, rehypeSanitize]}
-                    >
-                      {analysisResult}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              ) : (
-                <div className="border rounded-lg p-8 bg-gray-50 flex flex-col items-center justify-center text-center">
-                  <Search className="h-8 w-8 text-gray-400 mb-2" />
-                  <p className="text-gray-500">
-                    Selecione uma ação acima para analisar o documento com inteligência artificial
-                  </p>
-                </div>
-              )}
+              </div>
+            ) : (
+              <div className="border rounded-lg p-8 bg-gray-50 flex flex-col items-center justify-center text-center">
+                <Search className="h-8 w-8 text-gray-400 mb-2" />
+                <p className="text-gray-500">
+                  Selecione uma ação acima para analisar o documento com inteligência artificial
+                </p>
+              </div>
+            )}
               
               {/* Quiz Generator */}
               {documentData && (
@@ -569,7 +569,7 @@ export default function DocumentViewer() {
                   />
                 </div>
               )}
-            </div>
+          </div>
           )}
         </div>
       )}

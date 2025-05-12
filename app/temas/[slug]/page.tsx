@@ -107,16 +107,16 @@ export default function TopicPage({ params }: TopicPageProps) {
       
       <BackToTop />
       
-      <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-8">
-          <Link
-            href="/temas"
+      <Link
+        href="/temas"
             className="inline-flex items-center text-[#666666] hover:text-[#6EC1E4] transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Voltar para Temas
-          </Link>
-          
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Voltar para Temas
+      </Link>
+
           <div className="flex items-center space-x-3">
             <button 
               className="p-2 rounded-full hover:bg-[#F0F9FF] transition-colors flex items-center text-sm"
@@ -176,7 +176,12 @@ export default function TopicPage({ params }: TopicPageProps) {
                 >
                   <h3 className="text-xl font-semibold text-[#4A96D1] mb-4">Sobre este tema</h3>
                   <p className="text-gray-700 mb-4">
-                    Este conteúdo educativo foi desenvolvido para ajudar profissionais e estudantes a compreender melhor o desenvolvimento neuropsicomotor de bebês de 0 a 6 meses, com foco especial nos reflexos primitivos.
+                    {topic.id === "reflexos-0-6" ? 
+                      "Este conteúdo educativo foi desenvolvido para ajudar profissionais e estudantes a compreender melhor o desenvolvimento neuropsicomotor de bebês de 0 a 6 meses, com foco especial nos reflexos primitivos." :
+                      topic.id === "reflexos-7-15" ?
+                      "Este conteúdo educativo foi desenvolvido para ajudar profissionais e estudantes a compreender melhor o desenvolvimento neuropsicomotor de bebês de 7 a 15 meses, com foco especial nas aquisições motoras." :
+                      "Este conteúdo educativo foi desenvolvido para ajudar profissionais e estudantes a compreender melhor o desenvolvimento neuropsicomotor de bebês."
+                    }
                   </p>
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#F0F9FF] p-4 rounded-lg">
                     <div className="flex items-center">
@@ -189,7 +194,7 @@ export default function TopicPage({ params }: TopicPageProps) {
                     <div className="text-sm text-[#666666] flex items-center">
                       <span className="mr-2">Última atualização:</span>
                       <span className="bg-[#6EC1E4] text-white px-2 py-1 rounded-full text-xs">
-                        Junho 2023
+                        Maio 2025
                       </span>
                     </div>
                   </div>
@@ -254,9 +259,9 @@ export default function TopicPage({ params }: TopicPageProps) {
                   </div>
                   <p className="text-xs text-gray-600">
                     Para melhor compreensão, estude o desenvolvimento mês a mês, observe as imagens e relacione com os conceitos teóricos.
-                  </p>
-                </div>
-              </div>
+            </p>
+          </div>
+        </div>
             </motion.div>
             
             {/* Conteúdo principal */}
@@ -266,27 +271,27 @@ export default function TopicPage({ params }: TopicPageProps) {
               <RelatedTopics currentTopic={topic} allTopics={topics} />
               
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Link
-                  href="/provas"
+          <Link
+            href="/provas"
                   className="px-6 py-4 bg-gradient-to-r from-[#6EC1E4] to-[#4A96D1] text-white rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center transform hover:-translate-y-1"
-                >
+          >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
-                  Testar Conhecimentos
-                </Link>
+            Testar Conhecimentos
+          </Link>
 
-                <Link
-                  href="/temas"
+          <Link
+            href="/temas"
                   className="px-6 py-4 bg-white border border-[#6EC1E4] text-[#6EC1E4] rounded-lg hover:bg-[#F0F9FF] transition-colors flex items-center justify-center transform hover:-translate-y-1 hover:shadow-md"
-                >
+          >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
                   </svg>
-                  Explorar Outros Temas
-                </Link>
-              </div>
-            </motion.div>
+            Explorar Outros Temas
+          </Link>
+        </div>
+      </motion.div>
           </div>
         </motion.div>
       </div>
