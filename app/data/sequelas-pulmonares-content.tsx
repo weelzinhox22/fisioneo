@@ -1,6 +1,17 @@
 import React from 'react';
 
 const SequelasPulmonaresContent = `
+    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
+      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
+        <a href="#desenvolvimento-pulmonar-intrauterino" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Desenvolvimento Pulmonar</a>
+        <a href="#doenca-pulmonar-cronica-da-prematuridade" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Doença Pulmonar Crônica</a>
+        <a href="#evolucao-respiratoria-clinica-e-funcional" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Evolução Clínica</a>
+        <a href="#avaliacao-funcional-respiratoria" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Avaliação Funcional</a>
+        <a href="#consequencias-a-longo-prazo" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Consequências</a>
+        <a href="#abordagem-fisioterapeutica" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Abordagem Fisioterapêutica</a>
+        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
+      </div>
+    </div>
   <div class="prose max-w-none">
     <h2 class="text-3xl font-bold text-[#4A96D1] mb-6">Sequelas de Doenças Pulmonares em Prematuros</h2>
     
@@ -22,7 +33,7 @@ const SequelasPulmonaresContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 1: Atelectasia e alterações pulmonares em recém-nascidos prematuros no período neonatal</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Desenvolvimento Pulmonar Intrauterino</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="desenvolvimento-pulmonar-intrauterino">Desenvolvimento Pulmonar Intrauterino</h3>
     <p class="text-gray-700 mb-6">
       Para compreender o impacto da prematuridade no sistema respiratório, é essencial conhecer as fases do desenvolvimento pulmonar normal:
     </p>
@@ -76,7 +87,7 @@ const SequelasPulmonaresContent = `
       pulmonar fetal antes mesmo do nascimento.
     </p>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Doença Pulmonar Crônica da Prematuridade (DPCP)</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="doenca-pulmonar-cronica-da-prematuridade">Doença Pulmonar Crônica da Prematuridade (DPCP)</h3>
 
     <div class="space-y-6 mt-8">
       <div class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
@@ -120,7 +131,7 @@ const SequelasPulmonaresContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 2: Radiografia de tórax mostrando alterações típicas de Displasia Broncopulmonar</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Evolução Respiratória Clínica e Funcional</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="evolucao-respiratoria-clinica-e-funcional">Evolução Respiratória Clínica e Funcional</h3>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-8">
       <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
@@ -144,7 +155,7 @@ const SequelasPulmonaresContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Avaliação Funcional Respiratória</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="avaliacao-funcional-respiratoria">Avaliação Funcional Respiratória</h3>
     <p class="text-gray-700 mb-4">
       A avaliação da função pulmonar em prematuros evoluiu significativamente nas últimas décadas:
     </p>
@@ -171,7 +182,7 @@ const SequelasPulmonaresContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Consequências a Longo Prazo</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="consequencias-a-longo-prazo">Consequências a Longo Prazo</h3>
     <p class="text-gray-700 mb-6">
       As consequências respiratórias da prematuridade podem persistir até a vida adulta:
     </p>
@@ -229,7 +240,7 @@ const SequelasPulmonaresContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Abordagem Fisioterapêutica</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="abordagem-fisioterapeutica">Abordagem Fisioterapêutica</h3>
     <p class="text-gray-700 mb-6">
       A fisioterapia respiratória desempenha papel fundamental no manejo das sequelas pulmonares em prematuros:
     </p>
@@ -326,7 +337,7 @@ const SequelasPulmonaresContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Considerações Finais</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="consideracoes-finais">Considerações Finais</h3>
     <p class="text-gray-700 mb-4">
       As sequelas pulmonares da prematuridade representam um desafio significativo para pacientes, famílias e profissionais de saúde:
     </p>

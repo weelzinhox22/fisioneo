@@ -14,6 +14,15 @@ const DorNeonatalContent = `
       </p>
     </div>
 
+    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
+      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
+        <a href="#metodologia-da-revisao-integrativa" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Metodologia da Revisão</a>
+        <a href="#escalas-de-avaliacao-da-dor-neonatal" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Escalas de Avaliação</a>
+        <a href="#estrategias-nao-farmacologicas" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Estratégias Não Farmacológicas</a>
+        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
+      </div>
+    </div>
+
     <div class="my-10">
       <div class="relative h-[350px] md:h-[450px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50 flex items-center justify-center p-4">
         <img src="/images/neonatal/dor-neonatal.jpg" alt="Avaliação da dor em recém-nascido" class="max-h-full max-w-full object-contain" style="object-fit: contain;" />
@@ -21,7 +30,7 @@ const DorNeonatalContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 2: Profissional de saúde avaliando sinais de dor em recém-nascido em UTIN</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Metodologia da Revisão Integrativa</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="metodologia-da-revisao-integrativa">Metodologia da Revisão Integrativa</h3>
     <p class="text-gray-700">
       O estudo emprega uma Revisão Integrativa da literatura, um método robusto para sintetizar evidências científicas. 
       A busca foi realizada nas bases de dados Lilacs e Medline, cobrindo artigos publicados entre 2015 e 2020. 
@@ -50,7 +59,7 @@ const DorNeonatalContent = `
       Portanto, a identificação e o uso de instrumentos de avaliação da dor são cruciais para garantir o alívio e o tratamento adequados da dor.
     </p>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Escalas de Avaliação da Dor Neonatal</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="escalas-de-avaliacao-da-dor-neonatal">Escalas de Avaliação da Dor Neonatal</h3>
     <p class="text-gray-700 mb-6">
       O artigo destaca diversas escalas utilizadas para mensurar a dor em neonatos, cada uma com suas particularidades:
     </p>
@@ -137,7 +146,7 @@ const DorNeonatalContent = `
       estratégias farmacológicas e não farmacológicas.
     </p>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Estratégias Não Farmacológicas</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="estrategias-nao-farmacologicas">Estratégias Não Farmacológicas</h3>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-8">
       <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
@@ -190,7 +199,7 @@ const DorNeonatalContent = `
     </div>
 
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Considerações Finais</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="consideracoes-finais">Considerações Finais</h3>
     <p class="text-gray-700">
       O estudo conclui que, embora existam diversos instrumentos para avaliação da dor em neonatos, ainda existem 
       lacunas na prática clínica. A falta de conhecimento e a não utilização de escalas de dor por parte dos profissionais 

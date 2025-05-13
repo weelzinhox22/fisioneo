@@ -1,7 +1,4 @@
 {
-  "/temas/[slug]/page": "app/temas/[slug]/page.js",
   "/page": "app/page.js",
-  "/temas/page": "app/temas/page.js",
-  "/documentos/page": "app/documentos/page.js",
-  "/prova-geral/page": "app/prova-geral/page.js"
+  "/temas/[slug]/page": "app/temas/[slug]/page.js"
 }

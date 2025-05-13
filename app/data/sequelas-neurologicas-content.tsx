@@ -1,6 +1,15 @@
 import React from 'react';
 
 const SequelasNeurologicasContent = `
+    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
+      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
+        <a href="#desenvolvimento-cerebral" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Desenvolvimento Cerebral</a>
+        <a href="#principais-lesoes" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Principais Lesões</a>
+        <a href="#sequelas-longo-prazo" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Sequelas a Longo Prazo</a>
+        <a href="#abordagem-fisioterapeutica" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Abordagem Fisioterapêutica</a>
+        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
+      </div>
+    </div>
   <div class="prose max-w-none">
     <h2 class="text-3xl font-bold text-[#4A96D1] mb-6">Sequelas de Doenças Neurológicas em Prematuros</h2>
     
@@ -14,6 +23,8 @@ const SequelasNeurologicasContent = `
       </p>
     </div>
 
+
+
     <div class="my-10">
       <div class="relative h-[350px] md:h-[450px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50 flex items-center justify-center p-4">
         <img src="/images/neonatal/cerebro-prematuro.webp" alt="Desenvolvimento cerebral em prematuros" class="max-h-full max-w-full object-contain" style="object-fit: contain;" />
@@ -21,7 +32,7 @@ const SequelasNeurologicasContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 1: Desenvolvimento cerebral humano</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Desenvolvimento Cerebral Normal e Impacto da Prematuridade</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="desenvolvimento-cerebral">Desenvolvimento Cerebral Normal e Impacto da Prematuridade</h3>
     <p class="text-gray-700 mb-6">
       O desenvolvimento cerebral é um processo complexo que ocorre durante toda a gestação e continua após o nascimento. 
       A prematuridade interrompe este processo em momentos críticos, podendo afetar diversos aspectos do desenvolvimento neurológico:
@@ -56,7 +67,7 @@ const SequelasNeurologicasContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Principais Lesões Neurológicas em Prematuros</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="principais-lesoes">Principais Lesões Neurológicas em Prematuros</h3>
 
     <div class="space-y-6 mt-8">
       <div class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
@@ -97,7 +108,7 @@ const SequelasNeurologicasContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 2: Representação de um recém-nascido prematuro</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Sequelas Neurológicas a Longo Prazo</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="sequelas-longo-prazo">Sequelas Neurológicas a Longo Prazo</h3>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-8">
       <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
@@ -187,7 +198,7 @@ const SequelasNeurologicasContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Abordagem Fisioterapêutica</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="abordagem-fisioterapeutica">Abordagem Fisioterapêutica</h3>
     <p class="text-gray-700 mb-6">
       A intervenção fisioterapêutica precoce é fundamental para minimizar as sequelas neurológicas e potencializar o desenvolvimento:
     </p>
@@ -291,7 +302,7 @@ const SequelasNeurologicasContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Considerações Finais</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="consideracoes-finais">Considerações Finais</h3>
     <p class="text-gray-700 mb-4">
       As sequelas neurológicas em prematuros representam um desafio significativo, mas há estratégias eficazes para minimizar seu impacto:
     </p>

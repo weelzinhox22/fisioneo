@@ -14,6 +14,16 @@ const MetodoCanguruContent = `
       </p>
     </div>
 
+    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
+      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
+        <a href="#pilares-do-metodo-canguru" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Pilares do Método</a>
+        <a href="#fases-do-metodo-canguru" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Fases do Método</a>
+        <a href="#atuacao-da-fisioterapia" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Atuação da Fisioterapia</a>
+        <a href="#evidencias-cientificas" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Evidências Científicas</a>
+        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
+      </div>
+    </div>
+
     <div class="my-10">
       <div class="relative h-[350px] md:h-[450px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50 flex items-center justify-center p-4">
         <img src="/images/neonatal/metodo-canguru-principal.jpg" alt="Mãe realizando o método canguru com seu bebê prematuro" class="max-h-full max-w-full object-contain" style="object-fit: contain;" />
@@ -21,7 +31,7 @@ const MetodoCanguruContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 1: Posição canguru demonstrando o contato pele a pele entre mãe e recém-nascido prematuro</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Pilares do Método Canguru</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="pilares-do-metodo-canguru">Pilares do Método Canguru</h3>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 mb-8">
       <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100">
@@ -52,7 +62,7 @@ const MetodoCanguruContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Fases do Método Canguru</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="fases-do-metodo-canguru">Fases do Método Canguru</h3>
     <p class="text-gray-700 mb-6">
       O Método Canguru é dividido em três fases bem definidas, que acompanham o desenvolvimento do recém-nascido desde 
       o pré-natal até após a alta hospitalar:
@@ -92,7 +102,7 @@ const MetodoCanguruContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Atuação da Fisioterapia no Método Canguru</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="atuacao-da-fisioterapia">Atuação da Fisioterapia no Método Canguru</h3>
     <p class="text-gray-700 mb-6">
       O fisioterapeuta desempenha um papel crucial na equipe multidisciplinar do MC, atuando na estabilidade clínica, 
       no desenvolvimento motor e na promoção de experiências sensoriais do RN. As intervenções fisioterapêuticas incluem:
@@ -151,7 +161,7 @@ const MetodoCanguruContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 3: Fisioterapeuta orientando a mãe sobre o posicionamento correto durante o Método Canguru</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Evidências Científicas</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="evidencias-cientificas">Evidências Científicas</h3>
     <p class="text-gray-700 mb-4">
       Estudos têm demonstrado os benefícios da intervenção fisioterapêutica no MC, evidenciando sua importância para o 
       desenvolvimento adequado dos recém-nascidos prematuros.
@@ -198,7 +208,7 @@ const MetodoCanguruContent = `
     </p>
 
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Considerações Finais</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="consideracoes-finais">Considerações Finais</h3>
     <p class="text-gray-700 mb-4">
       A fisioterapia desempenha um papel fundamental no Método Canguru, contribuindo para a estabilidade clínica, o 
       desenvolvimento motor e a promoção de experiências sensoriais do RN. A intervenção fisioterapêutica no MC potencializa 

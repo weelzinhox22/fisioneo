@@ -15,6 +15,16 @@ const HidroterapiaNeonatosContent = `
       </p>
     </div>
 
+    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
+      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
+        <a href="#principios-da-hidroterapia" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Princípios</a>
+        <a href="#tecnicas-de-hidroterapia" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Técnicas</a>
+        <a href="#indicacoes-e-contraindicacoes" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Indicações</a>
+        <a href="#beneficios-comprovados" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Benefícios</a>
+        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
+      </div>
+    </div>
+
     <div class="my-10">
       <div class="relative h-[350px] md:h-[450px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50 flex items-center justify-center p-4">
         <img src="/images/neonatal/hidroterapia-neonatal.jpg" alt="Bebê prematuro recebendo hidroterapia em banheira específica" class="max-h-full max-w-full object-contain" style="object-fit: contain;" />
@@ -22,7 +32,7 @@ const HidroterapiaNeonatosContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 1: Sessão de hidroterapia com bebê prematuro em banheira terapêutica adaptada</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Princípios da Hidroterapia Neonatal</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="principios-da-hidroterapia">Princípios da Hidroterapia Neonatal</h3>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 mb-8">
       <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100">
@@ -53,7 +63,7 @@ const HidroterapiaNeonatosContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Técnicas de Hidroterapia em Neonatologia</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="tecnicas-de-hidroterapia">Técnicas de Hidroterapia em Neonatologia</h3>
     <p class="text-gray-700 mb-6">
       A hidroterapia em neonatologia engloba diferentes técnicas adaptadas às necessidades específicas de cada bebê, 
       respeitando sua idade gestacional, condição clínica e desenvolvimento neurológico:
@@ -97,7 +107,7 @@ const HidroterapiaNeonatosContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 2: Comparação entre diferentes técnicas de hidroterapia utilizadas em UTINs</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Indicações e Contraindicações</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="indicacoes-e-contraindicacoes">Indicações e Contraindicações</h3>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-8">
       <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
@@ -209,7 +219,7 @@ const HidroterapiaNeonatosContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Benefícios Comprovados</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="beneficios-comprovados">Benefícios Comprovados</h3>
     <p class="text-gray-700 mb-4">
       Estudos científicos têm documentado diversos benefícios da hidroterapia em neonatos, especialmente em prematuros:
     </p>
@@ -293,7 +303,7 @@ const HidroterapiaNeonatosContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Considerações Finais</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="consideracoes-finais">Considerações Finais</h3>
     <p class="text-gray-700 mb-4">
       A hidroterapia representa uma abordagem promissora no cuidado desenvolvimentista de neonatos prematuros, 
       oferecendo benefícios significativos para seu bem-estar físico e emocional durante a internação na UTIN. 
