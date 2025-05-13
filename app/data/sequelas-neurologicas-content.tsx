@@ -1,15 +1,6 @@
 import React from 'react';
 
 const SequelasNeurologicasContent = `
-    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
-      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
-        <a href="#desenvolvimento-cerebral" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Desenvolvimento Cerebral</a>
-        <a href="#principais-lesoes" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Principais Lesões</a>
-        <a href="#sequelas-longo-prazo" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Sequelas a Longo Prazo</a>
-        <a href="#abordagem-fisioterapeutica" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Abordagem Fisioterapêutica</a>
-        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
-      </div>
-    </div>
   <div class="prose max-w-none">
     <h2 class="text-3xl font-bold text-[#4A96D1] mb-6">Sequelas de Doenças Neurológicas em Prematuros</h2>
     
@@ -23,7 +14,15 @@ const SequelasNeurologicasContent = `
       </p>
     </div>
 
-
+    <div class="topic-quick-nav">
+      <div class="nav-items">
+        <a href="#desenvolvimento-cerebral" class="nav-item">Desenvolvimento Cerebral</a>
+        <a href="#principais-lesoes" class="nav-item">Principais Lesões</a>
+        <a href="#sequelas-longo-prazo" class="nav-item">Sequelas a Longo Prazo</a>
+        <a href="#abordagem-fisioterapeutica" class="nav-item">Abordagem Fisioterapêutica</a>
+        <a href="#consideracoes-finais" class="nav-item">Considerações Finais</a>
+      </div>
+    </div>
 
     <div class="my-10">
       <div class="relative h-[350px] md:h-[450px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50 flex items-center justify-center p-4">

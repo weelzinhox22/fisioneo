@@ -14,12 +14,12 @@ const DorNeonatalContent = `
       </p>
     </div>
 
-    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
-      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
-        <a href="#metodologia-da-revisao-integrativa" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Metodologia da Revisão</a>
-        <a href="#escalas-de-avaliacao-da-dor-neonatal" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Escalas de Avaliação</a>
-        <a href="#estrategias-nao-farmacologicas" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Estratégias Não Farmacológicas</a>
-        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
+    <div class="topic-quick-nav">
+      <div class="nav-items">
+        <a href="#metodologia-da-revisao-integrativa" class="nav-item">Metodologia da Revisão</a>
+        <a href="#escalas-de-avaliacao-da-dor-neonatal" class="nav-item">Escalas de Avaliação</a>
+        <a href="#estrategias-nao-farmacologicas" class="nav-item">Estratégias Não Farmacológicas</a>
+        <a href="#consideracoes-finais" class="nav-item">Considerações Finais</a>
       </div>
     </div>
 

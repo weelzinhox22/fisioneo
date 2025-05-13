@@ -1,222 +1,474 @@
 "use client"
 
 import Link from "next/link"
-import { Baby, Brain, Droplets, HeartPulse, Stethoscope } from "lucide-react"
-import { FadeIn } from "@/components/animations/fade-in"
-import { StaggerContainer } from "@/components/animations/stagger-container"
-import { ParallaxElement } from "@/components/animations/parallax-element"
-import { TransformEffect } from "@/components/animations/transform-effect"
-import { Transmorph } from "@/components/animations/transmorph"
-import { ZoomIn } from "@/components/animations/zoom-in"
+import { useEffect, useRef } from "react"
+import { 
+  Baby, 
+  Brain, 
+  Droplets, 
+  HeartPulse, 
+  Stethoscope, 
+  FileText, 
+  FileType, 
+  FileUp, 
+  Search, 
+  MessageSquare, 
+  BookOpen, 
+  RefreshCw 
+} from "lucide-react"
+import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Hero } from "@/app/components/Hero"
+import { AboutSection } from "@/app/components/AboutSection"
+import { AdvancedParallax } from "@/components/animations/advanced-parallax"
+import { MagneticButton } from "@/components/ui/magnetic-button"
+import { ThreeDText } from "@/components/ui/3d-text"
+
+// Register GSAP plugins
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Home() {
-  const topics = [
-    {
-      id: "reflexos-0-6",
-      title: "Reflexos de 0 a 6 meses",
-      description: "Estudo dos reflexos primitivos e sua evolução nos primeiros 6 meses de vida.",
-      icon: <Baby className="h-10 w-10 text-[#6EC1E4]" />,
-      href: "/temas/reflexos-0-6",
-    },
-    {
-      id: "reflexos-7-15",
-      title: "Reflexos de 7 a 15 meses",
-      description: "Desenvolvimento dos reflexos em bebês de 7 a 15 meses de idade.",
-      icon: <Baby className="h-10 w-10 text-[#B9A9FF]" />,
-      href: "/temas/reflexos-7-15",
-    },
-    {
-      id: "reacoes-0-15",
-      title: "Reações de 0 a 15 meses",
-      description: "Reações posturais e de equilíbrio durante o primeiro ano de vida.",
-      icon: <HeartPulse className="h-10 w-10 text-[#6EC1E4]" />,
-      href: "/temas/reacoes-0-15",
-    },
-    {
-      id: "escala-avaliacao",
-      title: "Escala de avaliação neonatal",
-      description: "Métodos e escalas para avaliação do desenvolvimento neonatal.",
-      icon: <Stethoscope className="h-10 w-10 text-[#A8E6CF]" />,
-      href: "/temas/escala-avaliacao",
-    },
-    {
-      id: "dor-neonatal",
-      title: "Dor neonatal",
-      description: "Avaliação e manejo da dor em recém-nascidos e prematuros.",
-      icon: <HeartPulse className="h-10 w-10 text-[#FF6B6B]" />,
-      href: "/temas/dor-neonatal",
-    },
-    {
-      id: "metodo-canguru",
-      title: "Método Canguru",
-      description: "Benefícios e aplicação do método canguru em neonatos.",
-      icon: <Baby className="h-10 w-10 text-[#A8E6CF]" />,
-      href: "/temas/metodo-canguru",
-    },
-    {
-      id: "hidroterapia",
-      title: "Hidroterapia em neonatos",
-      description: "Técnicas e benefícios da hidroterapia para bebês prematuros e recém-nascidos.",
-      icon: <Droplets className="h-10 w-10 text-[#6EC1E4]" />,
-      href: "/temas/hidroterapia",
-    },
-    {
-      id: "sequelas-neurologicas",
-      title: "Sequelas de doenças neurológicas em prematuros",
-      description: "Identificação e tratamento de sequelas neurológicas em bebês prematuros.",
-      icon: <Brain className="h-10 w-10 text-[#B9A9FF]" />,
-      href: "/temas/sequelas-neurologicas",
-    },
-    {
-      id: "sequelas-pulmonares",
-      title: "Sequelas de doenças pulmonares em prematuros",
-      description: "Abordagem fisioterapêutica para sequelas pulmonares em prematuros.",
-      icon: <Stethoscope className="h-10 w-10 text-[#6EC1E4]" />,
-      href: "/temas/sequelas-pulmonares",
-    },
-  ]
+  const pdfSectionRef = useRef(null);
+  const assessSectionRef = useRef(null);
+  const finalSectionRef = useRef(null);
+  
+  // Set up advanced scroll animations with GSAP
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const sections = [pdfSectionRef, assessSectionRef, finalSectionRef];
+    
+    sections.forEach((sectionRef) => {
+      if (!sectionRef.current) return;
+      
+      // Create animation for each section
+      gsap.fromTo(
+        sectionRef.current.querySelectorAll('.animate-on-scroll'),
+        {
+          y: 60,
+          opacity: 0,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 70%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+      
+      // Create parallax effect for background elements
+      gsap.fromTo(
+        sectionRef.current.querySelectorAll('.bg-parallax'),
+        {
+          y: 0,
+        },
+        {
+          y: -50,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
+        }
+      );
+    });
+    
+    // Cleanup
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
 
   return (
-    <div className="relative">
+    <motion.div 
+      className="relative overflow-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <Hero />
       
-      {/* Extremely subtle gradient transition with precise control */}
-      <div 
-        className="h-80 w-full relative"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(26,0,0,1) 0%, rgba(26,0,0,0.95) 5%, rgba(26,0,0,0.9) 10%, rgba(26,0,0,0.8) 15%, rgba(25,2,2,0.7) 20%, rgba(20,5,5,0.6) 25%, rgba(16,8,8,0.5) 30%, rgba(10,10,10,0.4) 40%, rgba(51,51,51,0.3) 50%, rgba(102,102,102,0.2) 60%, rgba(153,153,153,0.15) 70%, rgba(204,204,204,0.1) 80%, rgba(238,238,238,0.05) 90%, rgba(255,255,255,0) 100%)'
-        }}
-      />
+      <AboutSection />
       
-      <div className="container mx-auto px-4" style={{marginTop: "-40px"}}>
-        <section className="py-12 relative overflow-hidden mb-20">
-          <ParallaxElement speed={0.1} direction="left" className="absolute -left-20 top-10 opacity-10">
-            <Baby className="h-64 w-64 text-[#6EC1E4]" />
-          </ParallaxElement>
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Fundo decorativo */}
+        <div className="absolute top-40 left-0 w-full h-[800px] bg-gradient-to-r from-[#6EC1E4]/5 via-transparent to-[#B9A9FF]/5 rounded-full blur-3xl -z-10 transform -rotate-12 opacity-70"></div>
+        
+        <section 
+          ref={pdfSectionRef}
+          id="leitor-pdf" 
+          className="py-24 relative overflow-hidden mb-32"
+        >
+          <AdvancedParallax speed={0.08} direction="left">
+            <div className="bg-parallax absolute -left-20 top-10 opacity-5">
+              <FileText className="h-96 w-96 text-[#6EC1E4]" />
+            </div>
+          </AdvancedParallax>
 
-          <ParallaxElement speed={0.15} direction="right" className="absolute -right-20 bottom-10 opacity-10">
-            <Stethoscope className="h-64 w-64 text-[#B9A9FF]" />
-          </ParallaxElement>
+          <AdvancedParallax speed={0.12} direction="right">
+            <div className="bg-parallax absolute -right-20 bottom-10 opacity-5">
+              <FileType className="h-96 w-96 text-[#B9A9FF]" />
+            </div>
+          </AdvancedParallax>
 
-          <FadeIn direction="up" distance={30}>
-            <h2 className="text-3xl md:text-4xl font-bold text-center text-[#333333] mb-12">Temas Principais</h2>
-          </FadeIn>
+          <div className="animate-on-scroll text-center mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              <span className="px-4 py-1.5 bg-gradient-to-r from-[#6EC1E4]/10 to-[#B9A9FF]/10 rounded-full text-sm font-medium text-[#6EC1E4] inline-block mb-4">
+                Ferramenta Exclusiva
+              </span>
+              
+              <ThreeDText
+                text="Leitor de PDF Inteligente"
+                gradient={true}
+                depth={10}
+                perspective={1000}
+                fontSize="3rem"
+                className="mb-4"
+              />
+              
+              <p className="text-[#666666] max-w-2xl mx-auto">
+                Revolucione sua forma de estudar com nossa ferramenta de análise de documentos com IA
+              </p>
+            </motion.div>
+          </div>
 
-          <StaggerContainer
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            staggerDelay={0.1}
-            staggerType="spring"
-          >
-            {topics.map((topic, index) => (
-              <div 
-                key={topic.id}
-                className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
-              >
-                <div className="flex items-center mb-4">
-                  <div className="bg-[#F0F9FF] p-3 rounded-full mr-4">
-                    {topic.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold text-[#333333]">{topic.title}</h3>
-                </div>
-                <p className="text-[#666666] mb-4">{topic.description}</p>
-                <Link
-                  href={topic.href}
-                  className="text-[#6EC1E4] hover:text-[#5BA8CB] font-medium flex items-center"
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            <motion.div 
+              className="animate-on-scroll bg-white rounded-xl p-8 shadow-xl border border-gray-100 relative overflow-hidden"
+              whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF]"></div>
+              
+              <h3 className="text-2xl font-bold text-[#333333] mb-6">Como Funciona</h3>
+              
+              <div className="space-y-6">
+                <motion.div 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  Saiba mais
-                </Link>
+                  <div className="flex-shrink-0 bg-[#F0F9FF] p-4 rounded-xl mr-5">
+                    <FileUp className="h-7 w-7 text-[#6EC1E4]" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#333333] mb-1">1. Carregue seu PDF</h4>
+                    <p className="text-[#666666]">Faça upload de qualquer documento PDF relacionado à fisioterapia neonatal</p>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="flex-shrink-0 bg-[#F0F9FF] p-4 rounded-xl mr-5">
+                    <Search className="h-7 w-7 text-[#6EC1E4]" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#333333] mb-1">2. Analise o conteúdo</h4>
+                    <p className="text-[#666666]">Nossa IA extrai automaticamente o texto do documento para análise</p>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="flex-shrink-0 bg-[#F0F9FF] p-4 rounded-xl mr-5">
+                    <MessageSquare className="h-7 w-7 text-[#6EC1E4]" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#333333] mb-1">3. Faça perguntas</h4>
+                    <p className="text-[#666666]">Interaja com o documento através de perguntas ou solicite resumos</p>
+                </div>
+                </motion.div>
               </div>
-            ))}
-          </StaggerContainer>
+            </motion.div>
+            
+            <motion.div 
+              className="animate-on-scroll bg-white rounded-xl p-8 shadow-xl border border-gray-100 relative overflow-hidden"
+              whileHover={{ y: -10, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+              transition={{ duration: 0.4 }}
+            >
+              <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#B9A9FF] to-[#6EC1E4]"></div>
+              
+              <h3 className="text-2xl font-bold text-[#333333] mb-6">Por Que Usar</h3>
+              
+              <div className="space-y-6">
+                <motion.div 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="flex-shrink-0 bg-[#F8F5FF] p-4 rounded-xl mr-5">
+                    <BookOpen className="h-7 w-7 text-[#B9A9FF]" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#333333] mb-1">Estudo Otimizado</h4>
+                    <p className="text-[#666666]">Extraia informações chave de artigos científicos e materiais de estudo rapidamente</p>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="flex-shrink-0 bg-[#F8F5FF] p-4 rounded-xl mr-5">
+                    <RefreshCw className="h-7 w-7 text-[#B9A9FF]" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#333333] mb-1">Menos tempo, mais aprendizado</h4>
+                    <p className="text-[#666666]">Reduza o tempo de leitura obtendo resumos e explicações personalizadas</p>
+                  </div>
+                </motion.div>
+                
+                <motion.div 
+                  className="flex items-start"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="flex-shrink-0 bg-[#F8F5FF] p-4 rounded-xl mr-5">
+                    <Brain className="h-7 w-7 text-[#B9A9FF]" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#333333] mb-1">Compreensão aprofundada</h4>
+                    <p className="text-[#666666]">Tire dúvidas específicas sobre o conteúdo diretamente com nossa IA</p>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+            </div>
+          
+          <div className="animate-on-scroll flex flex-wrap justify-center items-center gap-4">
+            <MagneticButton
+              backgroundGradient={true}
+              glowOnHover={true}
+              className="px-8 py-4 font-medium"
+              href="/documentos"
+            >
+              <span className="flex items-center">
+                Experimentar Leitor de PDF
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </span>
+            </MagneticButton>
+            
+            <MagneticButton
+              variant="subtle"
+              className="px-8 py-4 font-medium border-2 border-[#6EC1E4] text-[#6EC1E4]"
+              href="/temas"
+            >
+              <span className="flex items-center">
+                Explorar Temas
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </span>
+            </MagneticButton>
+          </div>
         </section>
 
-        <TransformEffect type="morph" intensity={1} className="py-12 bg-[#F0F9FF] rounded-2xl my-20 p-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-[#333333] mb-6">Avalie Seus Conhecimentos</h2>
-            <p className="text-lg text-[#666666] mb-8">
-              Teste o que você aprendeu com nossas provas temáticas individuais ou desafie-se com nossa prova geral
-              abrangente.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link
+        <section 
+          ref={assessSectionRef}
+          className="py-24 my-32 relative"
+        >
+          <AdvancedParallax speed={0.15} direction="vertical" className="absolute inset-0">
+            <div className="bg-gradient-to-r from-[#6EC1E4]/20 to-[#B9A9FF]/20 rounded-3xl h-full w-full"></div>
+          </AdvancedParallax>
+          
+          <motion.div 
+            className="absolute inset-0 bg-white/90 backdrop-blur-md rounded-3xl"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+          />
+          
+          <div className="relative z-10 text-center max-w-3xl mx-auto px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="animate-on-scroll"
+            >
+              <span className="px-4 py-1.5 bg-gradient-to-r from-[#B9A9FF]/10 to-[#A090E0]/10 rounded-full text-sm font-medium text-[#A090E0] inline-block mb-4">
+                Teste seus conhecimentos
+              </span>
+              
+              <ThreeDText
+                text="Avalie Seus Conhecimentos"
+                gradient={true}
+                depth={8}
+                fontSize="2.5rem"
+                fontWeight="700"
+                className="mb-6"
+              />
+              
+              <p className="text-lg text-[#666666] mb-10 leading-relaxed">
+                Consolide seu aprendizado através de nossas avaliações interativas. Escolha entre provas específicas 
+                por tema ou desafie-se com nossa avaliação completa que abrange todos os aspectos da fisioterapia neonatal.
+              </p>
+            </motion.div>
+            
+            <div className="animate-on-scroll flex flex-wrap justify-center gap-6">
+              <MagneticButton
+                backgroundGradient={true}
+                glowOnHover={true}
+                className="px-8 py-4 font-medium"
                 href="/provas"
-                className="px-6 py-3 bg-gradient-to-r from-[#B9A9FF] to-[#A090E0] text-white rounded-lg hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
               >
-                Provas Temáticas
-              </Link>
-              <Link
+                Iniciar Avaliação Temática
+              </MagneticButton>
+              
+              <MagneticButton
+                variant="subtle"
+                className="px-8 py-4 font-medium border-2 border-[#B9A9FF] text-[#B9A9FF]"
                 href="/prova-geral"
-                className="px-6 py-3 bg-white border border-[#B9A9FF] text-[#B9A9FF] rounded-lg hover:bg-[#F8F5FF] hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
               >
-                Prova Geral
-              </Link>
+                Fazer Avaliação Completa
+              </MagneticButton>
             </div>
+        </div>
+      </section>
+
+        <section 
+          ref={finalSectionRef}
+          className="py-24 md:py-32 mb-16"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <AdvancedParallax speed={0.15} direction="horizontal" scale={true}>
+              <motion.div 
+                className="animate-on-scroll rounded-2xl overflow-hidden shadow-xl h-[400px] flex items-center justify-center relative"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true, amount: 0.3 }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#F0F9FF] to-[#E1F5FE] rounded-2xl backdrop-blur-sm"></div>
+                <div className="absolute w-full h-full flex items-center justify-center">
+                  <motion.div 
+                    className="relative w-40 h-40 rounded-full bg-gradient-to-r from-[#6EC1E4]/30 to-[#B9A9FF]/30 flex items-center justify-center"
+                    animate={{ 
+                      scale: [1, 1.05, 1],
+                      opacity: [0.8, 1, 0.8],
+                    }}
+                    transition={{ 
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut" 
+                    }}
+                  >
+                    <Baby className="h-24 w-24 text-[#6EC1E4]" />
+                  </motion.div>
           </div>
-        </TransformEffect>
 
-        <section className="py-12 md:py-20 mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <ParallaxElement speed={0.2} direction="left">
-              <div className="rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105 bg-gradient-to-br from-[#F0F9FF] to-[#E1F5FE] h-64 flex items-center justify-center">
-                <Baby className="h-24 w-24 text-[#6EC1E4]" />
-              </div>
-            </ParallaxElement>
+                {/* Elementos decorativos */}
+                <motion.div 
+                  className="absolute top-10 left-10 w-16 h-16 rounded-full bg-[#6EC1E4]/10"
+                  animate={{ 
+                    y: [0, -10, 0],
+                    opacity: [0.5, 0.8, 0.5]
+                  }}
+                  transition={{ 
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                <motion.div 
+                  className="absolute bottom-10 right-10 w-20 h-20 rounded-full bg-[#B9A9FF]/10"
+                  animate={{ 
+                    y: [0, 10, 0],
+                    opacity: [0.5, 0.8, 0.5]
+                  }}
+                  transition={{ 
+                    duration: 7,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                <motion.div 
+                  className="absolute top-1/2 right-16 w-8 h-8 rounded-full bg-[#A8E6CF]/20"
+                  animate={{ 
+                    x: [0, 5, 0],
+                    opacity: [0.6, 0.9, 0.6]
+                  }}
+                  transition={{ 
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+              </motion.div>
+            </AdvancedParallax>
 
-            <div>
-              <FadeIn direction="right" distance={50}>
-                <h2 className="text-3xl font-bold text-[#333333] mb-4">Fisioterapia Neonatal</h2>
-                <p className="text-lg text-[#666666] mb-4">
+            <div className="animate-on-scroll">
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
+              >
+                <span className="px-4 py-1.5 bg-gradient-to-r from-[#6EC1E4]/10 to-[#6EC1E4]/5 rounded-full text-sm font-medium text-[#6EC1E4] inline-block mb-4">
+                  Especialidade em crescimento
+                </span>
+                
+                <ThreeDText
+                  text="Fisioterapia Neonatal"
+                  gradient={true}
+                  depth={8}
+                  fontSize="2.5rem"
+                  className="mb-6"
+                />
+                
+                <p className="text-lg text-[#666666] mb-4 leading-relaxed">
                   A fisioterapia neonatal é uma especialidade que atua na prevenção, avaliação e tratamento de alterações
                   no desenvolvimento neuropsicomotor de recém-nascidos.
                 </p>
-                <p className="text-lg text-[#666666] mb-6">
+                <p className="text-lg text-[#666666] mb-8 leading-relaxed">
                   Nosso portal oferece recursos educacionais para profissionais e estudantes interessados nesta área
                   fundamental para o desenvolvimento saudável de bebês.
                 </p>
-                <Link
+                
+                <MagneticButton
+                  backgroundGradient={true}
+                  glowOnHover={true}
+                  strength={15}
+                  className="px-8 py-4 font-medium inline-flex items-center"
                   href="/temas"
-                  className="px-6 py-3 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white rounded-lg hover:opacity-90 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 inline-block"
                 >
                   Saiba Mais
-                </Link>
-              </FadeIn>
-            </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </MagneticButton>
+              </motion.div>
           </div>
-        </section>
-
-        <section className="py-12 md:py-20 bg-[#F0F9FF] rounded-2xl mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="order-2 md:order-1">
-              <FadeIn direction="left" distance={50}>
-                <h2 className="text-3xl font-bold text-[#333333] mb-4">Desenvolvimento Infantil</h2>
-                <p className="text-lg text-[#666666] mb-4">
-                  O acompanhamento do desenvolvimento infantil é essencial para identificar precocemente alterações e
-                  intervir de forma adequada.
-                </p>
-                <p className="text-lg text-[#666666] mb-6">
-                  Conheça os principais marcos do desenvolvimento motor, cognitivo e social, e aprenda a estimular cada
-                  etapa de forma adequada.
-                </p>
-                <Link
-                  href="/documentos"
-                  className="px-6 py-3 bg-gradient-to-r from-[#A8E6CF] to-[#7DCFB6] text-white rounded-lg hover:opacity-90 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 inline-block"
-                >
-                  Acessar Documentos
-                </Link>
-              </FadeIn>
-            </div>
-
-            <div className="order-1 md:order-2">
-              <ParallaxElement speed={0.2} direction="right">
-                <div className="rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105 bg-gradient-to-br from-[#F0FFF4] to-[#D7F9E9] h-64 flex items-center justify-center">
-                  <Brain className="h-24 w-24 text-[#A8E6CF]" />
-                </div>
-              </ParallaxElement>
-            </div>
-          </div>
-        </section>
+        </div>
+      </section>
       </div>
-    </div>
+    </motion.div>
   )
 }

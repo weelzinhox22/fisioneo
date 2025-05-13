@@ -14,13 +14,13 @@ const MetodoCanguruContent = `
       </p>
     </div>
 
-    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
-      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
-        <a href="#pilares-do-metodo-canguru" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Pilares do Método</a>
-        <a href="#fases-do-metodo-canguru" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Fases do Método</a>
-        <a href="#atuacao-da-fisioterapia" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Atuação da Fisioterapia</a>
-        <a href="#evidencias-cientificas" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Evidências Científicas</a>
-        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-white transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
+    <div class="topic-quick-nav">
+      <div class="nav-items">
+        <a href="#pilares-do-metodo-canguru" class="nav-item">Pilares do Método</a>
+        <a href="#fases-do-metodo-canguru" class="nav-item">Fases do Método</a>
+        <a href="#atuacao-da-fisioterapia" class="nav-item">Atuação da Fisioterapia</a>
+        <a href="#evidencias-cientificas" class="nav-item">Evidências Científicas</a>
+        <a href="#consideracoes-finais" class="nav-item">Considerações Finais</a>
       </div>
     </div>
 

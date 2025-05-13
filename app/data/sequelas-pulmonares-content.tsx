@@ -1,17 +1,6 @@
 import React from 'react';
 
 const SequelasPulmonaresContent = `
-    <div class="jsx-13131a25edb8b7e9 px-4 py-3 bg-[#F0F9FF] border-b border-[#E0E0E0] overflow-x-auto">
-      <div class="jsx-13131a25edb8b7e9 flex items-center space-x-4 min-w-max">
-        <a href="#desenvolvimento-pulmonar-intrauterino" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Desenvolvimento Pulmonar</a>
-        <a href="#doenca-pulmonar-cronica-da-prematuridade" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Doença Pulmonar Crônica</a>
-        <a href="#evolucao-respiratoria-clinica-e-funcional" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Evolução Clínica</a>
-        <a href="#avaliacao-funcional-respiratoria" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Avaliação Funcional</a>
-        <a href="#consequencias-a-longo-prazo" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Consequências</a>
-        <a href="#abordagem-fisioterapeutica" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Abordagem Fisioterapêutica</a>
-        <a href="#consideracoes-finais" class="jsx-13131a25edb8b7e9 text-sm font-medium px-3 py-1.5 rounded-full bg-white text-[#4A96D1] hover:bg-[#4A96D1] hover:text-black transition-colors shadow-sm whitespace-nowrap">Considerações Finais</a>
-      </div>
-    </div>
   <div class="prose max-w-none">
     <h2 class="text-3xl font-bold text-[#4A96D1] mb-6">Sequelas de Doenças Pulmonares em Prematuros</h2>
     
@@ -24,6 +13,18 @@ const SequelasPulmonaresContent = `
         Problemas como tosse, sibilância recorrente e até falência respiratória são complicações importantes que afetam 
         a qualidade de vida desses pacientes a longo prazo.
       </p>
+    </div>
+
+    <div class="topic-quick-nav">
+      <div class="nav-items">
+        <a href="#desenvolvimento-pulmonar-intrauterino" class="nav-item">Desenvolvimento Pulmonar</a>
+        <a href="#doenca-pulmonar-cronica-da-prematuridade" class="nav-item">Doença Pulmonar Crônica</a>
+        <a href="#evolucao-respiratoria-clinica-e-funcional" class="nav-item">Evolução Clínica</a>
+        <a href="#avaliacao-funcional-respiratoria" class="nav-item">Avaliação Funcional</a>
+        <a href="#consequencias-a-longo-prazo" class="nav-item">Consequências</a>
+        <a href="#abordagem-fisioterapeutica" class="nav-item">Abordagem Fisioterapêutica</a>
+        <a href="#consideracoes-finais" class="nav-item">Considerações Finais</a>
+      </div>
     </div>
 
     <div class="my-10">

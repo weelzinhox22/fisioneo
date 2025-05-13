@@ -54,6 +54,13 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      textShadow: {
+        DEFAULT: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+        md: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        lg: '0 2px 10px rgba(0, 0, 0, 0.5)',
+        xl: '0 2px 15px rgba(0, 0, 0, 0.7)'
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -75,7 +82,21 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addUtilities, theme }: any) {
+      const textShadows = theme('textShadow')
+      const utilities = Object.entries(textShadows).reduce((acc, [key, value]) => {
+        return {
+          ...acc,
+          [`.text-shadow${key === 'DEFAULT' ? '' : `-${key}`}`]: {
+            textShadow: value
+          }
+        }
+      }, {})
+      addUtilities(utilities)
+    }
+  ],
 } satisfies Config
 
 export default config

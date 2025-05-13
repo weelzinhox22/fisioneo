@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import { BookOpen, ChevronRight } from "lucide-react"
 
 interface Heading {
   id: string
@@ -90,30 +92,70 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-[#E0E0E0] p-4 sticky top-4">
-      <h3 className="text-lg font-semibold text-[#4A96D1] mb-3">Conteúdo</h3>
-      <ul className="space-y-2">
-        {headings.map((heading) => (
-          <li 
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-gradient-to-br from-white to-[#F8FBFF] rounded-xl shadow-md border border-[#E0E0E0]/50 p-5 sticky top-4"
+    >
+      <div className="flex items-center mb-4">
+        <div className="p-2 bg-[#F0F9FF] rounded-lg mr-3">
+          <BookOpen className="h-5 w-5 text-[#6EC1E4]" />
+        </div>
+        <h3 className="text-lg font-semibold text-[#4A96D1]">Conteúdo</h3>
+      </div>
+      
+      <div className="space-y-1 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+        {headings.map((heading, index) => (
+          <motion.div
             key={heading.id}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.05 }}
             className={`
               ${heading.level === 3 ? "ml-4" : ""}
-              ${activeId === heading.id ? "text-[#6EC1E4] font-medium" : "text-[#666666]"}
             `}
           >
             <a 
               href={`#${heading.id}`}
-              className="hover:text-[#4A96D1] transition-colors block py-1"
+              className={`
+                flex items-center py-2 px-3 rounded-lg transition-all duration-300
+                ${activeId === heading.id 
+                  ? "bg-gradient-to-r from-[#E6F3FF] to-[#F0F9FF] text-[#4A96D1] font-medium shadow-sm" 
+                  : "text-[#666666] hover:bg-[#F0F9FF] hover:text-[#4A96D1]"}
+              `}
               onClick={(e) => {
                 e.preventDefault()
                 document.getElementById(heading.id)?.scrollIntoView({ behavior: "smooth" })
               }}
             >
-              {heading.text}
+              <span className="flex-1">{heading.text}</span>
+              {activeId === heading.id && (
+                <ChevronRight className="h-4 w-4 text-[#6EC1E4]" />
+              )}
             </a>
-          </li>
+          </motion.div>
         ))}
-      </ul>
-    </div>
+      </div>
+      
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: rgba(110, 193, 228, 0.3);
+          border-radius: 20px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(110, 193, 228, 0.5);
+        }
+      `}</style>
+    </motion.div>
   )
 } 

@@ -10,10 +10,10 @@ import TopicContent from "@/app/components/TopicContent"
 import ReadingProgress from "@/app/components/ReadingProgress"
 import TableOfContents from "@/app/components/TableOfContents"
 import BackToTop from "@/app/components/BackToTop"
+import { ThemeInfoCard } from "@/app/components/ThemeInfoCard"
 
 export default function ReactionPage() {
   const [bookmarked, setBookmarked] = useState(false)
-  const [showInfo, setShowInfo] = useState(false)
   const [showMobileTableOfContents, setShowMobileTableOfContents] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
 
@@ -73,20 +73,6 @@ export default function ReactionPage() {
     },
   }
 
-  const infoVariant = {
-    hidden: { opacity: 0, height: 0 },
-    visible: { 
-      opacity: 1, 
-      height: "auto", 
-      transition: { duration: 0.3 } 
-    },
-    exit: { 
-      opacity: 0, 
-      height: 0, 
-      transition: { duration: 0.2 } 
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-[#F0F9FF]">
       {/* Barra de progresso fixa no topo da página */}
@@ -111,14 +97,6 @@ export default function ReactionPage() {
           
           <div className="flex items-center space-x-3">
             <button 
-              className="p-2 rounded-full hover:bg-[#F0F9FF] transition-colors flex items-center text-sm"
-              onClick={() => setShowInfo(!showInfo)}
-            >
-              <Info className="h-5 w-5 text-[#6EC1E4] mr-1" />
-              <span className="hidden sm:inline text-gray-600">Sobre</span>
-            </button>
-            
-            <button 
               className="p-2 rounded-full hover:bg-[#F0F9FF] transition-colors"
               onClick={() => window.navigator.share && window.navigator.share({
                 title: reaction.title,
@@ -140,6 +118,22 @@ export default function ReactionPage() {
           </div>
         </div>
 
+        {/* ThemeInfoCard component always visible */}
+        <ThemeInfoCard 
+          topicId="reacoes-0-15"
+          readTime={Math.ceil(reaction.content.length / 1000)}
+        />
+
+        {/* Add a debug indicator to show that this page is using the reaction data structure */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mb-4 p-2 bg-yellow-100 text-xs text-gray-700 rounded">
+            <div>Page ID: reacoes-0-15 | Content Length: {reaction.content.length}</div>
+            <div>Icon exists: {reaction.icon ? 'Yes' : 'No'}</div>
+            <div>Has reaction.id: {reaction.id ? 'Yes' : 'No'}</div>
+            <div>Total reactions: {reactions.length}</div>
+          </div>
+        )}
+
         <motion.div 
           initial="hidden" 
           animate="visible" 
@@ -157,38 +151,6 @@ export default function ReactionPage() {
               </div>
             </div>
             
-            <AnimatePresence>
-              {showInfo && (
-                <motion.div 
-                  variants={infoVariant}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="bg-white/70 backdrop-blur-sm p-6 rounded-xl border border-[#E0E0E0] mb-8 overflow-hidden"
-                >
-                  <h3 className="text-xl font-semibold text-[#4A96D1] mb-4">Sobre este tema</h3>
-                  <p className="text-gray-700 mb-4">
-                    Este conteúdo educativo foi desenvolvido para ajudar profissionais e estudantes a compreender melhor as reações posturais e de equilíbrio em bebês de 0 a 15 meses, com foco especial na avaliação do tônus muscular e reflexos primitivos.
-                  </p>
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#F0F9FF] p-4 rounded-lg">
-                    <div className="flex items-center">
-                      <BookOpen className="h-5 w-5 text-[#6EC1E4] mr-3" />
-                      <p className="text-sm text-[#666666]">
-                        Tempo estimado de leitura: {Math.ceil(reaction.content.length / 1000)} minutos
-                      </p>
-                    </div>
-                    
-                    <div className="text-sm text-[#666666] flex items-center">
-                      <span className="mr-2">Última atualização:</span>
-                      <span className="bg-[#6EC1E4] text-white px-2 py-1 rounded-full text-xs">
-                        Maio 2025
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
             {/* Navegação rápida para dispositivos móveis */}
             <div className="block lg:hidden mb-8">
               <button 

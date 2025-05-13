@@ -15,6 +15,17 @@ const HidroterapiaContent = `
       </p>
     </div>
 
+    <div class="topic-quick-nav">
+      <div class="nav-items">
+        <a href="#metodologia-do-estudo" class="nav-item">Metodologia</a>
+        <a href="#resultados" class="nav-item">Resultados</a>
+        <a href="#discussao-detalhada" class="nav-item">Discussão</a>
+        <a href="#exemplos-praticos" class="nav-item">Exemplos Práticos</a>
+        <a href="#consideracoes-especiais" class="nav-item">Considerações Especiais</a>
+        <a href="#consideracoes-finais" class="nav-item">Considerações Finais</a>
+      </div>
+    </div>
+
     <div class="my-10">
       <div class="relative h-[350px] md:h-[450px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-md mb-4 bg-gray-50 flex items-center justify-center p-4">
         <img src="/images/neonatal/hidroterapia-principal.jpg" alt="Bebê recebendo hidroterapia em UTIN" class="max-h-full max-w-full object-contain" style="object-fit: contain;" />
@@ -22,7 +33,7 @@ const HidroterapiaContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 1: Técnica de hidroterapia (ofurô) sendo aplicada em recém-nascido na UTIN</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Metodologia do Estudo</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="metodologia-do-estudo">Metodologia do Estudo</h3>
     <p class="text-gray-700 mb-6">
       O estudo analisado é retrospectivo, examinando dados de neonatos que foram submetidos à hidroterapia em uma UTIN 
       de um hospital no Rio Grande do Sul. Os dados foram coletados antes e após a intervenção, utilizando escalas 
@@ -65,7 +76,7 @@ const HidroterapiaContent = `
       <p class="text-sm text-center text-gray-600 italic">Figura 2: Comparação dos parâmetros fisiológicos antes e após a sessão de hidroterapia em neonatos</p>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Resultados</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="resultados">Resultados</h3>
     <p class="text-gray-700 mb-4">
       Os resultados do estudo demonstraram benefícios significativos da hidroterapia em diferentes aspectos do bem-estar dos neonatos:
     </p>
@@ -99,7 +110,7 @@ const HidroterapiaContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Discussão Detalhada</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="discussao-detalhada">Discussão Detalhada</h3>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-8">
       <div class="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
@@ -139,7 +150,7 @@ const HidroterapiaContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Exemplos Práticos</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="exemplos-praticos">Exemplos Práticos</h3>
     <p class="text-gray-700 mb-4">
       A aplicação da hidroterapia em neonatos segue um protocolo específico, garantindo a segurança e eficácia da intervenção:
     </p>
@@ -185,7 +196,7 @@ const HidroterapiaContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Considerações Especiais</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="consideracoes-especiais">Considerações Especiais</h3>
 
     <div class="space-y-6 mt-8">
       <div class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
@@ -219,7 +230,7 @@ const HidroterapiaContent = `
       </div>
     </div>
 
-    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold">Considerações Finais</h3>
+    <h3 class="text-2xl text-[#6EC1E4] mt-10 mb-4 font-semibold" id="consideracoes-finais">Considerações Finais</h3>
     <p class="text-gray-700 mb-4">
       A hidroterapia surge como uma ferramenta valiosa no cuidado neonatal, promovendo benefícios tanto fisiológicos quanto 
       emocionais. Os resultados observados no estudo endossam a incorporação dessa técnica na rotina de cuidados em UTINs, 
