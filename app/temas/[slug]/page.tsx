@@ -267,7 +267,7 @@ export default function TopicPage({ params }: TopicPageProps) {
             {/* Conteúdo principal */}
             <motion.div variants={childVariant} className="lg:col-span-3">
               <TopicContent topic={topic} />
-              
+
               <RelatedTopics currentTopic={topic} allTopics={topics} />
 
               <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
