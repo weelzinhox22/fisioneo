@@ -17,8 +17,10 @@ import {
   Baby,
   Stethoscope,
   GraduationCap,
-  RefreshCw
+  RefreshCw,
+  ExternalLink
 } from "lucide-react"
+import Link from "next/link"
 
 type FeatureStep = {
   title: string
@@ -27,6 +29,7 @@ type FeatureStep = {
   imageUrl: string
   highlight: string
   color: string
+  link?: string // Link to the feature page
 }
 
 export default function OnboardingWalkthrough() {
@@ -101,7 +104,8 @@ export default function OnboardingWalkthrough() {
       icon: <BookOpen className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Plataforma educacional especializada",
-      color: "blue"
+      color: "blue",
+      link: "/"
     },
     {
       title: "Assistente IA Interativo",
@@ -109,7 +113,8 @@ export default function OnboardingWalkthrough() {
       icon: <Sparkles className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1677442135148-1776d208998d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Tire dúvidas em tempo real",
-      color: "purple"
+      color: "purple",
+      link: "/#assistente-ia"
     },
     {
       title: "Leitor de PDF Integrado",
@@ -117,7 +122,8 @@ export default function OnboardingWalkthrough() {
       icon: <FileText className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1633613286991-611fe299c4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Estude documentos sem sair da plataforma",
-      color: "red"
+      color: "red",
+      link: "/documentos"
     },
     {
       title: "Provas Gerais",
@@ -125,7 +131,8 @@ export default function OnboardingWalkthrough() {
       icon: <PenTool className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Avalie seu conhecimento geral",
-      color: "green"
+      color: "green",
+      link: "/prova-geral"
     },
     {
       title: "Provas Temáticas",
@@ -133,7 +140,8 @@ export default function OnboardingWalkthrough() {
       icon: <BookMarked className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1554475901-4538ddfbccc2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Estude tópicos específicos em profundidade",
-      color: "amber"
+      color: "amber",
+      link: "/provas"
     },
     {
       title: "Método Canguru",
@@ -141,7 +149,8 @@ export default function OnboardingWalkthrough() {
       icon: <Baby className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Aprofunde-se no cuidado humanizado",
-      color: "pink"
+      color: "pink",
+      link: "/temas/metodo-canguru"
     },
     {
       title: "Avaliação Neurológica",
@@ -149,7 +158,8 @@ export default function OnboardingWalkthrough() {
       icon: <Brain className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1559757175-7cb036e010ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Avaliação e diagnóstico precoce",
-      color: "indigo"
+      color: "indigo",
+      link: "/temas/avaliacao-neurologica"
     },
     {
       title: "Recursos Educacionais",
@@ -157,7 +167,8 @@ export default function OnboardingWalkthrough() {
       icon: <GraduationCap className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Materiais de estudo diversificados",
-      color: "cyan"
+      color: "cyan",
+      link: "/temas"
     }
   ]
 
@@ -244,6 +255,18 @@ export default function OnboardingWalkthrough() {
                     </div>
                     <h3 className="text-xl font-semibold mb-2">{features[currentStep].title}</h3>
                     <p className="text-gray-600">{features[currentStep].description}</p>
+                    
+                    {/* Link to feature page */}
+                    {features[currentStep].link && (
+                      <Link 
+                        href={features[currentStep].link}
+                        className="mt-4 inline-flex items-center text-sm font-medium text-[#6EC1E4] hover:text-[#5BA8CB] transition-colors"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <span>Ir para {features[currentStep].title}</span>
+                        <ExternalLink className="ml-1 h-3.5 w-3.5" />
+                      </Link>
+                    )}
                   </div>
 
                   {/* Feature image (right side on desktop) */}
@@ -306,19 +329,37 @@ export default function OnboardingWalkthrough() {
                   </Button>
                 )}
               </div>
-              <Button
-                onClick={handleNext}
-                className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5BA8CB] hover:to-[#A090E0] text-white flex items-center gap-1"
-              >
-                {currentStep < features.length - 1 ? (
-                  <>
-                    Próximo
-                    <ChevronRight className="h-4 w-4" />
-                  </>
-                ) : (
-                  "Finalizar"
+              
+              <div className="flex gap-2">
+                {features[currentStep].link && (
+                  <Link 
+                    href={features[currentStep].link}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Button
+                      variant="outline"
+                      className="border-[#6EC1E4] text-[#6EC1E4] hover:bg-[#F0F7FF] hover:border-[#5BA8CB] hover:text-[#5BA8CB] flex items-center gap-1"
+                    >
+                      Acessar
+                      <ExternalLink className="h-3.5 w-3.5 ml-1" />
+                    </Button>
+                  </Link>
                 )}
-              </Button>
+                
+                <Button
+                  onClick={handleNext}
+                  className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5BA8CB] hover:to-[#A090E0] text-white flex items-center gap-1"
+                >
+                  {currentStep < features.length - 1 ? (
+                    <>
+                      Próximo
+                      <ChevronRight className="h-4 w-4" />
+                    </>
+                  ) : (
+                    "Finalizar"
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </DialogContent>
