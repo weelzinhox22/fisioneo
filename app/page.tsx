@@ -14,7 +14,8 @@ import {
   Search, 
   MessageSquare, 
   BookOpen, 
-  RefreshCw 
+  RefreshCw, 
+  Sparkles 
 } from "lucide-react"
 import { motion, useScroll, useTransform, useSpring } from "framer-motion"
 import gsap from "gsap"
@@ -34,12 +35,13 @@ export default function Home() {
   const pdfSectionRef = useRef(null);
   const assessSectionRef = useRef(null);
   const finalSectionRef = useRef(null);
+  const aiAssistantSectionRef = useRef(null);
   
   // Set up advanced scroll animations with GSAP
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    const sections = [pdfSectionRef, assessSectionRef, finalSectionRef];
+    const sections = [pdfSectionRef, assessSectionRef, finalSectionRef, aiAssistantSectionRef];
     
     sections.forEach((sectionRef) => {
       if (!sectionRef.current) return;
@@ -286,6 +288,173 @@ export default function Home() {
                 </svg>
               </span>
             </MagneticButton>
+          </div>
+        </section>
+
+        {/* Nova seção - Tutorial do Assistente IA */}
+        <section 
+          id="assistente-ia"
+          className="py-24 my-32 relative"
+          ref={aiAssistantSectionRef}
+        >
+          <AdvancedParallax speed={0.12} direction="diagonal" className="absolute inset-0">
+            <div className="bg-gradient-to-br from-[#6EC1E4]/10 to-[#B9A9FF]/10 rounded-3xl h-full w-full"></div>
+          </AdvancedParallax>
+          
+          <motion.div 
+            className="absolute inset-0 bg-white/90 backdrop-blur-md rounded-3xl"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+          />
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true, amount: 0.3 }}
+                className="animate-on-scroll"
+              >
+                <span className="px-4 py-1.5 bg-gradient-to-r from-[#6EC1E4]/10 to-[#B9A9FF]/10 rounded-full text-sm font-medium text-[#6EC1E4] inline-block mb-4">
+                  Assistente inteligente
+                </span>
+                
+                <ThreeDText
+                  text="Seu Assistente IA Pessoal"
+                  gradient={true}
+                  depth={8}
+                  fontSize="2.5rem"
+                  fontWeight="700"
+                  className="mb-6"
+                />
+                
+                <p className="text-lg text-[#666666] mb-4 leading-relaxed">
+                  Explore todo o potencial do FisioNeo com nosso Assistente IA, projetado para enriquecer sua experiência de aprendizado e tornar o estudo da fisioterapia neonatal mais eficiente e personalizado.
+                </p>
+                
+                <p className="text-lg text-[#666666] mb-6 leading-relaxed">
+                  Nosso assistente inteligente está disponível em todas as páginas do site, pronto para ajudar você a compreender conceitos complexos, oferecer explicações detalhadas e guiar seu aprendizado.
+                </p>
+                
+                <div className="space-y-6 mb-8">
+                  <motion.div 
+                    className="flex items-start"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <div className="flex-shrink-0 bg-[#F0F9FF] p-4 rounded-xl mr-5">
+                      <MessageSquare className="h-7 w-7 text-[#6EC1E4]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-[#333333] mb-1">Faça perguntas sobre o conteúdo</h4>
+                      <p className="text-[#666666]">Tire suas dúvidas sobre qualquer tópico de fisioterapia neonatal com respostas precisas e atualizadas</p>
+                    </div>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="flex items-start"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <div className="flex-shrink-0 bg-[#F0F9FF] p-4 rounded-xl mr-5">
+                      <BookOpen className="h-7 w-7 text-[#6EC1E4]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-[#333333] mb-1">Solicite explicações detalhadas</h4>
+                      <p className="text-[#666666]">Peça para o assistente explicar conceitos complexos de forma simples e adaptada ao seu nível de conhecimento</p>
+                    </div>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="flex items-start"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <div className="flex-shrink-0 bg-[#F0F9FF] p-4 rounded-xl mr-5">
+                      <Sparkles className="h-7 w-7 text-[#6EC1E4]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-[#333333] mb-1">Obtenha resumos personalizados</h4>
+                      <p className="text-[#666666]">Receba resumos dos tópicos de estudo adaptados às suas necessidades de aprendizado</p>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                viewport={{ once: true, amount: 0.3 }}
+                className="animate-on-scroll"
+              >
+                <div className="bg-white rounded-xl p-8 shadow-xl border border-gray-100 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF]"></div>
+                  
+                  <h3 className="text-2xl font-bold text-[#333333] mb-6">Como utilizar o Assistente IA</h3>
+                  
+                  <div className="space-y-8">
+                    <div className="relative pl-10">
+                      <div className="absolute left-0 top-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#F0F9FF] text-[#6EC1E4] font-semibold">1</div>
+                      <h4 className="font-semibold text-[#333333] mb-2">Encontre o botão do assistente</h4>
+                      <p className="text-[#666666] mb-3">Localize o botão do Assistente IA no canto inferior direito da tela em qualquer página do site.</p>
+                      <div className="p-3 bg-[#F8F9FA] rounded-lg flex items-center gap-3">
+                        <Sparkles className="h-5 w-5 text-[#6EC1E4]" />
+                        <span className="text-[#333333] font-medium">Assistente IA</span>
+                      </div>
+                    </div>
+                    
+                    <div className="relative pl-10">
+                      <div className="absolute left-0 top-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#F0F9FF] text-[#6EC1E4] font-semibold">2</div>
+                      <h4 className="font-semibold text-[#333333] mb-2">Clique para ativar</h4>
+                      <p className="text-[#666666] mb-3">Clique no botão para abrir o painel de conversa do assistente e iniciar a interação.</p>
+                    </div>
+                    
+                    <div className="relative pl-10">
+                      <div className="absolute left-0 top-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#F0F9FF] text-[#6EC1E4] font-semibold">3</div>
+                      <h4 className="font-semibold text-[#333333] mb-2">Faça suas perguntas</h4>
+                      <p className="text-[#666666] mb-3">Digite suas dúvidas, peça explicações ou solicite ajuda sobre qualquer tópico de fisioterapia neonatal.</p>
+                      <div className="p-3 bg-[#F8F9FA] rounded-lg text-[#666666] italic">
+                        "Pode me explicar como avaliar os reflexos primitivos em bebês prematuros?"
+                      </div>
+                    </div>
+                    
+                    <div className="relative pl-10">
+                      <div className="absolute left-0 top-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#F0F9FF] text-[#6EC1E4] font-semibold">4</div>
+                      <h4 className="font-semibold text-[#333333] mb-2">Interaja e aprofunde</h4>
+                      <p className="text-[#666666]">Continue a conversa, peça mais detalhes ou mude de tópico conforme sua necessidade de aprendizado.</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="mt-12 text-center"
+            >
+              <MagneticButton
+                backgroundGradient={true}
+                glowOnHover={true}
+                strength={15}
+                className="px-8 py-4 font-medium"
+                onClick={() => {
+                  // Use the same functionality as the DraggableAIButton
+                  alert('Assistente IA ativado!');
+                }}
+              >
+                <span className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  Experimentar Assistente IA
+                </span>
+              </MagneticButton>
+            </motion.div>
           </div>
         </section>
 

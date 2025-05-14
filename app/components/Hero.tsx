@@ -9,6 +9,7 @@ import { AdvancedParallax } from '@/components/animations/advanced-parallax';
 import { ThreeDText } from '@/components/ui/3d-text';
 import { MagneticButton } from '@/components/ui/magnetic-button';
 import { ScrollTo } from '@/components/animations/smooth-scroll';
+import { Monitor, X } from 'lucide-react';
 
 // Register GSAP plugins on client-side only
 if (typeof window !== 'undefined') {
@@ -87,6 +88,7 @@ const Particles = ({ count = 50 }) => {
 export const Hero = () => {
   const { isMobile } = useViewport();
   const [isClient, setIsClient] = useState(false);
+  const [showDesktopHint, setShowDesktopHint] = useState(true);
   const heroRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -136,7 +138,25 @@ export const Hero = () => {
         }
       );
     }
-  }, [controls]);
+    
+    // Auto-hide desktop hint after 10 seconds
+    if (isMobile) {
+      const timer = setTimeout(() => {
+        setShowDesktopHint(false);
+      }, 10000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [controls, isMobile]);
+  
+  // Função para determinar a posição vertical do bebê com base na altura da tela
+  const getBabyBottomPosition = () => {
+    if (typeof window === 'undefined') return 'bottom-20';
+    const screenHeight = window.innerHeight;
+    if (screenHeight < 700) return 'bottom-16';
+    if (screenHeight < 800) return 'bottom-20';
+    return 'bottom-24';
+  };
   
   // Staggered animation variants
   const containerVariants = {
@@ -187,12 +207,12 @@ export const Hero = () => {
             
             {/* Imagem hero-baby sobreposta */}
             <motion.div 
-              className={`absolute ${isMobile ? 'w-[80%] h-[75%] right-0 bottom-0' : 'w-[70%] h-[95%] right-0 bottom-0'} z-[1]`}
+              className={`absolute ${isMobile ? 'hidden' : 'w-[70%] h-[95%] right-0 bottom-0'} z-[1]`}
               initial={{ opacity: 0, x: 30 }}
               animate={{ 
                 opacity: 1, 
                 x: 0,
-                y: [0, -10, 0], // Efeito de flutuação suave
+                y: [0, -8, 0], // Efeito de flutuação suave
               }}
               transition={{ 
                 duration: 1.2, 
@@ -206,25 +226,34 @@ export const Hero = () => {
                 }
               }}
             >
-              <Image 
-                src="/images/feto/hero-baby.png" 
-                alt="Bebê"
-                fill
-                priority
-                quality={100}
-                sizes="(max-width: 1080px) 120vw, 120vw"
-                style={{ 
-                  objectFit: 'contain',
-                  objectPosition: 'top 15% right 5%',
-                  filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.15))'
+              <motion.div
+                animate={{ 
+                  y: [0, -15, 0],
+                  scale: [1, 1.08, 1]
                 }}
-              />
+                transition={{ 
+                  duration: 5,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut" 
+                }}
+              >
+                <Image 
+                  src="/images/feto/hero-baby.png" 
+                  alt="Bebê"
+                  width={850}
+                  height={850}
+                  priority
+                  quality={100}
+                  className="object-contain"
+                />
+              </motion.div>
             </motion.div>
           </div>
         )}
         
         {/* Advanced gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/60 to-transparent md:to-transparent to-black/40" />
         
         {/* Animated particle overlay */}
         <Particles count={isMobile ? 30 : 80} />
@@ -235,35 +264,49 @@ export const Hero = () => {
         className="relative z-10 h-full max-w-screen-xl mx-auto"
         style={{ opacity: opacityTransform }}
       >
-        <div className="flex flex-col justify-center h-full px-8 lg:px-16">
+        <div className={`flex flex-col ${isMobile ? 'justify-start pt-16' : 'justify-center'} h-full px-6 lg:px-16`}>
           <motion.div
             ref={contentRef}
             initial={{ opacity: 0, y: 40 }}
             animate={controls}
             variants={containerVariants}
-            className="md:max-w-[60%] lg:max-w-[55%]"
+            className={`${isMobile ? 'mx-auto text-center' : 'md:max-w-[60%] lg:max-w-[55%]'} sm:max-w-[85%] max-w-full`}
           >
             <motion.div 
               variants={itemVariants}
-              className="mb-6"
+              className="mb-2 md:mb-6"
             >
               <AdvancedParallax speed={0.2} direction="horizontal" blur={true}>
-                <span className="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/30 to-pink-500/30 backdrop-blur-sm border border-purple-500/40 text-sm font-medium text-white">
+                <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-gradient-to-r from-purple-500/30 to-pink-500/30 backdrop-blur-sm border border-purple-500/40 text-xs md:text-sm font-medium text-white">
                   Fisioterapia avançada para bebês
                 </span>
               </AdvancedParallax>
+              
+              {/* Texto adicional apenas em mobile - área que estava marcada em verde no print */}
+              {isMobile && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 0.5 }}
+                  className="mt-2 mb-3 text-center px-1"
+                >
+                  <p className="text-xs text-white leading-relaxed">
+                    <span className="font-semibold">Aprenda tudo sobre fisioterapia neonatal</span>: métodos, técnicas e avaliações em um único portal educacional focado em desenvolvimento infantil.
+                  </p>
+                </motion.div>
+              )}
             </motion.div>
             
             <motion.div 
               variants={itemVariants}
-              className="mb-8"
+              className="mb-6 md:mb-8"
               style={{ y: titleParallax }}
             >
               <ThreeDText
                 text={<>Fisioterapia<br/>Neonatal</>}
                 gradient={true}
                 depth={3}
-                fontSize={isMobile ? '3.5rem' : '5rem'}
+                fontSize={isMobile ? '2.7rem' : '5rem'}
                 perspective={1200}
                 interactive={true}
                 className="font-bold"
@@ -273,39 +316,96 @@ export const Hero = () => {
             
             <motion.p 
               variants={itemVariants}
-              className="text-lg text-gray-100 mb-10 font-medium leading-relaxed max-w-xl text-shadow"
+              className="text-sm md:text-lg text-gray-100 mb-4 md:mb-10 font-medium leading-relaxed max-w-xl text-shadow"
             >
-              Portal educacional dedicado ao estudo e prática da fisioterapia em recém-nascidos e crianças, com foco em desenvolvimento neuromotor, avaliação e intervenção precoce.
+              {isMobile ? 
+                "Portal educacional sobre fisioterapia em recém-nascidos e crianças, focado em desenvolvimento neuromotor." :
+                "Portal educacional dedicado ao estudo e prática da fisioterapia em recém-nascidos e crianças, com foco em desenvolvimento neuromotor, avaliação e intervenção precoce."
+              }
             </motion.p>
 
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
-              <ScrollTo targetId="leitor-pdf" offset={-100}>
-                <MagneticButton
-                  backgroundGradient={true}
-                  glowOnHover={true}
-                  strength={20}
-                  className="px-8 py-4 font-medium"
-                >
-                  <span className="flex items-center">
-                    Explorar Recursos
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </span>
-                </MagneticButton>
-              </ScrollTo>
-              
-              <ScrollTo targetId="sobre" offset={-80}>
-                <MagneticButton
-                  variant="subtle"
-                  className="px-8 py-4 font-medium text-white border-2 border-white/30 hover:bg-white/10"
-                >
-                  Saiba Mais
-                </MagneticButton>
-              </ScrollTo>
+            <motion.div variants={itemVariants} className="flex flex-wrap gap-3 md:gap-4">
+              {isMobile ? (
+                <>
+                  {/* Versão mobile com botões centralizados sem a imagem */}
+                  <div className="w-full flex flex-col items-center">
+                    <div className="flex flex-col gap-2 items-center">
+                      <ScrollTo targetId="leitor-pdf" offset={-100}>
+                        <button className="text-sm text-white font-medium px-5 py-1.5 bg-[#6EC1E4]/70 hover:bg-[#6EC1E4]/90 rounded-md transition-colors">
+                          Explorar Recursos
+                        </button>
+                      </ScrollTo>
+                      
+                      <ScrollTo targetId="sobre" offset={-80}>
+                        <button className="text-xs text-white font-medium px-4 py-1.5 bg-white/20 hover:bg-white/30 rounded-md transition-colors">
+                          Saiba Mais
+                        </button>
+                      </ScrollTo>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Versão desktop original */}
+                  <ScrollTo targetId="leitor-pdf" offset={-100}>
+                    <MagneticButton
+                      backgroundGradient={true}
+                      glowOnHover={true}
+                      strength={20}
+                      className="px-5 py-3 md:px-8 md:py-4 text-sm md:text-base font-medium"
+                    >
+                      <span className="flex items-center">
+                        Explorar Recursos
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-5 md:w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </span>
+                    </MagneticButton>
+                  </ScrollTo>
+                  
+                  <ScrollTo targetId="sobre" offset={-80}>
+                    <MagneticButton
+                      variant="subtle"
+                      className="px-5 py-3 md:px-8 md:py-4 text-sm md:text-base font-medium text-white border-2 border-white/30 hover:bg-white/10"
+                    >
+                      Saiba Mais
+                    </MagneticButton>
+                  </ScrollTo>
+                </>
+              )}
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Hero baby centralizado abaixo da div principal - apenas no mobile */}
+        {isMobile && (
+          <div className={`absolute left-1/2 transform -translate-x-1/2 ${getBabyBottomPosition()} z-10`}>
+            <div className="relative">
+              <motion.div
+                animate={{ 
+                  y: [0, -18, 0],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ 
+                  duration: 6,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut" 
+                }}
+              >
+                <Image 
+                  src="/images/feto/hero-baby.png" 
+                  alt="Bebê"
+                  width={850}
+                  height={850}
+                  priority
+                  quality={100}
+                  className="object-contain"
+                />
+              </motion.div>
+            </div>
+          </div>
+        )}
       </motion.div>
       
       {/* Scroll indicator */}
@@ -325,6 +425,64 @@ export const Hero = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
       </motion.div>
+      
+      {/* Desktop Experience Hint - Only shows on mobile */}
+      {isMobile && showDesktopHint && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ 
+            duration: 0.5, 
+            delay: 0.5,  // Reduzir o delay para 0.5 segundos
+            ease: "easeOut" 
+          }}
+          className="fixed bottom-20 inset-x-0 mx-auto z-50 w-[90%] max-w-xs px-4"
+        >
+          <div className="relative bg-gradient-to-r from-[#6EC1E4]/90 to-[#B9A9FF]/90 backdrop-blur-md rounded-lg p-4 shadow-xl border border-white/20">
+            <button 
+              className="absolute top-2 right-2 text-white/80 hover:text-white" 
+              onClick={() => setShowDesktopHint(false)}
+              aria-label="Fechar aviso"
+            >
+              <X size={18} />
+            </button>
+            
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-2 rounded-full">
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.15, 1],
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut" 
+                  }}
+                >
+                  <Monitor className="h-5 w-5 text-white" />
+                </motion.div>
+              </div>
+              <div>
+                <h4 className="text-white font-medium text-sm">Experiência Aprimorada</h4>
+                <p className="text-white/80 text-xs mt-1 leading-relaxed">
+                  Para uma melhor visualização, acesse também pelo computador ou notebook. A experiência mobile está otimizada, mas o desktop oferece recursos visuais adicionais.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-3 flex justify-end">
+              <button 
+                onClick={() => setShowDesktopHint(false)}
+                className="text-xs bg-white/20 hover:bg-white/30 text-white font-medium py-1.5 px-3 rounded-md transition-colors"
+              >
+                Entendi
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }; 

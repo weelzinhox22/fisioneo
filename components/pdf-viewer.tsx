@@ -37,20 +37,20 @@ export default function PDFViewer({ file, onError }: PDFViewerProps) {
   }, [file, onError])
   
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-full relative z-10">
       {isLoading ? (
         <div className="flex flex-col items-center justify-center p-12">
           <Loader2 className="h-12 w-12 text-[#6EC1E4] animate-spin mb-4" />
           <p className="text-lg font-medium mb-2">Carregando PDF...</p>
         </div>
       ) : pdfUrl ? (
-        <div className="pdf-container w-full">
+        <div className="pdf-container w-full relative z-20">
           <iframe
             ref={iframeRef}
             src={`${pdfUrl}#view=FitH`}
             className="w-full h-[600px] sm:h-[700px] md:h-[800px] lg:h-[850px] xl:h-[900px] border-0 rounded-lg"
             title="PDF Viewer"
-            style={{ minHeight: "600px" }}
+            style={{ minHeight: "600px", position: "relative", zIndex: 40 }}
           />
         </div>
       ) : (

@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import ParallaxBackground from "@/components/parallax-background"
 import AIAssistant from "@/components/ai-assistant"
+import OnboardingWalkthrough from "@/components/onboarding-walkthrough"
 import { SmoothScrollProvider } from '@/components/animations/smooth-scroll';
 
 const inter = Inter({
@@ -40,6 +41,7 @@ export default function RootLayout({
               <main className="flex-1">{children}</main>
               <Footer />
               <AIAssistant />
+              <OnboardingWalkthrough />
             </div>
           </SmoothScrollProvider>
         </ThemeProvider>

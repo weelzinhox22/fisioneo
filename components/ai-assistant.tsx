@@ -3,21 +3,14 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import {
-  Bot,
-  Send,
-  X,
-  Loader2,
   Sparkles,
-  ChevronDown,
-  ChevronUp,
-  MessageSquare,
-  AlertTriangle,
   WifiOff,
 } from "lucide-react"
 import { ZoomIn } from "./animations/zoom-in"
 import { getFallbackResponse } from "@/lib/fallback-responses"
+import FixedChatModal from "./fixed-chat-modal"
 
 type Message = {
   role: "user" | "assistant" | "system"
@@ -26,7 +19,6 @@ type Message = {
 
 export default function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isMinimized, setIsMinimized] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -38,7 +30,6 @@ export default function AIAssistant() {
   const [isOnline, setIsOnline] = useState(true)
   const [errorCount, setErrorCount] = useState(0)
   const [useLocalMode, setUseLocalMode] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Verificar conexão com a internet
   useEffect(() => {
@@ -56,13 +47,6 @@ export default function AIAssistant() {
       window.removeEventListener("offline", handleOfflineStatus)
     }
   }, [])
-
-  // Scroll para o final das mensagens quando novas mensagens são adicionadas
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
-    }
-  }, [messages])
 
   // Resetar contador de erros quando o chat é fechado
   useEffect(() => {
@@ -153,11 +137,6 @@ export default function AIAssistant() {
     }
   }
 
-  const toggleMinimize = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setIsMinimized(!isMinimized)
-  }
-
   const toggleLocalMode = () => {
     setUseLocalMode(!useLocalMode)
     setMessages((prev) => [
@@ -186,146 +165,19 @@ export default function AIAssistant() {
         </button>
       </ZoomIn>
 
-      {/* Modal do assistente */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 md:p-6"
-            onClick={() => setIsOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="bg-white rounded-xl shadow-xl w-full max-w-md flex flex-col overflow-hidden"
-              style={{ height: isMinimized ? "auto" : "600px" }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Cabeçalho */}
-              <div className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white p-4 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <Bot className="h-5 w-5" />
-                  <h3 className="font-medium">Assistente de Fisioterapia Neonatal</h3>
-                  {!isOnline && <WifiOff className="h-4 w-4 ml-1" />}
-                  {useLocalMode && <AlertTriangle className="h-4 w-4 ml-1 text-yellow-300" />}
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={toggleLocalMode}
-                    aria-label="Alternar modo local"
-                    className="text-xs px-2 py-1 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-                  >
-                    {useLocalMode ? "Modo Local" : "Modo Online"}
-                  </button>
-                  <button onClick={toggleMinimize} aria-label={isMinimized ? "Expandir" : "Minimizar"}>
-                    {isMinimized ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-                  </button>
-                  <button onClick={() => setIsOpen(false)} aria-label="Fechar assistente">
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Status de conexão */}
-              {!isOnline && (
-                <div className="bg-yellow-50 border-b border-yellow-100 px-4 py-2 flex items-center gap-2">
-                  <WifiOff className="h-4 w-4 text-yellow-500" />
-                  <span className="text-sm text-yellow-700">Modo offline - Usando respostas pré-definidas</span>
-                </div>
-              )}
-
-              {isOnline && useLocalMode && (
-                <div className="bg-yellow-50 border-b border-yellow-100 px-4 py-2 flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                  <span className="text-sm text-yellow-700">Usando respostas locais (modo forçado)</span>
-                </div>
-              )}
-
-              {/* Conteúdo (oculto quando minimizado) */}
-              {!isMinimized && (
-                <>
-                  {/* Mensagens */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-                    {messages.map(
-                      (message, index) =>
-                        message.role !== "system" && (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                          >
-                            {message.role === "assistant" && (
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] flex items-center justify-center mr-2 flex-shrink-0">
-                                <Bot className="h-4 w-4 text-white" />
-                              </div>
-                            )}
-                            <div
-                              className={`max-w-[80%] rounded-lg p-3 ${
-                                message.role === "user"
-                                  ? "bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white"
-                                  : "bg-white text-[#333333] border border-[#E0E0E0] shadow-sm"
-                              }`}
-                            >
-                              {message.content}
-                            </div>
-                            {message.role === "user" && (
-                              <div className="w-8 h-8 rounded-full bg-[#6EC1E4] flex items-center justify-center ml-2 flex-shrink-0">
-                                <MessageSquare className="h-4 w-4 text-white" />
-                              </div>
-                            )}
-                          </motion.div>
-                        ),
-                    )}
-                    {isLoading && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex justify-start"
-                      >
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] flex items-center justify-center mr-2 flex-shrink-0">
-                          <Bot className="h-4 w-4 text-white" />
-                        </div>
-                        <div className="max-w-[80%] rounded-lg p-3 bg-white text-[#333333] border border-[#E0E0E0] shadow-sm flex items-center gap-2">
-                          <Loader2 className="h-4 w-4 animate-spin text-[#6EC1E4]" />
-                          <span>Pensando...</span>
-                        </div>
-                      </motion.div>
-                    )}
-                    <div ref={messagesEndRef} />
-                  </div>
-
-                  {/* Formulário de entrada */}
-                  <form onSubmit={handleSendMessage} className="border-t border-[#E0E0E0] p-4 flex gap-2">
-                    <input
-                      type="text"
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      placeholder="Digite sua pergunta sobre fisioterapia neonatal..."
-                      className="flex-1 border border-[#E0E0E0] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#6EC1E4]"
-                      disabled={isLoading}
-                    />
-                    <button
-                      type="submit"
-                      className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5BA8CB] hover:to-[#A090E0] text-white rounded-lg px-4 py-2 transition-colors disabled:opacity-50 flex items-center gap-2"
-                      disabled={!input.trim() || isLoading}
-                    >
-                      <Send className="h-4 w-4" />
-                      <span className="sr-only">Enviar</span>
-                    </button>
-                  </form>
-                </>
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Usando o novo componente de chat modal fixo */}
+      <FixedChatModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        messages={messages}
+        isLoading={isLoading}
+        input={input}
+        setInput={setInput}
+        handleSendMessage={handleSendMessage}
+        useLocalMode={useLocalMode}
+        toggleLocalMode={toggleLocalMode}
+        isOnline={isOnline}
+      />
     </>
   )
 }

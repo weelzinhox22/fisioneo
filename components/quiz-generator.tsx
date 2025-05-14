@@ -89,13 +89,13 @@ export default function QuizGenerator({ documentText, documentTitle }: QuizGener
   }
   
   return (
-    <div>
+    <div className="relative z-10">
       {!questions.length ? (
         <>
           <button
             onClick={generateQuiz}
             disabled={isGenerating}
-            className="w-full py-3 bg-gradient-to-r from-[#B9A9FF] to-[#A091E4] text-white rounded-lg hover:shadow-lg transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 bg-gradient-to-r from-[#B9A9FF] to-[#A091E4] text-white rounded-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 relative z-20"
           >
             {isGenerating ? (
               <>
@@ -108,12 +108,12 @@ export default function QuizGenerator({ documentText, documentTitle }: QuizGener
           </button>
           
           {error && (
-            <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm flex justify-between items-center">
+            <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm flex justify-between items-center relative z-20">
               <span>{error}</span>
               {!isGenerating && (
                 <button 
                   onClick={resetAndRetry}
-                  className="ml-2 p-1.5 rounded-full bg-red-100 hover:bg-red-200 transition-colors"
+                  className="ml-2 p-1.5 rounded-full bg-red-100 hover:bg-red-200 transition-colors relative z-30"
                 >
                   <RefreshCw className="h-4 w-4" />
                 </button>
@@ -122,7 +122,7 @@ export default function QuizGenerator({ documentText, documentTitle }: QuizGener
           )}
         </>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 relative z-10">
           <p className="text-sm text-gray-600">
             {questions.length} perguntas geradas sobre este documento
           </p>
@@ -130,14 +130,14 @@ export default function QuizGenerator({ documentText, documentTitle }: QuizGener
           <div className="flex flex-col space-y-3">
             <button
               onClick={openQuiz}
-              className="w-full py-3 bg-gradient-to-r from-[#B9A9FF] to-[#A091E4] text-white rounded-lg hover:shadow-lg transition-all"
+              className="w-full py-3 bg-gradient-to-r from-[#B9A9FF] to-[#A091E4] text-white rounded-lg hover:shadow-lg transition-all relative z-20"
             >
               Responder às perguntas
             </button>
             
             <button
               onClick={resetAndRetry}
-              className="w-full py-2 border border-[#B9A9FF] text-[#B9A9FF] rounded-lg hover:bg-[#F5F3FF] transition-all text-sm flex items-center justify-center gap-1"
+              className="w-full py-2 border border-[#B9A9FF] text-[#B9A9FF] rounded-lg hover:bg-[#F5F3FF] transition-all text-sm flex items-center justify-center gap-1 relative z-20"
             >
               <RefreshCw className="h-4 w-4" />
               Gerar novas perguntas

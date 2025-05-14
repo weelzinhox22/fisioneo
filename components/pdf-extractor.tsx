@@ -67,10 +67,10 @@ export default function PDFExtractor({ file, onTextExtracted, onError }: PDFExtr
   }, [file, onTextExtracted, onError]);
   
   return (
-    <div className="flex flex-col items-center justify-center p-12">
+    <div className="flex flex-col items-center justify-center p-12 relative z-20">
       <Loader2 className="h-12 w-12 text-[#6EC1E4] animate-spin mb-4" />
       <p className="text-lg font-medium mb-2">Extraindo texto do PDF...</p>
-      <div className="w-full max-w-md bg-gray-200 rounded-full h-2.5 mb-2">
+      <div className="w-full max-w-md bg-gray-200 rounded-full h-2.5 mb-2 relative">
         <div 
           className="bg-[#6EC1E4] h-2.5 rounded-full" 
           style={{ width: `${progress}%` }}

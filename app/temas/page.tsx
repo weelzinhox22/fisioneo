@@ -226,8 +226,8 @@ export default function TemasPage() {
             muted
             loop
             playsInline
-            className="absolute w-full h-full object-cover"
-            style={{ objectPosition: "center right" }}
+            className="absolute w-full h-full object-cover md:object-right object-center"
+            style={{ objectFit: "cover" }}
           >
             <source src="/images/feto/hero-bg-vd.mp4" type="video/mp4" />
           </video>
