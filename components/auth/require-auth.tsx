@@ -26,6 +26,14 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
     }
 
     checkSupabaseSession()
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSupabaseSession(!!session)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   useEffect(() => {
@@ -35,7 +43,9 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
     console.log('Estado da sessão NextAuth:', hasNextAuthSession ? 'Autenticado' : 'Não autenticado')
     console.log('Estado da sessão Supabase:', supabaseSession ? 'Autenticado' : 'Não autenticado')
 
-    if (!hasNextAuthSession && !supabaseSession) {
+    const hasValidSession = hasNextAuthSession || supabaseSession
+
+    if (!hasValidSession) {
       console.log('Nenhuma sessão válida encontrada em RequireAuth')
       const callbackUrl = pathname
       router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`)

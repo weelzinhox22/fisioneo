@@ -20,6 +20,10 @@ export async function middleware(request: NextRequest) {
     // Log do estado das sessões
     console.log('NextAuth token:', token ? 'Presente' : 'Ausente')
     console.log('Supabase session:', supabaseSession ? 'Presente' : 'Ausente')
+    
+    if (token) {
+      console.log('Provider:', token.provider)
+    }
 
     // Se estiver acessando uma rota protegida
     if (request.nextUrl.pathname.startsWith('/temas') || 
@@ -27,25 +31,29 @@ export async function middleware(request: NextRequest) {
         request.nextUrl.pathname.startsWith('/prova-geral') ||
         request.nextUrl.pathname.startsWith('/documentos')) {
       
-      // Se não tiver nenhuma sessão válida, redireciona para o login
-      if (!token && !supabaseSession) {
+      // Verifica se tem uma sessão válida (NextAuth OU Supabase)
+      const hasValidSession = token || supabaseSession
+
+      if (!hasValidSession) {
         console.log('Nenhuma sessão válida encontrada, redirecionando para login')
-        
-        // Adiciona a URL atual como callbackUrl para retornar após o login
         const callbackUrl = request.nextUrl.pathname
         const loginUrl = new URL('/login', request.url)
         loginUrl.searchParams.set('callbackUrl', callbackUrl)
-        
         return NextResponse.redirect(loginUrl)
       }
 
+      // Se chegou aqui, tem uma sessão válida
       console.log('Acesso permitido à rota protegida:', request.nextUrl.pathname)
+      
+      // Adiciona o token à resposta para uso no cliente
+      if (token) {
+        res.headers.set('x-auth-provider', token.provider as string)
+      }
     }
 
     return res
   } catch (error) {
     console.error('Erro no middleware:', error)
-    // Em caso de erro, redireciona para o login
     const loginUrl = new URL('/login', request.url)
     return NextResponse.redirect(loginUrl)
   }
