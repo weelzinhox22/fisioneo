@@ -6,6 +6,64 @@ import { ArrowLeft, CheckCircle2, XCircle, BarChart, ChevronRight, AlarmClock } 
 import Link from "next/link"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 
+const questions = [
+  {
+    question: "Quais são os principais benefícios do Método Canguru para o bebê prematuro?",
+    options: [
+      "Estabilidade térmica, vínculo afetivo, melhor desenvolvimento neurológico e redução do estresse",
+      "Apenas controle térmico",
+      "Somente ganho de peso",
+      "Não tem benefícios comprovados"
+    ],
+    correctAnswer: 0,
+    explanation: "O Método Canguru oferece múltiplos benefícios: promove estabilidade térmica, fortalece o vínculo afetivo entre pais e bebê, favorece o desenvolvimento neurológico e reduz o estresse do recém-nascido."
+  },
+  {
+    question: "Como o Método Canguru influencia o desenvolvimento neurológico do prematuro?",
+    options: [
+      "Não tem influência",
+      "Apenas melhora o sono",
+      "Estimula conexões cerebrais, regula ciclo sono-vigília e promove organização comportamental",
+      "Somente acalma o bebê"
+    ],
+    correctAnswer: 2,
+    explanation: "O contato pele a pele estimula o desenvolvimento de conexões cerebrais, ajuda na regulação do ciclo sono-vigília e promove melhor organização comportamental do bebê prematuro."
+  },
+  {
+    question: "Quais são os critérios para iniciar o Método Canguru?",
+    options: [
+      "Somente desejo dos pais",
+      "Apenas peso adequado",
+      "Não existem critérios",
+      "Estabilidade clínica, peso mínimo, disponibilidade familiar e orientação da equipe"
+    ],
+    correctAnswer: 3,
+    explanation: "Os critérios incluem estabilidade clínica do bebê, peso mínimo estabelecido, disponibilidade e interesse da família, além de orientação adequada pela equipe de saúde."
+  },
+  {
+    question: "Como deve ser a posição correta para realizar o Método Canguru?",
+    options: [
+      "Não importa a posição",
+      "Apenas deitado",
+      "Bebê em posição vertical, entre os seios, apenas de fralda, cabeça lateralizada",
+      "Qualquer posição"
+    ],
+    correctAnswer: 2,
+    explanation: "A posição correta é fundamental: bebê deve estar em posição vertical, entre os seios do cuidador, vestindo apenas fralda, com cabeça lateralizada e vias aéreas desobstruídas."
+  },
+  {
+    question: "Qual é a importância do suporte profissional durante a prática do Método Canguru?",
+    options: [
+      "Somente em emergências",
+      "Orientação técnica, suporte emocional e monitoramento da adaptação",
+      "Não precisa de suporte",
+      "Apenas supervisão"
+    ],
+    correctAnswer: 1,
+    explanation: "O suporte profissional é essencial para fornecer orientação técnica adequada, dar suporte emocional aos pais e monitorar a adaptação do bebê e da família ao método."
+  }
+]
+
 export default function MetodoCanguruPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -42,64 +100,6 @@ export default function MetodoCanguruPage() {
     const seconds = timeInSeconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
-
-  const questions = [
-    {
-      question: "Quais são os critérios clínicos essenciais para um recém-nascido iniciar a primeira etapa do Método Canguru na UTI Neonatal?",
-      options: [
-        "Peso acima de 2000g e ausência de suporte ventilatório",
-        "Estabilidade clínica, peso mínimo de 1250g e nutrição enteral plena",
-        "Estabilidade clínica independente do peso e adaptação à ventilação mecânica",
-        "Apenas estabilidade respiratória e hemodinâmica, sem outros critérios"
-      ],
-      correctAnswer: 2,
-      explanation: "A primeira etapa do Método Canguru pode ser iniciada assim que o recém-nascido apresente estabilidade clínica, independentemente do peso ou necessidade de suporte ventilatório. O importante é que a equipe avalie a segurança para realizar o posicionamento canguru, mesmo em bebês em ventilação mecânica, desde que estejam clinicamente estáveis."
-    },
-    {
-      question: "Quais são os benefícios comprovados do Método Canguru para o desenvolvimento neurológico do recém-nascido prematuro?",
-      options: [
-        "Apenas regulação térmica e ganho de peso",
-        "Melhora do sono e redução do estresse, sem impacto no desenvolvimento",
-        "Organização comportamental, maturação do sistema nervoso autônomo e melhor desenvolvimento neuropsicomotor",
-        "Somente benefícios relacionados ao vínculo mãe-bebê"
-      ],
-      correctAnswer: 2,
-      explanation: "O Método Canguru promove benefícios neurológicos significativos, incluindo melhor organização comportamental, maturação do sistema nervoso autônomo e desenvolvimento neuropsicomotor. O contato pele a pele estimula a liberação de hormônios e neurotransmissores que favorecem a neuroplasticidade, além de proporcionar estímulos sensoriais adequados ao desenvolvimento cerebral."
-    },
-    {
-      question: "Na segunda etapa do Método Canguru, qual é a recomendação quanto ao tempo mínimo diário de posição canguru?",
-      options: [
-        "30 minutos, duas vezes ao dia",
-        "1 hora contínua, três vezes ao dia",
-        "Posição canguru intermitente, sem tempo mínimo estabelecido",
-        "Permanência contínua na posição canguru por pelo menos 4 horas ininterruptas"
-      ],
-      correctAnswer: 1,
-      explanation: "Na segunda etapa do Método Canguru, recomenda-se que o bebê permaneça em posição canguru por pelo menos 1 hora contínua, três vezes ao dia. Este tempo é considerado o mínimo necessário para garantir os benefícios fisiológicos e comportamentais do método, permitindo ciclos completos de sono e regulação dos sistemas corporais."
-    },
-    {
-      question: "Quais são os critérios de alta hospitalar para a terceira etapa do Método Canguru?",
-      options: [
-        "Peso mínimo de 2500g, independente de outros fatores",
-        "Peso mínimo de 1600g, ganho de peso adequado, mãe segura e vínculo estabelecido",
-        "Apenas amamentação exclusiva e ganho de peso adequado",
-        "Somente estabilidade clínica e ausência de complicações"
-      ],
-      correctAnswer: 1,
-      explanation: "Os critérios de alta para a terceira etapa incluem: peso mínimo de 1600g, ganho de peso adequado nos últimos dias, amamentação bem estabelecida, mãe segura e motivada para dar continuidade aos cuidados em casa, e vínculo família-bebê estabelecido. Além disso, a família deve ter condições de comparecer ao follow-up e acesso ao serviço de saúde caso necessário."
-    },
-    {
-      question: "Qual é o impacto do Método Canguru na amamentação e no ganho de peso do recém-nascido prematuro?",
-      options: [
-        "Não influencia a amamentação ou o ganho de peso",
-        "Aumenta apenas a produção de leite materno, sem impacto no ganho de peso",
-        "Favorece a amamentação exclusiva e promove melhor ganho de peso através da regulação térmica e metabólica",
-        "Melhora apenas o ganho de peso, sem efeito na amamentação"
-      ],
-      correctAnswer: 2,
-      explanation: "O Método Canguru tem impacto positivo tanto na amamentação quanto no ganho de peso. O contato pele a pele estimula a produção de leite materno, favorece o estabelecimento da amamentação exclusiva e promove melhor ganho de peso através da regulação térmica e metabólica. A proximidade constante facilita a amamentação sob livre demanda e o contato precoce estimula reflexos de sucção e deglutição."
-    }
-  ]
 
   const handleAnswerSelect = (index: number) => {
     if (isAnswered) return
@@ -159,7 +159,7 @@ export default function MetodoCanguruPage() {
         {!showResults ? (
           <div>
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">Avaliação sobre Método Canguru</h1>
+              <h1 className="text-2xl font-bold text-gray-800 mb-2">Método Canguru</h1>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-500">
                   Questão {currentQuestion + 1} de {questions.length}
@@ -180,104 +180,116 @@ export default function MetodoCanguruPage() {
                 {questions[currentQuestion].options.map((option, index) => (
                   <button
                     key={index}
-                    className={`w-full text-left p-4 rounded-lg border transition-all ${
+                    className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-[1.01] ${
                       selectedAnswer === index
                         ? index === questions[currentQuestion].correctAnswer
-                          ? "bg-green-50 border-green-200"
-                          : "bg-red-50 border-red-200"
-                        : "border-gray-200 hover:border-blue-200 hover:bg-blue-50"
+                          ? "bg-gradient-to-r from-green-50 to-green-100 border-green-500 shadow-lg"
+                          : "bg-gradient-to-r from-red-50 to-red-100 border-red-500 shadow-lg"
+                        : "border-gray-200 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md"
                     }`}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={isAnswered}
                   >
                     <div className="flex items-center">
                       <div
-                        className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${
+                        className={`h-7 w-7 rounded-full flex items-center justify-center mr-3 transition-all duration-300 ${
                           selectedAnswer === index
                             ? index === questions[currentQuestion].correctAnswer
-                              ? "bg-green-100 text-green-600"
-                              : "bg-red-100 text-red-600"
+                              ? "bg-green-500 text-white scale-110"
+                              : "bg-red-500 text-white scale-110"
                             : "bg-gray-100 text-gray-500"
                         }`}
                       >
                         {selectedAnswer === index ? (
                           index === questions[currentQuestion].correctAnswer ? (
-                            <CheckCircle2 className="h-4 w-4" />
+                            <CheckCircle2 className="h-5 w-5" />
                           ) : (
-                            <XCircle className="h-4 w-4" />
+                            <XCircle className="h-5 w-5" />
                           )
                         ) : (
-                          <span className="text-sm">{String.fromCharCode(65 + index)}</span>
+                          <span className="text-sm font-semibold">{String.fromCharCode(65 + index)}</span>
                         )}
                       </div>
-                      {option}
+                      <span className="text-gray-700 font-medium">{option}</span>
                     </div>
                   </button>
                 ))}
               </div>
 
               {isAnswered && (
-                <div
-                  className={`mt-4 p-4 rounded-lg ${
-                    selectedAnswer === questions[currentQuestion].correctAnswer
-                      ? "bg-green-50 border border-green-100"
-                      : "bg-red-50 border border-red-100"
-                  }`}
-                >
-                  <p className="text-sm">{feedbackMessage}</p>
-                </div>
-              )}
-
-              {isAnswered && (
-                <div className="mt-6 flex justify-end">
+                <div className="mt-6 space-y-4">
+                  <div
+                    className={`p-6 rounded-xl border-2 transition-all duration-300 ${
+                      selectedAnswer === questions[currentQuestion].correctAnswer
+                        ? "bg-gradient-to-r from-green-50 to-green-100 border-green-500 text-green-800"
+                        : "bg-gradient-to-r from-red-50 to-red-100 border-red-500 text-red-800"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      {selectedAnswer === questions[currentQuestion].correctAnswer ? (
+                        <>
+                          <CheckCircle2 className="h-6 w-6 text-green-600" />
+                          <span className="font-semibold text-green-800">Correto!</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="h-6 w-6 text-red-600" />
+                          <span className="font-semibold text-red-800">Incorreto</span>
+                        </>
+                      )}
+                    </div>
+                    <p className="text-sm leading-relaxed">{feedbackMessage}</p>
+                  </div>
                   <button
                     onClick={handleNextQuestion}
-                    className="bg-blue-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+                    className={`w-full rounded-xl p-4 flex items-center justify-center transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-1 ${
+                      currentQuestion < questions.length - 1
+                        ? "bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-500 hover:via-blue-400 hover:to-blue-500"
+                        : "bg-gradient-to-r from-green-600 via-green-500 to-green-600 hover:from-green-500 hover:via-green-400 hover:to-green-500"
+                    } text-white font-semibold shadow-[0_4px_20px_-4px_rgba(0,118,255,0.3)] hover:shadow-[0_8px_25px_-5px_rgba(0,118,255,0.4)]`}
                   >
-                    {currentQuestion < questions.length - 1 ? (
-                      <span className="flex items-center">
-                        Próxima questão
-                        <ChevronRight className="h-4 w-4 ml-2" />
-                      </span>
-                    ) : (
-                      "Ver resultados"
-                    )}
+                    <div className="flex items-center gap-2">
+                      {currentQuestion < questions.length - 1 ? (
+                        <>
+                          <span>Próxima Questão</span>
+                          <ChevronRight className="h-5 w-5 animate-[bounceRight_1s_infinite]" />
+                        </>
+                      ) : (
+                        <>
+                          <span>Ver Resultados</span>
+                          <BarChart className="h-5 w-5" />
+                        </>
+                      )}
+                    </div>
                   </button>
                 </div>
               )}
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BarChart className="h-8 w-8 text-blue-500" />
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Resultados do Teste</h2>
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="flex items-center gap-2">
+                  <AlarmClock className="h-5 w-5 text-gray-500" />
+                  <span className="text-gray-600">{formatTime(timer)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <BarChart className="h-5 w-5 text-gray-500" />
+                  <span className="text-gray-600">{calculateFinalGrade()}%</span>
+                </div>
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Resultados da Avaliação</h2>
-              <p className="text-gray-600">Você completou a avaliação em {formatTime(timer)}</p>
-            </div>
 
-            <div className="flex justify-center items-center gap-8 mb-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-500">{score}</div>
-                <div className="text-sm text-gray-500">Acertos</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-500">{questions.length}</div>
-                <div className="text-sm text-gray-500">Questões</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-800">{calculateFinalGrade()}%</div>
-                <div className="text-sm text-gray-500">Nota final</div>
-              </div>
-            </div>
+              <p className="text-gray-600 mb-8">
+                Você acertou {score} de {questions.length} questões
+              </p>
 
-            <div className="flex flex-wrap gap-4 justify-center">
-              <MagneticButton onClick={resetQuiz}>
-                Refazer Avaliação
-              </MagneticButton>
-              <MagneticButton href="/provas">
-                Voltar para Provas
+              <MagneticButton
+                onClick={resetQuiz}
+                className="bg-blue-500 text-white rounded-lg px-6 py-3 hover:bg-blue-600 transition-colors"
+              >
+                Tentar Novamente
               </MagneticButton>
             </div>
           </div>

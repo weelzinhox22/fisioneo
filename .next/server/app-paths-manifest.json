@@ -1,11 +1,9 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/login/page": "app/login/page.js",
   "/page": "app/page.js",
   "/perfil/page": "app/perfil/page.js",
-  "/temas/page": "app/temas/page.js",
-  "/temas/[slug]/page": "app/temas/[slug]/page.js",
-  "/(protected)/provas/page": "app/(protected)/provas/page.js",
-  "/(protected)/prova-geral/page": "app/(protected)/prova-geral/page.js"
+  "/login/page": "app/login/page.js",
+  "/(protected)/provas/sequelas-neurologicas/page": "app/(protected)/provas/sequelas-neurologicas/page.js",
+  "/(protected)/provas/sequelas-pulmonares/page": "app/(protected)/provas/sequelas-pulmonares/page.js",
+  "/(protected)/provas/metodo-canguru/page": "app/(protected)/provas/metodo-canguru/page.js"
 }

@@ -19,7 +19,7 @@ export default function ProfilePage() {
   const [alertConfig, setAlertConfig] = useState({
     title: "",
     message: "",
-    type: "success" as const
+    type: "success" as "success" | "error" | "info"
   })
   const [emailPreferences, setEmailPreferences] = useState({
     marketing: false,
@@ -69,15 +69,45 @@ export default function ProfilePage() {
     try {
       const userId = supabaseSession?.user?.id || nextAuthSession?.user?.email
 
-      const { data, error } = await supabase
+      // First check if a profile exists
+      const { data: existingProfile } = await supabase
         .from('user_profiles')
-        .upsert({
-          user_id: userId,
-          username: tempUsername,
-          updated_at: new Date().toISOString()
-        })
+        .select()
+        .eq('user_id', userId)
+        .single()
 
-      if (error) throw error
+      let operation
+      if (existingProfile) {
+        // Update existing profile
+        operation = supabase
+          .from('user_profiles')
+          .update({
+            username: tempUsername,
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', userId)
+      } else {
+        // Insert new profile
+        operation = supabase
+          .from('user_profiles')
+          .insert({
+            user_id: userId,
+            username: tempUsername,
+            updated_at: new Date().toISOString(),
+            email_preferences: {
+              marketing: false,
+              updates: true,
+              security: true
+            }
+          })
+      }
+
+      const { error } = await operation
+
+      if (error) {
+        console.error('Error saving username:', error)
+        throw new Error('Erro ao salvar o nome de usuário. Por favor, tente novamente.')
+      }
 
       setUsername(tempUsername)
       setIsEditing(false)
@@ -90,7 +120,7 @@ export default function ProfilePage() {
     } catch (error: any) {
       setAlertConfig({
         title: "Erro",
-        message: error.message,
+        message: error.message || "Erro ao atualizar o nome de usuário",
         type: "info"
       })
       setShowAlert(true)

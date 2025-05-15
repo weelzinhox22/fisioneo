@@ -6,6 +6,64 @@ import { ArrowLeft, CheckCircle2, XCircle, BarChart, ChevronRight, AlarmClock } 
 import Link from "next/link"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 
+const questions = [
+  {
+    question: "Qual é a importância das escalas de avaliação no desenvolvimento infantil?",
+    options: [
+      "Apenas documentação",
+      "Somente classificação",
+      "Não tem importância",
+      "Identificação precoce de atrasos, monitoramento do desenvolvimento e planejamento terapêutico"
+    ],
+    correctAnswer: 3,
+    explanation: "As escalas de avaliação são fundamentais para identificar precocemente atrasos no desenvolvimento, monitorar a evolução da criança e planejar intervenções terapêuticas adequadas."
+  },
+  {
+    question: "Como a escala AIMS (Alberta Infant Motor Scale) avalia o desenvolvimento motor?",
+    options: [
+      "Não avalia desenvolvimento motor",
+      "Apenas postura sentada",
+      "Observação de posturas e movimentos em prono, supino, sentado e em pé",
+      "Somente reflexos"
+    ],
+    correctAnswer: 2,
+    explanation: "A AIMS avalia o desenvolvimento motor através da observação detalhada das posturas e movimentos em quatro posições: prono, supino, sentado e em pé, considerando a qualidade do movimento."
+  },
+  {
+    question: "Quais são os principais componentes avaliados na escala Bayley III?",
+    options: [
+      "Somente linguagem",
+      "Cognição, linguagem, motor, social-emocional e comportamento adaptativo",
+      "Exclusivamente comportamento",
+      "Apenas motor"
+    ],
+    correctAnswer: 1,
+    explanation: "A Bayley III é uma avaliação abrangente que inclui cinco domínios principais: cognição, linguagem (receptiva e expressiva), motor (fino e grosso), social-emocional e comportamento adaptativo."
+  },
+  {
+    question: "Como interpretar corretamente os resultados das escalas de avaliação?",
+    options: [
+      "Não precisa interpretar",
+      "Apenas números",
+      "Considerando idade corrigida, contexto do desenvolvimento e fatores ambientais",
+      "Somente percentis"
+    ],
+    correctAnswer: 2,
+    explanation: "A interpretação adequada deve considerar a idade corrigida (em prematuros), o contexto global do desenvolvimento da criança e os fatores ambientais que podem influenciar seu desempenho."
+  },
+  {
+    question: "Qual a importância do acompanhamento longitudinal com escalas de avaliação?",
+    options: [
+      "Somente para pesquisa",
+      "Não é necessário",
+      "Apenas burocracia",
+      "Permite monitorar a evolução, ajustar intervenções e identificar novas necessidades"
+    ],
+    correctAnswer: 3,
+    explanation: "O acompanhamento longitudinal é essencial pois permite monitorar a evolução do desenvolvimento ao longo do tempo, ajustar as intervenções conforme necessário e identificar novas demandas terapêuticas."
+  }
+]
+
 export default function EscalaAvaliacaoPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
@@ -42,64 +100,6 @@ export default function EscalaAvaliacaoPage() {
     const seconds = timeInSeconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
-
-  const questions = [
-    {
-      question: "Na avaliação do desenvolvimento neuromotor através da escala AIMS (Alberta Infant Motor Scale), qual é a importância da observação da qualidade do movimento em diferentes posturas?",
-      options: [
-        "Avaliar apenas a quantidade de posturas alcançadas",
-        "Identificar padrões de movimento, alinhamento postural e distribuição de peso em cada postura",
-        "Verificar somente o tempo de permanência em cada postura",
-        "Medir exclusivamente a força muscular"
-      ],
-      correctAnswer: 1,
-      explanation: "A escala AIMS valoriza a observação da qualidade do movimento, incluindo padrões de movimento, alinhamento postural e distribuição de peso em diferentes posturas (prono, supino, sentado e em pé). Esta análise qualitativa é fundamental para identificar desvios sutis do desenvolvimento e planejar intervenções precoces."
-    },
-    {
-      question: "Como a escala Bayley III se diferencia da TIMP (Test of Infant Motor Performance) na avaliação de prematuros?",
-      options: [
-        "A Bayley III avalia apenas aspectos motores grosseiros",
-        "O TIMP é específico para avaliação após 12 meses",
-        "A Bayley III fornece uma avaliação mais abrangente, incluindo cognição, linguagem e desenvolvimento socioemocional",
-        "O TIMP não considera a idade corrigida"
-      ],
-      correctAnswer: 2,
-      explanation: "A Bayley III é mais abrangente, avaliando múltiplos domínios do desenvolvimento (motor, cognitivo, linguagem e socioemocional), enquanto o TIMP é específico para avaliação da qualidade do movimento e controle postural em bebês prematuros até 4 meses de idade corrigida."
-    },
-    {
-      question: "Na avaliação da dor através da escala NIPS (Neonatal Infant Pain Scale), quais parâmetros são considerados mais sensíveis para detectar dor aguda em prematuros?",
-      options: [
-        "Expressão facial e padrão respiratório",
-        "Apenas choro e movimentação dos membros",
-        "Somente frequência cardíaca",
-        "Estado de consciência isoladamente"
-      ],
-      correctAnswer: 0,
-      explanation: "Na escala NIPS, a expressão facial e o padrão respiratório são considerados os parâmetros mais sensíveis para detectar dor aguda em prematuros, pois são respostas mais consistentes e menos influenciadas por outros fatores como fadiga ou estado comportamental."
-    },
-    {
-      question: "Qual é a principal vantagem da escala PIPP-R (Premature Infant Pain Profile-Revised) em relação a outras escalas de avaliação da dor?",
-      options: [
-        "Avalia apenas parâmetros fisiológicos",
-        "Não considera a idade gestacional",
-        "Considera o estado comportamental e idade gestacional como fatores de ajuste na pontuação",
-        "É aplicável apenas em recém-nascidos a termo"
-      ],
-      correctAnswer: 2,
-      explanation: "A principal vantagem da PIPP-R é considerar o estado comportamental e a idade gestacional como fatores de ajuste na pontuação final, permitindo uma avaliação mais precisa da dor em prematuros de diferentes idades gestacionais e estados comportamentais."
-    },
-    {
-      question: "Na avaliação dos Movimentos Generalizados de Prechtl, qual é o significado prognóstico da ausência de Fidgety Movements aos 3 meses de idade corrigida?",
-      options: [
-        "Desenvolvimento normal garantido",
-        "Alto valor preditivo para paralisia cerebral",
-        "Indicativo de atraso motor transitório",
-        "Sem significado clínico relevante"
-      ],
-      correctAnswer: 1,
-      explanation: "A ausência de Fidgety Movements aos 3 meses de idade corrigida tem alto valor preditivo para paralisia cerebral. Esta avaliação é considerada uma das ferramentas mais precisas para identificação precoce de alterações neurológicas em bebês de risco."
-    }
-  ]
 
   const handleAnswerSelect = (index: number) => {
     if (isAnswered) return
@@ -159,7 +159,7 @@ export default function EscalaAvaliacaoPage() {
         {!showResults ? (
           <div>
             <div className="mb-8">
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">Avaliação de Escalas de Avaliação Neonatal</h1>
+              <h1 className="text-2xl font-bold text-gray-800 mb-2">Escalas de Avaliação do Desenvolvimento</h1>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-500">
                   Questão {currentQuestion + 1} de {questions.length}
@@ -180,67 +180,80 @@ export default function EscalaAvaliacaoPage() {
                 {questions[currentQuestion].options.map((option, index) => (
                   <button
                     key={index}
-                    className={`w-full text-left p-4 rounded-lg border transition-all ${
+                    className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-[1.01] ${
                       selectedAnswer === index
                         ? index === questions[currentQuestion].correctAnswer
-                          ? "bg-green-50 border-green-200"
-                          : "bg-red-50 border-red-200"
-                        : "border-gray-200 hover:border-blue-200 hover:bg-blue-50"
+                          ? "bg-gradient-to-r from-green-50 to-green-100 border-green-500 shadow-lg"
+                          : "bg-gradient-to-r from-red-50 to-red-100 border-red-500 shadow-lg"
+                        : "border-gray-200 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md"
                     }`}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={isAnswered}
                   >
                     <div className="flex items-center">
                       <div
-                        className={`h-6 w-6 rounded-full flex items-center justify-center mr-3 ${
+                        className={`h-7 w-7 rounded-full flex items-center justify-center mr-3 transition-all duration-300 ${
                           selectedAnswer === index
                             ? index === questions[currentQuestion].correctAnswer
-                              ? "bg-green-100 text-green-600"
-                              : "bg-red-100 text-red-600"
+                              ? "bg-green-500 text-white scale-110"
+                              : "bg-red-500 text-white scale-110"
                             : "bg-gray-100 text-gray-500"
                         }`}
                       >
                         {selectedAnswer === index ? (
                           index === questions[currentQuestion].correctAnswer ? (
-                            <CheckCircle2 className="h-4 w-4" />
+                            <CheckCircle2 className="h-5 w-5" />
                           ) : (
-                            <XCircle className="h-4 w-4" />
+                            <XCircle className="h-5 w-5" />
                           )
                         ) : (
-                          <span className="text-sm">{String.fromCharCode(65 + index)}</span>
+                          <span className="text-sm font-semibold">{String.fromCharCode(65 + index)}</span>
                         )}
                       </div>
-                      {option}
+                      <span className="text-gray-700 font-medium">{option}</span>
                     </div>
                   </button>
                 ))}
               </div>
 
               {isAnswered && (
-                <div
-                  className={`mt-4 p-4 rounded-lg ${
-                    selectedAnswer === questions[currentQuestion].correctAnswer
-                      ? "bg-green-50 border border-green-100"
-                      : "bg-red-50 border border-red-100"
-                  }`}
-                >
-                  <p className="text-sm">{feedbackMessage}</p>
-                </div>
-              )}
-
-              {isAnswered && (
-                <div className="mt-6 flex justify-end">
+                <div className="mt-6 space-y-4">
+                  <div
+                    className={`p-4 rounded-lg border ${
+                      selectedAnswer === questions[currentQuestion].correctAnswer
+                        ? "bg-green-50 border-green-200 text-green-800"
+                        : "bg-red-50 border-red-200 text-red-800"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      {selectedAnswer === questions[currentQuestion].correctAnswer ? (
+                        <>
+                          <CheckCircle2 className="h-5 w-5 text-green-600" />
+                          <span className="font-medium">Correto!</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="h-5 w-5 text-red-600" />
+                          <span className="font-medium">Incorreto</span>
+                        </>
+                      )}
+                    </div>
+                    <p className="text-sm">{feedbackMessage}</p>
+                  </div>
                   <button
                     onClick={handleNextQuestion}
-                    className="bg-blue-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+                    className="w-full px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center justify-center gap-2 group"
                   >
                     {currentQuestion < questions.length - 1 ? (
-                      <span className="flex items-center">
-                        Próxima questão
-                        <ChevronRight className="h-4 w-4 ml-2" />
-                      </span>
+                      <>
+                        <span>Próxima</span>
+                        <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </>
                     ) : (
-                      "Ver resultados"
+                      <>
+                        <span>Finalizar</span>
+                        <BarChart className="h-4 w-4" />
+                      </>
                     )}
                   </button>
                 </div>
@@ -248,36 +261,29 @@ export default function EscalaAvaliacaoPage() {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BarChart className="h-8 w-8 text-blue-500" />
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Resultados do Teste</h2>
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="flex items-center gap-2">
+                  <AlarmClock className="h-5 w-5 text-gray-500" />
+                  <span className="text-gray-600">{formatTime(timer)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <BarChart className="h-5 w-5 text-gray-500" />
+                  <span className="text-gray-600">{calculateFinalGrade()}%</span>
+                </div>
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Resultados da Avaliação</h2>
-              <p className="text-gray-600">Você completou a avaliação em {formatTime(timer)}</p>
-            </div>
 
-            <div className="flex justify-center items-center gap-8 mb-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-500">{score}</div>
-                <div className="text-sm text-gray-500">Acertos</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-500">{questions.length}</div>
-                <div className="text-sm text-gray-500">Questões</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-800">{calculateFinalGrade()}%</div>
-                <div className="text-sm text-gray-500">Nota final</div>
-              </div>
-            </div>
+              <p className="text-gray-600 mb-8">
+                Você acertou {score} de {questions.length} questões
+              </p>
 
-            <div className="flex flex-wrap gap-4 justify-center">
-              <MagneticButton onClick={resetQuiz}>
-                Refazer Avaliação
-              </MagneticButton>
-              <MagneticButton href="/provas">
-                Voltar para Provas
+              <MagneticButton
+                onClick={resetQuiz}
+                className="bg-blue-500 text-white rounded-lg px-6 py-3 hover:bg-blue-600 transition-colors"
+              >
+                Tentar Novamente
               </MagneticButton>
             </div>
           </div>

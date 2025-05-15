@@ -1,9 +1,68 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useRef, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ArrowLeft, CheckCircle2, XCircle, BarChart, ChevronRight, AlarmClock } from "lucide-react"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
-import { motion } from "framer-motion"
+import { MagneticButton } from "@/components/ui/magnetic-button"
+
+const questions = [
+  {
+    question: "Quais são as principais sequelas neurológicas observadas em prematuros?",
+    options: [
+      "Somente problemas de fala",
+      "Não apresentam sequelas",
+      "Apenas atraso motor",
+      "Paralisia cerebral, déficits cognitivos, alterações sensoriais e distúrbios comportamentais"
+    ],
+    correctAnswer: 3,
+    explanation: "As principais sequelas neurológicas em prematuros incluem paralisia cerebral, déficits cognitivos, alterações sensoriais (visão e audição) e distúrbios comportamentais/atencionais."
+  },
+  {
+    question: "Como identificar precocemente sinais de comprometimento neurológico em prematuros?",
+    options: [
+      "Apenas através de exames de imagem",
+      "Avaliação do desenvolvimento motor, reflexos, tônus muscular e marcos do desenvolvimento",
+      "Somente após 1 ano de idade",
+      "Não é possível identificar precocemente"
+    ],
+    correctAnswer: 1,
+    explanation: "A identificação precoce envolve avaliação sistemática do desenvolvimento motor, reflexos primitivos, tônus muscular e acompanhamento dos marcos do desenvolvimento esperados para a idade corrigida."
+  },
+  {
+    question: "Quais são os fatores de risco para o desenvolvimento de sequelas neurológicas em prematuros?",
+    options: [
+      "Apenas baixo peso",
+      "Prematuridade extrema, hemorragia intracraniana, infecções e hipóxia",
+      "Somente fatores genéticos",
+      "Não existem fatores de risco"
+    ],
+    correctAnswer: 1,
+    explanation: "Os principais fatores de risco incluem prematuridade extrema, ocorrência de hemorragia intracraniana, infecções do sistema nervoso central e episódios de hipóxia durante o período neonatal."
+  },
+  {
+    question: "Como deve ser o acompanhamento multidisciplinar de prematuros com risco neurológico?",
+    options: [
+      "Não precisa de acompanhamento",
+      "Apenas consultas médicas",
+      "Integração entre neuropediatra, fisioterapeuta, fonoaudiólogo e terapeuta ocupacional",
+      "Somente fisioterapia"
+    ],
+    correctAnswer: 2,
+    explanation: "O acompanhamento deve ser integrado, envolvendo neuropediatra, fisioterapeuta, fonoaudiólogo e terapeuta ocupacional, para garantir intervenção precoce e adequada em todas as áreas do desenvolvimento."
+  },
+  {
+    question: "Qual a importância da intervenção precoce em prematuros com sequelas neurológicas?",
+    options: [
+      "Maximiza o potencial de desenvolvimento e minimiza o impacto das sequelas",
+      "Só importante após 2 anos",
+      "Não tem importância",
+      "Apenas para tranquilizar os pais"
+    ],
+    correctAnswer: 0,
+    explanation: "A intervenção precoce é fundamental pois aproveita a plasticidade cerebral do período inicial do desenvolvimento, maximizando o potencial de recuperação e minimizando o impacto das sequelas a longo prazo."
+  }
+]
 
 export default function SequelasNeurologicasPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -13,75 +72,34 @@ export default function SequelasNeurologicasPage() {
   const [showResults, setShowResults] = useState(false)
   const [feedbackMessage, setFeedbackMessage] = useState("")
   const [timer, setTimer] = useState(0)
-  const [isTimerRunning, setIsTimerRunning] = useState(true)
+  const [isTimerRunning, setIsTimerRunning] = useState(false)
 
   useEffect(() => {
-    let interval: NodeJS.Timeout
-    if (isTimerRunning) {
-      interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer + 1)
-      }, 1000)
+    setIsTimerRunning(true)
+    return () => {
+      setIsTimerRunning(false)
     }
-    return () => clearInterval(interval)
-  }, [isTimerRunning])
+  }, [])
 
-  const questions = [
-    {
-      question: "Quais são os principais fatores de risco perinatais associados ao desenvolvimento de paralisia cerebral em recém-nascidos prematuros?",
-      options: [
-        "Apenas baixo peso ao nascer e idade gestacional",
-        "Somente infecções maternas durante a gestação",
-        "Hemorragia peri-intraventricular grau III/IV, leucomalácia periventricular, asfixia grave e infecções do SNC",
-        "Exclusivamente fatores genéticos e malformações congênitas"
-      ],
-      correctAnswer: 2,
-      explanation: "Os principais fatores de risco perinatais para paralisia cerebral em prematuros incluem hemorragia peri-intraventricular graus III/IV, leucomalácia periventricular, asfixia grave e infecções do SNC. Estas condições podem causar lesões significativas no sistema nervoso central em desenvolvimento, levando a déficits motores permanentes."
-    },
-    {
-      question: "Como se caracteriza o padrão típico de desenvolvimento motor em um prematuro com diplegia espástica nos primeiros 18 meses de vida?",
-      options: [
-        "Desenvolvimento motor normal até 6 meses, seguido de regressão",
-        "Atraso motor global desde o nascimento, sem padrão específico",
-        "Atraso predominante em membros superiores com desenvolvimento normal de membros inferiores",
-        "Atraso mais acentuado em membros inferiores, com hipertonia progressiva e padrão em tesoura"
-      ],
-      correctAnswer: 3,
-      explanation: "Na diplegia espástica, observa-se um atraso mais acentuado no desenvolvimento motor dos membros inferiores, com hipertonia progressiva e tendência ao padrão em tesoura. Os marcos motores são atingidos com atraso, especialmente aqueles que dependem do controle dos membros inferiores, como sentar sem apoio, engatinhar e andar."
-    },
-    {
-      question: "Quais são os sinais precoces de alteração do desenvolvimento visual que devem ser investigados em prematuros com leucomalácia periventricular?",
-      options: [
-        "Apenas estrabismo após 6 meses",
-        "Alterações do comportamento visual, dificuldade de fixação e seguimento, nistagmo e estrabismo precoce",
-        "Somente alterações de refração",
-        "Exclusivamente alterações de campo visual após 1 ano"
-      ],
-      correctAnswer: 1,
-      explanation: "Em prematuros com leucomalácia periventricular, deve-se investigar precocemente alterações do comportamento visual, dificuldade de fixação e seguimento visual, presença de nistagmo e estrabismo precoce. Estas alterações podem indicar comprometimento das vias visuais posteriores e necessitam de intervenção precoce."
-    },
-    {
-      question: "Qual é a abordagem terapêutica mais adequada para um prematuro com sinais de hemiparesia espástica identificada aos 6 meses de idade corrigida?",
-      options: [
-        "Apenas orientações aos pais sobre posicionamento",
-        "Esperar até 1 ano para iniciar qualquer intervenção",
-        "Intervenção precoce com abordagem multidisciplinar, incluindo fisioterapia, terapia ocupacional e orientação familiar",
-        "Somente medicações para controle do tônus muscular"
-      ],
-      correctAnswer: 2,
-      explanation: "A abordagem mais adequada é a intervenção precoce multidisciplinar, incluindo fisioterapia, terapia ocupacional e orientação familiar. O tratamento deve focar na prevenção de deformidades, estimulação do desenvolvimento neuropsicomotor, facilitação do uso do lado afetado e orientação aos pais sobre manejo e estimulação adequada."
-    },
-    {
-      question: "Quais são os critérios para indicação de toxina botulínica em prematuros com espasticidade e qual a idade mínima recomendada para a primeira aplicação?",
-      options: [
-        "Qualquer grau de espasticidade, independente da idade",
-        "Espasticidade moderada a grave, interferindo na funcionalidade, após 18-24 meses",
-        "Somente após 5 anos de idade, independente do grau de espasticidade",
-        "Apenas em casos de deformidades já estabelecidas"
-      ],
-      correctAnswer: 1,
-      explanation: "A toxina botulínica é indicada em casos de espasticidade moderada a grave que interfere na funcionalidade, sendo recomendada após 18-24 meses de idade. Os critérios incluem: espasticidade focal ou multifocal que limita a função, ausência de contraturas fixas, bom controle de tronco, e capacidade de participar do programa de reabilitação pós-aplicação."
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isTimerRunning && !showResults) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev + 1);
+      }, 1000);
     }
-  ]
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isTimerRunning, showResults]);
+
+  const formatTime = (timeInSeconds: number) => {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   const handleAnswerSelect = (index: number) => {
     if (isAnswered) return
@@ -125,12 +143,6 @@ export default function SequelasNeurologicasPage() {
     setIsTimerRunning(true)
   }
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60)
-    const remainingSeconds = seconds % 60
-    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`
-  }
-
   const calculateFinalGrade = () => {
     const percentage = (score / questions.length) * 100
     return percentage.toFixed(1)
@@ -144,101 +156,138 @@ export default function SequelasNeurologicasPage() {
           <span>Voltar para provas</span>
         </Link>
 
-        <div className="max-w-3xl mx-auto">
-          {!showResults ? (
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="p-8">
-                <div className="flex justify-between items-center mb-8">
-                  <h1 className="text-2xl font-bold text-gray-800">Sequelas Neurológicas</h1>
-                  <div className="text-sm font-medium text-gray-500">
-                    Tempo: {formatTime(timer)}
-                  </div>
+        {!showResults ? (
+          <div>
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-gray-800 mb-2">Sequelas Neurológicas em Prematuros</h1>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-500">
+                  Questão {currentQuestion + 1} de {questions.length}
+                </span>
+                <div className="flex items-center gap-2">
+                  <AlarmClock className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm text-gray-500">{formatTime(timer)}</span>
                 </div>
+              </div>
+            </div>
 
-                <div className="mb-4 bg-gray-100 rounded-full h-2">
-                  <div
-                    className="bg-gradient-to-r from-[#6EC1E4] to-[#5BA8CB] h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
-                  ></div>
-                </div>
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                {questions[currentQuestion].question}
+              </h2>
 
-                <div className="mb-4">
-                  <span className="text-sm font-medium text-gray-500">
-                    Questão {currentQuestion + 1} de {questions.length}
-                  </span>
-                </div>
-
-                <div className="space-y-6">
-                  <h2 className="text-lg font-medium text-gray-900">
-                    {questions[currentQuestion].question}
-                  </h2>
-
-                  <div className="space-y-3">
-                    {questions[currentQuestion].options.map((option, index) => (
-                      <motion.button
-                        key={index}
-                        onClick={() => handleAnswerSelect(index)}
-                        disabled={isAnswered}
-                        className={`w-full text-left p-4 rounded-lg border transition-all ${
+              <div className="space-y-3">
+                {questions[currentQuestion].options.map((option, index) => (
+                  <button
+                    key={index}
+                    className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-[1.01] ${
+                      selectedAnswer === index
+                        ? index === questions[currentQuestion].correctAnswer
+                          ? "bg-gradient-to-r from-green-50 to-green-100 border-green-500 shadow-lg"
+                          : "bg-gradient-to-r from-red-50 to-red-100 border-red-500 shadow-lg"
+                        : "border-gray-200 hover:border-blue-400 hover:bg-blue-50 hover:shadow-md"
+                    }`}
+                    onClick={() => handleAnswerSelect(index)}
+                    disabled={isAnswered}
+                  >
+                    <div className="flex items-center">
+                      <div
+                        className={`h-7 w-7 rounded-full flex items-center justify-center mr-3 transition-all duration-300 ${
                           selectedAnswer === index
                             ? index === questions[currentQuestion].correctAnswer
-                              ? "bg-green-50 border-green-200 text-green-800"
-                              : "bg-red-50 border-red-200 text-red-800"
-                            : "border-gray-200 hover:border-[#6EC1E4]/30 hover:bg-[#6EC1E4]/5"
-                        }`}
-                        whileHover={!isAnswered ? { scale: 1.01 } : {}}
-                        whileTap={!isAnswered ? { scale: 0.99 } : {}}
-                      >
-                        {option}
-                      </motion.button>
-                    ))}
-                  </div>
-
-                  {isAnswered && (
-                    <div className="mt-6">
-                      <div
-                        className={`p-4 rounded-lg ${
-                          selectedAnswer === questions[currentQuestion].correctAnswer
-                            ? "bg-green-50 text-green-800"
-                            : "bg-red-50 text-red-800"
+                              ? "bg-green-500 text-white scale-110"
+                              : "bg-red-500 text-white scale-110"
+                            : "bg-gray-100 text-gray-500"
                         }`}
                       >
-                        {feedbackMessage}
+                        {selectedAnswer === index ? (
+                          index === questions[currentQuestion].correctAnswer ? (
+                            <CheckCircle2 className="h-5 w-5" />
+                          ) : (
+                            <XCircle className="h-5 w-5" />
+                          )
+                        ) : (
+                          <span className="text-sm font-semibold">{String.fromCharCode(65 + index)}</span>
+                        )}
                       </div>
-
-                      <button
-                        onClick={handleNextQuestion}
-                        className="mt-4 w-full bg-[#6EC1E4] text-white py-3 px-6 rounded-lg hover:bg-[#5BA8CB] transition-colors"
-                      >
-                        {currentQuestion === questions.length - 1
-                          ? "Ver resultados"
-                          : "Próxima questão"}
-                      </button>
+                      <span className="text-gray-700 font-medium">{option}</span>
                     </div>
-                  )}
-                </div>
+                  </button>
+                ))}
               </div>
-            </div>
-          ) : (
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="p-8">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Resultados</h2>
-                <div className="space-y-4">
-                  <p className="text-lg">
-                    Pontuação: {score} de {questions.length} ({calculateFinalGrade()}%)
-                  </p>
-                  <p className="text-lg">Tempo total: {formatTime(timer)}</p>
-                  <button
-                    onClick={resetQuiz}
-                    className="w-full bg-[#6EC1E4] text-white py-3 px-6 rounded-lg hover:bg-[#5BA8CB] transition-colors"
+
+              {isAnswered && (
+                <div className="mt-6 space-y-4">
+                  <div
+                    className={`p-4 rounded-lg border ${
+                      selectedAnswer === questions[currentQuestion].correctAnswer
+                        ? "bg-green-50 border-green-200 text-green-800"
+                        : "bg-red-50 border-red-200 text-red-800"
+                    }`}
                   >
-                    Tentar novamente
+                    <div className="flex items-center gap-2 mb-2">
+                      {selectedAnswer === questions[currentQuestion].correctAnswer ? (
+                        <>
+                          <CheckCircle2 className="h-5 w-5 text-green-600" />
+                          <span className="font-medium">Correto!</span>
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="h-5 w-5 text-red-600" />
+                          <span className="font-medium">Incorreto</span>
+                        </>
+                      )}
+                    </div>
+                    <p className="text-sm">{feedbackMessage}</p>
+                  </div>
+                  <button
+                    onClick={handleNextQuestion}
+                    className="w-full px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center justify-center gap-2 group"
+                  >
+                    {currentQuestion < questions.length - 1 ? (
+                      <>
+                        <span>Próxima</span>
+                        <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </>
+                    ) : (
+                      <>
+                        <span>Finalizar</span>
+                        <BarChart className="h-4 w-4" />
+                      </>
+                    )}
                   </button>
                 </div>
-              </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Resultados do Teste</h2>
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="flex items-center gap-2">
+                  <AlarmClock className="h-5 w-5 text-gray-500" />
+                  <span className="text-gray-600">{formatTime(timer)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <BarChart className="h-5 w-5 text-gray-500" />
+                  <span className="text-gray-600">{calculateFinalGrade()}%</span>
+                </div>
+              </div>
+
+              <p className="text-gray-600 mb-8">
+                Você acertou {score} de {questions.length} questões
+              </p>
+
+              <MagneticButton
+                onClick={resetQuiz}
+                className="bg-blue-500 text-white rounded-lg px-6 py-3 hover:bg-blue-600 transition-colors"
+              >
+                Tentar Novamente
+              </MagneticButton>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
