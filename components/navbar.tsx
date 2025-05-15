@@ -9,6 +9,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { supabase } from "@/lib/supabase"
+import { ProfileDropdown } from "@/components/ui/profile-dropdown"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -16,6 +17,7 @@ export default function Navbar() {
   const pathname = usePathname()
   const { data: nextAuthSession } = useSession()
   const [supabaseSession, setSupabaseSession] = useState<any>(null)
+  const [username, setUsername] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -33,16 +35,43 @@ export default function Navbar() {
       const { data: { session } } = await supabase.auth.getSession()
       setSupabaseSession(session)
 
+      // Fetch username
+      const userId = session?.user?.id || nextAuthSession?.user?.email
+      if (userId) {
+        const { data: userData } = await supabase
+          .from('user_profiles')
+          .select('username')
+          .eq('user_id', userId)
+          .single()
+
+        if (userData?.username) {
+          setUsername(userData.username)
+        }
+      }
+
       // Subscribe to auth changes
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
         setSupabaseSession(session)
+       
+        // Update username on auth change
+        if (session?.user?.id) {
+          const { data: userData } = await supabase
+            .from('user_profiles')
+            .select('username')
+            .eq('user_id', session.user.id)
+            .single()
+
+          setUsername(userData?.username || null)
+        } else {
+          setUsername(null)
+        }
       })
 
       return () => subscription.unsubscribe()
     }
 
     checkSupabaseAuth()
-  }, [])
+  }, [nextAuthSession?.user?.email])
 
   // Combined session check
   const isAuthenticated = nextAuthSession || supabaseSession
@@ -179,19 +208,12 @@ export default function Navbar() {
             transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
           >
             {isAuthenticated ? (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-[#666666]">
-                  <User className="h-4 w-4 inline-block mr-1" />
-                  {userEmail}
-                </span>
-                <MagneticButton
-                  onClick={handleLogout}
-                  variant="subtle"
-                  className="px-4 py-2 text-sm font-medium text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 flex items-center gap-1.5"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Sair
-                </MagneticButton>
+              <div className="flex items-center gap-4">
+                <ProfileDropdown 
+                  email={userEmail || ''} 
+                  username={username}
+                  onLogout={handleLogout}
+                />
               </div>
             ) : (
               <Link href="/login">
