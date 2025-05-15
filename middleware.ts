@@ -1,23 +1,29 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-
-const supabaseUrl = 'https://htmkhefvctwmbrgeejkh.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0bWtoZWZ2Y3R3bWJyZ2VlamtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA3MTAzOTUsImV4cCI6MjA1NjI4NjM5NX0.4jJxHP980GW_Err3qBaHwa9eO4rqwA-LYo8c9kPBwnA'
+import { getToken } from 'next-auth/jwt'
 
 export async function middleware(request: NextRequest) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ 
-    req: request, 
-    res,
-    options: {
-      supabaseUrl,
-      supabaseKey: supabaseAnonKey
-    }
-  })
+  
+  // Check NextAuth session
+  const token = await getToken({ req: request })
+  
+  // Check Supabase session
+  const supabase = createMiddlewareClient({ req: request, res })
+  const { data: { session } } = await supabase.auth.getSession()
 
-  // Refresh session if expired - required for Server Components
-  await supabase.auth.getSession()
+  // If accessing a protected route
+  if (request.nextUrl.pathname.startsWith('/temas') || 
+      request.nextUrl.pathname.startsWith('/provas') ||
+      request.nextUrl.pathname.startsWith('/prova-geral') ||
+      request.nextUrl.pathname.startsWith('/documentos')) {
+    
+    // Allow access if either authentication is valid
+    if (!token && !session) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+  }
 
   return res
 }
@@ -31,7 +37,10 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
+     * - images folder
+     * - login page
+     * - auth callback
      */
-    '/((?!_next/static|_next/image|favicon.ico|public|images).*)',
+    '/((?!_next/static|_next/image|favicon.ico|public|images|login|auth/callback).*)',
   ],
 } 

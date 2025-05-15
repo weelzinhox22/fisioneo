@@ -1,5 +1,19 @@
-import NextAuth from "next-auth"
+import NextAuth, { type DefaultSession } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
+import CredentialsProvider from "next-auth/providers/credentials"
+import { supabase } from "@/lib/supabase"
+
+// Extend the session type to include user ID
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+    } & DefaultSession["user"]
+  }
+  interface User {
+    id: string
+  }
+}
 
 // Log das variáveis de ambiente (remova em produção)
 console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID)
@@ -16,12 +30,41 @@ const handler = NextAuth({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) return null
+        
+        try {
+          const { data: { user }, error } = await supabase.auth.signInWithPassword({
+            email: credentials.email,
+            password: credentials.password,
+          })
+
+          if (error || !user) return null
+          
+          return {
+            id: user.id,
+            name: user.email?.split('@')[0] || user.email,
+            email: user.email,
+            image: null
+          }
+        } catch (error) {
+          console.error('Auth error:', error)
+          return null
+        }
+      }
+    })
   ],
   pages: {
     signIn: '/login',
     error: '/login', // Página de erro personalizada
   },
-  debug: true, // Habilita logs detalhados
+  debug: process.env.NODE_ENV === 'development', // Habilita logs detalhados
   callbacks: {
     async redirect({ url, baseUrl }) {
       // Permite redirecionamento para URLs do mesmo site
@@ -31,12 +74,22 @@ const handler = NextAuth({
       // Por padrão, redireciona para a página inicial
       return baseUrl
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string
+      }
       return session
     },
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+      }
       return token
     },
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
 })
 

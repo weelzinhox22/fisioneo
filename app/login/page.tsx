@@ -18,10 +18,14 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const router = useRouter()
   const [showAlert, setShowAlert] = useState(false)
-  const [alertConfig, setAlertConfig] = useState({
+  const [alertConfig, setAlertConfig] = useState<{
+    title: string;
+    message: string;
+    type: 'success' | 'error' | 'info';
+  }>({
     title: "",
     message: "",
-    type: "success" as const
+    type: "success"
   })
 
   const handleEmailAuth = async (e: React.FormEvent) => {
@@ -47,12 +51,25 @@ export default function LoginPage() {
         })
         setShowAlert(true)
       } else {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        // First authenticate with Supabase
+        const { data: { user }, error: supabaseError } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
 
-        if (error) throw error
+        if (supabaseError) throw supabaseError
+
+        // Then authenticate with NextAuth
+        const result = await signIn("credentials", {
+          email,
+          password,
+          redirect: false,
+        })
+
+        if (result?.error) {
+          throw new Error(result.error)
+        }
+
         router.push("/")
       }
     } catch (error: any) {
@@ -65,6 +82,40 @@ export default function LoginPage() {
       setShowAlert(true)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handlePasswordReset = async () => {
+    if (!email) {
+      setAlertConfig({
+        title: "Atenção!",
+        message: "Por favor, insira seu email antes de solicitar a recuperação de senha.",
+        type: "info"
+      })
+      setShowAlert(true)
+      return
+    }
+    
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+      })
+      
+      if (error) throw error
+      
+      setAlertConfig({
+        title: "Email enviado!",
+        message: "Verifique sua caixa de entrada para redefinir sua senha.",
+        type: "success"
+      })
+      setShowAlert(true)
+    } catch (error: any) {
+      setAlertConfig({
+        title: "Erro!",
+        message: error.message,
+        type: "error"
+      })
+      setShowAlert(true)
     }
   }
 
@@ -173,39 +224,7 @@ export default function LoginPage() {
                 className="text-center"
               >
                 <button
-                  onClick={async () => {
-                    if (!email) {
-                      setAlertConfig({
-                        title: "Atenção!",
-                        message: "Por favor, insira seu email antes de solicitar a recuperação de senha.",
-                        type: "info"
-                      });
-                      setShowAlert(true);
-                      return;
-                    }
-                    
-                    try {
-                      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                        redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
-                      });
-                      
-                      if (error) throw error;
-                      
-                      setAlertConfig({
-                        title: "Email enviado!",
-                        message: "Verifique sua caixa de entrada para redefinir sua senha.",
-                        type: "success"
-                      });
-                      setShowAlert(true);
-                    } catch (error: any) {
-                      setAlertConfig({
-                        title: "Erro!",
-                        message: error.message,
-                        type: "info"
-                      });
-                      setShowAlert(true);
-                    }
-                  }}
+                  onClick={handlePasswordReset}
                   className="text-gray-400 hover:text-white transition-colors text-sm mt-2 group inline-flex items-center gap-2"
                 >
                   <span className="relative">
@@ -276,9 +295,7 @@ export default function LoginPage() {
               className="mt-6 text-center"
             >
               <button
-                onClick={() =>
-                  setMode(mode === "login" ? "register" : "login")
-                }
+                onClick={() => setMode(mode === "login" ? "register" : "login")}
                 className="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 {mode === "login"
