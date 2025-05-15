@@ -13,8 +13,8 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 const handler = NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   pages: {
@@ -23,6 +23,14 @@ const handler = NextAuth({
   },
   debug: true, // Habilita logs detalhados
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Permite redirecionamento para URLs do mesmo site
+      if (url.startsWith(baseUrl)) return url
+      // Permite redirecionamento para URLs relativas
+      if (url.startsWith("/")) return new URL(url, baseUrl).toString()
+      // Por padrão, redireciona para a página inicial
+      return baseUrl
+    },
     async session({ session, token, user }) {
       return session
     },
