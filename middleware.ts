@@ -1,47 +1,37 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { getToken } from 'next-auth/jwt'
 
-export async function middleware(request: NextRequest) {
+// Rotas que requerem autenticação
+const protectedRoutes = ['/provas', '/prova-geral', '/documentos']
+
+export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req: request, res })
 
-  // Try to refresh the session
-  const { data: { session }, error } = await supabase.auth.getSession()
+  // Criar cliente Supabase com os cookies
+  const supabase = createMiddlewareClient({ req, res })
 
-  // If we have a session, update the cookies
-  if (session) {
-    res.cookies.set('sb-access-token', session.access_token, {
-      secure: true,
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7 // 1 week
-    })
+  // Verificar sessão do Supabase
+  const { data: { session: supabaseSession } } = await supabase.auth.getSession()
 
-    if (session.refresh_token) {
-      res.cookies.set('sb-refresh-token', session.refresh_token, {
-        secure: true,
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7 // 1 week
-      })
-    }
+  // Verificar sessão do NextAuth
+  const nextAuthSession = await getToken({ req })
+
+  // Verificar se a rota atual precisa de autenticação
+  const isProtectedRoute = protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))
+
+  // Se for rota protegida e não houver sessão, redirecionar para login
+  if (isProtectedRoute && !supabaseSession && !nextAuthSession) {
+    const redirectUrl = new URL('/login', req.url)
+    redirectUrl.searchParams.set('callbackUrl', req.url)
+    return NextResponse.redirect(redirectUrl)
   }
 
   return res
 }
 
-// Specify which routes should be protected
+// Configurar em quais rotas o middleware deve ser executado
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     * - images folder
-     * - login page
-     * - api routes
-     */
-    '/((?!_next/static|_next/image|favicon.ico|public|images|login|api).*)',
-  ],
+  matcher: ['/provas/:path*', '/prova-geral/:path*', '/documentos/:path*']
 } 

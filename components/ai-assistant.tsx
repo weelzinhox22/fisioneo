@@ -11,7 +11,10 @@ import {
 import { ZoomIn } from "./animations/zoom-in"
 import { getFallbackResponse } from "@/lib/fallback-responses"
 import FixedChatModal from "./fixed-chat-modal"
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useSession } from "next-auth/react"
+import { supabase } from "@/lib/supabase"
+import { AlertDialog } from "@/components/ui/alert-dialog"
 
 type Message = {
   role: "user" | "assistant" | "system"
@@ -20,6 +23,7 @@ type Message = {
 
 export default function AIAssistant() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -32,6 +36,29 @@ export default function AIAssistant() {
   const [isOnline, setIsOnline] = useState(true)
   const [errorCount, setErrorCount] = useState(0)
   const [useLocalMode, setUseLocalMode] = useState(false)
+  const [showLoginAlert, setShowLoginAlert] = useState(false)
+  const { data: nextAuthSession, status: nextAuthStatus } = useSession()
+  const [supabaseSession, setSupabaseSession] = useState<any>(null)
+
+  // Check for Supabase session and subscribe to auth changes
+  useEffect(() => {
+    const checkSupabaseAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setSupabaseSession(session)
+
+      // Subscribe to auth changes
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setSupabaseSession(session)
+      })
+
+      return () => subscription.unsubscribe()
+    }
+
+    checkSupabaseAuth()
+  }, [])
+
+  // Combined session check that updates with auth state changes
+  const isAuthenticated = Boolean(nextAuthSession || supabaseSession)
 
   // Verificar conexão com a internet
   useEffect(() => {
@@ -56,6 +83,14 @@ export default function AIAssistant() {
       setErrorCount(0)
     }
   }, [isOpen])
+
+  const handleOpenChat = () => {
+    if (!isAuthenticated) {
+      setShowLoginAlert(true)
+      return
+    }
+    setIsOpen(true)
+  }
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -157,13 +192,30 @@ export default function AIAssistant() {
     return null
   }
 
+  // Don't render while checking auth status
+  if (nextAuthStatus === "loading") {
+    return null
+  }
+
   return (
     <>
+      <AlertDialog
+        isOpen={showLoginAlert}
+        onClose={() => setShowLoginAlert(false)}
+        title="Login Necessário"
+        message="Para acessar o Assistente IA, faça login na plataforma."
+        type="success"
+      />
+
       {/* Botão flutuante */}
       <ZoomIn className="fixed bottom-6 right-6 z-50">
         <button
-          onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5BA8CB] hover:to-[#A090E0] text-white rounded-full p-4 shadow-lg transition-all duration-300 flex items-center gap-2"
+          onClick={handleOpenChat}
+          className={`bg-gradient-to-r ${
+            isAuthenticated 
+              ? "from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5BA8CB] hover:to-[#A090E0]" 
+              : "from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600"
+          } text-white rounded-full p-4 shadow-lg transition-all duration-300 flex items-center gap-2`}
           aria-label="Abrir assistente de IA"
         >
           <Sparkles className="h-5 w-5" />

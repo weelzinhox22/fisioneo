@@ -2410,6 +2410,11 @@ video {
   --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
+.from-gray-400 {
+  --tw-gradient-from: #9ca3af var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(156 163 175 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
 .via-\[\#5AADD0\] {
   --tw-gradient-to: rgb(90 173 208 / 0)  var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), #5AADD0 var(--tw-gradient-via-position), var(--tw-gradient-to);
@@ -2582,6 +2587,9 @@ video {
 }
 .to-white\/50 {
   --tw-gradient-to: rgb(255 255 255 / 0.5) var(--tw-gradient-to-position);
+}
+.to-gray-500 {
+  --tw-gradient-to: #6b7280 var(--tw-gradient-to-position);
 }
 .bg-\[size\:20px_20px\] {
   background-size: 20px 20px;
@@ -4176,6 +4184,12 @@ img.fade-in {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.hover\:from-gray-500:hover {
+  --tw-gradient-from: #6b7280 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(107 114 128 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .hover\:to-\[\#4285F4\]:hover {
   --tw-gradient-to: #4285F4 var(--tw-gradient-to-position);
 }
@@ -4186,6 +4200,10 @@ img.fade-in {
 
 .hover\:to-\[\#A090E0\]:hover {
   --tw-gradient-to: #A090E0 var(--tw-gradient-to-position);
+}
+
+.hover\:to-gray-600:hover {
+  --tw-gradient-to: #4b5563 var(--tw-gradient-to-position);
 }
 
 .hover\:text-\[\#333333\]:hover {

@@ -16,7 +16,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  const { data: nextAuthSession } = useSession()
+  const { data: nextAuthSession, status: nextAuthStatus } = useSession()
   const [supabaseSession, setSupabaseSession] = useState<any>(null)
   const [username, setUsername] = useState<string | null>(null)
   const router = useRouter()
@@ -31,30 +31,16 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Check for Supabase session
+  // Check for Supabase session and subscribe to auth changes
   useEffect(() => {
     const checkSupabaseAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       setSupabaseSession(session)
 
-      // Fetch username
-      const userId = session?.user?.id || nextAuthSession?.user?.email
-      if (userId) {
-        const { data: userData } = await supabase
-          .from('user_profiles')
-          .select('username')
-          .eq('user_id', userId)
-          .single()
-
-        if (userData?.username) {
-          setUsername(userData.username)
-        }
-      }
-
       // Subscribe to auth changes
       const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
         setSupabaseSession(session)
-       
+        
         // Update username on auth change
         if (session?.user?.id) {
           const { data: userData } = await supabase
@@ -73,10 +59,27 @@ export default function Navbar() {
     }
 
     checkSupabaseAuth()
+  }, [])
+
+  // Update username when NextAuth session changes
+  useEffect(() => {
+    const updateUsername = async () => {
+      if (nextAuthSession?.user?.email) {
+        const { data: userData } = await supabase
+          .from('user_profiles')
+          .select('username')
+          .eq('email', nextAuthSession.user.email)
+          .single()
+
+        setUsername(userData?.username || null)
+      }
+    }
+
+    updateUsername()
   }, [nextAuthSession?.user?.email])
 
-  // Combined session check
-  const isAuthenticated = nextAuthSession || supabaseSession
+  // Combined session check that updates with auth state changes
+  const isAuthenticated = Boolean(nextAuthSession || supabaseSession)
   const userEmail = nextAuthSession?.user?.email || supabaseSession?.user?.email
 
   // Handle logout for both auth methods

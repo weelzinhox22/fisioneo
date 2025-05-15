@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { 
   Baby, 
   Brain, 
@@ -25,6 +25,9 @@ import { AboutSection } from "@/app/components/AboutSection"
 import { AdvancedParallax } from "@/components/animations/advanced-parallax"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { ThreeDText } from "@/components/ui/3d-text"
+import { AlertDialog } from "@/components/ui/alert-dialog"
+import { useSession } from "next-auth/react"
+import { supabase } from "@/lib/supabase"
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -37,6 +40,10 @@ export default function Home() {
   const finalSectionRef = useRef(null);
   const aiAssistantSectionRef = useRef(null);
   
+  const [showLoginAlert, setShowLoginAlert] = useState(false)
+  const { data: nextAuthSession, status: nextAuthStatus } = useSession()
+  const [supabaseSession, setSupabaseSession] = useState<any>(null)
+
   // Set up advanced scroll animations with GSAP
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -92,6 +99,39 @@ export default function Home() {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
+
+  // Check for Supabase session and subscribe to auth changes
+  useEffect(() => {
+    const checkSupabaseAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setSupabaseSession(session)
+
+      // Subscribe to auth changes
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setSupabaseSession(session)
+      })
+
+      return () => subscription.unsubscribe()
+    }
+
+    checkSupabaseAuth()
+  }, [])
+
+  // Combined session check that updates with auth state changes
+  const isAuthenticated = Boolean(nextAuthSession || supabaseSession)
+
+  // Don't render while checking auth status
+  if (nextAuthStatus === "loading") {
+    return null
+  }
+
+  const handleAIAssistantClick = () => {
+    if (!isAuthenticated) {
+      setShowLoginAlert(true)
+      return
+    }
+    alert('Assistente IA ativado!') // Replace with actual functionality
+  }
 
   return (
     <motion.div 
@@ -297,6 +337,13 @@ export default function Home() {
           className="py-24 my-32 relative"
           ref={aiAssistantSectionRef}
         >
+          <AlertDialog
+            isOpen={showLoginAlert}
+            onClose={() => setShowLoginAlert(false)}
+            title="Login Necessário"
+            message="Para acessar o Assistente IA, faça login na plataforma."
+            type="success"
+          />
           <AdvancedParallax speed={0.12} direction="diagonal" className="absolute inset-0">
             <div className="bg-gradient-to-br from-[#6EC1E4]/10 to-[#B9A9FF]/10 rounded-3xl h-full w-full"></div>
           </AdvancedParallax>
@@ -443,11 +490,10 @@ export default function Home() {
                 backgroundGradient={true}
                 glowOnHover={true}
                 strength={15}
-                className="px-8 py-4 font-medium"
-                onClick={() => {
-                  // Use the same functionality as the DraggableAIButton
-                  alert('Assistente IA ativado!');
-                }}
+                className={`px-8 py-4 font-medium ${
+                  !isAuthenticated ? 'opacity-50' : ''
+                }`}
+                onClick={handleAIAssistantClick}
               >
                 <span className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5" />
