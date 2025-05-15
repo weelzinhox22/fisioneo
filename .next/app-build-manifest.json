@@ -6,10 +6,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/login/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/login/page.js"
+      "static/chunks/app/page.js"
     ],
     "/api/auth/[...nextauth]/route": [
       "static/chunks/webpack.js",
@@ -26,25 +26,45 @@
       "static/chunks/main-app.js",
       "static/chunks/app/temas/page.js"
     ],
-    "/page": [
+    "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/login/page.js"
     ],
-    "/provas/page": [
+    "/(protected)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/provas/page.js"
+      "static/chunks/app/(protected)/layout.js"
     ],
-    "/prova-geral/page": [
+    "/(protected)/provas/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/prova-geral/page.js"
+      "static/chunks/app/(protected)/provas/layout.js"
     ],
-    "/documentos/page": [
+    "/(protected)/provas/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/documentos/page.js"
+      "static/chunks/app/(protected)/provas/page.js"
+    ],
+    "/(protected)/prova-geral/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/prova-geral/layout.js"
+    ],
+    "/(protected)/prova-geral/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/prova-geral/page.js"
+    ],
+    "/(protected)/documentos/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/documentos/layout.js"
+    ],
+    "/(protected)/documentos/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/documentos/page.js"
     ],
     "/perfil/page": [
       "static/chunks/webpack.js",
