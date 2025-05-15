@@ -37,7 +37,10 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null
+        if (!credentials?.email || !credentials?.password) {
+          console.log('Credenciais ausentes')
+          return null
+        }
         
         try {
           const { data: { user }, error } = await supabase.auth.signInWithPassword({
@@ -45,7 +48,15 @@ const handler = NextAuth({
             password: credentials.password,
           })
 
-          if (error || !user) return null
+          if (error) {
+            console.log('Erro Supabase:', error.message)
+            return null
+          }
+          
+          if (!user) {
+            console.log('Usuário não encontrado')
+            return null
+          }
           
           return {
             id: user.id,
@@ -54,7 +65,7 @@ const handler = NextAuth({
             image: null
           }
         } catch (error) {
-          console.error('Auth error:', error)
+          console.error('Erro de autenticação:', error)
           return null
         }
       }
@@ -62,11 +73,12 @@ const handler = NextAuth({
   ],
   pages: {
     signIn: '/login',
-    error: '/login', // Página de erro personalizada
+    error: '/login',
   },
-  debug: process.env.NODE_ENV === 'development', // Habilita logs detalhados
+  debug: process.env.NODE_ENV === 'development',
   callbacks: {
     async redirect({ url, baseUrl }) {
+      console.log('Redirecionando para:', url)
       // Permite redirecionamento para URLs do mesmo site
       if (url.startsWith(baseUrl)) return url
       // Permite redirecionamento para URLs relativas
@@ -75,21 +87,26 @@ const handler = NextAuth({
       return baseUrl
     },
     async session({ session, token }) {
+      console.log('Gerando sessão com token:', token)
       if (session.user) {
         session.user.id = token.id as string
       }
       return session
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+      console.log('Gerando JWT para usuário:', user?.email)
       if (user) {
         token.id = user.id
+      }
+      if (account) {
+        token.provider = account.provider
       }
       return token
     },
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60, // 30 dias
   },
 })
 

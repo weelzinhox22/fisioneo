@@ -7,7 +7,7 @@ import { LogIn, Mail } from "lucide-react"
 import Link from "next/link"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { supabase } from "@/lib/supabase"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { AlertDialog } from "@/components/ui/alert-dialog"
 
 export default function LoginPage() {
@@ -17,6 +17,7 @@ export default function LoginPage() {
   const [mode, setMode] = useState<"login" | "register">("login")
   const [error, setError] = useState("")
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [showAlert, setShowAlert] = useState(false)
   const [alertConfig, setAlertConfig] = useState<{
     title: string;
@@ -51,28 +52,38 @@ export default function LoginPage() {
         })
         setShowAlert(true)
       } else {
-        // First authenticate with Supabase
+        // Primeiro autentica com Supabase
         const { data: { user }, error: supabaseError } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
 
-        if (supabaseError) throw supabaseError
+        if (supabaseError) {
+          console.error('Erro Supabase:', supabaseError)
+          throw supabaseError
+        }
 
-        // Then authenticate with NextAuth
+        // Depois autentica com NextAuth
+        const callbackUrl = searchParams.get('callbackUrl') || '/'
+        console.log('Tentando login NextAuth com callbackUrl:', callbackUrl)
+
         const result = await signIn("credentials", {
           email,
           password,
           redirect: false,
+          callbackUrl,
         })
 
         if (result?.error) {
+          console.error('Erro NextAuth:', result.error)
           throw new Error(result.error)
         }
 
-        router.push("/")
+        console.log('Login bem-sucedido, redirecionando para:', callbackUrl)
+        router.push(callbackUrl)
       }
     } catch (error: any) {
+      console.error('Erro durante autenticação:', error)
       setError(error.message)
       setAlertConfig({
         title: "Erro!",
