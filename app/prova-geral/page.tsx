@@ -684,7 +684,7 @@ export default function ProvaGeralPage() {
   }
 
   if (!hasStarted) {
-    return (
+  return (
       <div className="relative min-h-screen bg-gradient-to-b from-white to-[#F8FAFF]">
         {/* Background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -695,8 +695,8 @@ export default function ProvaGeralPage() {
 
         {/* Start screen content */}
         <div className="container mx-auto px-6 py-16 relative z-10">
-          <Link
-            href="/provas"
+      <Link
+        href="/provas"
             className="inline-flex items-center text-[#666666] hover:text-[#333333] transition-colors mb-12 group"
           >
             <ChevronLeft className="h-5 w-5 mr-1 transition-transform group-hover:-translate-x-1" />

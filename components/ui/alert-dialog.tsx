@@ -1,16 +1,14 @@
 "use client"
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, X, Info } from 'lucide-react'
-
-type AlertType = 'success' | 'error' | 'info'
+import { Check, X } from 'lucide-react'
 
 interface AlertDialogProps {
   isOpen: boolean
   onClose: () => void
   title: string
   message: string
-  type?: AlertType
+  type?: 'success' | 'error' | 'info'
 }
 
 export function AlertDialog({ isOpen, onClose, title, message, type = 'success' }: AlertDialogProps) {
@@ -29,9 +27,10 @@ export function AlertDialog({ isOpen, onClose, title, message, type = 'success' 
           iconBg: 'bg-red-400/30'
         }
       case 'info':
+      default:
         return {
           bgGradient: 'from-[#6EC1E4]/90 to-[#B9A9FF]/90',
-          icon: <Info className="h-6 w-6 text-white" />,
+          icon: <Check className="h-6 w-6 text-white" />,
           iconBg: 'bg-blue-400/30'
         }
     }

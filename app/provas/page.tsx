@@ -252,8 +252,8 @@ export default function ProvasPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
-                <Link
-                  href="/prova-geral"
+          <Link
+            href="/prova-geral"
                   className="
                     relative overflow-hidden rounded-full transition-all 
                     bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white 
@@ -346,7 +346,7 @@ export default function ProvasPage() {
                       <ChevronRight className="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" />
                     </div>
                   </div>
-                </Link>
+          </Link>
               </motion.div>
             ))}
           </div>
@@ -386,8 +386,8 @@ export default function ProvasPage() {
                 <BarChart className="h-5 w-5" />
                 Fazer Avaliação Completa
               </span>
-            </Link>
-          </div>
+              </Link>
+            </div>
         </motion.div>
       </div>
     </div>

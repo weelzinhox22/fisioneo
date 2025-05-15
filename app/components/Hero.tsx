@@ -441,7 +441,7 @@ export const Hero = () => {
                   Para uma melhor visualização, acesse também pelo computador ou notebook. A experiência mobile está otimizada, mas o desktop oferece recursos visuais adicionais.
                 </p>
               </div>
-            </div>
+        </div>
 
             <div className="mt-3 flex justify-end">
               <button 
@@ -451,7 +451,7 @@ export const Hero = () => {
                 Entendi
               </button>
             </div>
-          </div>
+      </div>
         </motion.div>
       )}
     </div>
