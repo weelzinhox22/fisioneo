@@ -3,14 +3,17 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Baby, FileText, Home, BookOpen, GraduationCap, Award, MessageSquare } from "lucide-react"
+import { Menu, X, Baby, FileText, Home, BookOpen, GraduationCap, Award, MessageSquare, LogIn, LogOut, User } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { usePathname } from "next/navigation"
+import { useSession, signOut } from "next-auth/react"
+import { MagneticButton } from "@/components/ui/magnetic-button"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
+  const { data: session } = useSession()
 
   // Detectar scroll para efeitos visuais
   useEffect(() => {
@@ -99,22 +102,22 @@ export default function Navbar() {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
               >
                 {item.href ? (
-              <Link
-                href={item.href}
-                className={cn(
+                  <Link
+                    href={item.href}
+                    className={cn(
                       "relative px-4 py-2 rounded-full text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium flex items-center gap-1.5 group",
                       pathname === item.href 
                         ? "text-white bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] font-semibold shadow-md hover:shadow-lg hover:shadow-[#6EC1E4]/20" 
                         : "hover:bg-[#F0F9FF]"
-                )}
-              >
+                    )}
+                  >
                     <span className={cn(
                       "transition-all duration-300",
                       pathname === item.href ? "text-white" : "text-[#6EC1E4] group-hover:scale-110"
                     )}>
                       {item.icon}
                     </span>
-                {item.name}
+                    {item.name}
                     {pathname === item.href && (
                       <motion.span
                         className="absolute inset-0 rounded-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] -z-10"
@@ -126,7 +129,7 @@ export default function Navbar() {
                         }}
                       />
                     )}
-              </Link>
+                  </Link>
                 ) : (
                   <button
                     onClick={item.onClick}
@@ -140,6 +143,40 @@ export default function Navbar() {
                 )}
               </motion.div>
             ))}
+
+            {/* Auth Button */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
+            >
+              {session ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-[#666666]">
+                    <User className="h-4 w-4 inline-block mr-1" />
+                    {session.user?.name}
+                  </span>
+                  <MagneticButton
+                    onClick={() => signOut()}
+                    variant="subtle"
+                    className="px-4 py-2 text-sm font-medium text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 flex items-center gap-1.5"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sair
+                  </MagneticButton>
+                </div>
+              ) : (
+                <Link href="/login">
+                  <MagneticButton
+                    backgroundGradient={true}
+                    className="px-4 py-2 text-sm font-medium text-white flex items-center gap-1.5"
+                  >
+                    <LogIn className="h-4 w-4" />
+                    Entrar
+                  </MagneticButton>
+                </Link>
+              )}
+            </motion.div>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -184,25 +221,28 @@ export default function Navbar() {
                     transition={{ duration: 0.2, delay: index * 0.05 }}
                   >
                     {item.href ? (
-                  <Link
-                    href={item.href}
-                    className={cn(
+                      <Link
+                        href={item.href}
+                        className={cn(
                           "text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg",
                           pathname === item.href 
                             ? "bg-gradient-to-r from-[#6EC1E4]/10 to-[#B9A9FF]/10 text-[#6EC1E4] font-semibold border-l-4 border-[#6EC1E4]" 
                             : "hover:bg-[#F8F8F8]"
-                    )}
-                    onClick={() => setIsOpen(false)}
-                  >
+                        )}
+                        onClick={() => setIsOpen(false)}
+                      >
                         <span className="text-[#6EC1E4]">
                           {item.icon}
                         </span>
-                    {item.name}
-                  </Link>
+                        {item.name}
+                      </Link>
                     ) : (
                       <button
-                        onClick={item.onClick}
-                        className="text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg hover:bg-[#F8F8F8] w-full text-left"
+                        onClick={() => {
+                          item.onClick?.()
+                          setIsOpen(false)
+                        }}
+                        className="w-full text-left text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg hover:bg-[#F8F8F8]"
                       >
                         <span className="text-[#6EC1E4]">
                           {item.icon}
@@ -212,6 +252,42 @@ export default function Navbar() {
                     )}
                   </motion.div>
                 ))}
+
+                {/* Mobile Auth Button */}
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: navItems.length * 0.05 }}
+                  className="pt-2 border-t border-[#E0E0E0]"
+                >
+                  {session ? (
+                    <div className="space-y-2">
+                      <div className="px-4 py-2 text-sm text-[#666666]">
+                        <User className="h-4 w-4 inline-block mr-2" />
+                        {session.user?.name}
+                      </div>
+                      <button
+                        onClick={() => {
+                          signOut()
+                          setIsOpen(false)
+                        }}
+                        className="w-full text-left text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg hover:bg-[#F8F8F8]"
+                      >
+                        <LogOut className="h-4 w-4 text-[#6EC1E4]" />
+                        Sair
+                      </button>
+                    </div>
+                  ) : (
+                    <Link
+                      href="/login"
+                      className="w-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white py-3 px-4 rounded-lg flex items-center gap-3 hover:shadow-lg transition-all duration-300"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <LogIn className="h-4 w-4" />
+                      Entrar
+                    </Link>
+                  )}
+                </motion.div>
               </nav>
             </div>
           </motion.div>
