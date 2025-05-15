@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { getToken } from 'next-auth/jwt'
 
 // Rotas que requerem autenticação
 const protectedRoutes = ['/provas', '/prova-geral', '/documentos', '/temas']
@@ -9,13 +10,30 @@ export async function middleware(req: NextRequest) {
   // Criar resposta inicial
   const res = NextResponse.next()
 
-  // Criar cliente Supabase com os cookies
-  const supabase = createMiddlewareClient({ req, res })
+  // Verificar se é uma rota protegida
+  const isProtectedRoute = protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))
 
-  // Atualizar cookies de autenticação se necessário
+  if (isProtectedRoute) {
+    // Verificar token do NextAuth (Google)
+    const token = await getToken({ req })
+    if (token) {
+      return res
+    }
+
+    // Se não tem token do Google, verificar Supabase
+    const supabase = createMiddlewareClient({ req, res })
+    const { data: { session } } = await supabase.auth.getSession()
+
+    if (!session) {
+      // Se não está autenticado em nenhum dos dois, redirecionar para login
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+  }
+
+  // Criar cliente Supabase e atualizar cookies
+  const supabase = createMiddlewareClient({ req, res })
   await supabase.auth.getSession()
 
-  // Sempre retornar a resposta com cookies atualizados
   return res
 }
 
