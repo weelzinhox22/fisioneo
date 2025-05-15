@@ -10,6 +10,7 @@ import { useSession, signOut } from "next-auth/react"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { supabase } from "@/lib/supabase"
 import { ProfileDropdown } from "@/components/ui/profile-dropdown"
+import { AlertDialog } from "@/components/ui/alert-dialog"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -19,6 +20,7 @@ export default function Navbar() {
   const [supabaseSession, setSupabaseSession] = useState<any>(null)
   const [username, setUsername] = useState<string | null>(null)
   const router = useRouter()
+  const [showLoginAlert, setShowLoginAlert] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -111,6 +113,17 @@ export default function Navbar() {
     },
   ]
 
+  // Add protected routes array
+  const protectedRoutes = ['/provas', '/prova-geral', '/documentos']
+
+  const handleNavigation = (href: string) => {
+    if (protectedRoutes.some(route => href.startsWith(route)) && !isAuthenticated) {
+      setShowLoginAlert(true)
+      return false
+    }
+    return true
+  }
+
   const menuVariants = {
     closed: {
       opacity: 0,
@@ -154,12 +167,21 @@ export default function Navbar() {
       )
     }
 
+    const handleClick = (e: React.MouseEvent) => {
+      if (!handleNavigation(item.href!)) {
+        e.preventDefault()
+      }
+      if (isMobile) {
+        setIsOpen(false)
+      }
+    }
+
     return (
       <Link
         key={item.name}
         href={item.href!}
         className={commonClasses}
-        onClick={isMobile ? () => setIsOpen(false) : undefined}
+        onClick={handleClick}
       >
         {isMobile && <span className="text-[#6EC1E4]">{item.icon}</span>}
         <span className="relative z-10">{item.name}</span>
@@ -179,6 +201,14 @@ export default function Navbar() {
           : "bg-transparent"
       )}
     >
+      <AlertDialog
+        isOpen={showLoginAlert}
+        onClose={() => setShowLoginAlert(false)}
+        title="Acesso Restrito"
+        message="Você precisa fazer login para acessar esta área."
+        type="info"
+      />
+
       <div className="absolute inset-0 bg-gradient-to-r from-[#6EC1E4]/5 to-[#B9A9FF]/5" />
       
       <div className="container mx-auto px-4">
