@@ -5,15 +5,18 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Baby, FileText, Home, BookOpen, GraduationCap, Award, MessageSquare, LogIn, LogOut, User } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
 import { MagneticButton } from "@/components/ui/magnetic-button"
+import { supabase } from "@/lib/supabase"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  const { data: session } = useSession()
+  const { data: nextAuthSession } = useSession()
+  const [supabaseSession, setSupabaseSession] = useState<any>(null)
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +26,39 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  // Check for Supabase session
+  useEffect(() => {
+    const checkSupabaseAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      setSupabaseSession(session)
+
+      // Subscribe to auth changes
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setSupabaseSession(session)
+      })
+
+      return () => subscription.unsubscribe()
+    }
+
+    checkSupabaseAuth()
+  }, [])
+
+  // Combined session check
+  const isAuthenticated = nextAuthSession || supabaseSession
+  const userEmail = nextAuthSession?.user?.email || supabaseSession?.user?.email
+
+  // Handle logout for both auth methods
+  const handleLogout = async () => {
+    if (supabaseSession) {
+      await supabase.auth.signOut()
+      setSupabaseSession(null)
+    }
+    if (nextAuthSession) {
+      await signOut()
+    }
+    router.push('/login')
+  }
 
   const handleOpenSuggestions = () => {
     // Create and dispatch a custom event to open the suggestions dialog
@@ -142,14 +178,14 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
           >
-            {session ? (
+            {isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-[#666666]">
                   <User className="h-4 w-4 inline-block mr-1" />
-                  {session.user?.name}
+                  {userEmail}
                 </span>
                 <MagneticButton
-                  onClick={() => signOut()}
+                  onClick={handleLogout}
                   variant="subtle"
                   className="px-4 py-2 text-sm font-medium text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 flex items-center gap-1.5"
                 >
@@ -204,15 +240,15 @@ export default function Navbar() {
                     transition={{ duration: 0.2, delay: navItems.length * 0.05 }}
                     className="mt-4 pt-4 border-t border-[#E0E0E0]"
                   >
-                    {session ? (
+                    {isAuthenticated ? (
                       <div className="space-y-2">
                         <div className="px-4 py-2 text-sm text-[#666666]">
                           <User className="h-4 w-4 inline-block mr-2" />
-                          {session.user?.name}
+                          {userEmail}
                         </div>
                         <button
                           onClick={() => {
-                            signOut()
+                            handleLogout()
                             setIsOpen(false)
                           }}
                           className="w-full text-left text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg hover:bg-[#F8F8F8]"
