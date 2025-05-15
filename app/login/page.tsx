@@ -21,8 +21,43 @@ export default function LoginPage() {
   const [alertConfig, setAlertConfig] = useState({
     title: "",
     message: "",
-    type: "success" as const
+    type: "success" as "success" | "error" | "info"
   })
+
+  const createUserProfile = async (userId: string) => {
+    try {
+      // Convert string ID to UUID format if needed
+      const { data, error: profileError } = await supabase
+        .from('user_profiles')
+        .insert([
+          { 
+            user_id: userId, // Supabase will handle the UUID conversion
+            email_preferences: {
+              marketing: false,
+              updates: true,
+              security: true
+            }
+          }
+        ])
+        .select()
+
+      if (profileError) {
+        console.error('Error creating profile:', profileError)
+        // Log the full error details for debugging
+        console.error('Profile Error Details:', {
+          code: profileError.code,
+          message: profileError.message,
+          details: profileError.details,
+          hint: profileError.hint
+        })
+        return { success: false, error: profileError }
+      }
+      return { success: true, data }
+    } catch (error) {
+      console.error('Error in createUserProfile:', error)
+      return { success: false, error }
+    }
+  }
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,7 +66,8 @@ export default function LoginPage() {
 
     try {
       if (mode === "register") {
-        const { data, error } = await supabase.auth.signUp({
+        // First, try to create the user
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -39,14 +75,31 @@ export default function LoginPage() {
           },
         })
 
-        if (error) throw error
+        if (signUpError) {
+          console.error('Signup error:', signUpError)
+          throw signUpError
+        }
+
+        if (!authData.user) {
+          throw new Error("Failed to create user")
+        }
+
+        // Try to create the user profile manually if needed
+        const { success, error: profileError } = await createUserProfile(authData.user.id)
+
+        if (!success) {
+          console.error('Failed to create user profile:', profileError)
+          // We still continue as the trigger might have created the profile
+        }
+
         setAlertConfig({
-          title: "Cadastro realizado!",
-          message: "Verifique seu email para confirmar o cadastro. Enviamos um link de confirmação para você.",
+          title: "Registration successful!",
+          message: "Please check your email to confirm your registration. We've sent you a confirmation link.",
           type: "success"
         })
         setShowAlert(true)
       } else {
+        // Login logic
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
@@ -54,25 +107,25 @@ export default function LoginPage() {
 
         if (error) throw error
 
-        // Get the session after successful login
-        const { data: { session } } = await supabase.auth.getSession()
-        
-        if (session) {
-          // Set cookies for session persistence
-          document.cookie = `sb-access-token=${session.access_token}; path=/; max-age=3600; secure; samesite=lax`
-          document.cookie = `sb-refresh-token=${session.refresh_token}; path=/; max-age=3600; secure; samesite=lax`
+        if (data.session) {
+          // Success, redirect to home or callback URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const callbackUrl = urlParams.get('callbackUrl') || '/';
           
-          router.push("/")
-          router.refresh() // Force a refresh to update auth state
+          console.log('Login successful, redirecting to:', callbackUrl);
+          
+          // Redirect to the callback URL or home
+          router.push(callbackUrl);
         } else {
           throw new Error("Failed to get session after login")
         }
       }
     } catch (error: any) {
+      console.error('Auth error:', error)
       setError(error.message)
       setAlertConfig({
-        title: "Erro!",
-        message: error.message,
+        title: "Error!",
+        message: error.message || "An unexpected error occurred",
         type: "error"
       })
       setShowAlert(true)

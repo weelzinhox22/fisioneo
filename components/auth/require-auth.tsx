@@ -1,44 +1,41 @@
 "use client"
 
-import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
 
 export function RequireAuth({ children }: { children: React.ReactNode }) {
-  const { data: nextAuthSession, status: nextAuthStatus } = useSession()
-  const [supabaseSession, setSupabaseSession] = useState<any>(null)
+  const [session, setSession] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    const checkSupabaseAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setSupabaseSession(session)
+    // Verificar sessão inicial
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
       setLoading(false)
+    })
 
-      // Subscribe to auth changes
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        setSupabaseSession(session)
-      })
+    // Escutar mudanças na autenticação
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
 
-      return () => subscription.unsubscribe()
-    }
-
-    checkSupabaseAuth()
+    return () => subscription.unsubscribe()
   }, [])
 
+  // Redirecionar se não estiver autenticado
   useEffect(() => {
-    if (loading) return
-
-    // If neither NextAuth nor Supabase session exists, redirect to login
-    if (nextAuthStatus !== "loading" && !nextAuthSession && !supabaseSession) {
-      router.push('/login')
+    if (!loading && !session) {
+      const currentPath = window.location.pathname
+      router.push(`/login?callbackUrl=${encodeURIComponent(currentPath)}`)
     }
-  }, [nextAuthSession, nextAuthStatus, supabaseSession, loading, router])
+  }, [session, loading, router])
 
-  // Show loading state while checking auth
-  if (loading || nextAuthStatus === "loading") {
+  // Mostrar loading enquanto verifica
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#6EC1E4]"></div>
@@ -46,11 +43,15 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
     )
   }
 
-  // If either auth method is valid, render children
-  if (nextAuthSession || supabaseSession) {
+  // Se estiver autenticado, mostrar conteúdo
+  if (session) {
     return <>{children}</>
   }
 
-  // If no valid session, render nothing (will redirect)
-  return null
+  // Se não estiver autenticado, mostrar loading enquanto redireciona
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#6EC1E4]"></div>
+    </div>
+  )
 } 
