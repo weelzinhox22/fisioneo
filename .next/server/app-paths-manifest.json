@@ -1,7 +1,7 @@
 {
-  "/perfil/page": "app/perfil/page.js",
-  "/page": "app/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/login/page": "app/login/page.js",
-  "/(protected)/provas/sequelas-neurologicas/page": "app/(protected)/provas/sequelas-neurologicas/page.js",
-  "/(protected)/provas/sequelas-pulmonares/page": "app/(protected)/provas/sequelas-pulmonares/page.js"
+  "/page": "app/page.js",
+  "/(protected)/prova-geral/page": "app/(protected)/prova-geral/page.js",
+  "/(protected)/provas/page": "app/(protected)/provas/page.js"
 }
