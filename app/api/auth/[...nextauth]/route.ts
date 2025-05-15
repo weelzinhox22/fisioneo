@@ -2,6 +2,7 @@ import NextAuth, { type DefaultSession } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { supabase } from "@/lib/supabase"
+import { User as SupabaseUser } from '@supabase/supabase-js'
 
 // Extend the session type to include user ID and additional fields
 declare module "next-auth" {
@@ -49,8 +50,7 @@ const handler = NextAuth({
         }
         
         try {
-          // Autenticação com Supabase
-          const { data: { user }, error } = await supabase.auth.signInWithPassword({
+          const { data: { user, session }, error } = await supabase.auth.signInWithPassword({
             email: credentials.email,
             password: credentials.password,
           })
@@ -60,7 +60,7 @@ const handler = NextAuth({
             return null
           }
           
-          if (!user) {
+          if (!user || !session) {
             console.log('Usuário não encontrado')
             return null
           }
@@ -72,8 +72,8 @@ const handler = NextAuth({
             email: user.email,
             image: null,
             provider: 'credentials',
-            accessToken: user.access_token,
-            refreshToken: user.refresh_token
+            accessToken: session.access_token,
+            refreshToken: session.refresh_token
           }
         } catch (error) {
           console.error('Erro de autenticação:', error)
