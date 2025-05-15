@@ -1,12 +1,73 @@
 "use client"
 
+import { useState } from "react"
 import { signIn } from "next-auth/react"
 import { motion } from "framer-motion"
-import { LogIn } from "lucide-react"
+import { LogIn, Mail } from "lucide-react"
 import Link from "next/link"
 import { MagneticButton } from "@/components/ui/magnetic-button"
+import { supabase } from "@/lib/supabase"
+import { useRouter } from "next/navigation"
+import { AlertDialog } from "@/components/ui/alert-dialog"
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [mode, setMode] = useState<"login" | "register">("login")
+  const [error, setError] = useState("")
+  const router = useRouter()
+  const [showAlert, setShowAlert] = useState(false)
+  const [alertConfig, setAlertConfig] = useState({
+    title: "",
+    message: "",
+    type: "success" as const
+  })
+
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError("")
+
+    try {
+      if (mode === "register") {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        })
+
+        if (error) throw error
+        setAlertConfig({
+          title: "Cadastro realizado!",
+          message: "Verifique seu email para confirmar o cadastro. Enviamos um link de confirmação para você.",
+          type: "success"
+        })
+        setShowAlert(true)
+      } else {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
+
+        if (error) throw error
+        router.push("/")
+      }
+    } catch (error: any) {
+      setError(error.message)
+      setAlertConfig({
+        title: "Erro!",
+        message: error.message,
+        type: "error"
+      })
+      setShowAlert(true)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Vídeo de fundo */}
@@ -24,6 +85,15 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40" />
       </div>
 
+      {/* Alert Dialog */}
+      <AlertDialog
+        isOpen={showAlert}
+        onClose={() => setShowAlert(false)}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+      />
+
       {/* Conteúdo */}
       <div className="relative z-10 min-h-screen flex items-center justify-start p-8">
         <div className="max-w-md w-full ml-8">
@@ -36,7 +106,7 @@ export default function LoginPage() {
             {/* Logo ou Título */}
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-white mb-4">
-                Êpa, êpa, êpa! Vamos fazer login!
+                {mode === "login" ? "Bem-vindo de volta!" : "Criar nova conta"}
               </h1>
               <p className="text-gray-300 text-lg mb-2">
                 Conteúdo exclusivo para membros da plataforma
@@ -46,11 +116,121 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* Botão de Login */}
-            <motion.div
+            {/* Form de Email */}
+            <motion.form
+              onSubmit={handleEmailAuth}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
+              className="space-y-4 mb-6"
+            >
+              <div>
+                <input
+                  type="email"
+                  placeholder="Seu email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4285F4] focus:border-transparent transition-all"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  placeholder="Sua senha"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4285F4] focus:border-transparent transition-all"
+                  required
+                />
+              </div>
+              {error && (
+                <p className="text-red-400 text-sm mt-2 text-center">{error}</p>
+              )}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full px-6 py-3 text-lg font-medium relative overflow-hidden rounded-xl bg-gradient-to-r from-[#4285F4] to-[#34A853] hover:from-[#34A853] hover:to-[#4285F4] text-white transition-all duration-500 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <Mail className="w-5 h-5" />
+                  <span>
+                    {loading
+                      ? "Processando..."
+                      : mode === "login"
+                      ? "Entrar com Email"
+                      : "Criar conta"}
+                  </span>
+                </div>
+              </button>
+            </motion.form>
+
+            {/* Botão de Recuperação de Senha */}
+            {mode === "login" && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center"
+              >
+                <button
+                  onClick={async () => {
+                    if (!email) {
+                      setAlertConfig({
+                        title: "Atenção!",
+                        message: "Por favor, insira seu email antes de solicitar a recuperação de senha.",
+                        type: "info"
+                      });
+                      setShowAlert(true);
+                      return;
+                    }
+                    
+                    try {
+                      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                        redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
+                      });
+                      
+                      if (error) throw error;
+                      
+                      setAlertConfig({
+                        title: "Email enviado!",
+                        message: "Verifique sua caixa de entrada para redefinir sua senha.",
+                        type: "success"
+                      });
+                      setShowAlert(true);
+                    } catch (error: any) {
+                      setAlertConfig({
+                        title: "Erro!",
+                        message: error.message,
+                        type: "info"
+                      });
+                      setShowAlert(true);
+                    }
+                  }}
+                  className="text-gray-400 hover:text-white transition-colors text-sm mt-2 group inline-flex items-center gap-2"
+                >
+                  <span className="relative">
+                    Esqueceu sua senha?
+                    <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-gradient-to-r from-[#4285F4] to-[#34A853] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                  </span>
+                </button>
+              </motion.div>
+            )}
+
+            {/* Divisor */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/20"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-transparent text-gray-400">ou</span>
+              </div>
+            </div>
+
+            {/* Botão do Google */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
             >
               <MagneticButton
                 onClick={() => signIn("google", { callbackUrl: "/" })}
@@ -82,18 +262,37 @@ export default function LoginPage() {
                     </svg>
                   </div>
                   <span className="text-white font-semibold tracking-wide">
-                    Entrar com Google
+                    Continuar com Google
                   </span>
                 </div>
               </MagneticButton>
+            </motion.div>
+
+            {/* Alternar entre Login e Registro */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="mt-6 text-center"
+            >
+              <button
+                onClick={() =>
+                  setMode(mode === "login" ? "register" : "login")
+                }
+                className="text-gray-400 hover:text-white transition-colors text-sm"
+              >
+                {mode === "login"
+                  ? "Não tem uma conta? Cadastre-se"
+                  : "Já tem uma conta? Entre"}
+              </button>
             </motion.div>
 
             {/* Link para voltar */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="mt-6 text-center"
+              transition={{ delay: 0.8 }}
+              className="mt-4 text-center"
             >
               <Link
                 href="/"

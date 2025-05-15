@@ -11,6 +11,7 @@ import { MagneticButton } from '@/components/ui/magnetic-button';
 import { ScrollTo } from '@/components/animations/smooth-scroll';
 import { Monitor, X } from 'lucide-react';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
 // Register GSAP plugins on client-side only
 if (typeof window !== 'undefined') {
@@ -90,10 +91,20 @@ export const Hero = () => {
   const { isMobile } = useViewport();
   const [isClient, setIsClient] = useState(false);
   const [showDesktopHint, setShowDesktopHint] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
+  
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session);
+    };
+    checkAuth();
+  }, []);
   
   // Parallax scroll effect
   const { scrollYProgress } = useScroll({
@@ -248,7 +259,7 @@ export const Hero = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8, duration: 0.5 }}
                   className="mt-2 mb-3 text-center px-1"
-          >
+                >
                   <p className="text-xs text-white leading-relaxed">
                     <span className="font-semibold">Aprenda tudo sobre fisioterapia neonatal</span>: métodos, técnicas e avaliações em um único portal educacional focado em desenvolvimento infantil.
                   </p>
@@ -289,11 +300,13 @@ export const Hero = () => {
                   {/* Versão mobile com botões centralizados sem a imagem */}
                   <div className="w-full flex flex-col items-center">
                     <div className="flex flex-col gap-3 items-center">
-                      <Link href="/login" className="w-full">
-                        <button className="w-full text-sm text-white font-medium px-5 py-2 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5DAAD1] hover:to-[#A090E0] rounded-md transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
-                          Entrar na Plataforma
-                        </button>
-                      </Link>
+                      {!isLoggedIn && (
+                        <Link href="/login" className="w-full">
+                          <button className="w-full text-sm text-white font-medium px-5 py-2 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5DAAD1] hover:to-[#A090E0] rounded-md transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
+                            Entrar na Plataforma
+                          </button>
+                        </Link>
+                      )}
                       
                       <ScrollTo targetId="leitor-pdf" offset={-100}>
                         <button className="text-sm text-white font-medium px-5 py-1.5 bg-[#6EC1E4]/70 hover:bg-[#6EC1E4]/90 rounded-md transition-colors">
@@ -312,22 +325,24 @@ export const Hero = () => {
               ) : (
                 <>
                   {/* Versão desktop original */}
-                  <Link href="/login">
-                    <MagneticButton
-                      backgroundGradient={true}
-                      glowOnHover={true}
-                      strength={20}
-                      className="px-6 py-4 text-base font-medium group relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5DAAD1] hover:to-[#A090E0] transition-all duration-500 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
-                    >
-                      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <span className="flex items-center gap-2">
-                        Entrar na Plataforma
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </span>
-                    </MagneticButton>
-                  </Link>
+                  {!isLoggedIn && (
+                    <Link href="/login">
+                      <MagneticButton
+                        backgroundGradient={true}
+                        glowOnHover={true}
+                        strength={20}
+                        className="px-6 py-4 text-base font-medium group relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5DAAD1] hover:to-[#A090E0] transition-all duration-500 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                      >
+                        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <span className="flex items-center gap-2">
+                          Entrar na Plataforma
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </span>
+                      </MagneticButton>
+                    </Link>
+                  )}
                   
                   <ScrollTo targetId="leitor-pdf" offset={-100}>
                     <MagneticButton
@@ -394,7 +409,7 @@ export const Hero = () => {
             ease: "easeOut" 
           }}
           className="fixed bottom-20 inset-x-0 mx-auto z-50 w-[90%] max-w-xs px-4"
-                >
+        >
           <div className="relative bg-gradient-to-r from-[#6EC1E4]/90 to-[#B9A9FF]/90 backdrop-blur-md rounded-lg p-4 shadow-xl border border-white/20">
             <button 
               className="absolute top-2 right-2 text-white/80 hover:text-white" 
@@ -426,7 +441,7 @@ export const Hero = () => {
                   Para uma melhor visualização, acesse também pelo computador ou notebook. A experiência mobile está otimizada, mas o desktop oferece recursos visuais adicionais.
                 </p>
               </div>
-        </div>
+            </div>
 
             <div className="mt-3 flex justify-end">
               <button 
@@ -436,7 +451,7 @@ export const Hero = () => {
                 Entendi
               </button>
             </div>
-      </div>
+          </div>
         </motion.div>
       )}
     </div>
