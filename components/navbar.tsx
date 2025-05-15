@@ -15,18 +15,14 @@ export default function Navbar() {
   const pathname = usePathname()
   const { data: session } = useSession()
 
-  // Detectar scroll para efeitos visuais
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled);
-      }
-    };
+      setScrolled(window.scrollY > 20)
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [scrolled]);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const handleOpenSuggestions = () => {
     // Create and dispatch a custom event to open the suggestions dialog
@@ -42,257 +38,214 @@ export default function Navbar() {
     { name: "Provas", href: "/provas", icon: <GraduationCap className="h-4 w-4" /> },
     { name: "Prova Geral", href: "/prova-geral", icon: <Award className="h-4 w-4" /> },
     { name: "Documentos", href: "/documentos", icon: <FileText className="h-4 w-4" /> },
-    { name: "Sugestões", onClick: handleOpenSuggestions, icon: <MessageSquare className="h-4 w-4" /> },
+    { 
+      name: "Sugestões", 
+      type: "button",
+      onClick: handleOpenSuggestions, 
+      icon: <MessageSquare className="h-4 w-4" /> 
+    },
   ]
 
-  // Variants for animations
-  const logoVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { 
-        duration: 0.5, 
-        ease: "easeOut" 
-      } 
+  const menuVariants = {
+    closed: {
+      opacity: 0,
+      y: -20,
+      transition: {
+        duration: 0.2,
+        ease: "easeInOut"
+      }
+    },
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
     }
-  };
+  }
+
+  const renderNavItem = (item: typeof navItems[0], isMobile = false) => {
+    const commonClasses = cn(
+      "text-sm font-medium text-[#666666] hover:text-[#6EC1E4]",
+      isMobile 
+        ? "transition-all duration-300 hover:translate-x-1 flex items-center gap-2" 
+        : "transition-colors group relative"
+    )
+
+    if (item.type === "button") {
+      return (
+        <button
+          key={item.name}
+          onClick={item.onClick}
+          className={commonClasses}
+        >
+          {isMobile && <span className="text-[#6EC1E4]">{item.icon}</span>}
+          <span className="relative z-10">{item.name}</span>
+          {!isMobile && (
+            <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+          )}
+        </button>
+      )
+    }
+
+    return (
+      <Link
+        key={item.name}
+        href={item.href!}
+        className={commonClasses}
+        onClick={isMobile ? () => setIsOpen(false) : undefined}
+      >
+        {isMobile && <span className="text-[#6EC1E4]">{item.icon}</span>}
+        <span className="relative z-10">{item.name}</span>
+        {!isMobile && (
+          <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+        )}
+      </Link>
+    )
+  }
 
   return (
     <header 
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300",
         scrolled 
-          ? "border-b border-[#E0E0E0]/40 bg-white/90 backdrop-blur-md shadow-sm" 
-          : "bg-white/80 backdrop-blur-sm"
+          ? "bg-white/80 backdrop-blur-xl shadow-sm" 
+          : "bg-transparent"
       )}
     >
-      <div 
-        className={cn(
-          "absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#6EC1E4] via-[#B9A9FF] to-[#6EC1E4] opacity-0 transition-all duration-300",
-          scrolled && "opacity-100"
-        )}
-      ></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#6EC1E4]/5 to-[#B9A9FF]/5" />
       
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={logoVariants}
-          >
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] rounded-full opacity-70 blur-sm group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative bg-white rounded-full p-1.5">
-                  <Baby className="h-7 w-7 text-[#6EC1E4] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#6EC1E4] group-hover:to-[#B9A9FF] transition-all duration-300" />
-                </div>
+        <nav className="relative flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2 group">
+            <div className="relative">
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] rounded-full opacity-70 blur-lg group-hover:opacity-100 transition-all duration-300" />
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-sm">
+                <Baby className="h-6 w-6 text-[#6EC1E4] group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#6EC1E4] group-hover:to-[#B9A9FF] transition-all duration-300" />
               </div>
-              <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#333333] to-[#555555] group-hover:from-[#6EC1E4] group-hover:to-[#B9A9FF] transition-all duration-300">FisioNeo</span>
+            </div>
+            <span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#333333] to-[#555555] group-hover:from-[#6EC1E4] group-hover:to-[#B9A9FF] transition-all duration-300">
+              FisioNeo
+            </span>
           </Link>
-          </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navItems.map((item, index) => (
-              <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      "relative px-4 py-2 rounded-full text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium flex items-center gap-1.5 group",
-                      pathname === item.href 
-                        ? "text-white bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] font-semibold shadow-md hover:shadow-lg hover:shadow-[#6EC1E4]/20" 
-                        : "hover:bg-[#F0F9FF]"
-                    )}
-                  >
-                    <span className={cn(
-                      "transition-all duration-300",
-                      pathname === item.href ? "text-white" : "text-[#6EC1E4] group-hover:scale-110"
-                    )}>
-                      {item.icon}
-                    </span>
-                    {item.name}
-                    {pathname === item.href && (
-                      <motion.span
-                        className="absolute inset-0 rounded-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] -z-10"
-                        layoutId="navIndicator"
-                        transition={{ 
-                          type: "spring", 
-                          stiffness: 350, 
-                          damping: 30 
-                        }}
-                      />
-                    )}
-                  </Link>
-                ) : (
-                  <button
-                    onClick={item.onClick}
-                    className="relative px-4 py-2 rounded-full text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium flex items-center gap-1.5 group hover:bg-[#F0F9FF]"
-                  >
-                    <span className="text-[#6EC1E4] group-hover:scale-110 transition-all duration-300">
-                      {item.icon}
-                    </span>
-                    {item.name}
-                  </button>
-                )}
-              </motion.div>
-            ))}
+          <div className="hidden md:flex items-center space-x-8">
+            {navItems.map((item) => renderNavItem(item))}
+          </div>
 
-            {/* Auth Button */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
-            >
-              {session ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-[#666666]">
-                    <User className="h-4 w-4 inline-block mr-1" />
-                    {session.user?.name}
-                  </span>
-                  <MagneticButton
-                    onClick={() => signOut()}
-                    variant="subtle"
-                    className="px-4 py-2 text-sm font-medium text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 flex items-center gap-1.5"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    Sair
-                  </MagneticButton>
-                </div>
-              ) : (
-                <Link href="/login">
-                  <MagneticButton
-                    backgroundGradient={true}
-                    className="px-4 py-2 text-sm font-medium text-white flex items-center gap-1.5"
-                  >
-                    <LogIn className="h-4 w-4" />
-                    Entrar
-                  </MagneticButton>
-                </Link>
-              )}
-            </motion.div>
-          </nav>
+          {/* Auth Button */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
+          >
+            {session ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-[#666666]">
+                  <User className="h-4 w-4 inline-block mr-1" />
+                  {session.user?.name}
+                </span>
+                <MagneticButton
+                  onClick={() => signOut()}
+                  variant="subtle"
+                  className="px-4 py-2 text-sm font-medium text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 flex items-center gap-1.5"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sair
+                </MagneticButton>
+              </div>
+            ) : (
+              <Link href="/login">
+                <MagneticButton
+                  backgroundGradient={true}
+                  className="px-4 py-2 text-sm font-medium text-white flex items-center gap-1.5"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Entrar
+                </MagneticButton>
+              </Link>
+            )}
+          </motion.div>
 
           {/* Mobile Menu Button */}
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden relative"
+          <button
             onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="md:hidden relative z-50 p-2 -mr-2 text-[#666666] hover:text-[#6EC1E4] transition-colors"
           >
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#6EC1E4]/20 to-[#B9A9FF]/20 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="relative p-2">
-              {isOpen ? 
-                <X className="h-6 w-6 text-[#6EC1E4]" /> : 
-                <Menu className="h-6 w-6 text-[#6EC1E4]" />
-              }
-            </div>
-          </motion.button>
-        </div>
-      </div>
+            {isOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
 
-      {/* Mobile Navigation */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden border-t border-[#E0E0E0] bg-white/95 backdrop-blur-md"
-          >
-            <div className="container mx-auto px-4 py-4">
-              <nav className="flex flex-col space-y-2">
-                {navItems.map((item, index) => (
+          {/* Mobile Navigation */}
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial="closed"
+                animate="open"
+                exit="closed"
+                variants={menuVariants}
+                className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl shadow-lg md:hidden border-t border-[#E0E0E0]/50"
+              >
+                <div className="container mx-auto px-4 py-4">
+                  <div className="flex flex-col space-y-4">
+                    {navItems.map((item) => renderNavItem(item, true))}
+                  </div>
+
+                  {/* Mobile Auth Button */}
                   <motion.div
-                    key={item.name}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.2, delay: index * 0.05 }}
+                    transition={{ duration: 0.2, delay: navItems.length * 0.05 }}
+                    className="mt-4 pt-4 border-t border-[#E0E0E0]"
                   >
-                    {item.href ? (
+                    {session ? (
+                      <div className="space-y-2">
+                        <div className="px-4 py-2 text-sm text-[#666666]">
+                          <User className="h-4 w-4 inline-block mr-2" />
+                          {session.user?.name}
+                        </div>
+                        <button
+                          onClick={() => {
+                            signOut()
+                            setIsOpen(false)
+                          }}
+                          className="w-full text-left text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg hover:bg-[#F8F8F8]"
+                        >
+                          <LogOut className="h-4 w-4 text-[#6EC1E4]" />
+                          Sair
+                        </button>
+                      </div>
+                    ) : (
                       <Link
-                        href={item.href}
-                        className={cn(
-                          "text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg",
-                          pathname === item.href 
-                            ? "bg-gradient-to-r from-[#6EC1E4]/10 to-[#B9A9FF]/10 text-[#6EC1E4] font-semibold border-l-4 border-[#6EC1E4]" 
-                            : "hover:bg-[#F8F8F8]"
-                        )}
+                        href="/login"
+                        className="w-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white py-3 px-4 rounded-lg flex items-center gap-3 hover:shadow-lg transition-all duration-300"
                         onClick={() => setIsOpen(false)}
                       >
-                        <span className="text-[#6EC1E4]">
-                          {item.icon}
-                        </span>
-                        {item.name}
+                        <LogIn className="h-4 w-4" />
+                        Entrar
                       </Link>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          item.onClick?.()
-                          setIsOpen(false)
-                        }}
-                        className="w-full text-left text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg hover:bg-[#F8F8F8]"
-                      >
-                        <span className="text-[#6EC1E4]">
-                          {item.icon}
-                        </span>
-                        {item.name}
-                      </button>
                     )}
                   </motion.div>
-                ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </nav>
+      </div>
 
-                {/* Mobile Auth Button */}
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.2, delay: navItems.length * 0.05 }}
-                  className="pt-2 border-t border-[#E0E0E0]"
-                >
-                  {session ? (
-                    <div className="space-y-2">
-                      <div className="px-4 py-2 text-sm text-[#666666]">
-                        <User className="h-4 w-4 inline-block mr-2" />
-                        {session.user?.name}
-                      </div>
-                      <button
-                        onClick={() => {
-                          signOut()
-                          setIsOpen(false)
-                        }}
-                        className="w-full text-left text-[#666666] hover:text-[#6EC1E4] transition-all duration-300 text-sm font-medium py-3 px-4 flex items-center gap-3 rounded-lg hover:bg-[#F8F8F8]"
-                      >
-                        <LogOut className="h-4 w-4 text-[#6EC1E4]" />
-                        Sair
-                      </button>
-                    </div>
-                  ) : (
-                    <Link
-                      href="/login"
-                      className="w-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white py-3 px-4 rounded-lg flex items-center gap-3 hover:shadow-lg transition-all duration-300"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <LogIn className="h-4 w-4" />
-                      Entrar
-                    </Link>
-                  )}
-                </motion.div>
-              </nav>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Progress bar */}
+      <div className="h-0.5 bg-gradient-to-r from-[#6EC1E4] via-[#B9A9FF] to-[#6EC1E4] transform origin-left transition-transform duration-300" 
+           style={{ 
+             transform: `scaleX(${scrolled ? "1" : "0"})`,
+             opacity: scrolled ? "1" : "0" 
+           }} 
+      />
     </header>
   )
 }
