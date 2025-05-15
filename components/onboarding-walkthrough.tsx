@@ -18,7 +18,10 @@ import {
   Stethoscope,
   GraduationCap,
   RefreshCw,
-  ExternalLink
+  ExternalLink,
+  Phone,
+  Instagram,
+  MessageSquare
 } from "lucide-react"
 import Link from "next/link"
 
@@ -37,6 +40,7 @@ export default function OnboardingWalkthrough() {
   const [currentStep, setCurrentStep] = useState(0)
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false)
   const [showReopenButton, setShowReopenButton] = useState(false)
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false)
 
   useEffect(() => {
     // Check if user has seen the onboarding before
@@ -55,6 +59,21 @@ export default function OnboardingWalkthrough() {
       }, 10000)
     }
   }, [])
+
+  // Listen for custom events to open suggestions dialog
+  useEffect(() => {
+    const handleOpenSuggestions = () => {
+      setIsSuggestionsOpen(true);
+    };
+
+    // Add event listener
+    document.addEventListener('openSuggestions', handleOpenSuggestions);
+
+    // Clean up
+    return () => {
+      document.removeEventListener('openSuggestions', handleOpenSuggestions);
+    };
+  }, []);
 
   const handleComplete = () => {
     // Mark as seen in localStorage
@@ -173,7 +192,7 @@ export default function OnboardingWalkthrough() {
   ]
 
   // If user has completely dismissed the walkthrough, don't render anything
-  if (hasSeenOnboarding && !isOpen && !showReopenButton) return null
+  if (hasSeenOnboarding && !isOpen && !showReopenButton && !isSuggestionsOpen) return null
 
   const getIconBackgroundColor = (color: string) => {
     const colors: Record<string, string> = {
@@ -213,6 +232,7 @@ export default function OnboardingWalkthrough() {
         )}
       </AnimatePresence>
 
+      {/* Tour Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-md md:max-w-2xl p-0 gap-0 overflow-hidden rounded-xl border-0 shadow-xl">
           <div className="relative w-full">
@@ -364,6 +384,88 @@ export default function OnboardingWalkthrough() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Suggestions component for external access */}
+      <Dialog open={isSuggestionsOpen} onOpenChange={setIsSuggestionsOpen}>
+        <DialogContent className="sm:max-w-md md:max-w-lg p-0 gap-0 overflow-hidden rounded-xl border-0 shadow-xl">
+          <div className="relative w-full">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] p-4 text-white flex justify-between items-center">
+              <h2 className="font-bold text-lg md:text-xl flex items-center gap-2">
+                <MessageSquare className="h-5 w-5" />
+                Sugestões e Contato
+              </h2>
+              <button 
+                onClick={() => setIsSuggestionsOpen(false)}
+                className="rounded-full p-1 hover:bg-white/20 transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Suas sugestões são importantes!</h2>
+                
+                <p className="text-gray-600 mb-6">
+                  Tem alguma sugestão de questão, correção de conteúdo ou qualquer outra ideia para melhorar a plataforma? 
+                  Entre em contato diretamente pelo WhatsApp ou Instagram:
+                </p>
+                
+                <div className="space-y-4">
+                  <a 
+                    href="https://wa.me/5571991373142" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg border border-green-200 hover:shadow-md transition-all"
+                  >
+                    <div className="h-12 w-12 bg-green-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                      <Phone className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-800">WhatsApp</h3>
+                      <p className="text-gray-600">+55 71 99137-3142</p>
+                    </div>
+                  </a>
+                  
+                  <a 
+                    href="https://instagram.com/welziinho" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-100 rounded-lg border border-purple-200 hover:shadow-md transition-all"
+                  >
+                    <div className="h-12 w-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                      <Instagram className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-gray-800">Instagram</h3>
+                      <p className="text-gray-600">@welziinho</p>
+                    </div>
+                  </a>
+                </div>
+                
+                <div className="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                  <p className="text-blue-800 text-sm">
+                    Agradeço por seu feedback! Todas as sugestões são analisadas e podem ser incorporadas para melhorar a experiência de aprendizado de todos os usuários.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   )
+}
+
+// This function is exported so it can be called from the navbar
+export function openSuggestions() {
+  // Create and dispatch a custom event that the OnboardingWalkthrough component will listen to
+  const event = new CustomEvent('openSuggestions');
+  document.dispatchEvent(event);
 } 

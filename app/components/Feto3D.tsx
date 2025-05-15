@@ -309,13 +309,13 @@ export function Feto3D() {
       />
       
       {/* Modelo 3D */}
-      <primitive
-        ref={modelRef}
-        object={scene}
-        position={isMobile ? [0, 0, -1.0] : [-0.5, 0, -2.0]} // Posição ajustada para mobile
-        onPointerOver={() => !isMobile && setHovered(true)}
-        onPointerOut={() => !isMobile && setHovered(false)}
-      />
+    <primitive
+      ref={modelRef}
+      object={scene}
+      position={isMobile ? [0, 0, -1.0] : [-0.5, 0, -2.0]} // Posição ajustada para mobile
+      onPointerOver={() => !isMobile && setHovered(true)}
+      onPointerOut={() => !isMobile && setHovered(false)}
+    />
       
       {/* Adicionar efeito de brilho/aura ao redor do modelo */}
       {!isMobile && (

@@ -76,7 +76,7 @@ export default function ReadingProgress() {
         </motion.button>
         
         <AnimatePresence>
-          {showDetails && (
+        {showDetails && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.8, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -89,8 +89,8 @@ export default function ReadingProgress() {
                   <div className="p-1.5 bg-[#F0F9FF] rounded-lg mr-2.5">
                     <BookOpen className="h-4 w-4 text-[#6EC1E4]" />
                   </div>
-                  <h3 className="text-sm font-medium text-[#333333]">Progresso de leitura</h3>
-                </div>
+              <h3 className="text-sm font-medium text-[#333333]">Progresso de leitura</h3>
+            </div>
                 
                 <button 
                   onClick={() => setShowDetails(false)}
@@ -101,15 +101,15 @@ export default function ReadingProgress() {
               </div>
               
               <div className="space-y-4">
-                <div>
+              <div>
                   <div className="flex justify-between items-center mb-1.5">
-                    <p className="text-xs text-gray-500">Progresso</p>
+                <p className="text-xs text-gray-500">Progresso</p>
                     <span className="text-xs font-medium text-[#4A96D1]">{progress}%</span>
                   </div>
                   <div className="w-full bg-[#F0F9FF] rounded-full h-2.5">
-                    <div 
+                  <div 
                       className="bg-gradient-to-r from-[#6EC1E4] to-[#4A96D1] h-2.5 rounded-full relative overflow-hidden"
-                      style={{ width: `${progress}%` }}
+                    style={{ width: `${progress}%` }}
                     >
                       <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
                     </div>
@@ -120,12 +120,12 @@ export default function ReadingProgress() {
                   <div className="flex items-center">
                     <Clock className="h-3.5 w-3.5 text-[#6EC1E4] mr-1.5" />
                     <span>Tempo restante</span>
-                  </div>
+              </div>
                   <span className="font-medium text-[#4A96D1]">{remainingTime} min</span>
-                </div>
+              </div>
               </div>
             </motion.div>
-          )}
+        )}
         </AnimatePresence>
       </div>
     </div>

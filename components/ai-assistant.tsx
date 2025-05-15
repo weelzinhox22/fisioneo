@@ -11,6 +11,7 @@ import {
 import { ZoomIn } from "./animations/zoom-in"
 import { getFallbackResponse } from "@/lib/fallback-responses"
 import FixedChatModal from "./fixed-chat-modal"
+import { usePathname } from 'next/navigation'
 
 type Message = {
   role: "user" | "assistant" | "system"
@@ -18,6 +19,7 @@ type Message = {
 }
 
 export default function AIAssistant() {
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -148,6 +150,11 @@ export default function AIAssistant() {
           : "Modo online ativado. Conectando à API.",
       },
     ])
+  }
+
+  // Don't render on prova-geral page
+  if (pathname === '/prova-geral') {
+    return null
   }
 
   return (

@@ -49,7 +49,7 @@ export default function BackToTop() {
             <span className="absolute -top-1 -right-1 h-4 w-4 bg-white rounded-full flex items-center justify-center">
               <span className="h-2 w-2 bg-[#4A96D1] rounded-full animate-ping absolute"></span>
               <span className="h-2 w-2 bg-[#4A96D1] rounded-full relative"></span>
-            </span>
+          </span>
           </div>
         </motion.button>
       )}

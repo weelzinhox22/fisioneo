@@ -71,7 +71,7 @@ export default function DocumentosPage() {
       
       {/* Document viewer component - aumentando z-index para garantir interatividade */}
       <div className="container mx-auto px-6 pb-16 relative z-20" style={{ pointerEvents: "auto" }}>
-        <DocumentViewer />
+      <DocumentViewer />
       </div>
     </div>
   )

@@ -642,7 +642,7 @@ export default function QuizPage({ params }: QuizPageProps) {
     
     return colorMap[category] || quiz.color || "#6EC1E4"
   }
-  
+
   return (
     <div className="relative min-h-screen pb-20">
       {/* Background elements */}
@@ -662,19 +662,19 @@ export default function QuizPage({ params }: QuizPageProps) {
           
           <div className="relative z-10 container mx-auto px-6 py-10">
             <Link href="/provas" className="inline-flex items-center text-[#6EC1E4] mb-8 hover:text-[#6EC1E4]/80 transition-colors">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+        <ArrowLeft className="h-4 w-4 mr-2" />
               <span className="text-sm font-medium">Voltar para provas temáticas</span>
-            </Link>
-            
+      </Link>
+
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center gap-4">
                 <div className={`p-3 rounded-lg bg-gradient-to-r from-[${quiz.color}]/10 to-[${quiz.color}]/5`}>
                   {quiz.icon}
-                </div>
+        </div>
                 <div>
                   <span className={`px-4 py-1.5 bg-gradient-to-r from-[${quiz.color}]/10 to-[${quiz.color}]/5 rounded-full text-sm font-medium text-[${quiz.color}] inline-block mb-2`}>
                     Prova temática
-                  </span>
+                </span>
                   <h1 className="text-2xl md:text-3xl font-bold text-[#333333]">{quiz.title}</h1>
                 </div>
               </div>
@@ -684,7 +684,7 @@ export default function QuizPage({ params }: QuizPageProps) {
                 <span className="text-sm font-medium">{formatTime(timer)}</span>
               </div>
             </div>
-            
+
             <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden mb-4">
               <motion.div 
                 className={`h-full bg-[${quiz.color}]`}
@@ -705,7 +705,7 @@ export default function QuizPage({ params }: QuizPageProps) {
       
       <div className="container mx-auto px-6" ref={contentRef} style={{ position: "relative", zIndex: 20, pointerEvents: "auto" }}>
         {!showResults ? (
-          <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait">
             <motion.div
               key={currentQuestion}
               initial="hidden"
@@ -730,18 +730,18 @@ export default function QuizPage({ params }: QuizPageProps) {
               </h2>
               
               <div className="space-y-3 mb-6" style={{ position: "relative", zIndex: 50, pointerEvents: "auto" }}>
-                {quiz.questions[currentQuestion].options.map((option, index) => (
+                  {quiz.questions[currentQuestion].options.map((option, index) => (
                   <motion.button
-                    key={index}
+                      key={index}
                     className={`w-full text-left p-4 rounded-lg border transition-all ${
-                      selectedAnswer === index
-                        ? index === quiz.questions[currentQuestion].correctAnswer
+                        selectedAnswer === index
+                          ? index === quiz.questions[currentQuestion].correctAnswer
                           ? "bg-green-50 border-green-200 text-green-800"
                           : "bg-red-50 border-red-200 text-red-800"
                         : "border-gray-200 hover:border-[#6EC1E4]/30 hover:bg-[#6EC1E4]/5"
                     }`}
                     onClick={() => handleAnswerSelect(index)}
-                    disabled={isAnswered}
+                      disabled={isAnswered}
                     whileHover={!isAnswered ? { scale: 1.01 } : {}}
                     whileTap={!isAnswered ? { scale: 0.99 } : {}}
                     style={{ position: "relative", zIndex: 50, pointerEvents: "auto" }}
@@ -769,13 +769,13 @@ export default function QuizPage({ params }: QuizPageProps) {
                       <span className="text-md md:text-base">{option}</span>
                     </div>
                   </motion.button>
-                ))}
-              </div>
-              
-              {isAnswered && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  ))}
+                </div>
+
+                {isAnswered && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
                   className={`p-4 mb-6 rounded-lg ${
                     selectedAnswer === quiz.questions[currentQuestion].correctAnswer
                       ? "bg-green-50 border border-green-100"
@@ -783,33 +783,33 @@ export default function QuizPage({ params }: QuizPageProps) {
                   }`}
                 >
                   <p className={`text-sm ${
-                    selectedAnswer === quiz.questions[currentQuestion].correctAnswer
+                        selectedAnswer === quiz.questions[currentQuestion].correctAnswer
                       ? "text-green-700"
                       : "text-red-700"
                   }`}>
-                    {feedbackMessage}
-                  </p>
-                </motion.div>
-              )}
-              
-              {isAnswered && (
+                      {feedbackMessage}
+                    </p>
+                  </motion.div>
+                )}
+
+                {isAnswered && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
                   className="flex justify-end"
                 >
-                  <button
-                    onClick={handleNextQuestion}
+                    <button
+                      onClick={handleNextQuestion}
                     className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white px-6 py-3 rounded-lg font-medium inline-flex items-center hover:shadow-md transition-shadow"
-                  >
+                    >
                     {currentQuestion < quiz.questions.length - 1 ? "Próxima questão" : "Ver resultados"}
                     <ChevronRight className="h-4 w-4 ml-2" />
-                  </button>
+                    </button>
                 </motion.div>
-              )}
-            </motion.div>
-          </AnimatePresence>
+                )}
+              </motion.div>
+            </AnimatePresence>
         ) : (
           <motion.div
             initial="hidden"
@@ -844,7 +844,7 @@ export default function QuizPage({ params }: QuizPageProps) {
                 </div>
               </div>
             </div>
-            
+
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-[#333333] mb-4">Desempenho por Categoria</h3>
               
@@ -879,7 +879,7 @@ export default function QuizPage({ params }: QuizPageProps) {
                 ))}
               </div>
             </div>
-            
+
             <div className="flex flex-wrap gap-4 justify-center mt-8">
               <MagneticButton
                 backgroundGradient={true}

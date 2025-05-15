@@ -2,20 +2,42 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowLeft, CheckCircle2, XCircle, BarChart, TrendingUp, ChevronRight, AlarmClock } from "lucide-react"
+import { ArrowLeft, CheckCircle2, XCircle, BarChart, TrendingUp, ChevronRight, AlarmClock, ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { ThreeDText } from "@/components/ui/3d-text"
 import { AdvancedParallax } from "@/components/animations/advanced-parallax"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import { Particles } from "@/components/ui/particles"
 
 // Register GSAP plugins on client-side only
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger)
 }
 
+// Types
+interface Question {
+  question: string
+  options: string[]
+  correctAnswer: number
+  category: string
+  explanation: string
+}
+
+// Fisher-Yates shuffle algorithm
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
 export default function ProvaGeralPage() {
+  const isMobile = useMediaQuery("(max-width: 768px)")
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [isAnswered, setIsAnswered] = useState(false)
@@ -24,6 +46,9 @@ export default function ProvaGeralPage() {
   const [feedbackMessage, setFeedbackMessage] = useState("")
   const [timer, setTimer] = useState(0)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasStarted, setHasStarted] = useState(false)
   
   const headerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -78,79 +103,67 @@ export default function ProvaGeralPage() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Exemplo de perguntas para a prova geral
-  const questions = [
+  // Questions array
+  const originalQuestions: Question[] = [
     {
-      question: "Recém-nascido prematuro de 34 semanas apresenta hipertonia em membros inferiores e hipotonia axial. Durante a avaliação fisioterapêutica, observa-se persistência do reflexo tônico cervical assimétrico e ausência de reação de proteção lateral. Qual a conduta fisioterapêutica mais adequada para este caso?",
+      question: "Em relação à avaliação da dor em neonatos prematuros, qual escala é mais apropriada para avaliar a dor aguda durante procedimentos invasivos, considerando a idade gestacional como fator de correção?",
       options: [
-        "Realizar apenas alongamentos passivos dos membros inferiores",
-        "Estimulação sensorial multimodal com posicionamento em flexão e contenção facilitada",
-        "Aplicar padrões de facilitação neuromuscular proprioceptiva em diagonal",
-        "Iniciar treino de marcha com suporte parcial de peso imediatamente"
+        "Escala PIPP-R (Premature Infant Pain Profile – Revised)",
+        "Escala NIPS (Neonatal Infant Pain Scale)",
+        "Escala EDIN (Échelle Douleur Inconfort Nouveau-Né)",
+        "Escala N-PASS (Neonatal Pain Agitation and Sedation Scale)"
       ],
-      correctAnswer: 1,
-      category: "Intervenção Neurológica em Prematuros",
-      explanation: "A estimulação sensorial multimodal com posicionamento em flexão e contenção facilitada é a conduta mais adequada para este caso, pois respeita o desenvolvimento neurológico do prematuro, promove organização postural, facilita a integração dos reflexos primitivos e favorece experiências sensoriais positivas. Alongamentos isolados não abordam a desorganização neurológica, técnicas de PNF são avançadas para esta idade, e o treino de marcha seria inadequado neste estágio."
+      correctAnswer: 0,
+      category: "Dor Neonatal",
+      explanation: "A escala PIPP-R é especificamente adaptada para prematuros e considera a idade gestacional como fator de correção na avaliação da dor."
     },
     {
-      question: "Entre as evidências científicas que comprovam os benefícios da hidroterapia em neonatos, qual resultado está diretamente relacionado à imersão em água aquecida?",
+      question: "Durante a hidroterapia neonatal, quais são os parâmetros fisiológicos que devem ser monitorados continuamente para garantir a segurança do procedimento?",
       options: [
-        "Aumento da frequência cardíaca e frequência respiratória",
-        "Diminuição da saturação de oxigênio",
-        "Aumento dos níveis de cortisol salivar",
-        "Redução do estresse e estabilização dos sinais vitais"
+        "Apenas temperatura corporal e saturação de oxigênio",
+        "Frequência cardíaca, frequência respiratória, saturação de oxigênio e temperatura corporal",
+        "Pressão arterial e temperatura da água",
+        "Temperatura da água e umidade do ambiente"
+      ],
+      correctAnswer: 1,
+      category: "Hidroterapia em Neonatos",
+      explanation: "O monitoramento contínuo deve incluir frequência cardíaca, frequência respiratória, saturação de oxigênio e temperatura corporal."
+    },
+    {
+      question: "Na avaliação do desenvolvimento motor de um prematuro de 4 meses de idade corrigida, qual instrumento oferece maior sensibilidade para detectar alterações sutis na qualidade do movimento?",
+      options: [
+        "Escala de Denver II",
+        "Escala de Desenvolvimento de Gesell",
+        "TIMP (Test of Infant Motor Performance)",
+        "Escala Motora de Alberta (AIMS)"
+      ],
+      correctAnswer: 2,
+      category: "Avaliação Neonatal",
+      explanation: "O TIMP é o instrumento mais sensível para detectar alterações sutis na qualidade do movimento em bebês prematuros até 4 meses de idade corrigida."
+    },
+    {
+      question: "Qual é o mecanismo neurofisiológico pelo qual a hidroterapia em água aquecida (36,5-37°C) promove redução do tônus muscular em neonatos com padrão extensor aumentado?",
+      options: [
+        "Aumento da atividade reflexa medular",
+        "Redução do fluxo sanguíneo muscular",
+        "Estimulação do sistema nervoso simpático",
+        "Ativação dos receptores de pressão profunda e temperatura"
       ],
       correctAnswer: 3,
       category: "Hidroterapia em Neonatos",
-      explanation: "A imersão em água aquecida durante a hidroterapia neonatal promove a redução do estresse e estabilização dos sinais vitais. Estudos demonstram que após a hidroterapia ocorre diminuição da frequência cardíaca e respiratória, aumento da saturação de oxigênio e redução de comportamentos indicativos de estresse, com diminuição dos níveis de cortisol."
+      explanation: "A hidroterapia em água aquecida reduz o tônus muscular através da ativação dos receptores de pressão profunda e temperatura."
     },
     {
-      question: "No Método Canguru, a posição do recém-nascido no decúbito lateral direito durante o contato pele a pele está associada a qual benefício?",
+      question: "Em um recém-nascido prematuro com 32 semanas de idade gestacional, qual sequência de reflexos primitivos deve estar presente e qual sua importância para o desenvolvimento neuromotor?",
       options: [
-        "Diminuição da saturação de oxigênio",
-        "Aumento dos sinais de desconforto respiratório",
-        "Aumento dos níveis de SatO2 e redução do desconforto respiratório",
-        "Não há benefícios específicos nesta posição comparada a outras"
-      ],
-      correctAnswer: 2,
-      category: "Método Canguru",
-      explanation: "Conforme estudos sobre a posição canguru em diferentes decúbitos, o decúbito lateral direito durante o contato pele a pele aumenta os níveis de saturação de oxigênio (SatO2) e reduz os sinais de desconforto respiratório do bebê. Esta posição facilita uma melhor expansão torácica e melhora a ventilação-perfusão, promovendo bem-estar respiratório."
-    },
-    {
-      question: "Um recém-nascido de 29 semanas apresenta irritabilidade, choro intenso, expressão facial de dor, alteração na saturação de oxigênio e frequência cardíaca durante uma punção venosa. Qual escala é mais adequada para avaliar a dor neste procedimento?",
-      options: [
-        "Escala EDIN (Échelle Douleur Inconfort Nouveau-Né)",
-        "Escala NIPS (Neonatal Infant Pain Scale)",
-        "Escala PIPP-R (Premature Infant Pain Profile – Revised)",
-        "Escala N-PASS (Neonatal Pain Agitation and Sedation Scale)"
-      ],
-      correctAnswer: 2,
-      category: "Dor Neonatal",
-      explanation: "A escala PIPP-R (Premature Infant Pain Profile – Revised) é a mais adequada para este caso por ser especificamente adaptada para prematuros, avaliando não apenas as respostas comportamentais como expressão facial, mas também as respostas fisiológicas (frequência cardíaca, saturação de oxigênio) e considerando a idade gestacional como fator de correção, o que é fundamental para a avaliação em um prematuro de 29 semanas."
-    },
-    {
-      question: "Bebê de 4 meses, nascido a termo, apresenta persistência do Reflexo Tônico Cervical Assimétrico (RTCA) além do tempo esperado. Como este reflexo influencia o desenvolvimento motor e quais consequências sua persistência pode causar?",
-      options: [
-        "Facilita o desenvolvimento do controle cefálico e não causa prejuízos significativos",
-        "Dificulta o alcance de marcos como rolar e sentar, prejudicando a simetria e orientação na linha média",
-        "Acelera o processo de controle de tronco, mas prejudica a coordenação entre membros superiores e inferiores",
-        "Não interfere no desenvolvimento motor típico, sendo uma variação normal do desenvolvimento"
+        "Reflexo de marcha e preensão plantar, indicativos de desenvolvimento motor normal",
+        "Reflexos de sucção, Moro, preensão palmar e tônico cervical assimétrico, fundamentais para sobrevivência e desenvolvimento",
+        "Apenas reflexo de Moro e preensão palmar, essenciais para proteção",
+        "Reflexo tônico cervical assimétrico e Moro, indicativos de maturação do tronco cerebral"
       ],
       correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "A persistência do Reflexo Tônico Cervical Assimétrico (RTCA) além do tempo esperado dificulta a aquisição de marcos motores como rolar e sentar, pois impede que o bebê explore a linha média, desenvolvendo padrões de movimento assimétricos. Este reflexo, quando persistente, inibe a coordenação bilateral, dificultando atividades como levar as mãos à linha média, fundamentais para o desenvolvimento motor típico."
-    },
-    {
-      question: "Uma criança nascida prematura com 32 semanas apresenta, aos 18 meses, dificuldades na marcha com padrão de hipertonia em membros inferiores, caracterizada por flexão de quadril, rotação interna e adução, joelhos semiflexionados e pés em equino. Qual é o diagnóstico mais provável e quais lesões cerebrais comumente estão associadas a este quadro?",
-      options: [
-        "Atraso do desenvolvimento motor; Malformação do corpo caloso",
-        "Paralisia cerebral discinética; Lesão dos gânglios da base",
-        "Paralisia cerebral espástica bilateral; Leucomalácia periventricular",
-        "Ataxia cerebelar; Hemorragia cerebelar"
-      ],
-      correctAnswer: 2,
-      category: "Sequelas Neurológicas em Prematuros",
-      explanation: "O quadro descrito é característico de Paralisia Cerebral espástica bilateral, com predomínio em membros inferiores (diparesia espástica), que está frequentemente associada à Leucomalácia Periventricular (LPV). A LPV é uma lesão isquêmica da substância branca periventricular comum em prematuros, afetando principalmente as fibras descendentes do trato córtico-espinhal que inervam os membros inferiores, resultando no padrão típico de hipertonia espástica descrito."
+      category: "Reflexos de 0 a 6 meses",
+      explanation: "Com 32 semanas, devem estar presentes os reflexos de sucção, Moro, preensão palmar e tônico cervical assimétrico."
     },
     {
       question: "Na avaliação da dor em recém-nascidos prematuros, por que é importante utilizar escalas multidimensionais que consideram parâmetros fisiológicos e comportamentais?",
@@ -162,7 +175,7 @@ export default function ProvaGeralPage() {
       ],
       correctAnswer: 2,
       category: "Dor Neonatal",
-      explanation: "É importante utilizar escalas multidimensionais porque a resposta à dor em prematuros pode ser atenuada ou desorganizada devido à imaturidade do sistema nervoso. Prematuros podem apresentar menor capacidade de sustentação da resposta comportamental à dor e maior variabilidade nas respostas fisiológicas. A combinação de parâmetros fisiológicos (FC, FR, SatO2) e comportamentais (expressão facial, choro, estado de sono/vigília) permite uma avaliação mais precisa e individualizada da experiência dolorosa."
+      explanation: "É importante utilizar escalas multidimensionais porque a resposta à dor em prematuros pode ser atenuada ou desorganizada devido à imaturidade do sistema nervoso. Prematuros podem apresentar menor capacidade de sustentação da resposta comportamental à dor e maior variabilidade nas respostas fisiológicas."
     },
     {
       question: "Durante uma sessão de hidroterapia com um recém-nascido prematuro de 35 semanas, o bebê apresenta diminuição súbita da temperatura corporal e palidez. Qual deve ser a conduta imediata do fisioterapeuta?",
@@ -174,67 +187,7 @@ export default function ProvaGeralPage() {
       ],
       correctAnswer: 2,
       category: "Hidroterapia em Neonatos",
-      explanation: "A conduta imediata deve ser finalizar a sessão, retirar o bebê da água, secá-lo e aquecê-lo, além de monitorar seus sinais vitais. A diminuição súbita da temperatura corporal e palidez são sinais de estresse térmico que podem levar à hipotermia, que é particularmente perigosa em prematuros devido à sua menor reserva de gordura corporal, maior superfície corporal em relação à massa e imaturidade do centro de termorregulação. A continuidade do procedimento poderia agravar o quadro e levar a complicações graves."
-    },
-    {
-      question: "Um recém-nascido de 3 meses de idade corrigida (nascido com 32 semanas) apresenta movimentos de membros superiores com padrão discinético, força de preensão palmar assimétrica e dificuldade em manter a cabeça na linha média. Qual instrumento de avaliação é mais apropriado para detectar precocemente alterações neuromotoras neste caso?",
-      options: [
-        "Escala de Denver II",
-        "Teste de Gesell",
-        "TIMP (Test of Infant Motor Performance)",
-        "Escala Motora de Alberta (AIMS)"
-      ],
-      correctAnswer: 2,
-      category: "Avaliação Neonatal",
-      explanation: "O TIMP (Test of Infant Motor Performance) é o instrumento mais apropriado para este caso pois foi desenvolvido especificamente para avaliar qualidade e organização do movimento em bebês prematuros. É ideal para bebês nascidos a partir de 34 semanas pós-concepção até 4 meses de idade corrigida. Diferentemente dos outros testes mencionados, o TIMP é particularmente sensível para detectar precocemente alterações na qualidade do movimento e assimetrias, além de ter alto valor preditivo para identificar bebês com risco de desenvolvimento motor atípico."
-    },
-    {
-      question: "Na terceira fase do Método Canguru, qual é o papel do fisioterapeuta no acompanhamento ambulatorial do recém-nascido e sua família?",
-      options: [
-        "Supervisionar exclusivamente a posição canguru no ambiente domiciliar",
-        "Realizar apenas procedimentos respiratórios para prevenir complicações pulmonares",
-        "Avaliar o desenvolvimento neuropsicomotor, orientar posicionamento e estimulação em domicílio",
-        "Interromper a intervenção fisioterapêutica, pois nesta fase só é necessário acompanhamento médico"
-      ],
-      correctAnswer: 2,
-      category: "Método Canguru",
-      explanation: "Na terceira fase do Método Canguru, que ocorre após a alta hospitalar, o papel do fisioterapeuta inclui avaliar periodicamente o desenvolvimento neuropsicomotor do bebê, orientar os pais quanto ao posicionamento adequado e atividades de estimulação em domicílio. O fisioterapeuta também deve detectar precocemente desvios do desenvolvimento, adaptar as intervenções conforme crescimento e necessidades da criança, e trabalhar integrado à equipe multidisciplinar no acompanhamento ambulatorial até o bebê atingir 2.500g, contribuindo para a continuidade do cuidado."
-    },
-    {
-      question: "Bebê prematuro de 28 semanas, atualmente com 34 semanas de idade corrigida, está internado na UTI Neonatal e será submetido a múltiplos procedimentos dolorosos em um mesmo dia. Qual estratégia não-farmacológica combinada oferece maior efeito analgésico nesta situação?",
-      options: [
-        "Apenas sucção não-nutritiva com chupeta ou dedo enluvado",
-        "Contenção facilitada com envolvimento em ninho ou rolos",
-        "Combinação de glicose oral, contato pele a pele e sucção não-nutritiva",
-        "Musicoterapia com redução da luminosidade ambiental"
-      ],
-      correctAnswer: 2,
-      category: "Dor Neonatal",
-      explanation: "A combinação de glicose oral, contato pele a pele e sucção não-nutritiva oferece maior efeito analgésico por atuar em diferentes mecanismos. A glicose ativa receptores gustativos e libera endorfinas endógenas; o contato pele a pele promove liberação de ocitocina, estabilização dos sinais vitais e reduz o estresse; e a sucção não-nutritiva ativa mecanismos de autorregulação e inibição da hiperatividade. Estudos demonstram que esta abordagem multimodal potencializa o efeito analgésico, sendo mais eficaz que qualquer estratégia isolada, especialmente em procedimentos repetitivos."
-    },
-    {
-      question: "Um fisioterapeuta planeja realizar ofuroterapia em um recém-nascido prematuro de 36 semanas que apresenta irritabilidade após procedimentos dolorosos. Quais cuidados são essenciais para a aplicação segura desta técnica?",
-      options: [
-        "Utilizar água morna (35°C) e procedimento por 20 minutos sem monitoramento contínuo",
-        "Manter água aquecida (38-40°C) e bebê totalmente imerso para maior relaxamento",
-        "Água entre 36,5-37°C, monitoramento contínuo de sinais vitais e duração de 5-10 minutos",
-        "Adicionar óleos essenciais à água para potencializar o efeito relaxante da terapia"
-      ],
-      correctAnswer: 2,
-      category: "Hidroterapia em Neonatos",
-      explanation: "Para a aplicação segura da ofuroterapia, a água deve estar entre 36,5°C e 37°C (similar à temperatura corporal), verificada com termômetro digital antes da imersão. É essencial o monitoramento contínuo dos sinais vitais durante toda a sessão, que deve durar entre 5-10 minutos para evitar estresse térmico. O ambiente deve ter temperatura controlada, o procedimento deve ser interrompido imediatamente se houver sinais de instabilidade, e a cabeça/pescoço do bebê devem estar adequadamente apoiados para manter as vias aéreas livres."
-    },
-    {
-      question: "Ao avaliar um bebê prematuro de 7 meses de idade corrigida com histórico de Hemorragia Peri-intraventricular grau III, você observa aumento do tônus extensor em tronco com hipertonia em membros inferiores. De acordo com os padrões de evolução do tônus muscular no primeiro ano de vida, o que este achado representa?",
-      options: [
-        "Desenvolvimento motor típico, pois aos 7 meses o segundo padrão extensor já deveria estar presente",
-        "Atraso no desenvolvimento por persistência do primeiro padrão extensor além do tempo esperado",
-        "Alteração neurológica com hipertonia patológica, sugerindo desenvolvimento de paralisia cerebral",
-        "Variação normal do desenvolvimento, sem necessidade de intervenção específica"
-      ],
-      correctAnswer: 2,
-      category: "Sequelas Neurológicas em Prematuros",
-      explanation: "O achado representa uma alteração neurológica com hipertonia patológica, sugerindo desenvolvimento de paralisia cerebral. Aos 7 meses de idade corrigida, o bebê deveria estar no segundo padrão flexor, caracterizado pela capacidade de segurar os pés e levá-los à boca. A presença de padrão extensor em tronco com hipertonia em membros inferiores, associada ao histórico de HPIV grau III (que envolve hemorragia com dilatação ventricular), é altamente sugestiva de paralisia cerebral espástica, necessitando intervenção precoce e especializada."
+      explanation: "A conduta imediata deve ser finalizar a sessão, retirar o bebê da água, secá-lo e aquecê-lo, além de monitorar seus sinais vitais. A diminuição súbita da temperatura corporal e palidez são sinais de estresse térmico que podem levar à hipotermia."
     },
     {
       question: "No desenvolvimento motor normal de um bebê no primeiro ano de vida, qual é a sequência correta de aquisição das reações posturais?",
@@ -246,34 +199,46 @@ export default function ProvaGeralPage() {
       ],
       correctAnswer: 0,
       category: "Reações de 0 a 15 meses",
-      explanation: "A sequência correta de aquisição das reações posturais é: reação de proteção para frente (surge por volta dos 6 meses), reação de proteção lateral (surge por volta dos 7-8 meses) e reação de proteção para trás (surge por volta dos 9-10 meses). Esta sequência acompanha o desenvolvimento do controle postural do bebê, que primeiro consegue se proteger na direção anterior, quando começa a sentar sem apoio, depois lateralmente e, por fim, posteriormente, quando já tem maior estabilidade na posição sentada."
+      explanation: "A sequência correta de aquisição das reações posturais é: reação de proteção para frente (surge por volta dos 6 meses), reação de proteção lateral (surge por volta dos 7-8 meses) e reação de proteção para trás (surge por volta dos 9-10 meses)."
     },
     {
-      question: "Bebê de 32 semanas submetido a hidroterapia apresenta, após 5 sessões, melhora nos parâmetros de frequência cardíaca e respiratória em repouso. Este resultado pode ser atribuído a qual dos seguintes mecanismos fisiológicos da imersão em água aquecida?",
+      question: "Na terceira fase do Método Canguru, qual é o papel do fisioterapeuta no acompanhamento ambulatorial do recém-nascido e sua família?",
       options: [
-        "Aumento da pressão arterial sistêmica e maior débito cardíaco",
-        "Vasoconstrição periférica e aumento da resistência vascular",
-        "Efeito térmico com vasodilatação e pressão hidrostática promovendo melhor retorno venoso",
-        "Estimulação do sistema nervoso simpático com aumento do tônus vagal"
+        "Supervisionar exclusivamente a posição canguru no ambiente domiciliar",
+        "Realizar apenas procedimentos respiratórios para prevenir complicações pulmonares",
+        "Avaliar o desenvolvimento neuropsicomotor, orientar posicionamento e estimulação em domicílio",
+        "Interromper a intervenção fisioterapêutica, pois nesta fase só é necessário acompanhamento médico"
+      ],
+      correctAnswer: 2,
+      category: "Método Canguru",
+      explanation: "Na terceira fase do Método Canguru, que ocorre após a alta hospitalar, o papel do fisioterapeuta inclui avaliar periodicamente o desenvolvimento neuropsicomotor do bebê, orientar os pais quanto ao posicionamento adequado e atividades de estimulação em domicílio."
+    },
+    {
+      question: "Bebê prematuro de 28 semanas, atualmente com 34 semanas de idade corrigida, está internado na UTI Neonatal e será submetido a múltiplos procedimentos dolorosos em um mesmo dia. Qual estratégia não-farmacológica combinada oferece maior efeito analgésico nesta situação?",
+      options: [
+        "Apenas sucção não-nutritiva com chupeta ou dedo enluvado",
+        "Contenção facilitada com envolvimento em ninho ou rolos",
+        "Combinação de glicose oral, contato pele a pele e sucção não-nutritiva",
+        "Musicoterapia com redução da luminosidade ambiental"
+      ],
+      correctAnswer: 2,
+      category: "Dor Neonatal",
+      explanation: "A combinação de glicose oral, contato pele a pele e sucção não-nutritiva oferece maior efeito analgésico por atuar em diferentes mecanismos. A glicose ativa receptores gustativos e libera endorfinas endógenas; o contato pele a pele promove liberação de ocitocina e reduz o estresse."
+    },
+    {
+      question: "Um fisioterapeuta planeja realizar ofuroterapia em um recém-nascido prematuro de 36 semanas que apresenta irritabilidade após procedimentos dolorosos. Quais cuidados são essenciais para a aplicação segura desta técnica?",
+      options: [
+        "Utilizar água morna (35°C) e procedimento por 20 minutos sem monitoramento contínuo",
+        "Manter água aquecida (38-40°C) e bebê totalmente imerso para maior relaxamento",
+        "Água entre 36,5-37°C, monitoramento contínuo de sinais vitais e duração de 5-10 minutos",
+        "Adicionar óleos essenciais à água para potencializar o efeito relaxante da terapia"
       ],
       correctAnswer: 2,
       category: "Hidroterapia em Neonatos",
-      explanation: "A melhora nos parâmetros de frequência cardíaca e respiratória pode ser atribuída ao efeito térmico da água aquecida, que promove vasodilatação periférica, combinada à pressão hidrostática que facilita o retorno venoso. Estes efeitos melhoram a performance cardíaca e a circulação periférica, resultando em maior eficiência cardiovascular com menor demanda energética. Adicionalmente, a imersão em água aquecida tem efeito relaxante que reduz o estresse, contribuindo para a estabilização dos sinais vitais mesmo fora do ambiente aquático."
+      explanation: "Para a aplicação segura da ofuroterapia, a água deve estar entre 36,5°C e 37°C (similar à temperatura corporal), com monitoramento contínuo dos sinais vitais durante toda a sessão, que deve durar entre 5-10 minutos para evitar estresse térmico."
     },
     {
-      question: "Durante a avaliação fisioterapêutica de um recém-nascido a termo com 2 dias de vida, é observada assimetria nos movimentos espontâneos dos membros superiores, com mão direita predominantemente fechada. A motricidade provocada demonstra restrição na abertura dos dedos à direita. O que estes achados sugerem?",
-      options: [
-        "Características normais do desenvolvimento neuromotor neonatal",
-        "Reflexo tônico cervical assimétrico fisiológico para a idade",
-        "Possível lesão do plexo braquial tipo Erb-Duchenne",
-        "Imaturidade transitória do controle motor fino"
-      ],
-      correctAnswer: 2,
-      category: "Avaliação Neonatal",
-      explanation: "Os achados de assimetria nos movimentos espontâneos com mão predominantemente fechada e restrição na abertura dos dedos unilateralmente (à direita) sugerem possível lesão do plexo braquial tipo Erb-Duchenne. Esta lesão afeta as raízes nervosas C5-C6 e resulta em comprometimento da abdução e rotação externa do ombro, supinação do antebraço e extensão do punho e dedos. A assimetria persistente não é característica normal do desenvolvimento neuromotor neonatal e não se explica pelo reflexo tônico cervical assimétrico, que é temporário e relacionado à posição da cabeça."
-    },
-    {
-      question: "Uma criança nascida prematura com 30 semanas, agora com 4 anos, apresenta dificuldades de aprendizagem, especialmente em matemática e habilidades visuoespaciais, apesar de ter QI na faixa normal. Estudos de neuroimagem na fase neonatal evidenciaram lesão difusa da substância branca. Qual é a explicação neurofisiológica mais provável para este quadro?",
+      question: "Uma criança nascida prematura com 30 semanas, agora com 4 anos, apresenta dificuldades de aprendizagem, especialmente em matemática e habilidades visuoespaciais, apesar de ter QI na faixa normal. Qual é a explicação neurofisiológica mais provável para este quadro?",
       options: [
         "Lesão focal do córtex motor primário com preservação das áreas de associação",
         "Comprometimento da mielinização e conectividade entre diferentes regiões cerebrais",
@@ -282,7 +247,7 @@ export default function ProvaGeralPage() {
       ],
       correctAnswer: 1,
       category: "Sequelas Neurológicas em Prematuros",
-      explanation: "A explicação neurofisiológica mais provável é o comprometimento da mielinização e conectividade entre diferentes regiões cerebrais. A lesão difusa da substância branca, comum em prematuros, resulta em perda de oligodendrócitos e prejuízo na mielinização, afetando a eficiência da transmissão de sinais entre áreas cerebrais distantes. Isto compromete particularmente funções cognitivas complexas que dependem de redes neurais distribuídas, como matemática e habilidades visuoespaciais, mesmo quando o QI geral está preservado, caracterizando um déficit específico de conectividade cerebral."
+      explanation: "A explicação neurofisiológica mais provável é o comprometimento da mielinização e conectividade entre diferentes regiões cerebrais. A lesão difusa da substância branca, comum em prematuros, resulta em perda de oligodendrócitos e prejuízo na mielinização."
     },
     {
       question: "Na aplicação do Método Canguru para um recém-nascido prematuro de 1500g, que recentemente saiu da ventilação mecânica e está em ar ambiente, qual posicionamento o fisioterapeuta deve orientar aos pais para otimizar a função respiratória durante o contato pele a pele?",
@@ -294,9 +259,306 @@ export default function ProvaGeralPage() {
       ],
       correctAnswer: 2,
       category: "Método Canguru",
-      explanation: "O fisioterapeuta deve orientar a posição vertical, levemente reclinada, com cabeça lateralizada e vias aéreas livres. Esta posição otimiza a função respiratória ao promover melhor expansão diafragmática, reduzir o trabalho respiratório e diminuir o risco de obstrução das vias aéreas. A posição vertical favorece a estabilização da caixa torácica e melhora a ventilação das bases pulmonares. A leve lateralização da cabeça previne flexão excessiva do pescoço, enquanto o suporte adequado do corpo proporciona contenção sem restringir os movimentos respiratórios."
+      explanation: "O fisioterapeuta deve orientar a posição vertical, levemente reclinada, com cabeça lateralizada e vias aéreas livres. Esta posição otimiza a função respiratória ao promover melhor expansão diafragmática e reduzir o trabalho respiratório."
+    },
+    {
+      question: "Durante a avaliação fisioterapêutica de um recém-nascido a termo com 2 dias de vida, é observada assimetria nos movimentos espontâneos dos membros superiores, com mão direita predominantemente fechada. O que estes achados sugerem?",
+      options: [
+        "Características normais do desenvolvimento neuromotor neonatal",
+        "Reflexo tônico cervical assimétrico fisiológico para a idade",
+        "Possível lesão do plexo braquial tipo Erb-Duchenne",
+        "Imaturidade transitória do controle motor fino"
+      ],
+      correctAnswer: 2,
+      category: "Avaliação Neonatal",
+      explanation: "Os achados de assimetria nos movimentos espontâneos com mão predominantemente fechada e restrição na abertura dos dedos unilateralmente sugerem possível lesão do plexo braquial tipo Erb-Duchenne."
+    },
+    {
+      question: "Bebê de 4 meses, nascido a termo, apresenta persistência do Reflexo Tônico Cervical Assimétrico (RTCA) além do tempo esperado. Como este reflexo influencia o desenvolvimento motor?",
+      options: [
+        "Facilita o desenvolvimento do controle cefálico e não causa prejuízos significativos",
+        "Dificulta o alcance de marcos como rolar e sentar, prejudicando a simetria e orientação na linha média",
+        "Acelera o processo de controle de tronco, mas prejudica a coordenação entre membros superiores e inferiores",
+        "Não interfere no desenvolvimento motor típico, sendo uma variação normal do desenvolvimento"
+      ],
+      correctAnswer: 1,
+      category: "Desenvolvimento Motor",
+      explanation: "A persistência do RTCA dificulta a aquisição de marcos motores como rolar e sentar, pois impede que o bebê explore a linha média, desenvolvendo padrões de movimento assimétricos."
+    },
+    {
+      question: "Recém-nascido prematuro de 34 semanas apresenta hipertonia em membros inferiores e hipotonia axial. Durante a avaliação fisioterapêutica, observa-se persistência do reflexo tônico cervical assimétrico e ausência de reação de proteção lateral. Qual a conduta fisioterapêutica mais adequada para este caso?",
+      options: [
+        "Realizar apenas alongamentos passivos dos membros inferiores",
+        "Estimulação sensorial multimodal com posicionamento em flexão e contenção facilitada",
+        "Aplicar padrões de facilitação neuromuscular proprioceptiva em diagonal",
+        "Iniciar treino de marcha com suporte parcial de peso imediatamente"
+      ],
+      correctAnswer: 1,
+      category: "Intervenção Neurológica em Prematuros",
+      explanation: "A estimulação sensorial multimodal com posicionamento em flexão e contenção facilitada é a conduta mais adequada, pois respeita o desenvolvimento neurológico do prematuro e promove organização postural."
+    },
+    {
+      question: "Entre as evidências científicas que comprovam os benefícios da hidroterapia em neonatos, qual resultado está diretamente relacionado à imersão em água aquecida?",
+      options: [
+        "Aumento da frequência cardíaca e frequência respiratória",
+        "Diminuição da saturação de oxigênio",
+        "Aumento dos níveis de cortisol salivar",
+        "Redução do estresse e estabilização dos sinais vitais"
+      ],
+      correctAnswer: 3,
+      category: "Hidroterapia em Neonatos",
+      explanation: "A imersão em água aquecida durante a hidroterapia neonatal promove a redução do estresse e estabilização dos sinais vitais, com diminuição da frequência cardíaca e respiratória."
+    },
+    {
+      question: "Qual é a principal função do posicionamento terapêutico em prematuros na UTI Neonatal?",
+      options: [
+        "Facilitar procedimentos de enfermagem",
+        "Prevenir lesões de pele",
+        "Melhorar padrão respiratório",
+        "Promover organização neuromotora e desenvolvimento simétrico"
+      ],
+      correctAnswer: 3,
+      category: "Intervenção em UTI Neonatal",
+      explanation: "O posicionamento terapêutico tem como principal função promover a organização neuromotora e o desenvolvimento simétrico do prematuro."
+    },
+    {
+      question: "Quais são os sinais de estresse durante a manipulação do recém-nascido prematuro que indicam necessidade de pausa na intervenção?",
+      options: [
+        "Alteração de frequência cardíaca, dessaturação e mudança de coloração",
+        "Apenas choro e agitação motora",
+        "Somente alterações respiratórias",
+        "Exclusivamente alterações de temperatura"
+      ],
+      correctAnswer: 0,
+      category: "Avaliação Neonatal",
+      explanation: "Os principais sinais de estresse são alterações de frequência cardíaca, dessaturação e mudança de coloração da pele."
+    },
+    {
+      question: "Em relação ao desenvolvimento motor típico, qual é a idade esperada para o surgimento do controle cervical completo em um bebê nascido a termo?",
+      options: [
+        "2 meses",
+        "3-4 meses",
+        "5-6 meses",
+        "7-8 meses"
+      ],
+      correctAnswer: 1,
+      category: "Desenvolvimento Motor",
+      explanation: "O controle cervical completo é tipicamente alcançado entre 3-4 meses em bebês nascidos a termo."
+    },
+    {
+      question: "Qual é a temperatura ideal da água para a realização de hidroterapia em recém-nascidos prematuros estáveis?",
+      options: [
+        "34-35°C",
+        "35-36°C",
+        "36,5-37°C",
+        "38-39°C"
+      ],
+      correctAnswer: 2,
+      category: "Hidroterapia em Neonatos",
+      explanation: "A temperatura ideal é entre 36,5-37°C, similar à temperatura corporal do bebê."
+    },
+    {
+      question: "Qual é o principal objetivo da estimulação tátil-cinestésica em prematuros?",
+      options: [
+        "Promover ganho de peso e desenvolvimento neuromotor",
+        "Apenas melhorar o vínculo mãe-bebê",
+        "Reduzir o tempo de internação",
+        "Prevenir infecções hospitalares"
+      ],
+      correctAnswer: 0,
+      category: "Intervenção em UTI Neonatal",
+      explanation: "O principal objetivo é promover o ganho de peso e o desenvolvimento neuromotor do prematuro."
+    },
+    {
+      question: "Em que idade gestacional o reflexo de sucção-deglutição está completamente desenvolvido?",
+      options: [
+        "28-30 semanas",
+        "32-34 semanas",
+        "34-36 semanas",
+        "36-38 semanas"
+      ],
+      correctAnswer: 3,
+      category: "Desenvolvimento Motor",
+      explanation: "O reflexo de sucção-deglutição está completamente desenvolvido entre 36-38 semanas de idade gestacional."
+    },
+    {
+      question: "Qual é a frequência recomendada de mudança de decúbito em prematuros estáveis na UTI Neonatal?",
+      options: [
+        "A cada 8 horas",
+        "A cada 3-4 horas",
+        "A cada 12 horas",
+        "A cada 6 horas"
+      ],
+      correctAnswer: 1,
+      category: "Intervenção em UTI Neonatal",
+      explanation: "A mudança de decúbito deve ser realizada a cada 3-4 horas em prematuros estáveis."
+    },
+    {
+      question: "Qual é o principal benefício da posição canguru para o desenvolvimento neuromotor do prematuro?",
+      options: [
+        "Melhora do padrão respiratório",
+        "Redução do estresse",
+        "Promoção da autorregulação e organização comportamental",
+        "Prevenção de refluxo gastroesofágico"
+      ],
+      correctAnswer: 2,
+      category: "Método Canguru",
+      explanation: "O principal benefício neuromotor é a promoção da autorregulação e organização comportamental."
+    },
+    {
+      question: "Qual é a idade corrigida esperada para o surgimento do rolar ativo em bebês nascidos a termo?",
+      options: [
+        "2-3 meses",
+        "4-5 meses",
+        "6-7 meses",
+        "8-9 meses"
+      ],
+      correctAnswer: 1,
+      category: "Desenvolvimento Motor",
+      explanation: "O rolar ativo tipicamente surge entre 4-5 meses de idade corrigida em bebês nascidos a termo."
+    },
+    {
+      question: "Qual é o principal objetivo da contenção facilitada durante procedimentos dolorosos?",
+      options: [
+        "Reduzir o estresse e promover autorregulação",
+        "Imobilizar o bebê",
+        "Facilitar o procedimento",
+        "Prevenir lesões"
+      ],
+      correctAnswer: 0,
+      category: "Dor Neonatal",
+      explanation: "A contenção facilitada visa reduzir o estresse e promover a autorregulação do bebê durante procedimentos dolorosos."
+    },
+    {
+      question: "Qual é a idade gestacional mínima recomendada para início da hidroterapia em prematuros estáveis?",
+      options: [
+        "30 semanas",
+        "34 semanas",
+        "32 semanas",
+        "36 semanas"
+      ],
+      correctAnswer: 3,
+      category: "Hidroterapia em Neonatos",
+      explanation: "A hidroterapia é recomendada a partir de 36 semanas de idade gestacional em prematuros estáveis."
+    },
+    {
+      question: "Qual é o principal sinal de alerta no desenvolvimento motor de um bebê de 6 meses que indica necessidade de avaliação especializada?",
+      options: [
+        "Ausência de controle cervical",
+        "Não rolar",
+        "Não sentar sem apoio",
+        "Não pegar objetos"
+      ],
+      correctAnswer: 0,
+      category: "Desenvolvimento Motor",
+      explanation: "A ausência de controle cervical aos 6 meses é um importante sinal de alerta que requer avaliação especializada."
+    },
+    {
+      question: "Qual é a duração recomendada para uma sessão de fisioterapia respiratória em um recém-nascido prematuro estável?",
+      options: [
+        "30-40 minutos",
+        "15-20 minutos",
+        "45-60 minutos",
+        "5-10 minutos"
+      ],
+      correctAnswer: 1,
+      category: "Fisioterapia Respiratória",
+      explanation: "A duração recomendada é de 15-20 minutos, respeitando os sinais de estresse do bebê."
+    },
+    {
+      question: "Qual é o momento mais adequado para realizar a avaliação do desenvolvimento motor em prematuros?",
+      options: [
+        "Sempre pela idade cronológica",
+        "Apenas após termo",
+        "Utilizando a idade corrigida até 2 anos",
+        "Sem necessidade de correção da idade"
+      ],
+      correctAnswer: 2,
+      category: "Avaliação Neonatal",
+      explanation: "A avaliação deve ser realizada utilizando a idade corrigida até 2 anos de idade."
+    },
+    {
+      question: "Qual é a principal contraindicação para a realização de hidroterapia em neonatos?",
+      options: [
+        "Peso inferior a 2500g",
+        "Idade gestacional menor que 40 semanas",
+        "Uso de antibióticos",
+        "Instabilidade clínica e sinais vitais alterados"
+      ],
+      correctAnswer: 3,
+      category: "Hidroterapia em Neonatos",
+      explanation: "A principal contraindicação é a instabilidade clínica com alteração dos sinais vitais."
+    },
+    {
+      question: "Qual é o padrão respiratório típico de um recém-nascido saudável?",
+      options: [
+        "Respiração predominantemente abdominal",
+        "Respiração predominantemente torácica",
+        "Respiração paradoxal",
+        "Respiração exclusivamente nasal"
+      ],
+      correctAnswer: 0,
+      category: "Fisioterapia Respiratória",
+      explanation: "O padrão respiratório típico do recém-nascido é predominantemente abdominal."
+    },
+    {
+      question: "Em que momento é recomendado iniciar o posicionamento em prono durante a vigília em bebês nascidos a termo?",
+      options: [
+        "Apenas após 6 meses",
+        "Desde o nascimento, com supervisão",
+        "Após o controle cervical completo",
+        "Somente após sentar sem apoio"
+      ],
+      correctAnswer: 1,
+      category: "Desenvolvimento Motor",
+      explanation: "O posicionamento em prono durante a vigília deve ser iniciado desde o nascimento, sempre com supervisão."
+    },
+    {
+      question: "Qual é a principal função do 'ninho' no posicionamento do prematuro?",
+      options: [
+        "Apenas conforto",
+        "Decoração do leito",
+        "Contenção e organização postural",
+        "Aquecimento"
+      ],
+      correctAnswer: 2,
+      category: "Intervenção em UTI Neonatal",
+      explanation: "O ninho tem como principal função promover contenção e organização postural do prematuro."
+    },
+    {
+      question: "Qual é o critério mais importante para iniciar o treino de controle cervical em prematuros?",
+      options: [
+        "Idade cronológica de 2 meses",
+        "Peso mínimo de 2kg",
+        "Estabilidade respiratória",
+        "Idade corrigida de 1 mês"
+      ],
+      correctAnswer: 3,
+      category: "Desenvolvimento Motor",
+      explanation: "O critério mais importante é a estabilidade clínica e idade corrigida adequada."
     }
   ]
+
+  useEffect(() => {
+    // Randomize questions on component mount
+    setQuestions(shuffleArray(originalQuestions))
+    setIsLoading(false)
+  }, [])
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (isTimerRunning) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev + 1)
+      }, 1000)
+    }
+    return () => clearInterval(interval)
+  }, [isTimerRunning])
+
+  const startQuiz = () => {
+    setHasStarted(true)
+    setIsTimerRunning(true)
+  }
 
   const handleAnswerSelect = (index: number) => {
     if (isAnswered) return
@@ -412,7 +674,114 @@ export default function ProvaGeralPage() {
     const percentage = (score / questions.length) * 100
     return percentage.toFixed(1)
   }
-  
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6EC1E4]"></div>
+      </div>
+    )
+  }
+
+  if (!hasStarted) {
+    return (
+      <div className="relative min-h-screen bg-gradient-to-b from-white to-[#F8FAFF]">
+        {/* Background elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute w-[800px] h-[800px] rounded-full bg-[#6EC1E4]/5 blur-[120px] -top-[400px] -left-[300px]" />
+          <div className="absolute w-[600px] h-[600px] rounded-full bg-[#B9A9FF]/5 blur-[100px] -bottom-[200px] -right-[200px]" />
+          <Particles className="absolute inset-0" quantity={15} />
+        </div>
+
+        {/* Start screen content */}
+        <div className="container mx-auto px-6 py-16 relative z-10">
+          <Link
+            href="/provas"
+            className="inline-flex items-center text-[#666666] hover:text-[#333333] transition-colors mb-12 group"
+          >
+            <ChevronLeft className="h-5 w-5 mr-1 transition-transform group-hover:-translate-x-1" />
+            Voltar para Provas
+          </Link>
+
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center mb-12"
+            >
+              <h1 className="relative">
+                <span className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#2C3E50] to-[#3498DB] drop-shadow-sm">
+                  Avaliação Geral
+                </span>
+                <div className="absolute -z-10 blur-3xl opacity-20 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] w-full h-full top-0" />
+              </h1>
+              <p className="text-[#666666] text-xl leading-relaxed mb-4 max-w-2xl mx-auto mt-8">
+                Esta avaliação contém {questions.length} questões sobre diversos temas da fisioterapia neonatal.
+              </p>
+              <p className="text-[#888888] text-lg mb-12">
+                Você poderá ver a explicação detalhada após responder cada questão.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-sm"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#6EC1E4]/10 flex items-center justify-center mb-4">
+                  <AlarmClock className="h-6 w-6 text-[#6EC1E4]" />
+                </div>
+                <h3 className="text-lg font-semibold text-[#333333] mb-2">Tempo Flexível</h3>
+                <p className="text-[#666666]">Faça a prova no seu ritmo, com tempo para analisar cada questão.</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-sm"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#B9A9FF]/10 flex items-center justify-center mb-4">
+                  <BarChart className="h-6 w-6 text-[#B9A9FF]" />
+                </div>
+                <h3 className="text-lg font-semibold text-[#333333] mb-2">Feedback Detalhado</h3>
+                <p className="text-[#666666]">Receba explicações completas após cada resposta.</p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-sm"
+              >
+                <div className="w-12 h-12 rounded-full bg-[#6EC1E4]/10 flex items-center justify-center mb-4">
+                  <TrendingUp className="h-6 w-6 text-[#6EC1E4]" />
+                </div>
+                <h3 className="text-lg font-semibold text-[#333333] mb-2">Análise por Categoria</h3>
+                <p className="text-[#666666]">Acompanhe seu desempenho em cada área do conhecimento.</p>
+              </motion.div>
+            </div>
+
+            <div className="text-center">
+              <MagneticButton
+                onClick={startQuiz}
+                backgroundGradient={true}
+                glowOnHover={true}
+                strength={20}
+                className="px-10 py-5 text-lg font-medium inline-flex items-center"
+              >
+                <span className="mr-2">Começar Avaliação</span>
+                <ChevronRight className="h-5 w-5" />
+              </MagneticButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="relative min-h-screen pb-20">
       {/* Background elements */}
@@ -432,10 +801,10 @@ export default function ProvaGeralPage() {
           
           <div className="relative z-10 container mx-auto px-6 py-10">
             <Link href="/provas" className="inline-flex items-center text-[#6EC1E4] mb-8 hover:text-[#6EC1E4]/80 transition-colors">
-              <ArrowLeft className="h-4 w-4 mr-2" />
+        <ArrowLeft className="h-4 w-4 mr-2" />
               <span className="text-sm font-medium">Voltar para provas temáticas</span>
-            </Link>
-            
+      </Link>
+
             <div className="flex justify-between items-center mb-4">
               <div>
                 <span className="px-4 py-1.5 bg-gradient-to-r from-[#B9A9FF]/10 to-[#6EC1E4]/10 rounded-full text-sm font-medium text-[#B9A9FF] inline-block mb-2">
@@ -449,7 +818,7 @@ export default function ProvaGeralPage() {
                 <span className="text-sm font-medium">{formatTime(timer)}</span>
               </div>
             </div>
-            
+
             <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden mb-4">
               <motion.div 
                 className="h-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF]" 
@@ -470,7 +839,7 @@ export default function ProvaGeralPage() {
       
       <div className="container mx-auto px-6" ref={contentRef} style={{ position: "relative", zIndex: 20, pointerEvents: "auto" }}>
         {!showResults ? (
-          <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait">
             <motion.div
               key={currentQuestion}
               initial="hidden"
@@ -487,26 +856,26 @@ export default function ProvaGeralPage() {
                   color: getCategoryColor(questions[currentQuestion].category)
                 }}
               >
-                {questions[currentQuestion].category}
-              </span>
-              
+                    {questions[currentQuestion].category}
+                  </span>
+
               <h2 className="text-xl md:text-2xl font-semibold text-[#333333] mb-6">
                 {questions[currentQuestion].question}
               </h2>
-              
+
               <div className="space-y-3 mb-6" style={{ position: "relative", zIndex: 50, pointerEvents: "auto" }}>
-                {questions[currentQuestion].options.map((option, index) => (
+                  {questions[currentQuestion].options.map((option, index) => (
                   <motion.button
-                    key={index}
+                      key={index}
                     className={`w-full text-left p-4 rounded-lg border transition-all ${
-                      selectedAnswer === index
-                        ? index === questions[currentQuestion].correctAnswer
+                        selectedAnswer === index
+                          ? index === questions[currentQuestion].correctAnswer
                           ? "bg-green-50 border-green-200 text-green-800"
                           : "bg-red-50 border-red-200 text-red-800"
                         : "border-gray-200 hover:border-[#6EC1E4]/30 hover:bg-[#6EC1E4]/5"
                     }`}
                     onClick={() => handleAnswerSelect(index)}
-                    disabled={isAnswered}
+                      disabled={isAnswered}
                     whileHover={!isAnswered ? { scale: 1.01 } : {}}
                     whileTap={!isAnswered ? { scale: 0.99 } : {}}
                     style={{ position: "relative", zIndex: 50, pointerEvents: "auto" }}
@@ -534,13 +903,13 @@ export default function ProvaGeralPage() {
                       <span className="text-md md:text-base">{option}</span>
                     </div>
                   </motion.button>
-                ))}
-              </div>
-              
-              {isAnswered && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  ))}
+                </div>
+
+                {isAnswered && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
                   className={`p-4 mb-6 rounded-lg ${
                     selectedAnswer === questions[currentQuestion].correctAnswer
                       ? "bg-green-50 border border-green-100"
@@ -548,33 +917,33 @@ export default function ProvaGeralPage() {
                   }`}
                 >
                   <p className={`text-sm ${
-                    selectedAnswer === questions[currentQuestion].correctAnswer
+                        selectedAnswer === questions[currentQuestion].correctAnswer
                       ? "text-green-700"
                       : "text-red-700"
                   }`}>
-                    {feedbackMessage}
-                  </p>
-                </motion.div>
-              )}
-              
-              {isAnswered && (
+                      {feedbackMessage}
+                    </p>
+                  </motion.div>
+                )}
+
+                {isAnswered && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
                   className="flex justify-end"
                 >
-                  <button
-                    onClick={handleNextQuestion}
+                    <button
+                      onClick={handleNextQuestion}
                     className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white px-6 py-3 rounded-lg font-medium inline-flex items-center hover:shadow-md transition-shadow"
-                  >
+                    >
                     {currentQuestion < questions.length - 1 ? "Próxima questão" : "Ver resultados"}
                     <ChevronRight className="h-4 w-4 ml-2" />
-                  </button>
+                    </button>
                 </motion.div>
-              )}
-            </motion.div>
-          </AnimatePresence>
+                )}
+              </motion.div>
+            </AnimatePresence>
         ) : (
           <motion.div
             initial="hidden"
@@ -586,7 +955,7 @@ export default function ProvaGeralPage() {
               <AdvancedParallax speed={0.1} direction="vertical">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-r from-[#6EC1E4]/20 to-[#B9A9FF]/20 flex items-center justify-center mx-auto mb-4">
                   <BarChart className="h-10 w-10 text-[#6EC1E4]" />
-                </div>
+            </div>
               </AdvancedParallax>
               
               <h2 className="text-2xl md:text-3xl font-bold text-[#333333] mb-2">Resultados da Avaliação</h2>
@@ -609,7 +978,7 @@ export default function ProvaGeralPage() {
                 </div>
               </div>
             </div>
-            
+
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-[#333333] mb-4">Desempenho por Categoria</h3>
               
@@ -644,8 +1013,8 @@ export default function ProvaGeralPage() {
                 ))}
               </div>
             </div>
-            
-            <div className="flex flex-wrap gap-4 justify-center mt-8">
+
+            <div className="flex justify-center gap-4 mt-8">
               <MagneticButton
                 backgroundGradient={true}
                 glowOnHover={true}
@@ -672,6 +1041,7 @@ export default function ProvaGeralPage() {
           </motion.div>
         )}
       </div>
+
     </div>
   )
 }

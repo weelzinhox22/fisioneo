@@ -32,17 +32,17 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans min-h-screen bg-[#F7FAFC]`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <SmoothScrollProvider options={{ lerp: 0.08, duration: 1.0, smoothTouch: false }}>
-            <ParallaxBackground speed={0.2} direction="up">
-              <div className="absolute inset-0 bg-gradient-to-b from-[#F0F9FF] to-[#F7FAFC] opacity-80" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#F0F9FF]/10 to-[#F7FAFC]/10 bg-repeat opacity-5" />
-            </ParallaxBackground>
-            <div className="flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-              <AIAssistant />
+          <ParallaxBackground speed={0.2} direction="up">
+            <div className="absolute inset-0 bg-gradient-to-b from-[#F0F9FF] to-[#F7FAFC] opacity-80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#F0F9FF]/10 to-[#F7FAFC]/10 bg-repeat opacity-5" />
+          </ParallaxBackground>
+          <div className="flex min-h-screen flex-col">
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <AIAssistant />
               <OnboardingWalkthrough />
-            </div>
+          </div>
           </SmoothScrollProvider>
         </ThemeProvider>
       </body>

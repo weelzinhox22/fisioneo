@@ -419,8 +419,8 @@ export default function Home() {
                       <p className="text-[#666666] mb-3">Digite suas dúvidas, peça explicações ou solicite ajuda sobre qualquer tópico de fisioterapia neonatal.</p>
                       <div className="p-3 bg-[#F8F9FA] rounded-lg text-[#666666] italic">
                         "Pode me explicar como avaliar os reflexos primitivos em bebês prematuros?"
-                      </div>
-                    </div>
+          </div>
+        </div>
                     
                     <div className="relative pl-10">
                       <div className="absolute left-0 top-0 flex items-center justify-center w-7 h-7 rounded-full bg-[#F0F9FF] text-[#6EC1E4] font-semibold">4</div>
@@ -518,7 +518,7 @@ export default function Home() {
               >
                 Fazer Avaliação Completa
               </MagneticButton>
-            </div>
+          </div>
         </div>
       </section>
 

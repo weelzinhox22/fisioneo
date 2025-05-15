@@ -58,6 +58,43 @@
   }
 }
 
+/* Estilos para scrollbar personalizada */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Suporte para Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+/* Melhorar o comportamento de rolagem */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Garantir que o conteúdo seja clicável em áreas com scroll */
+.overflow-y-auto, .overflow-auto {
+  overscroll-behavior: contain;
+}
+
 /* Estilos para o ReactMarkdown */
 .prose h1 {
   @apply text-2xl font-bold text-[#333333] mb-4 mt-6;

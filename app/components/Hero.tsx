@@ -192,71 +192,29 @@ export const Hero = () => {
       >
         {isClient && (
           <div className="absolute inset-0 w-full h-full">
-            <Image 
-              src="/images/feto/hero-bg.webp" 
-              alt="Fisioterapia Neonatal"
-              fill
-              priority
-              quality={isMobile ? 80 : 95}
-              sizes="100vw"
-              style={{ 
-                objectFit: 'cover',
-                objectPosition: 'center right',
-              }}
-            />
-            
-            {/* Imagem hero-baby sobreposta */}
-            <motion.div 
-              className={`absolute ${isMobile ? 'hidden' : 'w-[70%] h-[95%] right-0 bottom-0'} z-[1]`}
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ 
-                opacity: 1, 
-                x: 0,
-                y: [0, -8, 0], // Efeito de flutuação suave
-              }}
-              transition={{ 
-                duration: 1.2, 
-                delay: 0.5, 
-                ease: [0.25, 0.1, 0.25, 1.0],
-                y: {
-                  duration: 4,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut"
-                }
-              }}
-            >
-              <motion.div
-                animate={{ 
-                  y: [0, -15, 0],
-                  scale: [1, 1.08, 1]
-                }}
-                transition={{ 
-                  duration: 5,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut" 
+            {/* Video background */}
+            <div className="absolute inset-0 w-full h-full overflow-hidden">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute w-full h-full object-cover"
+                style={{
+                  filter: "brightness(0.7) contrast(1.1)",
                 }}
               >
-                <Image 
-                  src="/images/feto/hero-baby.png" 
-                  alt="Bebê"
-                  width={850}
-                  height={850}
-                  priority
-                  quality={100}
-                  className="object-contain"
-                />
-              </motion.div>
-            </motion.div>
+                <source src="/images/feto/hero-baby-vd.mp4" type="video/mp4" />
+              </video>
+            </div>
+            
+            {/* Advanced gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/60 to-transparent md:to-transparent to-black/40" />
+            
+            {/* Animated particle overlay */}
+            <Particles count={isMobile ? 30 : 80} />
           </div>
         )}
-        
-        {/* Advanced gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/60 to-transparent md:to-transparent to-black/40" />
-        
-        {/* Animated particle overlay */}
-        <Particles count={isMobile ? 30 : 80} />
       </motion.div>
       
       {/* Content section with parallax and staggered animations */}
@@ -289,7 +247,7 @@ export const Hero = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8, duration: 0.5 }}
                   className="mt-2 mb-3 text-center px-1"
-                >
+          >
                   <p className="text-xs text-white leading-relaxed">
                     <span className="font-semibold">Aprenda tudo sobre fisioterapia neonatal</span>: métodos, técnicas e avaliações em um único portal educacional focado em desenvolvimento infantil.
                   </p>
@@ -378,34 +336,8 @@ export const Hero = () => {
         </div>
 
         {/* Hero baby centralizado abaixo da div principal - apenas no mobile */}
-        {isMobile && (
-          <div className={`absolute left-1/2 transform -translate-x-1/2 ${getBabyBottomPosition()} z-10`}>
-            <div className="relative">
-              <motion.div
-                animate={{ 
-                  y: [0, -18, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ 
-                  duration: 6,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut" 
-                }}
-              >
-                <Image 
-                  src="/images/feto/hero-baby.png" 
-                  alt="Bebê"
-                  width={850}
-                  height={850}
-                  priority
-                  quality={100}
-                  className="object-contain"
-                />
-              </motion.div>
-            </div>
-          </div>
-        )}
+        {/* Removing mobile video since we're using fullscreen approach */}
+
       </motion.div>
       
       {/* Scroll indicator */}
@@ -438,7 +370,7 @@ export const Hero = () => {
             ease: "easeOut" 
           }}
           className="fixed bottom-20 inset-x-0 mx-auto z-50 w-[90%] max-w-xs px-4"
-        >
+                >
           <div className="relative bg-gradient-to-r from-[#6EC1E4]/90 to-[#B9A9FF]/90 backdrop-blur-md rounded-lg p-4 shadow-xl border border-white/20">
             <button 
               className="absolute top-2 right-2 text-white/80 hover:text-white" 
@@ -470,8 +402,8 @@ export const Hero = () => {
                   Para uma melhor visualização, acesse também pelo computador ou notebook. A experiência mobile está otimizada, mas o desktop oferece recursos visuais adicionais.
                 </p>
               </div>
-            </div>
-            
+        </div>
+
             <div className="mt-3 flex justify-end">
               <button 
                 onClick={() => setShowDesktopHint(false)}
@@ -480,7 +412,7 @@ export const Hero = () => {
                 Entendi
               </button>
             </div>
-          </div>
+      </div>
         </motion.div>
       )}
     </div>

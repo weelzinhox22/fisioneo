@@ -407,8 +407,8 @@ export default function DocumentViewer() {
           />
           <div className="flex flex-col items-center">
             <button className="px-6 py-3 bg-gradient-to-r from-[#6EC1E4] to-[#5BA8CB] text-white rounded-lg hover:shadow-md transition-all font-medium relative z-10">
-              Selecionar arquivo
-            </button>
+            Selecionar arquivo
+          </button>
             <p className="text-xs text-gray-400 mt-3">Formatos suportados: PDF (.pdf) e texto (.txt)</p>
           </div>
         </div>

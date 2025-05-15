@@ -144,10 +144,10 @@ export default function TopicPage({ params }: TopicPageProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <ThemeInfoCard 
-            topicId={topic.id}
-            readTime={Math.ceil(topic.content.length / 1000)}
-          />
+        <ThemeInfoCard 
+          topicId={topic.id}
+          readTime={Math.ceil(topic.content.length / 1000)}
+        />
         </motion.div>
 
         {/* Add a debug indicator to show that TopicContent component is being used in this page */}
@@ -261,31 +261,31 @@ export default function TopicPage({ params }: TopicPageProps) {
 
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
-                  <Link
-                    href="/provas"
+                <Link
+                  href="/provas"
                     className="px-6 py-4 bg-gradient-to-r from-[#6EC1E4] via-[#5AADD0] to-[#4A96D1] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center transform hover:-translate-y-1 group"
-                  >
+                >
                     <div className="p-2 bg-white/20 rounded-full mr-3 group-hover:bg-white/30 transition-colors">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                      </svg>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
                     </div>
                     <span className="font-medium">Testar Conhecimentos</span>
-                  </Link>
+                </Link>
                 </motion.div>
 
                 <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
-                  <Link
-                    href="/temas"
+                <Link
+                  href="/temas"
                     className="px-6 py-4 bg-white border border-[#6EC1E4] text-[#4A96D1] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center transform hover:-translate-y-1 group"
-                  >
+                >
                     <div className="p-2 bg-[#F0F9FF] rounded-full mr-3 group-hover:bg-[#E6F3FF] transition-colors">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
-                      </svg>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                  </svg>
                     </div>
                     <span className="font-medium">Explorar Outros Temas</span>
-                  </Link>
+                </Link>
                 </motion.div>
               </div>
             </motion.div>
