@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { User, Mail, Key, Edit2, Check, X } from "lucide-react"
+import { User, Mail, Key, Edit2, Check, X, Bell, Shield, Trash2, Lock } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { useSession } from "next-auth/react"
 import { AlertDialog } from "@/components/ui/alert-dialog"
+import { useRouter } from "next/navigation"
 
 export default function ProfilePage() {
   const { data: nextAuthSession } = useSession()
@@ -20,6 +21,12 @@ export default function ProfilePage() {
     message: "",
     type: "success" as const
   })
+  const [emailPreferences, setEmailPreferences] = useState({
+    marketing: false,
+    updates: true,
+    security: true
+  })
+  const router = useRouter()
 
   useEffect(() => {
     const checkSupabaseAuth = async () => {
@@ -29,12 +36,15 @@ export default function ProfilePage() {
       // Fetch username from metadata
       const { data: userData, error } = await supabase
         .from('user_profiles')
-        .select('username')
+        .select('username, email_preferences')
         .eq('user_id', session?.user?.id || nextAuthSession?.user?.email)
         .single()
 
       if (userData?.username) {
         setUsername(userData.username)
+      }
+      if (userData?.email_preferences) {
+        setEmailPreferences(userData.email_preferences)
       }
       
       setLoading(false)
@@ -87,6 +97,108 @@ export default function ProfilePage() {
     }
   }
 
+  const handleResetPassword = async () => {
+    try {
+      if (!userEmail) throw new Error("Email não encontrado")
+
+      const { error } = await supabase.auth.resetPasswordForEmail(userEmail, {
+        redirectTo: `${window.location.origin}/auth/callback?next=/perfil`,
+      })
+
+      if (error) throw error
+
+      setAlertConfig({
+        title: "Email Enviado!",
+        message: "Verifique sua caixa de entrada para redefinir sua senha.",
+        type: "success"
+      })
+      setShowAlert(true)
+    } catch (error: any) {
+      setAlertConfig({
+        title: "Erro",
+        message: error.message,
+        type: "info"
+      })
+      setShowAlert(true)
+    }
+  }
+
+  const handleUpdateEmailPreferences = async (key: keyof typeof emailPreferences) => {
+    try {
+      const userId = supabaseSession?.user?.id || nextAuthSession?.user?.email
+      const newPreferences = {
+        ...emailPreferences,
+        [key]: !emailPreferences[key]
+      }
+
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ 
+          email_preferences: newPreferences,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', userId)
+
+      if (error) throw error
+
+      setEmailPreferences(newPreferences)
+      setAlertConfig({
+        title: "Sucesso!",
+        message: "Preferências de email atualizadas",
+        type: "success"
+      })
+      setShowAlert(true)
+    } catch (error: any) {
+      setAlertConfig({
+        title: "Erro",
+        message: error.message,
+        type: "info"
+      })
+      setShowAlert(true)
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    try {
+      const userId = supabaseSession?.user?.id || nextAuthSession?.user?.email
+
+      // Delete user profile first
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .delete()
+        .eq('user_id', userId)
+
+      if (profileError) throw profileError
+
+      // If using Supabase auth, delete the auth user
+      if (supabaseSession) {
+        const { error: authError } = await supabase.auth.admin.deleteUser(
+          supabaseSession.user.id
+        )
+        if (authError) throw authError
+      }
+
+      setAlertConfig({
+        title: "Conta Excluída",
+        message: "Sua conta foi excluída com sucesso. Você será redirecionado em breve.",
+        type: "success"
+      })
+      setShowAlert(true)
+
+      // Redirect after a short delay
+      setTimeout(() => {
+        router.push('/')
+      }, 2000)
+    } catch (error: any) {
+      setAlertConfig({
+        title: "Erro",
+        message: error.message,
+        type: "info"
+      })
+      setShowAlert(true)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -110,7 +222,7 @@ export default function ProfilePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-2xl mx-auto"
+          className="max-w-2xl mx-auto space-y-8"
         >
           {/* Header */}
           <div className="text-center mb-8">
@@ -120,7 +232,7 @@ export default function ProfilePage() {
 
           {/* Profile Card */}
           <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
-            {/* User Info */}
+            <h2 className="text-xl font-semibold text-[#333333] mb-4">Informações Pessoais</h2>
             <div className="space-y-6">
               {/* Username Section */}
               <div className="flex items-center gap-4 p-4 bg-[#F8F8F8] rounded-xl">
@@ -179,7 +291,7 @@ export default function ProfilePage() {
                 <div className="p-3 bg-white rounded-full">
                   <Mail className="h-6 w-6 text-[#6EC1E4]" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <p className="text-sm text-[#666666]">Email</p>
                   <p className="text-[#333333] font-medium">{userEmail}</p>
                 </div>
@@ -198,12 +310,132 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Coming Soon Section */}
-            <div className="mt-8 p-4 bg-[#F8F8F8] rounded-xl">
-              <p className="text-center text-sm text-[#666666]">
-                Mais configurações de perfil em breve! 🚀
-              </p>
+          {/* Security Card */}
+          {!nextAuthSession && (
+            <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
+              <h2 className="text-xl font-semibold text-[#333333] mb-4">Segurança</h2>
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 p-4 bg-[#F8F8F8] rounded-xl">
+                  <div className="p-3 bg-white rounded-full">
+                    <Lock className="h-6 w-6 text-[#6EC1E4]" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm text-[#666666]">Senha</p>
+                    <p className="text-[#333333] text-sm mt-1">
+                      Altere sua senha para manter sua conta segura
+                    </p>
+                    <button
+                      onClick={handleResetPassword}
+                      className="mt-2 px-4 py-2 text-sm bg-[#6EC1E4]/10 text-[#6EC1E4] rounded-lg hover:bg-[#6EC1E4]/20 transition-colors"
+                    >
+                      Redefinir Senha
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Email Preferences Card */}
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-6">
+            <h2 className="text-xl font-semibold text-[#333333] mb-4">Preferências de Email</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-[#F8F8F8] rounded-xl">
+                <div className="flex items-center gap-3">
+                  <Bell className="h-5 w-5 text-[#6EC1E4]" />
+                  <div>
+                    <p className="text-sm font-medium text-[#333333]">Atualizações da Plataforma</p>
+                    <p className="text-xs text-[#666666]">Receba notificações sobre novos recursos</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleUpdateEmailPreferences('updates')}
+                  className={`w-12 h-6 rounded-full transition-colors relative ${
+                    emailPreferences.updates ? 'bg-[#6EC1E4]' : 'bg-gray-300'
+                  }`}
+                >
+                  <div
+                    className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                      emailPreferences.updates ? 'right-1' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-[#F8F8F8] rounded-xl">
+                <div className="flex items-center gap-3">
+                  <Shield className="h-5 w-5 text-[#6EC1E4]" />
+                  <div>
+                    <p className="text-sm font-medium text-[#333333]">Alertas de Segurança</p>
+                    <p className="text-xs text-[#666666]">Seja notificado sobre atividades suspeitas</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleUpdateEmailPreferences('security')}
+                  className={`w-12 h-6 rounded-full transition-colors relative ${
+                    emailPreferences.security ? 'bg-[#6EC1E4]' : 'bg-gray-300'
+                  }`}
+                >
+                  <div
+                    className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                      emailPreferences.security ? 'right-1' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-[#F8F8F8] rounded-xl">
+                <div className="flex items-center gap-3">
+                  <Mail className="h-5 w-5 text-[#6EC1E4]" />
+                  <div>
+                    <p className="text-sm font-medium text-[#333333]">Emails de Marketing</p>
+                    <p className="text-xs text-[#666666]">Receba novidades e ofertas especiais</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleUpdateEmailPreferences('marketing')}
+                  className={`w-12 h-6 rounded-full transition-colors relative ${
+                    emailPreferences.marketing ? 'bg-[#6EC1E4]' : 'bg-gray-300'
+                  }`}
+                >
+                  <div
+                    className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                      emailPreferences.marketing ? 'right-1' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Danger Zone */}
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-red-200 p-6">
+            <h2 className="text-xl font-semibold text-red-600 mb-4">Zona de Perigo</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-red-50 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <Trash2 className="h-5 w-5 text-red-600" />
+                  <div>
+                    <p className="text-sm font-medium text-red-600">Excluir Conta</p>
+                    <p className="text-xs text-red-500">Esta ação não pode ser desfeita</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    const confirmed = window.confirm(
+                      "Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita."
+                    )
+                    if (confirmed) {
+                      handleDeleteAccount()
+                    }
+                  }}
+                  className="px-4 py-2 text-sm bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
+                >
+                  Excluir
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>
