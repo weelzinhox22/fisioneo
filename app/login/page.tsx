@@ -53,7 +53,7 @@ export default function LoginPage() {
         setShowAlert(true)
       } else {
         // Primeiro autentica com Supabase
-        const { data: { user }, error: supabaseError } = await supabase.auth.signInWithPassword({
+        const { data: { user, session }, error: supabaseError } = await supabase.auth.signInWithPassword({
           email,
           password,
         })
@@ -61,6 +61,10 @@ export default function LoginPage() {
         if (supabaseError) {
           console.error('Erro Supabase:', supabaseError)
           throw supabaseError
+        }
+
+        if (!user || !session) {
+          throw new Error('Usuário ou sessão não encontrados')
         }
 
         // Depois autentica com NextAuth
@@ -78,6 +82,9 @@ export default function LoginPage() {
           console.error('Erro NextAuth:', result.error)
           throw new Error(result.error)
         }
+
+        // Aguarda um momento para garantir que as sessões estejam sincronizadas
+        await new Promise(resolve => setTimeout(resolve, 500))
 
         console.log('Login bem-sucedido, redirecionando para:', callbackUrl)
         router.push(callbackUrl)

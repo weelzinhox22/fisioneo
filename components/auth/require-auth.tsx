@@ -11,14 +11,21 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [supabaseSession, setSupabaseSession] = useState<boolean | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [authError, setAuthError] = useState<string | null>(null)
 
+  // Verifica e mantém a sessão do Supabase atualizada
   useEffect(() => {
     const checkSupabaseSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession()
+        console.log('Supabase session check:', session ? 'Presente' : 'Ausente')
+        if (session) {
+          console.log('Supabase user:', session.user.email)
+        }
         setSupabaseSession(!!session)
       } catch (error) {
         console.error('Erro ao verificar sessão Supabase:', error)
+        setAuthError('Erro ao verificar sessão Supabase')
         setSupabaseSession(false)
       } finally {
         setIsLoading(false)
@@ -27,9 +34,12 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
 
     checkSupabaseSession()
 
+    // Inscreve-se para mudanças na sessão do Supabase
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('Supabase auth state change:', _event)
+      console.log('New session:', session ? 'Presente' : 'Ausente')
       setSupabaseSession(!!session)
     })
 
@@ -40,15 +50,23 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
     if (status === "loading" || isLoading) return
 
     const hasNextAuthSession = status === "authenticated"
-    console.log('Estado da sessão NextAuth:', hasNextAuthSession ? 'Autenticado' : 'Não autenticado')
-    console.log('Estado da sessão Supabase:', supabaseSession ? 'Autenticado' : 'Não autenticado')
+    console.log('=== Estado das Sessões em RequireAuth ===')
+    console.log('NextAuth status:', status)
+    console.log('NextAuth session:', hasNextAuthSession ? 'Presente' : 'Ausente')
+    if (session?.user) {
+      console.log('NextAuth user:', session.user.email)
+    }
+    console.log('Supabase session:', supabaseSession ? 'Presente' : 'Ausente')
 
+    // Verifica se tem pelo menos uma sessão válida
     const hasValidSession = hasNextAuthSession || supabaseSession
 
     if (!hasValidSession) {
       console.log('Nenhuma sessão válida encontrada em RequireAuth')
-      const callbackUrl = pathname
-      router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`)
+      console.log('Redirecionando para:', `/login?callbackUrl=${encodeURIComponent(pathname)}`)
+      router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`)
+    } else {
+      console.log('Sessão válida encontrada:', hasNextAuthSession ? 'NextAuth' : 'Supabase')
     }
   }, [session, status, supabaseSession, isLoading, router, pathname])
 
@@ -60,6 +78,17 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
     )
   }
 
+  if (authError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500">
+          Erro de autenticação: {authError}
+        </div>
+      </div>
+    )
+  }
+
+  // Permite o acesso se tiver qualquer sessão válida
   if (!session && !supabaseSession) {
     return null
   }
