@@ -99,7 +99,6 @@ export default function LoginPage() {
         })
         setShowAlert(true)
       } else {
-        // Login logic
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
@@ -107,15 +106,16 @@ export default function LoginPage() {
 
         if (error) throw error
 
-        if (data.session) {
-          // Success, redirect to home or callback URL
-          const urlParams = new URLSearchParams(window.location.search);
-          const callbackUrl = urlParams.get('callbackUrl') || '/';
+        // Get the session after successful login
+        const { data: { session } } = await supabase.auth.getSession()
+        
+        if (session) {
+          // Set cookies for session persistence
+          document.cookie = `sb-access-token=${session.access_token}; path=/; max-age=3600; secure; samesite=lax`
+          document.cookie = `sb-refresh-token=${session.refresh_token}; path=/; max-age=3600; secure; samesite=lax`
           
-          console.log('Login successful, redirecting to:', callbackUrl);
-          
-          // Redirect to the callback URL or home
-          router.push(callbackUrl);
+          router.push("/")
+          router.refresh() // Force a refresh to update auth state
         } else {
           throw new Error("Failed to get session after login")
         }
