@@ -32,8 +32,11 @@ const nextConfig = {
     optimizeCss: true,
     optimizePackageImports: ['three', '@react-three/fiber', '@react-three/drei', 'framer-motion'],
   },
-  // Reduzir tamanho do JS
-  swcMinify: true,
+  // Configurações de produção
+  productionBrowserSourceMaps: false,
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true
 }
 
 export default nextConfig
