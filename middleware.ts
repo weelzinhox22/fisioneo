@@ -13,30 +13,22 @@ export async function middleware(req: NextRequest) {
   // Verificar se é uma rota protegida
   const isProtectedRoute = protectedRoutes.some(route => req.nextUrl.pathname.startsWith(route))
   
-  // Para rotas protegidas, verificar autenticação
   if (isProtectedRoute) {
-    // 1. Verificar token do NextAuth (Google)
+    // Verificar token do NextAuth (Google)
     const token = await getToken({ req })
     if (token) {
-      // Se tem token do Google, permitir acesso imediato
+      // Se tem token do Google, permitir acesso
       return res
     }
-    
-    // 2. Verificar autenticação do Supabase
-    const supabase = createMiddlewareClient({ req, res })
-    const { data } = await supabase.auth.getSession()
-    
-    // Se não estiver autenticado nem no Google nem no Supabase, redirecionar para login
-    if (!data.session) {
-      return NextResponse.redirect(new URL('/login', req.url))
-    }
   }
-  
-  // Criar cliente Supabase com os cookies para outras rotas
+
+  // Criar cliente Supabase com os cookies
   const supabase = createMiddlewareClient({ req, res })
+
+  // Atualizar cookies de autenticação se necessário
   await supabase.auth.getSession()
-  
-  // Retornar a resposta com cookies atualizados
+
+  // Sempre retornar a resposta com cookies atualizados
   return res
 }
 
