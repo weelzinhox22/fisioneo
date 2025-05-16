@@ -6,50 +6,40 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
+    "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/login/page.js"
     ],
     "/api/auth/[...nextauth]/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/auth/[...nextauth]/route.js"
     ],
-    "/login/page": [
+    "/perfil/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/login/page.js"
-    ],
-    "/temas/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/temas/layout.js"
-    ],
-    "/temas/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/temas/page.js"
+      "static/chunks/app/perfil/page.js"
     ],
     "/(protected)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/layout.js"
     ],
-    "/(protected)/provas/layout": [
+    "/(protected)/prova-geral/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/provas/layout.js"
+      "static/chunks/app/(protected)/prova-geral/layout.js"
     ],
-    "/(protected)/provas/page": [
+    "/(protected)/prova-geral/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/provas/page.js"
+      "static/chunks/app/(protected)/prova-geral/page.js"
     ],
-    "/perfil/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/perfil/page.js"
+      "static/chunks/app/page.js"
     ]
   }
 }

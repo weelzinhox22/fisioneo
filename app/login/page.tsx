@@ -1,21 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { motion } from "framer-motion"
-import { LogIn, Mail } from "lucide-react"
+import { LogIn, Mail, UserPlus } from "lucide-react"
 import Link from "next/link"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { supabase } from "@/lib/supabase"
 import { useRouter } from "next/navigation"
 import { AlertDialog } from "@/components/ui/alert-dialog"
+import { CookieConsent } from "@/components/ui/cookie-consent"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [name, setName] = useState("")
   const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState<"login" | "register">("login")
   const [error, setError] = useState("")
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
   const router = useRouter()
   const [showAlert, setShowAlert] = useState(false)
   const [alertConfig, setAlertConfig] = useState({
@@ -23,6 +27,16 @@ export default function LoginPage() {
     message: "",
     type: "success" as "success" | "error" | "info"
   })
+
+  // Mostrar alerta sobre login do Google suspenso
+  useEffect(() => {
+    setAlertConfig({
+      title: "Aviso Importante",
+      message: "O login com Google está temporariamente suspenso. Por favor, utilize seu email e senha para acessar a plataforma.",
+      type: "info"
+    })
+    setShowAlert(true)
+  }, [])
 
   const createUserProfile = async (userId: string) => {
     try {
@@ -59,6 +73,20 @@ export default function LoginPage() {
     }
   }
 
+  // Validação de senha
+  const validatePassword = (pass: string) => {
+    const minLength = 8
+    const hasLowerCase = /[a-z]/.test(pass)
+    const hasNumbers = /\d/.test(pass)
+
+    const errors = []
+    if (pass.length < minLength) errors.push("pelo menos 8 caracteres")
+    if (!hasLowerCase) errors.push("uma letra")
+    if (!hasNumbers) errors.push("um número")
+
+    return errors
+  }
+
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -66,35 +94,52 @@ export default function LoginPage() {
 
     try {
       if (mode === "register") {
+        // Validações
+        if (!name.trim()) {
+          throw new Error("Por favor, insira seu nome completo")
+        }
+
+        if (password !== confirmPassword) {
+          throw new Error("As senhas não coincidem")
+        }
+
+        const passwordErrors = validatePassword(password)
+        if (passwordErrors.length > 0) {
+          throw new Error(`A senha deve conter ${passwordErrors.join(", ")}`)
+        }
+
+        if (!acceptedTerms) {
+          throw new Error("Você precisa aceitar os termos de uso e política de privacidade")
+        }
+
         // First, try to create the user
         const { data: authData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: {
+            data: {
+              name
+            },
             emailRedirectTo: `${window.location.origin}/auth/callback`,
           },
         })
 
-        if (signUpError) {
-          console.error('Signup error:', signUpError)
-          throw signUpError
-        }
+        if (signUpError) throw signUpError
 
         if (!authData.user) {
-          throw new Error("Failed to create user")
+          throw new Error("Falha ao criar usuário")
         }
 
-        // Try to create the user profile manually if needed
+        // Try to create the user profile
         const { success, error: profileError } = await createUserProfile(authData.user.id)
 
         if (!success) {
           console.error('Failed to create user profile:', profileError)
-          // We still continue as the trigger might have created the profile
         }
 
         setAlertConfig({
-          title: "Registration successful!",
-          message: "Please check your email to confirm your registration. We've sent you a confirmation link.",
+          title: "Cadastro realizado com sucesso!",
+          message: "Por favor, verifique seu email para confirmar seu cadastro. Enviamos um link de confirmação.",
           type: "success"
         })
         setShowAlert(true)
@@ -124,8 +169,8 @@ export default function LoginPage() {
       console.error('Auth error:', error)
       setError(error.message)
       setAlertConfig({
-        title: "Error!",
-        message: error.message || "An unexpected error occurred",
+        title: "Erro!",
+        message: error.message || "Ocorreu um erro inesperado",
         type: "error"
       })
       setShowAlert(true)
@@ -182,6 +227,14 @@ export default function LoginPage() {
               </p>
             </div>
 
+            {/* Aviso sobre login do Google */}
+            <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+              <p className="text-blue-400 text-sm text-center">
+                ⚠️ O login com Google está temporariamente suspenso. 
+                Por favor, utilize seu email e senha.
+              </p>
+            </div>
+
             {/* Form de Email */}
             <motion.form
               onSubmit={handleEmailAuth}
@@ -190,6 +243,19 @@ export default function LoginPage() {
               transition={{ delay: 0.2, duration: 0.8 }}
               className="space-y-4 mb-6"
             >
+              {mode === "register" && (
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Nome completo"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4285F4] focus:border-transparent transition-all"
+                    required
+                  />
+                </div>
+              )}
+
               <div>
                 <input
                   type="email"
@@ -200,6 +266,7 @@ export default function LoginPage() {
                   required
                 />
               </div>
+
               <div>
                 <input
                   type="password"
@@ -210,12 +277,58 @@ export default function LoginPage() {
                   required
                 />
               </div>
+
+              {mode === "register" && (
+                <>
+                  <div>
+                    <input
+                      type="password"
+                      placeholder="Confirme sua senha"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4285F4] focus:border-transparent transition-all"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      checked={acceptedTerms}
+                      onChange={(e) => setAcceptedTerms(e.target.checked)}
+                      className="mt-1"
+                    />
+                    <label htmlFor="terms" className="text-sm text-gray-300">
+                      Li e aceito os{" "}
+                      <Link href="/termos" className="text-blue-400 hover:text-blue-300">
+                        termos de uso
+                      </Link>{" "}
+                      e a{" "}
+                      <Link href="/privacidade" className="text-blue-400 hover:text-blue-300">
+                        política de privacidade
+                      </Link>
+                    </label>
+                  </div>
+
+                  <div className="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
+                    <h4 className="text-sm font-medium text-blue-400 mb-2">Requisitos da senha:</h4>
+                    <ul className="text-xs text-gray-400 space-y-1">
+                      <li>• Mínimo de 8 caracteres</li>
+                      <li>• Pelo menos uma letra</li>
+                      <li>• Pelo menos um número</li>
+                    </ul>
+                  </div>
+                </>
+              )}
+
               {error && (
                 <p className="text-red-400 text-sm mt-2 text-center">{error}</p>
               )}
+
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || (mode === "register" && !acceptedTerms)}
                 className="w-full px-6 py-3 text-lg font-medium relative overflow-hidden rounded-xl bg-gradient-to-r from-[#4285F4] to-[#34A853] hover:from-[#34A853] hover:to-[#4285F4] text-white transition-all duration-500 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <div className="flex items-center justify-center gap-3">
@@ -283,56 +396,44 @@ export default function LoginPage() {
             )}
 
             {/* Divisor */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-white/20"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-transparent text-gray-400">ou</span>
-              </div>
-            </div>
-
-            {/* Botão do Google */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-            >
-              <MagneticButton
-                onClick={() => signIn("google", { callbackUrl: "/" })}
-                backgroundGradient={true}
-                glowOnHover={true}
-                strength={20}
-                className="w-full px-6 py-4 text-lg font-medium group relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#4285F4] to-[#34A853] hover:from-[#34A853] hover:to-[#4285F4] transition-all duration-500 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
-              >
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="flex items-center justify-center gap-3">
-                  <div className="bg-white p-2 rounded-full">
-                    <svg className="w-5 h-5" viewBox="0 0 24 24">
-                      <path
-                        fill="#4285F4"
-                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                      />
-                      <path
-                        fill="#34A853"
-                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                      />
-                      <path
-                        fill="#FBBC05"
-                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                      />
-                      <path
-                        fill="#EA4335"
-                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                      />
-                    </svg>
-                  </div>
-                  <span className="text-white font-semibold tracking-wide">
-                    Continuar com Google
-                  </span>
+            <div className="flex flex-col items-center justify-center space-y-4 mt-6">
+              <div className="relative w-full">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-white/10"></div>
                 </div>
-              </MagneticButton>
-            </motion.div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 text-gray-400 bg-[#1a1a1a]">ou continue com</span>
+                </div>
+              </div>
+
+              {/* Botão do Google desabilitado */}
+              <button
+                type="button"
+                disabled
+                className="w-full flex items-center justify-center px-4 py-3 space-x-2 text-white bg-white/5 rounded-xl opacity-50 cursor-not-allowed"
+                title="Login com Google temporariamente suspenso"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 48 48">
+                  <path
+                    fill="#FFC107"
+                    d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
+                  />
+                  <path
+                    fill="#FF3D00"
+                    d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"
+                  />
+                  <path
+                    fill="#4CAF50"
+                    d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"
+                  />
+                  <path
+                    fill="#1976D2"
+                    d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
+                  />
+                </svg>
+                <span>Entrar com Google</span>
+              </button>
+            </div>
 
             {/* Alternar entre Login e Registro */}
             <motion.div
@@ -341,16 +442,26 @@ export default function LoginPage() {
               transition={{ delay: 0.6 }}
               className="mt-6 text-center"
             >
-              <button
-                onClick={() =>
-                  setMode(mode === "login" ? "register" : "login")
-                }
-                className="text-gray-400 hover:text-white transition-colors text-sm"
-              >
-                {mode === "login"
-                  ? "Não tem uma conta? Cadastre-se"
-                  : "Já tem uma conta? Entre"}
-              </button>
+              {mode === "login" ? (
+                <button
+                  onClick={() => setMode("register")}
+                  className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
+                >
+                  <UserPlus className="w-5 h-5" />
+                  <span className="font-medium">Criar nova conta</span>
+                  <div className="absolute -bottom-6 left-0 w-full text-center">
+                    <span className="text-xs text-emerald-400">É rápido e gratuito!</span>
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={() => setMode("login")}
+                  className="text-gray-400 hover:text-white transition-colors text-sm inline-flex items-center gap-2"
+                >
+                  <LogIn className="w-4 h-4" />
+                  Já tem uma conta? Entre
+                </button>
+              )}
             </motion.div>
 
             {/* Link para voltar */}
@@ -358,7 +469,7 @@ export default function LoginPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
-              className="mt-4 text-center"
+              className="mt-8 text-center"
             >
               <Link
                 href="/"
@@ -371,6 +482,9 @@ export default function LoginPage() {
           </motion.div>
         </div>
       </div>
+
+      {/* Cookie Consent */}
+      <CookieConsent />
     </div>
   )
 } 
