@@ -2,6 +2,8 @@
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/page": "app/page.js",
   "/login/page": "app/login/page.js",
+  "/temas/page": "app/temas/page.js",
+  "/(protected)/provas/page": "app/(protected)/provas/page.js",
   "/(protected)/prova-geral/page": "app/(protected)/prova-geral/page.js",
-  "/(protected)/provas/page": "app/(protected)/provas/page.js"
+  "/(protected)/documentos/page": "app/(protected)/documentos/page.js"
 }

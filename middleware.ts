@@ -15,7 +15,7 @@ export async function middleware(req: NextRequest) {
   
   if (isProtectedRoute) {
     // Verificar token do NextAuth (Google)
-    const token = await getToken({ req })
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
     if (token) {
       // Se tem token do Google, permitir acesso
       return res
