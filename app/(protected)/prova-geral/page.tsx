@@ -377,9 +377,9 @@ export default function ProvaGeralPage() {
         "34-36 semanas",
         "36-38 semanas"
       ],
-      correctAnswer: 3,
+      correctAnswer: 2,
       category: "Desenvolvimento Motor",
-      explanation: "O reflexo de sucção-deglutição está completamente desenvolvido entre 36-38 semanas de idade gestacional."
+      explanation: "O reflexo de sucção-deglutição está completamente desenvolvido entre 34-36 semanas de idade gestacional."
     },
     {
       question: "Qual é a frequência recomendada de mudança de decúbito em prematuros estáveis na UTI Neonatal?",

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
+import { usePathname } from "next/navigation"
 import { 
   X, 
   ChevronRight, 
@@ -21,7 +22,9 @@ import {
   ExternalLink,
   Phone,
   Instagram,
-  MessageSquare
+  MessageSquare,
+  Heart,
+  Bug
 } from "lucide-react"
 import Link from "next/link"
 
@@ -41,6 +44,7 @@ export default function OnboardingWalkthrough() {
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false)
   const [showReopenButton, setShowReopenButton] = useState(false)
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     // Check if user has seen the onboarding before
@@ -191,8 +195,8 @@ export default function OnboardingWalkthrough() {
     }
   ]
 
-  // If user has completely dismissed the walkthrough, don't render anything
-  if (hasSeenOnboarding && !isOpen && !showReopenButton && !isSuggestionsOpen) return null
+  // If user has completely dismissed the walkthrough or is on prova-geral page, don't render anything
+  if ((hasSeenOnboarding && !isOpen && !showReopenButton && !isSuggestionsOpen) || pathname === "/prova-geral") return null
 
   const getIconBackgroundColor = (color: string) => {
     const colors: Record<string, string> = {
@@ -389,18 +393,28 @@ export default function OnboardingWalkthrough() {
       <Dialog open={isSuggestionsOpen} onOpenChange={setIsSuggestionsOpen}>
         <DialogContent className="sm:max-w-md md:max-w-lg p-0 gap-0 overflow-hidden rounded-xl border-0 shadow-xl">
           <div className="relative w-full">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] p-4 text-white flex justify-between items-center">
-              <h2 className="font-bold text-lg md:text-xl flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
-                Sugestões e Contato
-              </h2>
-              <button 
-                onClick={() => setIsSuggestionsOpen(false)}
-                className="rounded-full p-1 hover:bg-white/20 transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
+            {/* Header with animated gradient background */}
+            <div className="relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] opacity-90">
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20" />
+              </div>
+              <div className="relative p-6 text-white">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="font-bold text-xl md:text-2xl flex items-center gap-2">
+                    <MessageSquare className="h-6 w-6" />
+                    Sugestões e Contato
+                  </h2>
+                  <button 
+                    onClick={() => setIsSuggestionsOpen(false)}
+                    className="rounded-full p-2 hover:bg-white/20 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+                <p className="text-white/90 text-sm md:text-base">
+                  Ajude-nos a melhorar a plataforma compartilhando suas ideias e sugestões
+                </p>
+              </div>
             </div>
 
             {/* Content */}
@@ -409,27 +423,28 @@ export default function OnboardingWalkthrough() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
+                className="space-y-6"
               >
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Suas sugestões são importantes!</h2>
-                
-                <p className="text-gray-600 mb-6">
-                  Tem alguma sugestão de questão, correção de conteúdo ou qualquer outra ideia para melhorar a plataforma? 
-                  Entre em contato diretamente pelo WhatsApp ou Instagram:
-                </p>
-                
-                <div className="space-y-4">
+                {/* Contact options */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <a 
                     href="https://wa.me/5571991373142" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg border border-green-200 hover:shadow-md transition-all"
+                    className="group relative overflow-hidden"
                   >
-                    <div className="h-12 w-12 bg-green-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                      <Phone className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-800">WhatsApp</h3>
-                      <p className="text-gray-600">+55 71 99137-3142</p>
+                    <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-green-600/10 group-hover:opacity-100 transition-opacity rounded-xl" />
+                    <div className="relative p-4 bg-white rounded-xl border border-green-100 hover:border-green-200 transition-all transform hover:-translate-y-1 hover:shadow-lg">
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-inner">
+                          <Phone className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-800 mb-1">WhatsApp</h3>
+                          <p className="text-gray-600 text-sm">Mensagem direta</p>
+                          <p className="text-green-600 text-sm font-medium mt-1">+55 71 99137-3142</p>
+                        </div>
+                      </div>
                     </div>
                   </a>
                   
@@ -437,22 +452,74 @@ export default function OnboardingWalkthrough() {
                     href="https://instagram.com/welziinho" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center p-4 bg-gradient-to-r from-purple-50 to-pink-100 rounded-lg border border-purple-200 hover:shadow-md transition-all"
+                    className="group relative overflow-hidden"
                   >
-                    <div className="h-12 w-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                      <Instagram className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-800">Instagram</h3>
-                      <p className="text-gray-600">@welziinho</p>
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 group-hover:opacity-100 transition-opacity rounded-xl" />
+                    <div className="relative p-4 bg-white rounded-xl border border-purple-100 hover:border-purple-200 transition-all transform hover:-translate-y-1 hover:shadow-lg">
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-inner">
+                          <Instagram className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-gray-800 mb-1">Instagram</h3>
+                          <p className="text-gray-600 text-sm">Siga-nos</p>
+                          <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 text-sm font-medium mt-1">@welziinho</p>
+                        </div>
+                      </div>
                     </div>
                   </a>
                 </div>
-                
-                <div className="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
-                  <p className="text-blue-800 text-sm">
-                    Agradeço por seu feedback! Todas as sugestões são analisadas e podem ser incorporadas para melhorar a experiência de aprendizado de todos os usuários.
-                  </p>
+
+                {/* Suggestion categories */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-gray-800">O que você gostaria de sugerir?</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button className="p-3 text-left rounded-lg border border-gray-200 hover:border-[#6EC1E4] hover:bg-[#6EC1E4]/5 transition-all group">
+                      <div className="flex items-center gap-2 mb-1">
+                        <FileText className="h-4 w-4 text-[#6EC1E4] group-hover:scale-110 transition-transform" />
+                        <span className="font-medium text-gray-800">Conteúdo</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Sugestões de novos temas ou melhorias</p>
+                    </button>
+                    
+                    <button className="p-3 text-left rounded-lg border border-gray-200 hover:border-[#B9A9FF] hover:bg-[#B9A9FF]/5 transition-all group">
+                      <div className="flex items-center gap-2 mb-1">
+                        <GraduationCap className="h-4 w-4 text-[#B9A9FF] group-hover:scale-110 transition-transform" />
+                        <span className="font-medium text-gray-800">Questões</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Novas questões ou correções</p>
+                    </button>
+                    
+                    <button className="p-3 text-left rounded-lg border border-gray-200 hover:border-[#6EC1E4] hover:bg-[#6EC1E4]/5 transition-all group">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Sparkles className="h-4 w-4 text-[#6EC1E4] group-hover:scale-110 transition-transform" />
+                        <span className="font-medium text-gray-800">Recursos</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Ideias para novas funcionalidades</p>
+                    </button>
+                    
+                    <button className="p-3 text-left rounded-lg border border-gray-200 hover:border-[#B9A9FF] hover:bg-[#B9A9FF]/5 transition-all group">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Bug className="h-4 w-4 text-[#B9A9FF] group-hover:scale-110 transition-transform" />
+                        <span className="font-medium text-gray-800">Bugs</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Reportar problemas técnicos</p>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Feedback message */}
+                <div className="bg-gradient-to-r from-[#6EC1E4]/10 to-[#B9A9FF]/10 p-4 rounded-xl border border-[#6EC1E4]/20">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF]">
+                      <Heart className="h-4 w-4 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-800">
+                        Agradecemos seu feedback! Todas as sugestões são analisadas e podem ser incorporadas para melhorar a experiência de aprendizado.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </div>
