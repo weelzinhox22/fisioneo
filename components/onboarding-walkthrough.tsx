@@ -119,16 +119,16 @@ export default function OnboardingWalkthrough() {
   const features: FeatureStep[] = [
     {
       title: "Bem-vindo à FisioNeo",
-      description: "Sua plataforma completa sobre fisioterapia neonatal. Comece sua jornada criando uma conta gratuita para acessar todos os recursos disponíveis.",
+      description: "Sua plataforma completa sobre fisioterapia neonatal. Projeto desenvolvido para apoiar estudantes, profissionais e interessados na área, reunindo conteúdo especializado, ferramentas interativas e recursos de estudo em um só lugar.",
       icon: <BookOpen className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      highlight: "Comece aqui",
+      highlight: "Plataforma educacional especializada",
       color: "blue",
-      link: "/register"
+      link: "/"
     },
     {
       title: "Assistente IA Interativo",
-      description: "Tire dúvidas sobre fisioterapia neonatal a qualquer momento com nosso assistente de IA especializado. Ele pode explicar conceitos, técnicas e protocolos com respostas baseadas em evidências científicas.",
+      description: "Tire dúvidas sobre fisioterapia neonatal a qualquer momento com nosso assistente de IA especializado. Ele pode explicar conceitos, técnicas, protocolos e ajudar em seus estudos com respostas rápidas e baseadas em evidências científicas.",
       icon: <Sparkles className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1677442135148-1776d208998d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       highlight: "Tire dúvidas em tempo real",
@@ -136,31 +136,58 @@ export default function OnboardingWalkthrough() {
       link: "/#assistente-ia"
     },
     {
-      title: "Provas e Avaliações",
-      description: "Teste e aprimore seus conhecimentos com nossas avaliações especializadas. Receba feedback instantâneo sobre seu desempenho e identifique áreas para aprofundamento.",
+      title: "Leitor de PDF Integrado",
+      description: "Acesse e estude artigos científicos, diretrizes e documentos importantes diretamente na plataforma. Nosso leitor de PDF integrado permite fazer anotações, destacar trechos importantes e salvar referências para consulta futura.",
+      icon: <FileText className="h-6 w-6" />,
+      imageUrl: "https://images.unsplash.com/photo-1633613286991-611fe299c4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      highlight: "Estude documentos sem sair da plataforma",
+      color: "red",
+      link: "/documentos"
+    },
+    {
+      title: "Provas Gerais",
+      description: "Teste seus conhecimentos com avaliações abrangentes que cobrem os principais tópicos da fisioterapia neonatal e pediátrica. Receba feedback instantâneo sobre seu desempenho e identifique áreas para aprofundamento.",
       icon: <PenTool className="h-6 w-6" />,
       imageUrl: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      highlight: "Avalie seu conhecimento",
+      highlight: "Avalie seu conhecimento geral",
       color: "green",
+      link: "/prova-geral"
+    },
+    {
+      title: "Provas Temáticas",
+      description: "Aprofunde-se em temas específicos como reflexos primitivos, método canguru, avaliação neurológica e desenvolvimento motor. Nossas provas temáticas permitem um estudo direcionado e especializado para cada área de interesse.",
+      icon: <BookMarked className="h-6 w-6" />,
+      imageUrl: "https://images.unsplash.com/photo-1554475901-4538ddfbccc2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      highlight: "Estude tópicos específicos em profundidade",
+      color: "amber",
       link: "/provas"
     },
     {
-      title: "Artigos e Conteúdo",
-      description: "Acesse uma biblioteca completa de artigos, recursos educacionais e materiais de estudo. Conteúdo organizado e atualizado para facilitar seu aprendizado.",
-      icon: <BookMarked className="h-6 w-6" />,
-      imageUrl: "https://images.unsplash.com/photo-1554475901-4538ddfbccc2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      highlight: "Explore o conteúdo",
-      color: "amber",
-      link: "/temas"
+      title: "Método Canguru",
+      description: "Conheça em detalhes o Método Canguru, uma abordagem fundamental para o cuidado de bebês prematuros. Aprenda sobre seus benefícios, técnicas de aplicação, evidências científicas e como orientar famílias sobre sua prática.",
+      icon: <Baby className="h-6 w-6" />,
+      imageUrl: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      highlight: "Aprofunde-se no cuidado humanizado",
+      color: "pink",
+      link: "/temas/metodo-canguru"
     },
     {
-      title: "Leitor de PDF com IA",
-      description: "Estude artigos científicos e documentos com nosso leitor de PDF inteligente. Faça anotações, destaque trechos importantes e use a IA para compreender melhor o conteúdo.",
-      icon: <FileText className="h-6 w-6" />,
-      imageUrl: "https://images.unsplash.com/photo-1633613286991-611fe299c4be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      highlight: "Leitura inteligente",
-      color: "red",
-      link: "/documentos"
+      title: "Avaliação Neurológica",
+      description: "Estude os principais aspectos da avaliação neurológica em recém-nascidos, incluindo reflexos primitivos, tônus muscular, postura e desenvolvimento sensorial. Conteúdo essencial para diagnóstico e intervenção precoce.",
+      icon: <Brain className="h-6 w-6" />,
+      imageUrl: "https://images.unsplash.com/photo-1559757175-7cb036e010ce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      highlight: "Avaliação e diagnóstico precoce",
+      color: "indigo",
+      link: "/temas/avaliacao-neurologica"
+    },
+    {
+      title: "Recursos Educacionais",
+      description: "Acesse uma biblioteca completa de recursos educacionais, incluindo vídeos, infográficos, resumos, fluxogramas e estudos de caso. Material organizado para facilitar o aprendizado e a revisão de conteúdos essenciais.",
+      icon: <GraduationCap className="h-6 w-6" />,
+      imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      highlight: "Materiais de estudo diversificados",
+      color: "cyan",
+      link: "/temas"
     }
   ]
 

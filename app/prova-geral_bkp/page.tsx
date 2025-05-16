@@ -106,6 +106,66 @@ export default function ProvaGeralPage() {
   // Questions array
   const originalQuestions: Question[] = [
     {
+      question: "Em um recém-nascido prematuro de 28 semanas com displasia broncopulmonar e em uso de CPAP nasal, qual seria a justificativa neurofisiológica para a observação de um atraso no desenvolvimento do controle cervical aos 3 meses de idade corrigida?",
+      options: [
+        "Exclusivamente devido à fraqueza muscular causada pela prematuridade extrema",
+        "Alteração do desenvolvimento das vias vestibulares devido ao posicionamento prolongado em prono",
+        "Integração sensório-motora prejudicada pela demanda respiratória aumentada e uso prolongado do CPAP, afetando o desenvolvimento do controle postural",
+        "Comprometimento isolado do sistema proprioceptivo cervical"
+      ],
+      correctAnswer: 2,
+      category: "Desenvolvimento Neuromotor",
+      explanation: "A justificativa mais completa envolve a integração sensório-motora prejudicada. O uso prolongado do CPAP e o aumento do trabalho respiratório levam a uma adaptação do controle motor para priorizar a função respiratória, afetando o desenvolvimento do controle postural. O bebê utiliza recursos neuromotores para estabilizar a respiração, impactando a disponibilidade desses recursos para o desenvolvimento do controle cervical."
+    },
+    {
+      question: "Durante a avaliação de um prematuro de 32 semanas em ventilação mecânica, você observa dessaturação frequente (queda de 88-92% para 75-80%) durante o manuseio mínimo, mesmo sem procedimentos invasivos. Considerando a complexa interação cardiopulmonar neonatal, qual seria a investigação e conduta mais apropriada?",
+      options: [
+        "Simplesmente aumentar o FiO2 durante o manuseio para compensar as dessaturações",
+        "Investigar canal arterial patente e adequar o manuseio considerando o impacto hemodinâmico",
+        "Suspender todo manuseio por 24 horas para evitar instabilidade",
+        "Solicitar apenas ajustes nos parâmetros ventilatórios"
+      ],
+      correctAnswer: 1,
+      category: "Fisioterapia Respiratória",
+      explanation: "A investigação do canal arterial patente é crucial pois as dessaturações durante manuseio mínimo podem indicar shunt direita-esquerda significativo. O manuseio deve ser adaptado considerando o impacto hemodinâmico, pois alterações posturais podem afetar o retorno venoso e agravar o shunt, causando dessaturação. A abordagem deve ser multifatorial, considerando a interação cardiopulmonar complexa do prematuro."
+    },
+    {
+      question: "Em um prematuro de 30 semanas com 20 dias de vida, durante a fisioterapia respiratória, você observa movimentos generalizados ausentes e padrão postural em opistótono intermitente. Qual seria a correlação mais precisa entre estes achados e o prognóstico neuromotor, considerando as evidências atuais sobre neuroplasticidade neonatal?",
+      options: [
+        "Achados transitórios sem relevância prognóstica significativa",
+        "Indicativos absolutos de paralisia cerebral, sem possibilidade de intervenção efetiva",
+        "Sinais de alerta que requerem avaliação neurológica, mas com potencial de modificação através de intervenção precoce baseada em neuroplasticidade",
+        "Alterações típicas da prematuridade que se resolverão espontaneamente"
+      ],
+      correctAnswer: 2,
+      category: "Avaliação Neurológica",
+      explanation: "Os achados são sinais de alerta importantes que requerem avaliação neurológica detalhada. A ausência de movimentos generalizados e o padrão em opistótono podem indicar comprometimento neurológico, porém, considerando a neuroplasticidade acentuada nesta idade, intervenções precoces e direcionadas podem modificar significativamente o prognóstico. A plasticidade neural é máxima neste período, permitindo reorganização cortical e desenvolvimento de novas conexões neurais."
+    },
+    {
+      question: "Na avaliação de um recém-nascido a termo com encefalopatia hipóxico-isquêmica submetido a hipotermia terapêutica, você observa alterações nos reflexos primitivos e tônus muscular. Considerando a fisiopatologia da lesão hipóxico-isquêmica e o mecanismo neuroprotetor da hipotermia, qual seria a interpretação mais adequada destes achados para o planejamento terapêutico?",
+      options: [
+        "Aguardar o reaquecimento completo para iniciar qualquer avaliação ou intervenção",
+        "Considerar os achados como definitivos e estabelecer prognóstico imediato",
+        "Interpretar os achados considerando o efeito da temperatura na excitabilidade neural e planejar reavaliações seriadas pós-reaquecimento",
+        "Iniciar estimulação intensiva imediatamente para compensar as alterações observadas"
+      ],
+      correctAnswer: 2,
+      category: "Avaliação Neonatal",
+      explanation: "A interpretação deve considerar que a hipotermia altera a excitabilidade neural e o tônus muscular temporariamente. Os reflexos primitivos e o tônus podem estar modificados pelo efeito neuroprotetor da hipotermia, que reduz o metabolismo cerebral e a excitabilidade neural. O planejamento terapêutico deve incluir reavaliações após o reaquecimento, quando a verdadeira extensão do comprometimento neurológico poderá ser melhor avaliada."
+    },
+    {
+      question: "Em um prematuro de 29 semanas com 45 dias de vida, durante a transição da ventilação mecânica para CPAP nasal, você observa aumento do trabalho respiratório e assincronismo toracoabdominal significativo após 2 horas de extubação. Considerando a biomecânica respiratória neonatal e a maturação pulmonar, qual seria a análise e conduta mais apropriada?",
+      options: [
+        "Reintubação imediata por falha na extubação",
+        "Análise integrada da mecânica respiratória, considerando fadiga diafragmática, suporte pressórico e possível atelectasia pós-extubação, com ajustes no CPAP e posicionamento",
+        "Manter CPAP sem alterações por 24 horas para adaptação natural",
+        "Apenas ajustar FiO2 para manter saturação adequada"
+      ],
+      correctAnswer: 1,
+      category: "Fisioterapia Respiratória",
+      explanation: "A análise deve ser integrada, considerando múltiplos fatores: a fadiga diafragmática após ventilação mecânica prolongada, a necessidade de ajuste no suporte pressórico do CPAP, e a possível atelectasia pós-extubação. O assincronismo toracoabdominal pode ser otimizado com ajustes no CPAP e posicionamento adequado, considerando a biomecânica respiratória específica do prematuro e a imaturidade da musculatura respiratória."
+    },
+    {
       question: "Em relação à avaliação da dor em neonatos prematuros, qual escala é mais apropriada para avaliar a dor aguda durante procedimentos invasivos, considerando a idade gestacional como fator de correção?",
       options: [
         "Escala PIPP-R (Premature Infant Pain Profile – Revised)",
@@ -536,6 +596,90 @@ export default function ProvaGeralPage() {
       correctAnswer: 3,
       category: "Desenvolvimento Motor",
       explanation: "O critério mais importante é a estabilidade clínica e idade corrigida adequada."
+    },
+    {
+      question: "Um recém-nascido prematuro extremo (24 semanas) com 80 dias de vida apresenta piora da função respiratória após tentativa de extubação. O exame de imagem revela áreas de enfisema intersticial pulmonar difuso. Com base na fisiopatologia da displasia broncopulmonar e mecanotransdução celular em pulmões imaturos, qual a estratégia ventilatória que minimizaria o dano induzido pela ventilação mecânica neste caso específico?",
+      options: [
+        "Ventilação oscilatória de alta frequência com volume garantido, visando reduzir o barotrauma e o volutrauma simultaneamente",
+        "Ventilação convencional com pressões inspiratórias elevadas para recrutar alvéolos colapsados e reduzir o enfisema",
+        "Estratégia permissiva de hipercapnia com volumes correntes ultrabaixos (3-4ml/kg) e PEEP otimizada para evitar lesão por estiramento celular",
+        "CPAP nasal com pressões progressivamente crescentes para facilitar o recrutamento alveolar gradual"
+      ],
+      correctAnswer: 2,
+      category: "Fisioterapia Respiratória Avançada",
+      explanation: "A estratégia permissiva de hipercapnia com volumes correntes ultrabaixos minimiza o dano induzido pela ventilação ao reduzir significativamente o estiramento celular, que é o principal gatilho para cascatas inflamatórias e fibrogênicas. A mecanotransdução celular em pulmões imaturos é especialmente sensível ao estresse mecânico, e volumes menores reduzem a ativação de vias de sinalização pró-inflamatórias. A PEEP otimizada previne o colapso cíclico evitando atelectrauma, enquanto tolerar níveis mais elevados de CO2 (hipercapnia permissiva) permite redução do volume minuto, protegendo de lesão adicional um pulmão já enfisematoso."
+    },
+    {
+      question: "Em um estudo de análise tridimensional de movimento em bebês de 4 meses nascidos prematuros extremos, foi identificada alteração na variabilidade de movimento e na riqueza do repertório motor. Qual mecanismo neurofisiológico explica melhor esta alteração, considerando os atuais conhecimentos sobre organização cortical, plasticidade atividade-dependente e especificidade sináptica?",
+      options: [
+        "Redução do volume cerebelar resultando em déficit no refinamento dos padrões motores",
+        "Limitação da formação de conexões tálamo-corticais devido à privação sensório-motora durante período crítico de desenvolvimento",
+        "Interrupção das trajetórias desenvolvimentais dos sistemas propriospinal e corticospinal, combinada com atividade neural aberrante durante períodos sensíveis de organização cortical",
+        "Deficiência de mielinização dos tratos corticospinais laterais causada por risco metabólico aumentado"
+      ],
+      correctAnswer: 2,
+      category: "Neurociência do Desenvolvimento",
+      explanation: "A interrupção das trajetórias desenvolvimentais dos sistemas propriospinal e corticospinal, combinada com atividade neural aberrante durante períodos sensíveis, explica melhor as alterações observadas. A prematuridade extrema interrompe a formação normal dos circuitos sensório-motores em um período crítico de desenvolvimento das conexões tálamo-corticais e corticospinais. A plasticidade atividade-dependente fica comprometida devido à atividade neural insuficiente ou aberrante, prejudicando a especificidade sináptica necessária para a formação de mapas somatotópicos precisos, resultando em redução da variabilidade e riqueza do repertório motor. O timing da conectividade neuronal é crítico, e problemas nesta fase podem levar a redes neurais subótimas, mesmo com intervenção posterior."
+    },
+    {
+      question: "Uma recém-nascida de 36 semanas apresenta assimetria no padrão de movimentos espontâneos e irritabilidade extrema ao manuseio do membro superior direito. A ressonância magnética revela lesão parcial do plexo braquial direito (C5-C6). Considerando os princípios de recuperação neural, plasticidade cruzada inter-hemisférica e neuroproteção, qual abordagem terapêutica teria maior potencial para otimizar a reorganização dos mapas corticais e prevenir distorções somatotópicas?",
+      options: [
+        "Restrição do membro não afetado com terapia intensiva do lado afetado para evitar dominância do hemisfério não afetado",
+        "Estimulação elétrica funcional de baixa intensidade combinada com treino bimanual respeitando períodos de recuperação neural",
+        "Terapia por restrição induzida por três horas diárias em regime domiciliar",
+        "Abordagem integrada com feedback sensorial enriquecido, estimulação tátil-proprioceptiva refinada das aferências lesadas, combinada com treinamento motor bilateral para modular a competição inter-hemisférica durante a reorganização cortical"
+      ],
+      correctAnswer: 3,
+      category: "Neuroplasticidade e Reabilitação",
+      explanation: "A abordagem integrada representa a escolha ideal baseada nos princípios atuais de neuroplasticidade. Em uma lesão parcial do plexo braquial em desenvolvimento, a competição entre hemisférios pode levar à supressão do hemisfério afetado pelas projeções do hemisfério não afetado. O feedback sensorial enriquecido estimula a reorganização adaptativa dos mapas somatossensoriais, enquanto a estimulação tátil-proprioceptiva refinada preserva as aferências parcialmente intactas. O treinamento bilateral modula a competição inter-hemisférica durante um período crítico de formação de conexões corticais, evitando o fenômeno de 'learned non-use' (não-uso aprendido) sem os efeitos potencialmente negativos da restrição excessiva em um sistema nervoso em desenvolvimento."
+    },
+    {
+      question: "Um neonato a termo com encefalopatia hipóxico-isquêmica moderada será submetido a hipotermia terapêutica. Considerando os mecanismos celulares e moleculares de neuroproteção, em qual janela temporal e por quais mecanismos específicos a abordagem fisioterapêutica poderia potencializar os efeitos neuroprotetores da hipotermia?",
+      options: [
+        "Nas primeiras 12 horas pós-insulto, através de mobilização ativa para aumentar o fluxo sanguíneo cerebral e oxigenação",
+        "Entre 24-48 horas após o início da hipotermia, através de posicionamento terapêutico e mínima estimulação para reduzir a demanda metabólica neuronal durante inibição da excitotoxicidade glutamatérgica",
+        "Após 72 horas, com estimulação sensorial intensiva para acelerar a reorganização sináptica",
+        "Durante as primeiras 6 horas, com manobras vestibulares para estimular a neuroplasticidade precoce"
+      ],
+      correctAnswer: 1,
+      category: "Neuroproteção Avançada",
+      explanation: "Durante a fase de 24-48 horas após o início da hipotermia terapêutica, ocorrem processos-chave de inibição da excitotoxicidade glutamatérgica e redução da cascata inflamatória neurotóxica. O posicionamento terapêutico e a mínima estimulação nesta fase são sinérgicos aos mecanismos de ação da hipotermia, pois reduzem a demanda metabólica neuronal, potencializando a supressão de radicais livres e preservando a integridade mitocondrial. A estimulação excessiva neste período poderia aumentar o metabolismo neuronal, antagonizando os efeitos da hipotermia e potencialmente exacerbando o dano celular durante a fase de lesão secundária."
+    },
+    {
+      question: "Em um estudo randomizado controlado sobre desenvolvimento motor em prematuros, observou-se que bebês submetidos a um programa específico de fisioterapia apresentaram melhores escores no General Movements Assessment (GMA) aos 3 meses de idade corrigida, porém sem diferença significativa no TIMP. Como você interpretaria estes achados considerando as bases neurofisiológicas avaliadas por cada instrumento e o impacto prognóstico para paralisia cerebral?",
+      options: [
+        "O resultado indica que a intervenção foi ineficaz, pois o TIMP é mais sensível que o GMA para detectar alterações motoras sutis",
+        "A intervenção afetou positivamente a função dos centros geradores de padrões centrais e a integridade das redes subcorticais que regulam os movimentos generalizados, sem impacto significativo nas habilidades motoras específicas de caráter mais cortical avaliadas pelo TIMP",
+        "Os resultados são inconsistentes e metodologicamente questionáveis, já que ambos os instrumentos deveriam mostrar resultados similares",
+        "O GMA é exclusivamente influenciado por fatores ambientais, enquanto o TIMP reflete apenas o desenvolvimento neurológico inato"
+      ],
+      correctAnswer: 1,
+      category: "Avaliação Neurológica Avançada",
+      explanation: "Esta discrepância nos resultados reflete a diferença fundamental entre os construtos neurológicos avaliados por cada instrumento. O GMA avalia primariamente a função dos centros geradores de padrões centrais e a integridade das redes neurais subcorticais que regulam os movimentos generalizados, sendo altamente preditivo para paralisia cerebral. O TIMP avalia habilidades motoras mais específicas e funcionais que dependem de maior controle cortical. A melhora no GMA sem alteração significativa no TIMP sugere que a intervenção foi eficaz em modular os circuitos neurais responsáveis pela qualidade dos movimentos espontâneos, mas essa modulação ainda não se traduziu em ganhos funcionais específicos mensuráveis pelo TIMP. Este é um achado importante, pois a qualidade dos movimentos generalizados é um preditor mais forte para paralisia cerebral do que as habilidades funcionais específicas em estágios muito precoces."
+    },
+    {
+      question: "Na avaliação seriada de um neonato com hemorragia periventricular grau III, você observa desenvolvimento de hidrocefalia pós-hemorrágica e sinais de leucomalácia periventricular. Integrando os conhecimentos sobre vias motoras descendentes, desenvolvimento dos tratos corticoespinhais e neuroplasticidade do SNC imaturo, qual seria o padrão esperado de comprometimento motor e sua justificativa neurofisiológica?",
+      options: [
+        "Diplegia espástica leve, pois a substância branca periventricular contém principalmente fibras motoras para membros inferiores, com preservação relativa dos membros superiores",
+        "Hemiparesia espástica severa contralateral à lesão, devido ao comprometimento unilateral das fibras que cruzam na decussação das pirâmides",
+        "Quadriplegia espástica com maior acometimento de membros inferiores, devido à distribuição periventricular das fibras descendentes e ao comprometimento da organização somatotópica do trato corticoespinhal",
+        "Déficit motor mínimo devido à extensa neuroplasticidade e reorganização cortical nesta idade"
+      ],
+      correctAnswer: 2,
+      category: "Neurologia Neonatal Avançada",
+      explanation: "O padrão de quadriplegia espástica com maior comprometimento de membros inferiores ocorre porque a hemorragia periventricular grau III associada à leucomalácia periventricular afeta a substância branca periventricular bilateralmente. As fibras do trato corticoespinhal para os membros inferiores passam mais medialmente na coroa radiada e são mais vulneráveis à lesão periventricular do que as fibras destinadas aos membros superiores, que passam mais lateralmente. Além disso, a hidrocefalia pós-hemorrágica causa pressão adicional sobre essas vias, exacerbando o dano às fibras descendentes. Em um SNC imaturo, embora exista potencial para reorganização cortical, lesões extensas bilaterais como esta comprometem significativamente esse potencial plástico, resultando em déficits motores permanentes com padrão espástico característico devido à liberação do controle inibitório supraespinal sobre os reflexos espinais."
+    },
+    {
+      question: "Um prematuro de 26 semanas com 45 dias de vida desenvolveu displasia broncopulmonar grave e permanece em ventilação mecânica. Os parâmetros ventilatórios atuais incluem: PIP 24 cmH2O, PEEP 6 cmH2O, FR 45 ipm, Tempo inspiratório 0,35s e FiO2 45%. Gasometria arterial: pH 7,29, PaCO2 58 mmHg, PaO2 62 mmHg, HCO3 26 mEq/L, BE -2. Considerando os princípios de proteção pulmonar, mecânica respiratória neonatal e prevenção de lesão induzida pela ventilação, qual seria a melhor estratégia de ajuste ventilatório?",
+      options: [
+        "Aumentar PIP para 26 cmH2O e reduzir FR para 40 ipm, visando melhorar a ventilação alveolar",
+        "Manter parâmetros atuais, pois a hipercapnia permissiva é aceitável na displasia broncopulmonar",
+        "Implementar volume garantido com volume corrente de 4-5ml/kg, reduzir o tempo inspiratório para 0,30s e aumentar PEEP para 7-8 cmH2O, objetivando homogeneização da distribuição ventilatória e redução do espaço morto",
+        "Aumentar FiO2 para 60% e FR para 60 ipm para normalizar os valores gasométricos"
+      ],
+      correctAnswer: 2,
+      category: "Ventilação Mecânica Avançada",
+      explanation: "A implementação de volume garantido com volume corrente baixo (4-5ml/kg) é a estratégia mais adequada para proteção pulmonar em um prematuro com displasia broncopulmonar grave. O volume garantido proporciona ventilação mais homogênea e reduz o risco de volutrauma e barotrauma por ajustar automaticamente a pressão inspiratória à complacência pulmonar variável. A redução do tempo inspiratório para 0,30s é benéfica pois diminui o risco de air trapping em pulmões com constante de tempo aumentada devido à obstrução de vias aéreas característica da DBP. O aumento da PEEP para 7-8 cmH2O otimiza o recrutamento alveolar nas áreas colapsadas, melhorando a relação ventilação-perfusão e reduzindo o shunt intrapulmonar. Esta abordagem equilibra a necessidade de adequada troca gasosa com a proteção contra lesão pulmonar adicional, aceitando uma hipercapnia leve a moderada (hipercapnia permissiva) como trade-off para uma ventilação mais protetora."
     }
   ]
 
@@ -690,7 +834,9 @@ export default function ProvaGeralPage() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute w-[800px] h-[800px] rounded-full bg-[#6EC1E4]/5 blur-[120px] -top-[400px] -left-[300px]" />
           <div className="absolute w-[600px] h-[600px] rounded-full bg-[#B9A9FF]/5 blur-[100px] -bottom-[200px] -right-[200px]" />
-          <Particles className="absolute inset-0" quantity={15} />
+          <div className="absolute inset-0">
+            <Particles />
+          </div>
         </div>
 
         {/* Start screen content */}
