@@ -1,4 +1,4 @@
-import { RequireAuth } from "@/components/auth/require-auth"
+import { RequireAuth } from "@/components/auth/require-auth-new"
 
 export default function ProtectedLayout({
   children,
