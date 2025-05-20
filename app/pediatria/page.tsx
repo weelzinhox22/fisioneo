@@ -8,6 +8,9 @@ import { FadeIn } from "@/components/animations/fade-in"
 import { StaggerContainer } from "@/components/animations/stagger-container"
 import { StaggerItem } from "@/components/animations/stagger-item"
 import DraggableAIButton from "@/app/components/DraggableAIButton"
+import Paywall from "@/components/paywall"
+import { usePageAccess } from "@/hooks/usePageAccess"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function PediatriaPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,6 +18,13 @@ export default function PediatriaPage() {
   const [focusedSuggestion, setFocusedSuggestion] = useState(-1);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const suggestionContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Usar o hook de acesso à página
+  const { loading, hasAccess, viewCount, remainingViews } = usePageAccess({
+    pagePath: '/pediatria',
+    viewLimit: 2,
+    requiresPayment: true,
+  });
   
   const topics = [
     {
@@ -185,9 +195,50 @@ export default function PediatriaPage() {
     );
   };
 
+  // Se estiver carregando, mostrar esqueleto de carregamento
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <Skeleton className="h-[500px] w-full rounded-xl" />
+      </div>
+    );
+  }
+
+  // Se não tiver acesso, mostrar o paywall
+  if (!hasAccess) {
+    return (
+      <Paywall 
+        title="Acesso Limitado ao Conteúdo de Pediatria"
+        description="Você já visualizou esta página 2 vezes. Para continuar acessando este conteúdo e todos os materiais exclusivos sobre Fisioterapia Pediátrica, assine agora o plano Premium da Fisioneo."
+        redirectUrl="https://pay.kiwify.com.br/RIjocp1"
+        hasAccess={hasAccess}
+        remainingViews={remainingViews}
+        maxViews={2}
+      />
+    );
+  }
+
+  // Se tem acesso, mostrar mensagem de visualizações restantes e o conteúdo normal
   return (
     <div className="relative overflow-hidden pb-16">
       <DraggableAIButton />
+      
+      {/* Aviso de visualizações restantes */}
+      {remainingViews > 0 && (
+        <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-2 mb-4 rounded-md mx-auto max-w-7xl mt-4">
+          <p className="text-sm font-medium">
+            Você tem {remainingViews} {remainingViews === 1 ? 'visualização restante' : 'visualizações restantes'} 
+            nesta página. Após isso, será necessário assinar o plano Premium para continuar acessando.
+          </p>
+        </div>
+      )}
+      
+      {/* Informações de debug */}
+      <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-2 mb-4 rounded-md mx-auto max-w-7xl mt-4">
+        <p className="text-sm font-medium">
+          [DEBUG] Informações: Página: /pediatria | Visualizações: {viewCount} | Restantes: {remainingViews}
+        </p>
+      </div>
       
       {/* Elementos decorativos de fundo */}
       {decorativeElements.map((el, index) => {
@@ -198,13 +249,25 @@ export default function PediatriaPage() {
             className="absolute pointer-events-none z-0 hidden md:block"
             style={{ 
               top: el.top || "auto", 
+              bottom: el.bottom || "auto", 
               left: el.left || "auto", 
-              right: el.right || "auto", 
-              bottom: el.bottom || "auto",
+              right: el.right || "auto" 
             }}
-            initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-            animate={{ opacity: el.opacity, scale: 1, rotate: 0 }}
-            transition={{ delay: el.delay, duration: 0.8 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: el.opacity, 
+              scale: 1,
+              rotate: [0, 5, 0, -5, 0],
+              transition: { 
+                delay: el.delay,
+                duration: 2,
+                rotate: {
+                  repeat: Infinity,
+                  duration: 20,
+                  ease: "easeInOut"
+                }
+              } 
+            }}
           >
             <Icon size={el.size} color={el.color} />
           </motion.div>
