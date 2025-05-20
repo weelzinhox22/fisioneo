@@ -1,0 +1,150 @@
+{
+  "pages": {
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/login/page.js"
+    ],
+    "/api/auth/[...nextauth]/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/auth/[...nextauth]/route.js"
+    ],
+    "/temas/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/temas/layout.js"
+    ],
+    "/temas/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/temas/page.js"
+    ],
+    "/temas/[slug]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/temas/[slug]/page.js"
+    ],
+    "/pediatria/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/layout.js"
+    ],
+    "/pediatria/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/page.js"
+    ],
+    "/pediatria/desenvolvimento-motor/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/desenvolvimento-motor/page.js"
+    ],
+    "/(protected)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/layout.js"
+    ],
+    "/(protected)/documentos/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/documentos/layout.js"
+    ],
+    "/(protected)/documentos/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/documentos/page.js"
+    ],
+    "/api/pdf-ocr/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/pdf-ocr/route.js"
+    ],
+    "/api/pdf-analyze/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/pdf-analyze/route.js"
+    ],
+    "/pediatria/avaliacao-neurologica/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/avaliacao-neurologica/page.js"
+    ],
+    "/pediatria/fisioterapia-funcional/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/fisioterapia-funcional/page.js"
+    ],
+    "/pediatria/paralisia-cerebral/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/paralisia-cerebral/page.js"
+    ],
+    "/pediatria/paralisia-braquial/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/paralisia-braquial/page.js"
+    ],
+    "/pediatria/tea/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/tea/page.js"
+    ],
+    "/pediatria/queimaduras/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/queimaduras/page.js"
+    ],
+    "/pediatria/cuidados-paliativos/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/cuidados-paliativos/page.js"
+    ],
+    "/pediatria/duchenne/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/pediatria/duchenne/page.js"
+    ],
+    "/(protected)/prova-geral/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/prova-geral/layout.js"
+    ],
+    "/(protected)/prova-geral/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/prova-geral/page.js"
+    ],
+    "/(protected)/provas/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/provas/layout.js"
+    ],
+    "/(protected)/provas/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/provas/page.js"
+    ],
+    "/(protected)/prova-pediatrica/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/prova-pediatrica/layout.js"
+    ],
+    "/(protected)/prova-pediatrica/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/prova-pediatrica/page.js"
+    ]
+  }
+}
