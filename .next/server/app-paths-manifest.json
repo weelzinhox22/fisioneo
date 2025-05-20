@@ -1,9 +1,8 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/pediatria/tea/page": "app/pediatria/tea/page.js",
-  "/pediatria/page": "app/pediatria/page.js",
   "/(protected)/prova-geral/page": "app/(protected)/prova-geral/page.js",
-  "/(protected)/prova-pediatrica/page": "app/(protected)/prova-pediatrica/page.js",
   "/(protected)/documentos/page": "app/(protected)/documentos/page.js",
-  "/(protected)/provas/page": "app/(protected)/provas/page.js"
+  "/pediatria/page": "app/pediatria/page.js",
+  "/(protected)/provas/page": "app/(protected)/provas/page.js",
+  "/(protected)/prova-pediatrica/page": "app/(protected)/prova-pediatrica/page.js"
 }
