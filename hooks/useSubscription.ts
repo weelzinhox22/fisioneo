@@ -33,6 +33,20 @@ const masterUsers = [
   }
 ];
 
+// Função auxiliar para obter cookies
+const getCookie = (name: string): string | null => {
+  if (typeof document === 'undefined') return null;
+  
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
+    if (cookie.startsWith(name + '=')) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return null;
+};
+
 // Função para obter um identificador único do dispositivo
 const getDeviceFingerprint = async (): Promise<string> => {
   try {
@@ -92,22 +106,54 @@ export function useSubscription(): UseSubscriptionResult {
         // Tentar obter o email do usuário
         let userEmail = null;
         
-        // Verificar se o usuário está logado via NextAuth
-        if (session?.user?.email) {
-          userEmail = session.user.email;
-          console.log('[SUBSCRIPTION] Verificando assinatura para:', userEmail);
-        } else {
-          // Verificar autenticação do Supabase
-          const { data } = await supabase.auth.getSession();
+        // Verificar primeiro se é um usuário master via localStorage ou cookies
+        let isMasterFromStorage = false;
+        
+        try {
+          // Tentar obter via cookies primeiro (mais confiável entre navegações)
+          let masterUser = getCookie('fisioneo_master_user');
+          let masterLoginTime = getCookie('fisioneo_master_login_time');
           
-          if (data.session?.user?.email) {
-            userEmail = data.session.user.email;
+          // Se não encontrou nos cookies, tentar localStorage
+          if (!masterUser || !masterLoginTime) {
+            masterUser = localStorage.getItem('fisioneo_master_user');
+            masterLoginTime = localStorage.getItem('fisioneo_master_login_time');
+          }
+          
+          if (masterUser && masterLoginTime) {
+            const loginTime = new Date(masterLoginTime);
+            const now = new Date();
+            const hoursDiff = (now.getTime() - loginTime.getTime()) / (1000 * 60 * 60);
+            
+            if (hoursDiff < 24) {
+              userEmail = masterUser;
+              isMasterFromStorage = true;
+              console.log('[SUBSCRIPTION] Usuário master detectado via storage:', userEmail);
+            }
+          }
+        } catch (e) {
+          console.error('[SUBSCRIPTION] Erro ao verificar usuário master via storage:', e);
+        }
+        
+        // Se não encontrou usuário master no armazenamento, verificar via sessão
+        if (!isMasterFromStorage) {
+          // Verificar se o usuário está logado via NextAuth
+          if (session?.user?.email) {
+            userEmail = session.user.email;
             console.log('[SUBSCRIPTION] Verificando assinatura para:', userEmail);
           } else {
-            // Usuário não está logado
-            setLoading(false);
-            setHasSubscription(false);
-            return;
+            // Verificar autenticação do Supabase
+            const { data } = await supabase.auth.getSession();
+            
+            if (data.session?.user?.email) {
+              userEmail = data.session.user.email;
+              console.log('[SUBSCRIPTION] Verificando assinatura para:', userEmail);
+            } else {
+              // Usuário não está logado
+              setLoading(false);
+              setHasSubscription(false);
+              return;
+            }
           }
         }
         
@@ -118,13 +164,34 @@ export function useSubscription(): UseSubscriptionResult {
         }
 
         // Verificar se o usuário é um usuário master
-        const isMasterUser = masterUsers.some(user => user.email.toLowerCase() === userEmail?.toLowerCase());
+        const masterUserEntry = masterUsers.find(user => 
+          user.email.toLowerCase() === userEmail?.toLowerCase()
+        );
         
-        if (isMasterUser) {
-          console.log('[SUBSCRIPTION] Usuário master detectado:', userEmail);
+        if (masterUserEntry) {
+          console.log('[SUBSCRIPTION] Usuário master confirmado:', userEmail);
+          
+          if (isMasterFromStorage) {
+            // Se já foi identificado como usuário master pelo armazenamento,
+            // não precisamos fazer mais verificações de dispositivo
+            setHasSubscription(true);
+            setSubscriptionData({ 
+              type: 'master',
+              plan_type: 'lifetime',
+              created_at: new Date().toISOString()
+            });
+            setLoading(false);
+            return;
+          }
           
           // Para usuários master, verificar se o dispositivo já está associado a este usuário
-          const deviceId = await getDeviceFingerprint();
+          let deviceId;
+          try {
+            deviceId = await getDeviceFingerprint();
+          } catch (e) {
+            console.error('[SUBSCRIPTION] Erro ao obter fingerprint do dispositivo:', e);
+            deviceId = 'fallback_device_' + Math.random().toString(36).substring(2);
+          }
           
           // Encontrar o usuário master na lista
           const masterUserIndex = masterUsers.findIndex(user => 
@@ -148,6 +215,21 @@ export function useSubscription(): UseSubscriptionResult {
                   masterUsers[masterUserIndex].deviceId === deviceId) {
                 masterUsers[masterUserIndex].deviceId = deviceId;
                 console.log('[SUBSCRIPTION] Dispositivo associado ao usuário master:', deviceId);
+                
+                // Armazenar informações nos cookies e localStorage para persistência
+                try {
+                  localStorage.setItem('fisioneo_master_user', masterUserEntry.email);
+                  localStorage.setItem('fisioneo_master_login_time', new Date().toString());
+                  
+                  // Criar cookies também para maior compatibilidade
+                  const expirationDate = new Date();
+                  expirationDate.setHours(expirationDate.getHours() + 24);
+                  document.cookie = `fisioneo_master_user=${masterUserEntry.email}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
+                  document.cookie = `fisioneo_master_login_time=${new Date().toString()}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
+                } catch (e) {
+                  console.error('[SUBSCRIPTION] Erro ao armazenar dados do usuário master:', e);
+                }
+                
                 setHasSubscription(true);
                 setSubscriptionData({ 
                   type: 'master',

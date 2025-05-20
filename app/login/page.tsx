@@ -173,41 +173,53 @@ export default function LoginPage() {
         if (masterUser) {
           console.log('[LOGIN] Usuário master detectado:', email);
           
-          // Criar uma sessão especial para o usuário master
-          // Para isso, vamos fazer login com o Supabase e configurar cookies especiais
           try {
-            // Tentar autenticar o usuário no Supabase (mesmo que não exista - vai falhar)
-            const { error } = await supabase.auth.signInWithPassword({
-              email: masterUser.email,
-              password: masterUser.password
-            });
+            // Não precisamos mais tentar autenticar via Supabase para usuários master
+            // Vamos criar diretamente a sessão do usuário master
             
-            // Se o login falhou (como esperado para usuários que não existem no Supabase)
-            // vamos criar uma sessão "virtual" usando localStorage
-            if (error) {
-              console.log('[LOGIN] Criando sessão manual para usuário master');
-              localStorage.setItem('fisioneo_master_user', masterUser.email);
-              localStorage.setItem('fisioneo_master_login_time', new Date().toString());
-              
-              router.push("/")
-              router.refresh()
-              return;
-            } else {
-              // Se por acaso o login deu certo (usuário existe), seguir o fluxo normal
-              console.log('[LOGIN] Usuário master existe no Supabase, usando fluxo normal');
-              router.push("/")
-              router.refresh()
-              return;
-            }
-          } catch (masterAuthError) {
-            console.error('[LOGIN] Erro ao autenticar usuário master:', masterAuthError);
-            // Continuar tentando o fluxo normal, mas como sabemos que é um usuário master,
-            // podemos criar a sessão virtual
+            // Usar tanto localStorage quanto cookies para garantir persistência
             localStorage.setItem('fisioneo_master_user', masterUser.email);
             localStorage.setItem('fisioneo_master_login_time', new Date().toString());
             
-            router.push("/")
-            router.refresh()
+            // Criar cookies também para maior compatibilidade
+            const expirationDate = new Date();
+            expirationDate.setHours(expirationDate.getHours() + 24); // Expira em 24 horas
+            
+            document.cookie = `fisioneo_master_user=${masterUser.email}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
+            document.cookie = `fisioneo_master_login_time=${new Date().toString()}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
+            
+            // Adicionar delay para garantir que o localStorage e cookies sejam definidos antes do redirecionamento
+            setLoading(true);
+            
+            // Mostrar confirmação de login bem-sucedido
+            setAlertConfig({
+              title: "Login bem-sucedido!",
+              message: `Bem-vindo(a), usuário ${masterUser.email.split('@')[0]}! Você agora tem acesso completo à plataforma.`,
+              type: "success"
+            });
+            setShowAlert(true);
+            
+            // Adicionar um atraso para permitir que o usuário veja a confirmação
+            setTimeout(() => {
+              // Redirecionar para a página inicial
+              window.location.href = "/"; // Usar redirecionamento direto em vez do router para forçar recarga completa
+            }, 1500);
+            
+            return;
+          } catch (masterAuthError) {
+            console.error('[LOGIN] Erro ao autenticar usuário master:', masterAuthError);
+            
+            // Em caso de erro, tentar novamente com abordagem direta
+            localStorage.setItem('fisioneo_master_user', masterUser.email);
+            localStorage.setItem('fisioneo_master_login_time', new Date().toString());
+            
+            const expirationDate = new Date();
+            expirationDate.setHours(expirationDate.getHours() + 24);
+            
+            document.cookie = `fisioneo_master_user=${masterUser.email}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
+            document.cookie = `fisioneo_master_login_time=${new Date().toString()}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
+            
+            window.location.href = "/"; 
             return;
           }
         }
