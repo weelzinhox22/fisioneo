@@ -20,6 +20,46 @@ const getCookie = (name: string): string | null => {
   return null;
 };
 
+// Função para checar se o usuário master está autenticado
+const checkMasterAuth = (): boolean => {
+  try {
+    // 1. Verificar cookie de sessão master (mais rápido)
+    const sessionCookie = getCookie('fisioneo_master_session');
+    if (sessionCookie === 'true') {
+      console.log('[AUTH] Usuário autenticado via cookie de sessão master');
+      return true;
+    }
+
+    // 2. Verificar email e timestamp
+    const masterEmail = getCookie('fisioneo_master_user') || localStorage.getItem('fisioneo_master_user');
+    const loginTime = getCookie('fisioneo_master_login_time') || localStorage.getItem('fisioneo_master_login_time');
+    
+    if (masterEmail && loginTime) {
+      try {
+        // Verificar se o login não expirou (7 dias)
+        const loginDate = new Date(loginTime);
+        const now = new Date();
+        const daysDiff = (now.getTime() - loginDate.getTime()) / (1000 * 60 * 60 * 24);
+        
+        if (daysDiff < 7) {
+          console.log('[AUTH] Usuário master autenticado:', masterEmail);
+          return true;
+        } else {
+          console.log('[AUTH] Login de usuário master expirado');
+          return false;
+        }
+      } catch (e) {
+        console.error('[AUTH] Erro ao verificar tempo de login:', e);
+      }
+    }
+    
+    return false;
+  } catch (e) {
+    console.error('[AUTH] Erro ao verificar autenticação master:', e);
+    return false;
+  }
+};
+
 export function RequireAuth({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -28,86 +68,23 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      // Verificar autenticação do Google (NextAuth)
+      // 1. Verificar autenticação do Google (NextAuth)
       if (session) {
         console.log('[AUTH] Usuário autenticado via NextAuth');
-        setIsAuthenticated(true)
-        setLoading(false)
-        return
+        setIsAuthenticated(true);
+        setLoading(false);
+        return;
       }
 
-      // Verificar se é um usuário master através do localStorage e cookies
-      // Tentando várias abordagens para aumentar a chance de sucesso
-      let masterUser = null;
-      let masterLoginTime = null;
-      
-      // Tentar via localStorage primeiro
-      try {
-        masterUser = localStorage.getItem('fisioneo_master_user');
-        masterLoginTime = localStorage.getItem('fisioneo_master_login_time');
-        
-        // Se não encontrou no localStorage, tentar via cookies
-        if (!masterUser || !masterLoginTime) {
-          console.log('[AUTH] Tentando obter sessão de usuário master via cookies');
-          masterUser = getCookie('fisioneo_master_user');
-          masterLoginTime = getCookie('fisioneo_master_login_time');
-        }
-      } catch (e) {
-        console.error('[AUTH] Erro ao acessar localStorage:', e);
-        // Se ocorrer erro com localStorage, tentar cookies
-        masterUser = getCookie('fisioneo_master_user');
-        masterLoginTime = getCookie('fisioneo_master_login_time');
-      }
-      
-      if (masterUser && masterLoginTime) {
-        console.log('[AUTH] Encontrada sessão de usuário master:', masterUser);
-        try {
-          const loginTime = new Date(masterLoginTime);
-          const now = new Date();
-          
-          // Verificar se a sessão master não expirou (24 horas)
-          const timeDiff = now.getTime() - loginTime.getTime();
-          const hoursDiff = timeDiff / (1000 * 60 * 60);
-          
-          if (hoursDiff < 24) {
-            console.log('[AUTH] Usuário master autenticado:', masterUser);
-            
-            // Atualizar o timestamp de login para estender a sessão
-            const newLoginTime = new Date().toString();
-            try {
-              localStorage.setItem('fisioneo_master_login_time', newLoginTime);
-              
-              // Atualizar também os cookies
-              const expirationDate = new Date();
-              expirationDate.setHours(expirationDate.getHours() + 24);
-              document.cookie = `fisioneo_master_login_time=${newLoginTime}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
-            } catch (e) {
-              console.error('[AUTH] Erro ao atualizar timestamp de sessão:', e);
-            }
-            
-            setIsAuthenticated(true);
-            setLoading(false);
-            return;
-          } else {
-            // Sessão expirada, limpar dados
-            console.log('[AUTH] Sessão master expirada');
-            try {
-              localStorage.removeItem('fisioneo_master_user');
-              localStorage.removeItem('fisioneo_master_login_time');
-              
-              // Limpar cookies também
-              document.cookie = 'fisioneo_master_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=lax';
-              document.cookie = 'fisioneo_master_login_time=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=lax';
-            } catch (e) {
-              console.error('[AUTH] Erro ao limpar dados de sessão expirada:', e);
-            }
-          }
-        } catch (e) {
-          console.error('[AUTH] Erro ao verificar tempo de sessão:', e);
-        }
+      // 2. Verificar se é um usuário master
+      if (checkMasterAuth()) {
+        console.log('[AUTH] Autenticação master confirmada');
+        setIsAuthenticated(true);
+        setLoading(false);
+        return;
       }
 
-      // Se não estiver autenticado com Google ou master, verificar Supabase
+      // 3. Se não estiver autenticado ainda, verificar Supabase
       try {
         const { data } = await supabase.auth.getSession();
         
@@ -128,10 +105,10 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
       }
       
       setLoading(false);
-    }
+    };
 
     checkAuth();
-  }, [router, session]) // Adicionar session como dependência
+  }, [router, session]);
 
   // Mostrar loading enquanto verifica
   if (loading) {
@@ -139,12 +116,12 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#6EC1E4]"></div>
       </div>
-    )
+    );
   }
 
   // Só renderizar o conteúdo se estiver autenticado
   if (isAuthenticated) {
-    return <>{children}</>
+    return <>{children}</>;
   }
 
   // Se não estiver autenticado, mostrar loading enquanto redireciona
@@ -152,5 +129,5 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex items-center justify-center">
       <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-[#6EC1E4]"></div>
     </div>
-  )
+  );
 } 

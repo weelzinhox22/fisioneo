@@ -107,6 +107,32 @@ export default function LoginPage() {
     return errors
   }
 
+  // Função para definir cookies com autenticação master
+  const setMasterAuthCookies = (masterEmail: string) => {
+    try {
+      console.log('[LOGIN] Definindo cookies de autenticação para usuário master:', masterEmail);
+      
+      // Definir localStorage
+      localStorage.setItem('fisioneo_master_user', masterEmail);
+      localStorage.setItem('fisioneo_master_login_time', new Date().toString());
+      
+      // Definir cookies com expiração de 7 dias (mais tempo para mais confiabilidade)
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 7); 
+      
+      document.cookie = `fisioneo_master_user=${masterEmail}; path=/; expires=${expirationDate.toUTCString()}; SameSite=Strict`;
+      document.cookie = `fisioneo_master_login_time=${new Date().toString()}; path=/; expires=${expirationDate.toUTCString()}; SameSite=Strict`;
+      
+      // Adicionar um cookie de sessão (sem expiração) para maior compatibilidade
+      document.cookie = `fisioneo_master_session=true; path=/; SameSite=Strict`;
+      
+      return true;
+    } catch (error) {
+      console.error('[LOGIN] Erro ao definir cookies de autenticação:', error);
+      return false;
+    }
+  }
+
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -173,55 +199,41 @@ export default function LoginPage() {
         if (masterUser) {
           console.log('[LOGIN] Usuário master detectado:', email);
           
-          try {
-            // Não precisamos mais tentar autenticar via Supabase para usuários master
-            // Vamos criar diretamente a sessão do usuário master
-            
-            // Usar tanto localStorage quanto cookies para garantir persistência
-            localStorage.setItem('fisioneo_master_user', masterUser.email);
-            localStorage.setItem('fisioneo_master_login_time', new Date().toString());
-            
-            // Criar cookies também para maior compatibilidade
-            const expirationDate = new Date();
-            expirationDate.setHours(expirationDate.getHours() + 24); // Expira em 24 horas
-            
-            document.cookie = `fisioneo_master_user=${masterUser.email}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
-            document.cookie = `fisioneo_master_login_time=${new Date().toString()}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
-            
-            // Adicionar delay para garantir que o localStorage e cookies sejam definidos antes do redirecionamento
-            setLoading(true);
-            
-            // Mostrar confirmação de login bem-sucedido
-            setAlertConfig({
-              title: "Login bem-sucedido!",
-              message: `Bem-vindo(a), usuário ${masterUser.email.split('@')[0]}! Você agora tem acesso completo à plataforma.`,
-              type: "success"
-            });
-            setShowAlert(true);
-            
-            // Adicionar um atraso para permitir que o usuário veja a confirmação
-            setTimeout(() => {
-              // Redirecionar para a página inicial
-              window.location.href = "/"; // Usar redirecionamento direto em vez do router para forçar recarga completa
-            }, 1500);
-            
-            return;
-          } catch (masterAuthError) {
-            console.error('[LOGIN] Erro ao autenticar usuário master:', masterAuthError);
-            
-            // Em caso de erro, tentar novamente com abordagem direta
-            localStorage.setItem('fisioneo_master_user', masterUser.email);
-            localStorage.setItem('fisioneo_master_login_time', new Date().toString());
-            
-            const expirationDate = new Date();
-            expirationDate.setHours(expirationDate.getHours() + 24);
-            
-            document.cookie = `fisioneo_master_user=${masterUser.email}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
-            document.cookie = `fisioneo_master_login_time=${new Date().toString()}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
-            
-            window.location.href = "/"; 
-            return;
+          // Definir cookies e localStorage para autenticação
+          const authSuccess = setMasterAuthCookies(masterUser.email);
+          
+          if (!authSuccess) {
+            throw new Error("Erro ao criar sessão. Tente novamente.");
           }
+          
+          // Confirmar que os cookies foram definidos
+          const masterUserCookie = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('fisioneo_master_user='));
+            
+          if (!masterUserCookie) {
+            console.warn('[LOGIN] Cookie de autenticação não detectado após definição');
+            
+            // Tentar definir novamente usando uma abordagem alternativa
+            document.cookie = `fisioneo_master_user=${masterUser.email}; path=/`;
+            document.cookie = `fisioneo_master_session=true; path=/`;
+          }
+          
+          // Mostrar alerta de sucesso
+          setAlertConfig({
+            title: "Login bem-sucedido!",
+            message: `Bem-vindo(a), ${masterUser.email.split('@')[0]}! Você agora tem acesso completo à plataforma.`,
+            type: "success"
+          });
+          setShowAlert(true);
+          
+          // Adicionar um atraso antes do redirecionamento para garantir que os cookies sejam definidos
+          setTimeout(() => {
+            // Usar redirecionamento direto para forçar recarga completa da página
+            window.location.href = "/";
+          }, 1500);
+          
+          return;
         }
         
         // Fluxo normal de login para usuários regulares

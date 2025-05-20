@@ -14,22 +14,18 @@ const masterUsers = [
   {
     email: 'admin@fisioneo.com',
     password: 'Fisioneo@2023',
-    deviceId: '', // Será preenchido ao entrar
   },
   {
     email: 'professor@fisioneo.com',
     password: 'Professor@2024',
-    deviceId: '',
   },
   {
     email: 'diretor@fisioneo.com',
     password: 'Diretor@2024',
-    deviceId: '',
   },
   {
     email: 'convidado@fisioneo.com',
     password: 'Convidado@2024',
-    deviceId: '',
   }
 ];
 
@@ -45,6 +41,42 @@ const getCookie = (name: string): string | null => {
     }
   }
   return null;
+};
+
+// Verificar se o usuário master está autenticado
+const isMasterUser = (): {authenticated: boolean, email: string | null} => {
+  try {
+    // 1. Verificar cookie de sessão
+    if (getCookie('fisioneo_master_session') === 'true') {
+      const email = getCookie('fisioneo_master_user') || localStorage.getItem('fisioneo_master_user');
+      if (email) {
+        return { authenticated: true, email };
+      }
+    }
+    
+    // 2. Verificar por email e timestamp
+    const masterEmail = getCookie('fisioneo_master_user') || localStorage.getItem('fisioneo_master_user');
+    const loginTime = getCookie('fisioneo_master_login_time') || localStorage.getItem('fisioneo_master_login_time');
+    
+    if (masterEmail && loginTime) {
+      try {
+        const loginDate = new Date(loginTime);
+        const now = new Date();
+        const daysDiff = (now.getTime() - loginDate.getTime()) / (1000 * 60 * 60 * 24);
+        
+        if (daysDiff < 7) { // 7 dias de validade
+          return { authenticated: true, email: masterEmail };
+        }
+      } catch (e) {
+        console.error('[SUBSCRIPTION] Erro ao verificar tempo de login:', e);
+      }
+    }
+    
+    return { authenticated: false, email: null };
+  } catch (e) {
+    console.error('[SUBSCRIPTION] Erro ao verificar autenticação master:', e);
+    return { authenticated: false, email: null };
+  }
 };
 
 // Função para obter um identificador único do dispositivo
@@ -103,57 +135,40 @@ export function useSubscription(): UseSubscriptionResult {
       setError(null);
       
       try {
-        // Tentar obter o email do usuário
-        let userEmail = null;
+        // 1. Verificar primeiro se é um usuário master
+        const { authenticated, email: masterEmail } = isMasterUser();
         
-        // Verificar primeiro se é um usuário master via localStorage ou cookies
-        let isMasterFromStorage = false;
-        
-        try {
-          // Tentar obter via cookies primeiro (mais confiável entre navegações)
-          let masterUser = getCookie('fisioneo_master_user');
-          let masterLoginTime = getCookie('fisioneo_master_login_time');
-          
-          // Se não encontrou nos cookies, tentar localStorage
-          if (!masterUser || !masterLoginTime) {
-            masterUser = localStorage.getItem('fisioneo_master_user');
-            masterLoginTime = localStorage.getItem('fisioneo_master_login_time');
-          }
-          
-          if (masterUser && masterLoginTime) {
-            const loginTime = new Date(masterLoginTime);
-            const now = new Date();
-            const hoursDiff = (now.getTime() - loginTime.getTime()) / (1000 * 60 * 60);
-            
-            if (hoursDiff < 24) {
-              userEmail = masterUser;
-              isMasterFromStorage = true;
-              console.log('[SUBSCRIPTION] Usuário master detectado via storage:', userEmail);
-            }
-          }
-        } catch (e) {
-          console.error('[SUBSCRIPTION] Erro ao verificar usuário master via storage:', e);
+        if (authenticated && masterEmail) {
+          console.log('[SUBSCRIPTION] Usuário master autenticado:', masterEmail);
+          setHasSubscription(true);
+          setSubscriptionData({ 
+            type: 'master',
+            plan_type: 'lifetime',
+            created_at: new Date().toISOString()
+          });
+          setLoading(false);
+          return;
         }
         
-        // Se não encontrou usuário master no armazenamento, verificar via sessão
-        if (!isMasterFromStorage) {
-          // Verificar se o usuário está logado via NextAuth
-          if (session?.user?.email) {
-            userEmail = session.user.email;
+        // 2. Se não é usuário master, verificar o email por outros meios
+        let userEmail = null;
+        
+        // Verificar se o usuário está logado via NextAuth
+        if (session?.user?.email) {
+          userEmail = session.user.email;
+          console.log('[SUBSCRIPTION] Verificando assinatura para:', userEmail);
+        } else {
+          // Verificar autenticação do Supabase
+          const { data } = await supabase.auth.getSession();
+          
+          if (data.session?.user?.email) {
+            userEmail = data.session.user.email;
             console.log('[SUBSCRIPTION] Verificando assinatura para:', userEmail);
           } else {
-            // Verificar autenticação do Supabase
-            const { data } = await supabase.auth.getSession();
-            
-            if (data.session?.user?.email) {
-              userEmail = data.session.user.email;
-              console.log('[SUBSCRIPTION] Verificando assinatura para:', userEmail);
-            } else {
-              // Usuário não está logado
-              setLoading(false);
-              setHasSubscription(false);
-              return;
-            }
+            // Usuário não está logado
+            setLoading(false);
+            setHasSubscription(false);
+            return;
           }
         }
         
@@ -162,92 +177,8 @@ export function useSubscription(): UseSubscriptionResult {
           setHasSubscription(false);
           return;
         }
-
-        // Verificar se o usuário é um usuário master
-        const masterUserEntry = masterUsers.find(user => 
-          user.email.toLowerCase() === userEmail?.toLowerCase()
-        );
         
-        if (masterUserEntry) {
-          console.log('[SUBSCRIPTION] Usuário master confirmado:', userEmail);
-          
-          if (isMasterFromStorage) {
-            // Se já foi identificado como usuário master pelo armazenamento,
-            // não precisamos fazer mais verificações de dispositivo
-            setHasSubscription(true);
-            setSubscriptionData({ 
-              type: 'master',
-              plan_type: 'lifetime',
-              created_at: new Date().toISOString()
-            });
-            setLoading(false);
-            return;
-          }
-          
-          // Para usuários master, verificar se o dispositivo já está associado a este usuário
-          let deviceId;
-          try {
-            deviceId = await getDeviceFingerprint();
-          } catch (e) {
-            console.error('[SUBSCRIPTION] Erro ao obter fingerprint do dispositivo:', e);
-            deviceId = 'fallback_device_' + Math.random().toString(36).substring(2);
-          }
-          
-          // Encontrar o usuário master na lista
-          const masterUserIndex = masterUsers.findIndex(user => 
-            user.email.toLowerCase() === userEmail?.toLowerCase()
-          );
-          
-          if (masterUserIndex !== -1) {
-            // Verifica se algum outro usuário já está usando este dispositivo
-            const deviceInUseByOther = masterUsers.some((user, index) => 
-              index !== masterUserIndex && 
-              user.deviceId === deviceId && 
-              user.deviceId !== ''
-            );
-            
-            if (deviceInUseByOther) {
-              console.log('[SUBSCRIPTION] Dispositivo já associado a outro usuário master.');
-              setHasSubscription(false);
-            } else {
-              // Atribuir este dispositivo ao usuário master se ainda não estiver atribuído
-              if (masterUsers[masterUserIndex].deviceId === '' || 
-                  masterUsers[masterUserIndex].deviceId === deviceId) {
-                masterUsers[masterUserIndex].deviceId = deviceId;
-                console.log('[SUBSCRIPTION] Dispositivo associado ao usuário master:', deviceId);
-                
-                // Armazenar informações nos cookies e localStorage para persistência
-                try {
-                  localStorage.setItem('fisioneo_master_user', masterUserEntry.email);
-                  localStorage.setItem('fisioneo_master_login_time', new Date().toString());
-                  
-                  // Criar cookies também para maior compatibilidade
-                  const expirationDate = new Date();
-                  expirationDate.setHours(expirationDate.getHours() + 24);
-                  document.cookie = `fisioneo_master_user=${masterUserEntry.email}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
-                  document.cookie = `fisioneo_master_login_time=${new Date().toString()}; path=/; expires=${expirationDate.toUTCString()}; secure; samesite=lax`;
-                } catch (e) {
-                  console.error('[SUBSCRIPTION] Erro ao armazenar dados do usuário master:', e);
-                }
-                
-                setHasSubscription(true);
-                setSubscriptionData({ 
-                  type: 'master',
-                  plan_type: 'lifetime',
-                  created_at: new Date().toISOString()
-                });
-                setLoading(false);
-                return;
-              }
-              
-              // Se o usuário já tem um dispositivo diferente associado
-              console.log('[SUBSCRIPTION] Usuário master tentando acessar de outro dispositivo.');
-              setHasSubscription(false);
-            }
-          }
-        }
-        
-        // Verificar se o usuário possui assinatura ativa no Supabase
+        // 3. Verificar se o usuário possui assinatura ativa no Supabase
         const { data, error } = await supabase
           .from('subscriptions')
           .select('*')
