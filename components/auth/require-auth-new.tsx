@@ -21,7 +21,32 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
         return
       }
 
-      // Se não estiver autenticado com Google, verificar Supabase
+      // Verificar se é um usuário master através do localStorage
+      const masterUser = localStorage.getItem('fisioneo_master_user')
+      const masterLoginTime = localStorage.getItem('fisioneo_master_login_time')
+      
+      if (masterUser && masterLoginTime) {
+        const loginTime = new Date(masterLoginTime)
+        const now = new Date()
+        
+        // Verificar se a sessão master não expirou (24 horas)
+        const timeDiff = now.getTime() - loginTime.getTime()
+        const hoursDiff = timeDiff / (1000 * 60 * 60)
+        
+        if (hoursDiff < 24) {
+          console.log('Usuário master autenticado:', masterUser)
+          setIsAuthenticated(true)
+          setLoading(false)
+          return
+        } else {
+          // Sessão expirada, limpar dados
+          console.log('Sessão master expirada')
+          localStorage.removeItem('fisioneo_master_user')
+          localStorage.removeItem('fisioneo_master_login_time')
+        }
+      }
+
+      // Se não estiver autenticado com Google ou master, verificar Supabase
       const { data } = await supabase.auth.getSession()
       
       if (!data.session) {

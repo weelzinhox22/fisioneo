@@ -11,6 +11,26 @@ import { useRouter } from "next/navigation"
 import { AlertDialog } from "@/components/ui/alert-dialog"
 import { CookieConsent } from "@/components/ui/cookie-consent"
 
+// Lista de usuários master com acesso ilimitado
+const masterUsers = [
+  {
+    email: 'admin@fisioneo.com',
+    password: 'Fisioneo@2023',
+  },
+  {
+    email: 'professor@fisioneo.com',
+    password: 'Professor@2024',
+  },
+  {
+    email: 'diretor@fisioneo.com',
+    password: 'Diretor@2024',
+  },
+  {
+    email: 'convidado@fisioneo.com',
+    password: 'Convidado@2024',
+  }
+];
+
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -144,6 +164,55 @@ export default function LoginPage() {
         })
         setShowAlert(true)
       } else {
+        // Verificar se o usuário é um usuário master
+        const masterUser = masterUsers.find(user => 
+          user.email.toLowerCase() === email.toLowerCase() && 
+          user.password === password
+        );
+        
+        if (masterUser) {
+          console.log('[LOGIN] Usuário master detectado:', email);
+          
+          // Criar uma sessão especial para o usuário master
+          // Para isso, vamos fazer login com o Supabase e configurar cookies especiais
+          try {
+            // Tentar autenticar o usuário no Supabase (mesmo que não exista - vai falhar)
+            const { error } = await supabase.auth.signInWithPassword({
+              email: masterUser.email,
+              password: masterUser.password
+            });
+            
+            // Se o login falhou (como esperado para usuários que não existem no Supabase)
+            // vamos criar uma sessão "virtual" usando localStorage
+            if (error) {
+              console.log('[LOGIN] Criando sessão manual para usuário master');
+              localStorage.setItem('fisioneo_master_user', masterUser.email);
+              localStorage.setItem('fisioneo_master_login_time', new Date().toString());
+              
+              router.push("/")
+              router.refresh()
+              return;
+            } else {
+              // Se por acaso o login deu certo (usuário existe), seguir o fluxo normal
+              console.log('[LOGIN] Usuário master existe no Supabase, usando fluxo normal');
+              router.push("/")
+              router.refresh()
+              return;
+            }
+          } catch (masterAuthError) {
+            console.error('[LOGIN] Erro ao autenticar usuário master:', masterAuthError);
+            // Continuar tentando o fluxo normal, mas como sabemos que é um usuário master,
+            // podemos criar a sessão virtual
+            localStorage.setItem('fisioneo_master_user', masterUser.email);
+            localStorage.setItem('fisioneo_master_login_time', new Date().toString());
+            
+            router.push("/")
+            router.refresh()
+            return;
+          }
+        }
+        
+        // Fluxo normal de login para usuários regulares
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
