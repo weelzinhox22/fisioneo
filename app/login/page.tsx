@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { motion } from "framer-motion"
-import { LogIn, Mail, UserPlus } from "lucide-react"
+import { LogIn, Mail, UserPlus, AlertTriangle, X } from "lucide-react"
 import Link from "next/link"
 import { MagneticButton } from "@/components/ui/magnetic-button"
 import { supabase } from "@/lib/supabase"
@@ -22,21 +22,12 @@ export default function LoginPage() {
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const router = useRouter()
   const [showAlert, setShowAlert] = useState(false)
+  const [showGoogleWarning, setShowGoogleWarning] = useState(true)
   const [alertConfig, setAlertConfig] = useState({
     title: "",
     message: "",
     type: "success" as "success" | "error" | "info"
   })
-
-  // Mostrar alerta sobre login do Google suspenso
-  useEffect(() => {
-    setAlertConfig({
-      title: "Aviso Importante",
-      message: "O login com Google está temporariamente suspenso. Por favor, utilize seu email e senha para acessar a plataforma.",
-      type: "info"
-    })
-    setShowAlert(true)
-  }, [])
 
   const createUserProfile = async (userId: string) => {
     try {
@@ -196,7 +187,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40" />
       </div>
 
-      {/* Alert Dialog */}
+      {/* Alert Dialog para erros e notificações */}
       <AlertDialog
         isOpen={showAlert}
         onClose={() => setShowAlert(false)}
@@ -206,32 +197,52 @@ export default function LoginPage() {
       />
 
       {/* Conteúdo */}
-      <div className="relative z-10 min-h-screen flex items-center justify-start p-8">
-        <div className="max-w-md w-full ml-8">
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 md:p-8">
+        <div className="max-w-md w-full mx-auto md:ml-8">
+          {/* Banner de aviso do Google fixo e otimizado para mobile */}
+          {showGoogleWarning && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-5 relative bg-gradient-to-r from-[#6EC1E4]/90 to-[#B9A9FF]/90 backdrop-blur-md rounded-xl p-3 md:p-4 shadow-2xl border border-white/20"
+            >
+              <button 
+                onClick={() => setShowGoogleWarning(false)}
+                className="absolute top-2 right-2 text-white/70 hover:text-white transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+              
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-full bg-blue-400/30 flex-shrink-0">
+                  <AlertTriangle className="h-4 w-4 md:h-5 md:w-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-sm md:text-base font-semibold text-white mb-0.5">Aviso Importante</h3>
+                  <p className="text-xs md:text-sm text-white/90">
+                    O login com Google está temporariamente suspenso. Por favor, utilize seu email e senha.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           <motion.div
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="backdrop-blur-md bg-white/10 rounded-3xl p-8 shadow-2xl border border-white/10"
+            className="backdrop-blur-md bg-white/10 rounded-3xl p-6 md:p-8 shadow-2xl border border-white/10"
           >
             {/* Logo ou Título */}
-            <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-white mb-4">
+            <div className="text-center mb-6">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
                 {mode === "login" ? "Bem-vindo de volta!" : "Criar nova conta"}
               </h1>
-              <p className="text-gray-300 text-lg mb-2">
+              <p className="text-gray-300 text-base md:text-lg mb-2">
                 Conteúdo exclusivo para membros da plataforma
               </p>
-              <p className="text-gray-400 text-sm italic">
+              <p className="text-gray-400 text-xs md:text-sm italic">
                 "Porque até os bebês sabem que conhecimento é poder! 👶✨"
-              </p>
-            </div>
-
-            {/* Aviso sobre login do Google */}
-            <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-              <p className="text-blue-400 text-sm text-center">
-                ⚠️ O login com Google está temporariamente suspenso. 
-                Por favor, utilize seu email e senha.
               </p>
             </div>
 
@@ -291,24 +302,30 @@ export default function LoginPage() {
                     />
                   </div>
 
-                  <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      id="terms"
-                      checked={acceptedTerms}
-                      onChange={(e) => setAcceptedTerms(e.target.checked)}
-                      className="mt-1"
-                    />
-                    <label htmlFor="terms" className="text-sm text-gray-300">
+                  {/* Termos de uso - MELHORADO PARA MOBILE */}
+                  <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                    <div className="flex items-center gap-3 mb-2">
+                      <input
+                        type="checkbox"
+                        id="terms"
+                        checked={acceptedTerms}
+                        onChange={(e) => setAcceptedTerms(e.target.checked)}
+                        className="w-5 h-5 accent-blue-500 rounded"
+                      />
+                      <label htmlFor="terms" className="text-sm text-gray-300 font-medium">
+                        Aceito os termos e condições
+                      </label>
+                    </div>
+                    <div className="pl-8 text-xs text-gray-400">
                       Li e aceito os{" "}
-                      <Link href="/termos" className="text-blue-400 hover:text-blue-300">
+                      <Link href="/termos" className="text-blue-400 hover:text-blue-300 font-medium underline">
                         termos de uso
                       </Link>{" "}
                       e a{" "}
-                      <Link href="/privacidade" className="text-blue-400 hover:text-blue-300">
+                      <Link href="/privacidade" className="text-blue-400 hover:text-blue-300 font-medium underline">
                         política de privacidade
                       </Link>
-                    </label>
+                    </div>
                   </div>
 
                   <div className="bg-blue-500/10 p-4 rounded-xl border border-blue-500/20">
@@ -483,7 +500,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Cookie Consent */}
+      {/* Cookie Consent - vamos melhorar este componente */}
       <CookieConsent />
     </div>
   )
