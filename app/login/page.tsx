@@ -11,26 +11,6 @@ import { useRouter } from "next/navigation"
 import { AlertDialog } from "@/components/ui/alert-dialog"
 import { CookieConsent } from "@/components/ui/cookie-consent"
 
-// Lista de usuários master com acesso ilimitado
-const masterUsers = [
-  {
-    email: 'admin@fisioneo.com',
-    password: 'Fisioneo@2023',
-  },
-  {
-    email: 'professor@fisioneo.com',
-    password: 'Professor@2024',
-  },
-  {
-    email: 'diretor@fisioneo.com',
-    password: 'Diretor@2024',
-  },
-  {
-    email: 'convidado@fisioneo.com',
-    password: 'Convidado@2024',
-  }
-];
-
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -107,32 +87,6 @@ export default function LoginPage() {
     return errors
   }
 
-  // Função para definir cookies com autenticação master
-  const setMasterAuthCookies = (masterEmail: string) => {
-    try {
-      console.log('[LOGIN] Definindo cookies de autenticação para usuário master:', masterEmail);
-      
-      // Definir localStorage
-      localStorage.setItem('fisioneo_master_user', masterEmail);
-      localStorage.setItem('fisioneo_master_login_time', new Date().toString());
-      
-      // Definir cookies com expiração de 7 dias (mais tempo para mais confiabilidade)
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 7); 
-      
-      document.cookie = `fisioneo_master_user=${masterEmail}; path=/; expires=${expirationDate.toUTCString()}; SameSite=Strict`;
-      document.cookie = `fisioneo_master_login_time=${new Date().toString()}; path=/; expires=${expirationDate.toUTCString()}; SameSite=Strict`;
-      
-      // Adicionar um cookie de sessão (sem expiração) para maior compatibilidade
-      document.cookie = `fisioneo_master_session=true; path=/; SameSite=Strict`;
-      
-      return true;
-    } catch (error) {
-      console.error('[LOGIN] Erro ao definir cookies de autenticação:', error);
-      return false;
-    }
-  }
-
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -190,53 +144,6 @@ export default function LoginPage() {
         })
         setShowAlert(true)
       } else {
-        // Verificar se o usuário é um usuário master
-        const masterUser = masterUsers.find(user => 
-          user.email.toLowerCase() === email.toLowerCase() && 
-          user.password === password
-        );
-        
-        if (masterUser) {
-          console.log('[LOGIN] Usuário master detectado:', email);
-          
-          // Definir cookies e localStorage para autenticação
-          const authSuccess = setMasterAuthCookies(masterUser.email);
-          
-          if (!authSuccess) {
-            throw new Error("Erro ao criar sessão. Tente novamente.");
-          }
-          
-          // Confirmar que os cookies foram definidos
-          const masterUserCookie = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('fisioneo_master_user='));
-            
-          if (!masterUserCookie) {
-            console.warn('[LOGIN] Cookie de autenticação não detectado após definição');
-            
-            // Tentar definir novamente usando uma abordagem alternativa
-            document.cookie = `fisioneo_master_user=${masterUser.email}; path=/`;
-            document.cookie = `fisioneo_master_session=true; path=/`;
-          }
-          
-          // Mostrar alerta de sucesso
-          setAlertConfig({
-            title: "Login bem-sucedido!",
-            message: `Bem-vindo(a), ${masterUser.email.split('@')[0]}! Você agora tem acesso completo à plataforma.`,
-            type: "success"
-          });
-          setShowAlert(true);
-          
-          // Adicionar um atraso antes do redirecionamento para garantir que os cookies sejam definidos
-          setTimeout(() => {
-            // Usar redirecionamento direto para forçar recarga completa da página
-            window.location.href = "/";
-          }, 1500);
-          
-          return;
-        }
-        
-        // Fluxo normal de login para usuários regulares
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
