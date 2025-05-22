@@ -377,9 +377,9 @@ export default function ProvaGeralPage() {
         "34-36 semanas",
         "36-38 semanas"
       ],
-      correctAnswer: 2,
+      correctAnswer: 3,
       category: "Desenvolvimento Motor",
-      explanation: "O reflexo de sucção-deglutição está completamente desenvolvido entre 34-36 semanas de idade gestacional."
+      explanation: "O reflexo de sucção-deglutição está completamente desenvolvido entre 36-38 semanas de idade gestacional."
     },
     {
       question: "Qual é a frequência recomendada de mudança de decúbito em prematuros estáveis na UTI Neonatal?",
@@ -406,18 +406,6 @@ export default function ProvaGeralPage() {
       explanation: "O principal benefício neuromotor é a promoção da autorregulação e organização comportamental."
     },
     {
-      question: "Qual é a idade corrigida esperada para o surgimento do rolar ativo em bebês nascidos a termo?",
-      options: [
-        "2-3 meses",
-        "4-5 meses",
-        "6-7 meses",
-        "8-9 meses"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "O rolar ativo tipicamente surge entre 4-5 meses de idade corrigida em bebês nascidos a termo."
-    },
-    {
       question: "Qual é o principal objetivo da contenção facilitada durante procedimentos dolorosos?",
       options: [
         "Reduzir o estresse e promover autorregulação",
@@ -440,18 +428,6 @@ export default function ProvaGeralPage() {
       correctAnswer: 3,
       category: "Hidroterapia em Neonatos",
       explanation: "A hidroterapia é recomendada a partir de 36 semanas de idade gestacional em prematuros estáveis."
-    },
-    {
-      question: "Qual é o principal sinal de alerta no desenvolvimento motor de um bebê de 6 meses que indica necessidade de avaliação especializada?",
-      options: [
-        "Ausência de controle cervical",
-        "Não rolar",
-        "Não sentar sem apoio",
-        "Não pegar objetos"
-      ],
-      correctAnswer: 0,
-      category: "Desenvolvimento Motor",
-      explanation: "A ausência de controle cervical aos 6 meses é um importante sinal de alerta que requer avaliação especializada."
     },
     {
       question: "Qual é a duração recomendada para uma sessão de fisioterapia respiratória em um recém-nascido prematuro estável?",
@@ -500,42 +476,6 @@ export default function ProvaGeralPage() {
       correctAnswer: 0,
       category: "Fisioterapia Respiratória",
       explanation: "O padrão respiratório típico do recém-nascido é predominantemente abdominal."
-    },
-    {
-      question: "Em que momento é recomendado iniciar o posicionamento em prono durante a vigília em bebês nascidos a termo?",
-      options: [
-        "Apenas após 6 meses",
-        "Desde o nascimento, com supervisão",
-        "Após o controle cervical completo",
-        "Somente após sentar sem apoio"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "O posicionamento em prono durante a vigília deve ser iniciado desde o nascimento, sempre com supervisão."
-    },
-    {
-      question: "Qual é a principal função do 'ninho' no posicionamento do prematuro?",
-      options: [
-        "Apenas conforto",
-        "Decoração do leito",
-        "Contenção e organização postural",
-        "Aquecimento"
-      ],
-      correctAnswer: 2,
-      category: "Intervenção em UTI Neonatal",
-      explanation: "O ninho tem como principal função promover contenção e organização postural do prematuro."
-    },
-    {
-      question: "Qual é o critério mais importante para iniciar o treino de controle cervical em prematuros?",
-      options: [
-        "Idade cronológica de 2 meses",
-        "Peso mínimo de 2kg",
-        "Estabilidade respiratória",
-        "Idade corrigida de 1 mês"
-      ],
-      correctAnswer: 3,
-      category: "Desenvolvimento Motor",
-      explanation: "O critério mais importante é a estabilidade clínica e idade corrigida adequada."
     },
     {
       question: "Um recém-nascido prematuro extremo (24 semanas) com 80 dias de vida apresenta piora da função respiratória após tentativa de extubação. O exame de imagem revela áreas de enfisema intersticial pulmonar difuso. Com base na fisiopatologia da displasia broncopulmonar e mecanotransdução celular em pulmões imaturos, qual a estratégia ventilatória que minimizaria o dano induzido pela ventilação mecânica neste caso específico?",
@@ -622,40 +562,124 @@ export default function ProvaGeralPage() {
       explanation: "A implementação de volume garantido com volume corrente baixo (4-5ml/kg) é a estratégia mais adequada para proteção pulmonar em um prematuro com displasia broncopulmonar grave. O volume garantido proporciona ventilação mais homogênea e reduz o risco de volutrauma e barotrauma por ajustar automaticamente a pressão inspiratória à complacência pulmonar variável. A redução do tempo inspiratório para 0,30s é benéfica pois diminui o risco de air trapping em pulmões com constante de tempo aumentada devido à obstrução de vias aéreas característica da DBP. O aumento da PEEP para 7-8 cmH2O otimiza o recrutamento alveolar nas áreas colapsadas, melhorando a relação ventilação-perfusão e reduzindo o shunt intrapulmonar. Esta abordagem equilibra a necessidade de adequada troca gasosa com a proteção contra lesão pulmonar adicional, aceitando uma hipercapnia leve a moderada (hipercapnia permissiva) como trade-off para uma ventilação mais protetora."
     },
     {
-      question: "Em um recém-nascido com 38 semanas de idade gestacional diagnosticado com síndrome de aspiração meconial severa e hipertensão pulmonar persistente, observa-se significativa heterogeneidade de ventilação pulmonar com áreas de hiperdistensão e atelectasia concomitantes. Considerando os princípios de mecânica respiratória, recrutamento alveolar e interação cardiopulmonar, qual a estratégia ideal de posicionamento e manobras fisioterapêuticas para otimizar a ventilação sem comprometer a hemodinâmica?",
+      question: "Qual é o principal papel da fisioterapia em pacientes com Distrofia Muscular de Duchenne (DMD)?",
       options: [
-        "Posição prona com elevação de tórax à 15° e vibrocompressão intercostal nas regiões não-dependentes, para minimizar a ventilação/perfusão heterogênea e preservar o débito cardíaco",
-        "Posição supina com head-up à 30° e estimulação diafragmática, para facilitar o retorno venoso e aumentar a excursão diafragmática",
-        "Posição lateral alternada a cada 2 horas com manobras de compressão-descompressão torácica, para mobilizar secreções e maximizar a estabilidade hemodinâmica",
-        "Decúbito elevado com rotação axial seriada de 30° e técnica de expiração lenta prolongada modificada, para otimização do volume pulmonar final sem impacto na resistência vascular pulmonar"
+        "Reverter o processo de degeneração muscular",
+        "Realizar apenas alongamentos passivos para evitar atrofia",
+        "Retardar a progressão da doença e prevenir complicações secundárias",
+        "Iniciar precocemente o uso de cadeira de rodas para preservar energia"
       ],
-      correctAnswer: 0,
-      category: "Fisioterapia Respiratória Avançada",
-      explanation: "A posição prona com elevação do tórax à 15° é ideal para este paciente pois promove melhor distribuição da ventilação, favorecendo a aeração das regiões dorsais pulmonares que possuem maior perfusão, otimizando assim a relação ventilação-perfusão. A elevação torácica moderada (15°) previne o excesso de pressão abdominal sobre o diafragma sem comprometer o retorno venoso. A vibrocompressão intercostal nas regiões não-dependentes (neste caso, anteriores) ajuda a mobilizar secreções sem desestabilizar áreas atelectásicas recém-recrutadas. Esta abordagem integrada considera os aspectos fisiopatológicos da síndrome de aspiração meconial (heterogeneidade ventilatória e inflamação) e da hipertensão pulmonar persistente (resistência vascular pulmonar aumentada e instabilidade hemodinâmica), evitando manobras que poderiam aumentar a pressão intratorácica excessivamente e comprometer o retorno venoso e débito cardíaco, agravando a hipertensão pulmonar."
+      correctAnswer: 2,
+      category: "Distrofia Muscular de Duchenne",
+      explanation: "A fisioterapia desempenha um papel fundamental no retardo da progressão da doença e na prevenção de complicações secundárias. Embora não possa reverter o processo degenerativo, intervenções fisioterapêuticas adequadas podem melhorar significativamente a qualidade de vida dos pacientes com DMD."
     },
     {
-      question: "Durante a avaliação do desenvolvimento neuromotor de um bebê de 7 meses (idade corrigida de 5 meses) nascido com 32 semanas, você identifica alteração na modulação sensorial tátil profunda, assimetria na distribuição de peso quando em posição sentada e limitação na rotação axial durante o alcance. Com base nos princípios neurofisiológicos de controle postural, processamento sensorial e integração sensório-motora, qual seria o impacto funcional esperado nos próximos 3 meses e a abordagem terapêutica mais apropriada?",
+      question: "Na Distrofia Muscular de Duchenne, o que caracteriza a manobra de Gowers?",
       options: [
-        "Impacto limitado ao desenvolvimento da coordenação olho-mão, requerendo principalmente treino de alcance e pinça",
-        "Provável atraso na aquisição de transferências posturais independentes, requerendo abordagem com integração sensorial, facilitação de reações de equilíbrio e experiências de transição postural multiplanar",
-        "Atraso significativo na marcha independente, necessitando de treino precoce de ortostase com suporte",
-        "Dificuldades na comunicação não-verbal, requerendo principalmente terapia ocupacional focada em praxias"
+        "Capacidade de elevar os braços acima da cabeça",
+        "Uso sequencial dos membros e tronco para levantar-se do chão, indicando fraqueza dos músculos proximais dos membros inferiores",
+        "Padrão respiratório com predominância torácica",
+        "Contração involuntária dos músculos faciais durante o esforço"
       ],
       correctAnswer: 1,
-      category: "Desenvolvimento Neuromotor Avançado",
-      explanation: "A combinação de alterações na modulação sensorial tátil profunda (que afeta a percepção corporal e o esquema corporal), assimetria na distribuição de peso em posição sentada (indicando déficit nas reações posturais automáticas) e limitação na rotação axial (componente essencial para dissociação de cinturas e transferências posturais) prejudicará especificamente a aquisição de transferências posturais independentes nos próximos meses. O período entre 8-10 meses é crítico para o desenvolvimento das transições posturais (sentar-engatinhar, sentar-4 apoios, sentar-ajoelhado) que dependem diretamente da integração sensorial adequada para percepção corporal no espaço, reações de equilíbrio eficientes para manutenção da estabilidade durante o movimento e capacidade de rotação axial para deslocamento de peso e mudanças de direção. A abordagem terapêutica deve focar na integração sensorial (inputs proprioceptivos e táteis calibrados), facilitação gradual das reações de equilíbrio em diferentes posturas e planos, e experiências de transição postural multiplanar para desenvolver ajustes antecipatórios e feedback mais eficientes."
+      category: "Distrofia Muscular de Duchenne",
+      explanation: "A manobra de Gowers é um sinal clínico característico da DMD que indica fraqueza nos músculos proximais dos membros inferiores devido à atrofia muscular. O paciente utiliza as mãos para 'escalar' o próprio corpo ao se levantar do chão, apoiando-se sequencialmente nos joelhos e coxas."
     },
     {
-      question: "Um recém-nascido prematuro extremo (25 semanas) com 40 dias de vida apresenta episódios recorrentes de dessaturação e bradicardia durante procedimentos de aspiração endotraqueal, mesmo após pré-oxigenação adequada. Os sinais vitais basais incluem: FC=158bpm, FR=65irpm, SpO2=92% (FiO2=35%), PAM=36mmHg. A ecocardiografia funcional revela canal arterial moderadamente restritivo com shunt esquerda-direita e sobrecarga atrial. Considerando a integração cardiopulmonar neonatal, mecanismos vagais e pressões intrapulmonares dinâmicas, qual seria a modificação técnica mais apropriada para o procedimento de aspiração?",
+      question: "Qual das seguintes estratégias fisioterapêuticas é mais recomendada para o tratamento da Distrofia Muscular de Duchenne?",
       options: [
-        "Reduzir o tempo de aspiração para máximo de 3 segundos e aumentar o vácuo para -100 cmH2O para maior eficiência",
-        "Implementar sistema de aspiração fechado com controle preciso de pressão negativa (-60 a -80 cmH2O) e tempo (<5 segundos), combinado com manobras de recrutamento alveolar pós-aspiração",
-        "Manter aspiração convencional aumentando a pré-oxigenação para FiO2=100% por 2 minutos",
-        "Substituir aspiração por instilação de solução salina hipertônica para mobilizar secreções"
+        "Exercícios resistidos intensos para fortalecer a musculatura",
+        "Imobilização prolongada para preservar a energia muscular",
+        "Exercícios submáximos regulares combinados com alongamentos",
+        "Terapia por restrição de movimento para focar na funcionalidade"
+      ],
+      correctAnswer: 2,
+      category: "Distrofia Muscular de Duchenne",
+      explanation: "O exercício submáximo regular combinado com alongamentos é recomendado para evitar a atrofia muscular por desuso e prevenir contraturas. Exercícios resistidos intensos podem acelerar a degeneração muscular, enquanto a imobilização prolongada promove a atrofia e as contraturas."
+    },
+    {
+      question: "Quais são os principais benefícios da hidroterapia no tratamento da Distrofia Muscular de Duchenne?",
+      options: [
+        "Apenas recreação e socialização",
+        "Fortalecimento muscular através de alta resistência",
+        "Flutuabilidade que facilita movimentos, fortalecimento muscular gradual e relaxamento muscular",
+        "Aumento da rigidez muscular e melhora do equilíbrio"
+      ],
+      correctAnswer: 2,
+      category: "Distrofia Muscular de Duchenne",
+      explanation: "A hidroterapia oferece múltiplos benefícios para pacientes com DMD: as propriedades físicas da água facilitam a movimentação através da flutuabilidade, proporcionam resistência gradual para fortalecimento dos músculos atrofiados, e as propriedades térmicas auxiliam no relaxamento muscular. Além disso, permite exercícios respiratórios, treino de marcha e atividades lúdicas em ambiente de baixo impacto."
+    },
+    {
+      question: "Por que a adequação postural em cadeiras de rodas é fundamental para pacientes com Distrofia Muscular de Duchenne?",
+      options: [
+        "Apenas para proporcionar conforto",
+        "Para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral",
+        "Somente para facilitar o transporte do paciente",
+        "Para fortalecer a musculatura paravertebral"
       ],
       correctAnswer: 1,
-      category: "Fisioterapia em UTI Neonatal Avançada",
-      explanation: "Os episódios de dessaturação e bradicardia durante aspiração são multifatoriais, envolvendo reflexo vagal, desinsuflação pulmonar e alterações hemodinâmicas. No contexto de um DAP com sobrecarga atrial, as quedas súbitas de pressão intratorácica durante aspiração convencional podem aumentar transitoriamente o shunt E-D, comprometendo ainda mais o débito sistêmico e a oxigenação tecidual. O sistema de aspiração fechado mantém o PEEP durante o procedimento, evitando colapso alveolar e minimizando as alterações de pressão intratorácica que afetam o retorno venoso e o fluxo através do canal arterial. O controle preciso da pressão negativa (-60 a -80 cmH2O) é suficiente para remover secreções sem causar trauma ou pressão negativa excessiva que poderia induzir atelectasia. As manobras de recrutamento alveolar pós-aspiração (breves incrementos controlados de pressão inspiratória) restabelecem o volume pulmonar perdido mesmo com o sistema fechado, otimizando a ventilação e a oxigenação sem impacto hemodinâmico significativo. Esta abordagem integrada considera a fisiopatologia cardiopulmonar específica deste prematuro, minimizando o estímulo vagal e as alterações hemodinâmicas relacionadas ao DAP."
+      category: "Distrofia Muscular de Duchenne",
+      explanation: "A adequação postural em cadeiras de rodas é fundamental para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral. A postura inadequada pode levar à escoliose e comprometer a eficácia da respiração. O alinhamento postural adequado evita compensações na coluna vertebral, beneficiando a função respiratória, que é frequentemente afetada pela doença."
+    },
+    {
+      question: "Qual é a definição de cuidados paliativos segundo a Organização Mundial da Saúde (OMS)?",
+      options: [
+        "Cuidados exclusivos para pacientes nos últimos dias de vida",
+        "Medidas para acelerar a morte sem sofrimento do paciente",
+        "Cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo",
+        "Apenas controle da dor em pacientes terminais"
+      ],
+      correctAnswer: 2,
+      category: "Cuidados Paliativos Pediátricos",
+      explanation: "A OMS define cuidados paliativos como o cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo. O foco principal é o controle da dor e dos sintomas físicos, psicológicos, sociais e espirituais, visando melhorar a qualidade de vida dos pacientes terminais e de seus familiares."
+    },
+    {
+      question: "No contexto dos cuidados paliativos, o que significa ortotanásia?",
+      options: [
+        "Prática pela qual se abrevia a vida de um enfermo incurável de maneira deliberada",
+        "Prolongamento artificial do processo de morte, sem perspectiva de cura ou melhora",
+        "Morte natural, permitindo que ela ocorra no tempo certo, sem abreviação ou prolongamento artificial",
+        "Suspensão de todos os tratamentos médicos em pacientes terminais"
+      ],
+      correctAnswer: 2,
+      category: "Cuidados Paliativos Pediátricos",
+      explanation: "A ortotanásia refere-se à morte natural, permitindo que ela ocorra no tempo certo, sem abreviação (como na eutanásia) ou prolongamento artificial (como na distanásia). Busca proporcionar ao paciente as condições necessárias para compreender sua mortalidade e prepará-lo para uma morte digna, sem intervenção no processo natural."
+    },
+    {
+      question: "Quais são os tipos mais comuns de câncer em crianças?",
+      options: [
+        "Câncer de pulmão, mama, próstata e colorretal",
+        "Leucemias, tumores do SNC, linfomas, neuroblastomas e tumor de Wilms",
+        "Melanoma, carcinoma basocelular e carcinoma espinocelular",
+        "Carcinoma hepatocelular, câncer gástrico e câncer de pâncreas"
+      ],
+      correctAnswer: 1,
+      category: "Cuidados Paliativos Pediátricos",
+      explanation: "Os tipos mais comuns de câncer em crianças incluem leucemias (cânceres do sangue), tumores do Sistema Nervoso Central (SNC), linfomas (cânceres do sistema linfático), neuroblastomas (tumor de células nervosas), tumor de Wilms (tumor renal), tumores ósseos, rabdomiossarcoma e retinoblastoma."
+    },
+    {
+      question: "Qual é o principal objetivo da fisioterapia nos cuidados paliativos de crianças com câncer?",
+      options: [
+        "Curar a doença de base através de exercícios específicos",
+        "Aumentar ou manter o conforto e a independência, reduzindo o tempo de hospitalização",
+        "Apenas prevenir úlceras de decúbito",
+        "Substituir o tratamento medicamentoso para controle da dor"
+      ],
+      correctAnswer: 1,
+      category: "Cuidados Paliativos Pediátricos",
+      explanation: "O objetivo da fisioterapia nos cuidados paliativos é aumentar ou manter o conforto e a independência funcional, reduzindo o tempo de hospitalização e aumentando o tempo com familiares e amigos. A fisioterapia também desempenha um papel preventivo, antecipando possíveis complicações e implementando medidas preventivas."
+    },
+    {
+      question: "Um prematuro de 26 semanas com 45 dias de vida desenvolveu displasia broncopulmonar grave e permanece em ventilação mecânica. Os parâmetros ventilatórios atuais incluem: PIP 24 cmH2O, PEEP 6 cmH2O, FR 45 ipm, Tempo inspiratório 0,35s e FiO2 45%. Gasometria arterial: pH 7,29, PaCO2 58 mmHg, PaO2 62 mmHg, HCO3 26 mEq/L, BE -2. Considerando os princípios de proteção pulmonar, mecânica respiratória neonatal e prevenção de lesão induzida pela ventilação, qual seria a melhor estratégia de ajuste ventilatório?",
+      options: [
+        "Aumentar PIP para 26 cmH2O e reduzir FR para 40 ipm, visando melhorar a ventilação alveolar",
+        "Manter parâmetros atuais, pois a hipercapnia permissiva é aceitável na displasia broncopulmonar",
+        "Implementar volume garantido com volume corrente de 4-5ml/kg, reduzir o tempo inspiratório para 0,30s e aumentar PEEP para 7-8 cmH2O, objetivando homogeneização da distribuição ventilatória e redução do espaço morto",
+        "Aumentar FiO2 para 60% e FR para 60 ipm para normalizar os valores gasométricos"
+      ],
+      correctAnswer: 2,
+      category: "Ventilação Mecânica Avançada",
+      explanation: "A implementação de volume garantido com volume corrente baixo (4-5ml/kg) é a estratégia mais adequada para proteção pulmonar em um prematuro com displasia broncopulmonar grave. O volume garantido proporciona ventilação mais homogênea e reduz o risco de volutrauma e barotrauma por ajustar automaticamente a pressão inspiratória à complacência pulmonar variável. A redução do tempo inspiratório para 0,30s é benéfica pois diminui o risco de air trapping em pulmões com constante de tempo aumentada devido à obstrução de vias aéreas característica da DBP. O aumento da PEEP para 7-8 cmH2O otimiza o recrutamento alveolar nas áreas colapsadas, melhorando a relação ventilação-perfusão e reduzindo o shunt intrapulmonar. Esta abordagem equilibra a necessidade de adequada troca gasosa com a proteção contra lesão pulmonar adicional, aceitando uma hipercapnia leve a moderada (hipercapnia permissiva) como trade-off para uma ventilação mais protetora."
     },
     {
       question: "Qual é o principal papel da fisioterapia em pacientes com Distrofia Muscular de Duchenne (DMD)?",
@@ -718,54 +742,6 @@ export default function ProvaGeralPage() {
       explanation: "A adequação postural em cadeiras de rodas é fundamental para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral. A postura inadequada pode levar à escoliose e comprometer a eficácia da respiração. O alinhamento postural adequado evita compensações na coluna vertebral, beneficiando a função respiratória, que é frequentemente afetada pela doença."
     },
     {
-      question: "Qual tecnologia assistiva tem mostrado resultados promissores na melhoria da condição física e funcional de pacientes com Distrofia Muscular de Duchenne?",
-      options: [
-        "Exclusivamente órteses rígidas",
-        "Apenas estimulação elétrica neuromuscular",
-        "Realidade virtual com interfaces específicas",
-        "Somente ventilação não-invasiva"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A realidade virtual tem mostrado resultados promissores no tratamento da DMD. Estudos demonstram que o uso de jogos de computador com interfaces específicas pode proporcionar um melhor desempenho motor, ativando a função muscular distal e facilitando os ajustes posturais por meio de interfaces virtuais, além de proporcionar uma abordagem lúdica que aumenta a adesão ao tratamento."
-    },
-    {
-      question: "Qual é a recomendação atual sobre o uso de órteses em pacientes com Distrofia Muscular de Duchenne?",
-      options: [
-        "Evitar completamente para não causar dependência",
-        "Usar apenas em fases avançadas da doença",
-        "Uso precoce, especialmente AFOs articuladas, antes que o déficit funcional esteja avançado",
-        "Utilizar apenas durante a noite para não interferir nas atividades diárias"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "O uso precoce de órteses, especialmente as AFOs (Ankle-Foot Orthosis) articuladas, pode promover mudanças positivas nos parâmetros da marcha em pacientes com DMD, desde que utilizadas antes que o déficit funcional esteja avançado. As órteses ajudam a prevenir deformidades, prolongam a fase ambulatória e melhoram a funcionalidade."
-    },
-    {
-      question: "Qual é o mecanismo que causa a Distrofia Muscular de Duchenne em nível celular?",
-      options: [
-        "Excesso de produção de miosina",
-        "Inflamação crônica do tecido muscular",
-        "Ausência ou deficiência da proteína distrofina",
-        "Hipertrofia das fibras musculares tipo II"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A DMD é causada por um defeito bioquímico intrínseco da célula muscular, relacionado à ausência ou deficiência da proteína distrofina. Esta proteína é essencial para manter a integridade da membrana celular durante a contração muscular. Sua ausência leva à ruptura da membrana e à morte celular, resultando em degeneração muscular progressiva."
-    },
-    {
-      question: "Quais técnicas respiratórias são mais indicadas para pacientes com Distrofia Muscular de Duchenne em fase avançada?",
-      options: [
-        "Exclusivamente manobras de percussão torácica",
-        "Técnicas de expansão pulmonar, treino dos músculos respiratórios e tosse assistida",
-        "Apenas exercícios de respiração abdominal",
-        "Somente técnicas de expiração forçada"
-      ],
-      correctAnswer: 1,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "Na fase avançada da DMD, as técnicas respiratórias mais indicadas incluem uma combinação de técnicas de expansão pulmonar (incentivadores respiratórios, respiração glossofaríngea), treino dos músculos respiratórios (dentro dos limites da fadiga) e técnicas de tosse assistida (manual ou mecânica). Estas abordagens visam manter a complacência pulmonar, a capacidade vital e a eficácia da tosse, prevenindo complicações respiratórias que são causa frequente de morbimortalidade."
-    },
-    {
       question: "Qual é a definição de cuidados paliativos segundo a Organização Mundial da Saúde (OMS)?",
       options: [
         "Cuidados exclusivos para pacientes nos últimos dias de vida",
@@ -814,76 +790,16 @@ export default function ProvaGeralPage() {
       explanation: "O objetivo da fisioterapia nos cuidados paliativos é aumentar ou manter o conforto e a independência funcional, reduzindo o tempo de hospitalização e aumentando o tempo com familiares e amigos. A fisioterapia também desempenha um papel preventivo, antecipando possíveis complicações e implementando medidas preventivas."
     },
     {
-      question: "Quais componentes devem ser incluídos na avaliação fisioterapêutica de uma criança em cuidados paliativos?",
+      question: "Um prematuro de 26 semanas com 45 dias de vida desenvolveu displasia broncopulmonar grave e permanece em ventilação mecânica. Os parâmetros ventilatórios atuais incluem: PIP 24 cmH2O, PEEP 6 cmH2O, FR 45 ipm, Tempo inspiratório 0,35s e FiO2 45%. Gasometria arterial: pH 7,29, PaCO2 58 mmHg, PaO2 62 mmHg, HCO3 26 mEq/L, BE -2. Considerando os princípios de proteção pulmonar, mecânica respiratória neonatal e prevenção de lesão induzida pela ventilação, qual seria a melhor estratégia de ajuste ventilatório?",
       options: [
-        "Apenas avaliação da amplitude de movimento e força muscular",
-        "Somente avaliação da dor e do sistema respiratório",
-        "História do paciente/pais, observação clínica, avaliação da amplitude de movimento, força, postura, dor, tônus, estado respiratório e avaliação funcional",
-        "Exclusivamente avaliação psicológica e nutricional"
+        "Aumentar PIP para 26 cmH2O e reduzir FR para 40 ipm, visando melhorar a ventilação alveolar",
+        "Manter parâmetros atuais, pois a hipercapnia permissiva é aceitável na displasia broncopulmonar",
+        "Implementar volume garantido com volume corrente de 4-5ml/kg, reduzir o tempo inspiratório para 0,30s e aumentar PEEP para 7-8 cmH2O, objetivando homogeneização da distribuição ventilatória e redução do espaço morto",
+        "Aumentar FiO2 para 60% e FR para 60 ipm para normalizar os valores gasométricos"
       ],
       correctAnswer: 2,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Uma avaliação fisioterapêutica completa deve incluir: história do paciente/pais, observação clínica, avaliação da amplitude de movimento, força muscular (com cuidado em pacientes plaquetopênicos), avaliação postural, avaliação da dor, tônus muscular, sistemas sensoriais, estado respiratório, resistência cardiovascular e avaliação funcional (transferência, marcha, mobilidade)."
-    },
-    {
-      question: "Quais são as principais condutas fisioterapêuticas para manejo da dor em crianças com câncer em cuidados paliativos?",
-      options: [
-        "Apenas medicação analgésica",
-        "Contenção física e sedação",
-        "Eletroterapia, terapia manual, cinesioterapia, crioterapia e termoterapia",
-        "Exclusivamente técnicas de distração psicológica"
-      ],
-      correctAnswer: 2,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "O manejo da dor em cuidados paliativos pediátricos deve incluir diversas técnicas fisioterapêuticas como eletroterapia (TENS), terapia manual (massagens, mobilizações), cinesioterapia (exercícios terapêuticos adaptados), crioterapia (aplicação de frio) e termoterapia (aplicação de calor), sempre considerando a condição clínica e tolerância da criança."
-    },
-    {
-      question: "Por que as atividades lúdicas são importantes no tratamento fisioterapêutico de crianças com câncer em cuidados paliativos?",
-      options: [
-        "Apenas para distrair a criança durante procedimentos dolorosos",
-        "Para proporcionar um ambiente menos traumatizante, mais humanizado e aumentar a adesão ao tratamento",
-        "Somente para ocupar o tempo livre da criança no hospital",
-        "Exclusivamente para agradar aos pais e cuidadores"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "As atividades lúdicas são importantes no tratamento de crianças com câncer pois proporcionam um ambiente menos traumatizante e mais humanizado. Recursos lúdicos como brincadeiras, jogos, livros, brinquedos e música podem ser integrados aos exercícios terapêuticos, aumentando a adesão ao tratamento, promovendo conforto e melhorando a qualidade de vida."
-    },
-    {
-      question: "Quais das seguintes técnicas fisioterapêuticas são recomendadas para o alívio do estresse em crianças com câncer em cuidados paliativos?",
-      options: [
-        "Apenas técnicas respiratórias",
-        "Terapia manual, hidroterapia (Watsu), consciência corporal e técnicas de relaxamento",
-        "Somente alongamentos passivos",
-        "Exclusivamente estimulação elétrica de alta frequência"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Para o alívio do estresse em crianças com câncer em cuidados paliativos, recomenda-se uma combinação de técnicas que incluem terapia manual (massagem terapêutica), hidroterapia (especialmente a técnica Watsu), técnicas de consciência corporal e métodos de relaxamento, que podem ser adaptados à idade e condição da criança."
-    },
-    {
-      question: "Como a fisioterapia pode auxiliar no manejo da fadiga em pacientes oncológicos terminais?",
-      options: [
-        "Através de exercícios intensos para aumentar a resistência",
-        "Conservação de energia, atividades graduadas e adaptação do ambiente",
-        "Recomendando repouso absoluto",
-        "Apenas com uso de técnicas de respiração"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "A fisioterapia pode auxiliar no manejo da fadiga através de estratégias de conservação de energia, atividades físicas cuidadosamente graduadas conforme a tolerância do paciente, e adaptação do ambiente para minimizar o gasto energético. O objetivo é manter a capacidade funcional e minimizar as perdas, equilibrando atividade e repouso."
-    },
-    {
-      question: "No contexto dos cuidados paliativos pediátricos, quais são os cinco estágios do processo de morrer descritos na literatura?",
-      options: [
-        "Esperança, aceitação, barganha, depressão e raiva",
-        "Negação, raiva, barganha, depressão e aceitação",
-        "Choque, negação, raiva, tristeza e resignação",
-        "Medo, negação, isolamento, depressão e paz"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Os cinco estágios do processo de morrer são: negação ('isso não está acontecendo comigo'), raiva ('por que está acontecendo comigo?'), barganha (tentativas de adiar o inevitável), depressão (tristeza preparatória) e aceitação (paz e entendimento da situação). Compreender esses estágios é crucial para ajudar os pacientes a aceitarem sua condição com menos sofrimento."
+      category: "Ventilação Mecânica Avançada",
+      explanation: "A implementação de volume garantido com volume corrente baixo (4-5ml/kg) é a estratégia mais adequada para proteção pulmonar em um prematuro com displasia broncopulmonar grave. O volume garantido proporciona ventilação mais homogênea e reduz o risco de volutrauma e barotrauma por ajustar automaticamente a pressão inspiratória à complacência pulmonar variável. A redução do tempo inspiratório para 0,30s é benéfica pois diminui o risco de air trapping em pulmões com constante de tempo aumentada devido à obstrução de vias aéreas característica da DBP. O aumento da PEEP para 7-8 cmH2O otimiza o recrutamento alveolar nas áreas colapsadas, melhorando a relação ventilação-perfusão e reduzindo o shunt intrapulmonar. Esta abordagem equilibra a necessidade de adequada troca gasosa com a proteção contra lesão pulmonar adicional, aceitando uma hipercapnia leve a moderada (hipercapnia permissiva) como trade-off para uma ventilação mais protetora."
     }
   ]
 
