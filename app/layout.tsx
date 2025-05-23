@@ -19,7 +19,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Fisioterapia Neonatal e Pediátrica",
-  description: "Portal educacional sobre Fisioterapia Neonatal e Pediátrica"
+  description: "Portal educacional sobre Fisioterapia Neonatal e Pediátrica",
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({

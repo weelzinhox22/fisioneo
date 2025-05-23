@@ -562,30 +562,6 @@ export default function ProvaGeralPage() {
       explanation: "A implementação de volume garantido com volume corrente baixo (4-5ml/kg) é a estratégia mais adequada para proteção pulmonar em um prematuro com displasia broncopulmonar grave. O volume garantido proporciona ventilação mais homogênea e reduz o risco de volutrauma e barotrauma por ajustar automaticamente a pressão inspiratória à complacência pulmonar variável. A redução do tempo inspiratório para 0,30s é benéfica pois diminui o risco de air trapping em pulmões com constante de tempo aumentada devido à obstrução de vias aéreas característica da DBP. O aumento da PEEP para 7-8 cmH2O otimiza o recrutamento alveolar nas áreas colapsadas, melhorando a relação ventilação-perfusão e reduzindo o shunt intrapulmonar. Esta abordagem equilibra a necessidade de adequada troca gasosa com a proteção contra lesão pulmonar adicional, aceitando uma hipercapnia leve a moderada (hipercapnia permissiva) como trade-off para uma ventilação mais protetora."
     },
     {
-      question: "Qual é o principal papel da fisioterapia em pacientes com Distrofia Muscular de Duchenne (DMD)?",
-      options: [
-        "Reverter o processo de degeneração muscular",
-        "Realizar apenas alongamentos passivos para evitar atrofia",
-        "Retardar a progressão da doença e prevenir complicações secundárias",
-        "Iniciar precocemente o uso de cadeira de rodas para preservar energia"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A fisioterapia desempenha um papel fundamental no retardo da progressão da doença e na prevenção de complicações secundárias. Embora não possa reverter o processo degenerativo, intervenções fisioterapêuticas adequadas podem melhorar significativamente a qualidade de vida dos pacientes com DMD."
-    },
-    {
-      question: "Na Distrofia Muscular de Duchenne, o que caracteriza a manobra de Gowers?",
-      options: [
-        "Capacidade de elevar os braços acima da cabeça",
-        "Uso sequencial dos membros e tronco para levantar-se do chão, indicando fraqueza dos músculos proximais dos membros inferiores",
-        "Padrão respiratório com predominância torácica",
-        "Contração involuntária dos músculos faciais durante o esforço"
-      ],
-      correctAnswer: 1,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A manobra de Gowers é um sinal clínico característico da DMD que indica fraqueza nos músculos proximais dos membros inferiores devido à atrofia muscular. O paciente utiliza as mãos para 'escalar' o próprio corpo ao se levantar do chão, apoiando-se sequencialmente nos joelhos e coxas."
-    },
-    {
       question: "Qual das seguintes estratégias fisioterapêuticas é mais recomendada para o tratamento da Distrofia Muscular de Duchenne?",
       options: [
         "Exercícios resistidos intensos para fortalecer a musculatura",
@@ -596,30 +572,6 @@ export default function ProvaGeralPage() {
       correctAnswer: 2,
       category: "Distrofia Muscular de Duchenne",
       explanation: "O exercício submáximo regular combinado com alongamentos é recomendado para evitar a atrofia muscular por desuso e prevenir contraturas. Exercícios resistidos intensos podem acelerar a degeneração muscular, enquanto a imobilização prolongada promove a atrofia e as contraturas."
-    },
-    {
-      question: "Quais são os principais benefícios da hidroterapia no tratamento da Distrofia Muscular de Duchenne?",
-      options: [
-        "Apenas recreação e socialização",
-        "Fortalecimento muscular através de alta resistência",
-        "Flutuabilidade que facilita movimentos, fortalecimento muscular gradual e relaxamento muscular",
-        "Aumento da rigidez muscular e melhora do equilíbrio"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A hidroterapia oferece múltiplos benefícios para pacientes com DMD: as propriedades físicas da água facilitam a movimentação através da flutuabilidade, proporcionam resistência gradual para fortalecimento dos músculos atrofiados, e as propriedades térmicas auxiliam no relaxamento muscular. Além disso, permite exercícios respiratórios, treino de marcha e atividades lúdicas em ambiente de baixo impacto."
-    },
-    {
-      question: "Por que a adequação postural em cadeiras de rodas é fundamental para pacientes com Distrofia Muscular de Duchenne?",
-      options: [
-        "Apenas para proporcionar conforto",
-        "Para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral",
-        "Somente para facilitar o transporte do paciente",
-        "Para fortalecer a musculatura paravertebral"
-      ],
-      correctAnswer: 1,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A adequação postural em cadeiras de rodas é fundamental para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral. A postura inadequada pode levar à escoliose e comprometer a eficácia da respiração. O alinhamento postural adequado evita compensações na coluna vertebral, beneficiando a função respiratória, que é frequentemente afetada pela doença."
     },
     {
       question: "Qual é a definição de cuidados paliativos segundo a Organização Mundial da Saúde (OMS)?",
@@ -646,42 +598,6 @@ export default function ProvaGeralPage() {
       explanation: "A ortotanásia refere-se à morte natural, permitindo que ela ocorra no tempo certo, sem abreviação (como na eutanásia) ou prolongamento artificial (como na distanásia). Busca proporcionar ao paciente as condições necessárias para compreender sua mortalidade e prepará-lo para uma morte digna, sem intervenção no processo natural."
     },
     {
-      question: "Quais são os tipos mais comuns de câncer em crianças?",
-      options: [
-        "Câncer de pulmão, mama, próstata e colorretal",
-        "Leucemias, tumores do SNC, linfomas, neuroblastomas e tumor de Wilms",
-        "Melanoma, carcinoma basocelular e carcinoma espinocelular",
-        "Carcinoma hepatocelular, câncer gástrico e câncer de pâncreas"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Os tipos mais comuns de câncer em crianças incluem leucemias (cânceres do sangue), tumores do Sistema Nervoso Central (SNC), linfomas (cânceres do sistema linfático), neuroblastomas (tumor de células nervosas), tumor de Wilms (tumor renal), tumores ósseos, rabdomiossarcoma e retinoblastoma."
-    },
-    {
-      question: "Qual é o principal objetivo da fisioterapia nos cuidados paliativos de crianças com câncer?",
-      options: [
-        "Curar a doença de base através de exercícios específicos",
-        "Aumentar ou manter o conforto e a independência, reduzindo o tempo de hospitalização",
-        "Apenas prevenir úlceras de decúbito",
-        "Substituir o tratamento medicamentoso para controle da dor"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "O objetivo da fisioterapia nos cuidados paliativos é aumentar ou manter o conforto e a independência funcional, reduzindo o tempo de hospitalização e aumentando o tempo com familiares e amigos. A fisioterapia também desempenha um papel preventivo, antecipando possíveis complicações e implementando medidas preventivas."
-    },
-    {
-      question: "Um prematuro de 26 semanas com 45 dias de vida desenvolveu displasia broncopulmonar grave e permanece em ventilação mecânica. Os parâmetros ventilatórios atuais incluem: PIP 24 cmH2O, PEEP 6 cmH2O, FR 45 ipm, Tempo inspiratório 0,35s e FiO2 45%. Gasometria arterial: pH 7,29, PaCO2 58 mmHg, PaO2 62 mmHg, HCO3 26 mEq/L, BE -2. Considerando os princípios de proteção pulmonar, mecânica respiratória neonatal e prevenção de lesão induzida pela ventilação, qual seria a melhor estratégia de ajuste ventilatório?",
-      options: [
-        "Aumentar PIP para 26 cmH2O e reduzir FR para 40 ipm, visando melhorar a ventilação alveolar",
-        "Manter parâmetros atuais, pois a hipercapnia permissiva é aceitável na displasia broncopulmonar",
-        "Implementar volume garantido com volume corrente de 4-5ml/kg, reduzir o tempo inspiratório para 0,30s e aumentar PEEP para 7-8 cmH2O, objetivando homogeneização da distribuição ventilatória e redução do espaço morto",
-        "Aumentar FiO2 para 60% e FR para 60 ipm para normalizar os valores gasométricos"
-      ],
-      correctAnswer: 2,
-      category: "Ventilação Mecânica Avançada",
-      explanation: "A implementação de volume garantido com volume corrente baixo (4-5ml/kg) é a estratégia mais adequada para proteção pulmonar em um prematuro com displasia broncopulmonar grave. O volume garantido proporciona ventilação mais homogênea e reduz o risco de volutrauma e barotrauma por ajustar automaticamente a pressão inspiratória à complacência pulmonar variável. A redução do tempo inspiratório para 0,30s é benéfica pois diminui o risco de air trapping em pulmões com constante de tempo aumentada devido à obstrução de vias aéreas característica da DBP. O aumento da PEEP para 7-8 cmH2O otimiza o recrutamento alveolar nas áreas colapsadas, melhorando a relação ventilação-perfusão e reduzindo o shunt intrapulmonar. Esta abordagem equilibra a necessidade de adequada troca gasosa com a proteção contra lesão pulmonar adicional, aceitando uma hipercapnia leve a moderada (hipercapnia permissiva) como trade-off para uma ventilação mais protetora."
-    },
-    {
       question: "Qual é o principal papel da fisioterapia em pacientes com Distrofia Muscular de Duchenne (DMD)?",
       options: [
         "Reverter o processo de degeneração muscular",
@@ -704,18 +620,6 @@ export default function ProvaGeralPage() {
       correctAnswer: 1,
       category: "Distrofia Muscular de Duchenne",
       explanation: "A manobra de Gowers é um sinal clínico característico da DMD que indica fraqueza nos músculos proximais dos membros inferiores devido à atrofia muscular. O paciente utiliza as mãos para 'escalar' o próprio corpo ao se levantar do chão, apoiando-se sequencialmente nos joelhos e coxas."
-    },
-    {
-      question: "Qual das seguintes estratégias fisioterapêuticas é mais recomendada para o tratamento da Distrofia Muscular de Duchenne?",
-      options: [
-        "Exercícios resistidos intensos para fortalecer a musculatura",
-        "Imobilização prolongada para preservar a energia muscular",
-        "Exercícios submáximos regulares combinados com alongamentos",
-        "Terapia por restrição de movimento para focar na funcionalidade"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "O exercício submáximo regular combinado com alongamentos é recomendado para evitar a atrofia muscular por desuso e prevenir contraturas. Exercícios resistidos intensos podem acelerar a degeneração muscular, enquanto a imobilização prolongada promove a atrofia e as contraturas."
     },
     {
       question: "Quais são os principais benefícios da hidroterapia no tratamento da Distrofia Muscular de Duchenne?",
@@ -742,30 +646,6 @@ export default function ProvaGeralPage() {
       explanation: "A adequação postural em cadeiras de rodas é fundamental para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral. A postura inadequada pode levar à escoliose e comprometer a eficácia da respiração. O alinhamento postural adequado evita compensações na coluna vertebral, beneficiando a função respiratória, que é frequentemente afetada pela doença."
     },
     {
-      question: "Qual é a definição de cuidados paliativos segundo a Organização Mundial da Saúde (OMS)?",
-      options: [
-        "Cuidados exclusivos para pacientes nos últimos dias de vida",
-        "Medidas para acelerar a morte sem sofrimento do paciente",
-        "Cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo",
-        "Apenas controle da dor em pacientes terminais"
-      ],
-      correctAnswer: 2,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "A OMS define cuidados paliativos como o cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo. O foco principal é o controle da dor e dos sintomas físicos, psicológicos, sociais e espirituais, visando melhorar a qualidade de vida dos pacientes terminais e de seus familiares."
-    },
-    {
-      question: "No contexto dos cuidados paliativos, o que significa ortotanásia?",
-      options: [
-        "Prática pela qual se abrevia a vida de um enfermo incurável de maneira deliberada",
-        "Prolongamento artificial do processo de morte, sem perspectiva de cura ou melhora",
-        "Morte natural, permitindo que ela ocorra no tempo certo, sem abreviação ou prolongamento artificial",
-        "Suspensão de todos os tratamentos médicos em pacientes terminais"
-      ],
-      correctAnswer: 2,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "A ortotanásia refere-se à morte natural, permitindo que ela ocorra no tempo certo, sem abreviação (como na eutanásia) ou prolongamento artificial (como na distanásia). Busca proporcionar ao paciente as condições necessárias para compreender sua mortalidade e prepará-lo para uma morte digna, sem intervenção no processo natural."
-    },
-    {
       question: "Quais são os tipos mais comuns de câncer em crianças?",
       options: [
         "Câncer de pulmão, mama, próstata e colorretal",
@@ -789,18 +669,6 @@ export default function ProvaGeralPage() {
       category: "Cuidados Paliativos Pediátricos",
       explanation: "O objetivo da fisioterapia nos cuidados paliativos é aumentar ou manter o conforto e a independência funcional, reduzindo o tempo de hospitalização e aumentando o tempo com familiares e amigos. A fisioterapia também desempenha um papel preventivo, antecipando possíveis complicações e implementando medidas preventivas."
     },
-    {
-      question: "Um prematuro de 26 semanas com 45 dias de vida desenvolveu displasia broncopulmonar grave e permanece em ventilação mecânica. Os parâmetros ventilatórios atuais incluem: PIP 24 cmH2O, PEEP 6 cmH2O, FR 45 ipm, Tempo inspiratório 0,35s e FiO2 45%. Gasometria arterial: pH 7,29, PaCO2 58 mmHg, PaO2 62 mmHg, HCO3 26 mEq/L, BE -2. Considerando os princípios de proteção pulmonar, mecânica respiratória neonatal e prevenção de lesão induzida pela ventilação, qual seria a melhor estratégia de ajuste ventilatório?",
-      options: [
-        "Aumentar PIP para 26 cmH2O e reduzir FR para 40 ipm, visando melhorar a ventilação alveolar",
-        "Manter parâmetros atuais, pois a hipercapnia permissiva é aceitável na displasia broncopulmonar",
-        "Implementar volume garantido com volume corrente de 4-5ml/kg, reduzir o tempo inspiratório para 0,30s e aumentar PEEP para 7-8 cmH2O, objetivando homogeneização da distribuição ventilatória e redução do espaço morto",
-        "Aumentar FiO2 para 60% e FR para 60 ipm para normalizar os valores gasométricos"
-      ],
-      correctAnswer: 2,
-      category: "Ventilação Mecânica Avançada",
-      explanation: "A implementação de volume garantido com volume corrente baixo (4-5ml/kg) é a estratégia mais adequada para proteção pulmonar em um prematuro com displasia broncopulmonar grave. O volume garantido proporciona ventilação mais homogênea e reduz o risco de volutrauma e barotrauma por ajustar automaticamente a pressão inspiratória à complacência pulmonar variável. A redução do tempo inspiratório para 0,30s é benéfica pois diminui o risco de air trapping em pulmões com constante de tempo aumentada devido à obstrução de vias aéreas característica da DBP. O aumento da PEEP para 7-8 cmH2O otimiza o recrutamento alveolar nas áreas colapsadas, melhorando a relação ventilação-perfusão e reduzindo o shunt intrapulmonar. Esta abordagem equilibra a necessidade de adequada troca gasosa com a proteção contra lesão pulmonar adicional, aceitando uma hipercapnia leve a moderada (hipercapnia permissiva) como trade-off para uma ventilação mais protetora."
-    }
   ]
 
   useEffect(() => {
