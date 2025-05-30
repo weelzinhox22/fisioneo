@@ -1,10 +1,4 @@
 {
-  "app\\(protected)\\prova-geral\\page.tsx -> jspdf": {
-    "id": "app\\(protected)\\prova-geral\\page.tsx -> jspdf",
-    "files": [
-      "static/chunks/_app-pages-browser_node_modules_jspdf_dist_jspdf_es_min_js.js"
-    ]
-  },
   "app\\(protected)\\prova-pediatrica\\page.tsx -> jspdf": {
     "id": "app\\(protected)\\prova-pediatrica\\page.tsx -> jspdf",
     "files": [

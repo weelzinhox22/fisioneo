@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowLeft, CheckCircle2, XCircle, BarChart, TrendingUp, ChevronRight, AlarmClock, ChevronLeft, FileDown } from "lucide-react"
+import { ArrowLeft, CheckCircle2, XCircle, BarChart, TrendingUp, ChevronRight, AlarmClock, ChevronLeft, FileDown, Bell, X } from "lucide-react"
 import Link from "next/link"
 import { ThreeDText } from "@/components/ui/3d-text"
 import { AdvancedParallax } from "@/components/animations/advanced-parallax"
@@ -16,6 +16,76 @@ import { Particles } from "@/components/ui/particles"
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger)
 }
+
+// Modal de atualização
+interface UpdateModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const UpdateModal: React.FC<UpdateModalProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div 
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm" 
+        onClick={onClose}
+      />
+      <motion.div 
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+        className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6 md:p-8 z-50"
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
+        >
+          <X className="h-5 w-5 text-gray-500" />
+        </button>
+        
+        <div className="flex items-start mb-4">
+          <div className="bg-blue-50 p-2 rounded-full mr-4">
+            <Bell className="h-6 w-6 text-blue-500" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Atualização de Conteúdo</h3>
+            <p className="text-sm text-gray-500">30 de maio de 2025</p>
+          </div>
+        </div>
+        
+        <div className="space-y-3 text-gray-700">
+          <p>
+            Informamos que as questões desta avaliação foram completamente revisadas e atualizadas para melhor refletir o conteúdo programático da disciplina de Fisioterapia Pediátrica.
+          </p>
+          <p>
+            As atualizações incluem:
+          </p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li>Reformulação dos enunciados para maior clareza</li>
+            <li>Distribuição mais equilibrada das alternativas corretas</li>
+            <li>Atualização das explicações com base em evidências científicas</li>
+            <li>Ajuste do nível de dificuldade para melhor avaliação do conhecimento</li>
+          </ul>
+          <p className="font-medium text-blue-600">
+            Agradecemos sua compreensão e dedicação aos estudos. Esta atualização visa proporcionar uma experiência de aprendizado mais eficaz e alinhada com as práticas atuais em fisioterapia pediátrica.
+          </p>
+        </div>
+        
+        <div className="mt-6">
+          <button
+            onClick={onClose}
+            className="w-full py-2.5 px-4 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white rounded-lg font-medium hover:shadow-md transition-all"
+          >
+            Entendido, obrigado!
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
 
 // Types
 interface Question {
@@ -49,6 +119,7 @@ export default function ProvaPediatricaPage() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasStarted, setHasStarted] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(true)
   
   const headerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -81,6 +152,24 @@ export default function ProvaPediatricaPage() {
     }
   }, [])
   
+  // Verificar se o usuário já viu o popup
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const hasSeenUpdate = localStorage.getItem('hasSeenPediatricaUpdate-May2025');
+    if (hasSeenUpdate) {
+      setIsModalOpen(false);
+    }
+  }, []);
+
+  // Função para fechar o modal e salvar no localStorage
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hasSeenPediatricaUpdate-May2025', 'true');
+    }
+  }
+  
   // Timer logic
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -106,521 +195,592 @@ export default function ProvaPediatricaPage() {
   // Questions array
   const originalQuestions: Question[] = [
     {
-      question: "Qual é o principal papel da fisioterapia em pacientes com Distrofia Muscular de Duchenne (DMD)?",
-      options: [
-        "Reverter o processo de degeneração muscular através de técnicas específicas que estimulam a regeneração de fibras musculares, melhorando a síntese proteica nas células danificadas",
-        "Realizar apenas alongamentos passivos para evitar atrofia, mantendo o tecido muscular em comprimento funcional e preservando capacidades residuais sem sobrecarregar o sistema musculoesquelético",
-        "Retardar a progressão da doença e prevenir complicações secundárias, melhorando a qualidade de vida dos pacientes através de abordagens multidimensionais",
-        "Iniciar precocemente o uso de cadeira de rodas para preservar energia metabólica, evitando o gasto energético excessivo que acelera a degeneração muscular nas fases iniciais da doença"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A fisioterapia desempenha um papel fundamental no retardo da progressão da doença e na prevenção de complicações secundárias. Embora não possa reverter o processo degenerativo, intervenções fisioterapêuticas adequadas podem melhorar significativamente a qualidade de vida dos pacientes com DMD."
-    },
-    {
-      question: "Na Distrofia Muscular de Duchenne, o que caracteriza a manobra de Gowers?",
-      options: [
-        "Capacidade de elevar os braços acima da cabeça para avaliação da força muscular de cintura escapular, importante na identificação de fraqueza proximal nos estágios iniciais da doença",
-        "Padrão respiratório com predominância torácica, desenvolvido como mecanismo compensatório à fraqueza progressiva do diafragma, visível durante avaliação respiratória específica",
-        "Contração involuntária dos músculos faciais durante o esforço físico intenso, relacionada à disfunção neurológica secundária à doença neuromuscular progressiva",
-        "Uso sequencial dos membros e tronco para levantar-se do chão, indicando fraqueza dos músculos proximais dos membros inferiores devido à atrofia muscular característica"
-      ],
-      correctAnswer: 3,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A manobra de Gowers é um sinal clínico característico da DMD que indica fraqueza nos músculos proximais dos membros inferiores devido à atrofia muscular. O paciente utiliza as mãos para 'escalar' o próprio corpo ao se levantar do chão, apoiando-se sequencialmente nos joelhos e coxas."
-    },
-    {
-      question: "Qual das seguintes estratégias fisioterapêuticas é mais recomendada para o tratamento da Distrofia Muscular de Duchenne?",
-      options: [
-        "Exercícios submáximos regulares combinados com alongamentos, visando manutenção da função muscular e prevenção de contraturas sem causar danos adicionais",
-        "Exercícios resistidos intensos para fortalecer a musculatura, especialmente em fases iniciais da doença, aumentando a resistência à fadiga e fortalecendo as fibras musculares ainda funcionais",
-        "Imobilização prolongada para preservar a energia muscular, minimizando microlesões por esforço e reduzindo o catabolismo proteico excessivo nas fibras musculares comprometidas",
-        "Terapia por restrição de movimento para focar na funcionalidade, concentrando o treinamento em grupos musculares específicos que permanecerão funcionais por mais tempo durante a progressão da doença"
-      ],
-      correctAnswer: 0,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "O exercício submáximo regular combinado com alongamentos é recomendado para evitar a atrofia muscular por desuso e prevenir contraturas. Exercícios resistidos intensos podem acelerar a degeneração muscular, enquanto a imobilização prolongada promove a atrofia e as contraturas."
-    },
-    {
-      question: "Quais são os principais benefícios da hidroterapia no tratamento da Distrofia Muscular de Duchenne?",
-      options: [
-        "Aumento da rigidez muscular e melhora do equilíbrio através da resistência constante oferecida pela água, potencializando o desenvolvimento do tônus muscular protetor nas articulações instáveis",
-        "Apenas recreação e socialização para melhorar aspectos psicológicos, sem benefícios físicos diretos, mas com importante papel na qualidade de vida e socialização destes pacientes",
-        "Fortalecimento muscular através de alta resistência, com sobrecarga progressiva que só é possível no meio aquático devido à propriedade de resistência hidrodinâmica da água em diferentes velocidades",
-        "Flutuabilidade que facilita movimentos, fortalecimento muscular gradual e relaxamento muscular, permitindo exercícios com menor impacto e maior amplitude funcional"
-      ],
-      correctAnswer: 3,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A hidroterapia oferece múltiplos benefícios para pacientes com DMD: as propriedades físicas da água facilitam a movimentação através da flutuabilidade, proporcionam resistência gradual para fortalecimento dos músculos atrofiados, e as propriedades térmicas auxiliam no relaxamento muscular. Além disso, permite exercícios respiratórios, treino de marcha e atividades lúdicas em ambiente de baixo impacto."
-    },
-    {
-      question: "Por que a adequação postural em cadeiras de rodas é fundamental para pacientes com Distrofia Muscular de Duchenne?",
-      options: [
-        "Para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral, mantendo o alinhamento postural adequado e favorecendo a mecânica respiratória",
-        "Apenas para proporcionar conforto durante o posicionamento sentado prolongado, sem impacto significativo na progressão da doença ou em complicações secundárias a longo prazo",
-        "Para fortalecer a musculatura paravertebral através do estímulo constante à manutenção ativa da postura, criando adaptações musculares compensatórias benéficas",
-        "Somente para facilitar o transporte do paciente e permitir maior independência de mobilidade em ambientes variados, sem considerações terapêuticas específicas"
-      ],
-      correctAnswer: 0,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A adequação postural em cadeiras de rodas é fundamental para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral. A postura inadequada pode levar à escoliose e comprometer a eficácia da respiração. O alinhamento postural adequado evita compensações na coluna vertebral, beneficiando a função respiratória, que é frequentemente afetada pela doença."
-    },
-    {
-      question: "Qual tecnologia assistiva tem mostrado resultados promissores na melhoria da condição física e funcional de pacientes com Distrofia Muscular de Duchenne?",
-      options: [
-        "Somente ventilação não-invasiva com diferentes modos respiratórios programáveis, que além de auxiliar na função respiratória, proporciona estímulo à musculatura acessória da respiração",
-        "Realidade virtual com interfaces específicas, proporcionando estímulo motor, cognitivo e motivacional através de ambientes interativos adaptados",
-        "Exclusivamente órteses rígidas confeccionadas com materiais termomoldáveis de alta tecnologia, que restringem movimentos anormais e previnem deformidades progressivas",
-        "Apenas estimulação elétrica neuromuscular de baixa frequência e longa duração, para recrutamento seletivo de fibras musculares tipo I resistentes à fadiga"
-      ],
-      correctAnswer: 1,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A realidade virtual tem mostrado resultados promissores no tratamento da DMD. Estudos demonstram que o uso de jogos de computador com interfaces específicas pode proporcionar um melhor desempenho motor, ativando a função muscular distal e facilitando os ajustes posturais por meio de interfaces virtuais, além de proporcionar uma abordagem lúdica que aumenta a adesão ao tratamento."
-    },
-    {
-      question: "Qual é a recomendação atual sobre o uso de órteses em pacientes com Distrofia Muscular de Duchenne?",
-      options: [
-        "Uso precoce, especialmente AFOs articuladas, antes que o déficit funcional esteja avançado, permitindo manutenção da biomecânica e função por períodos mais longos",
-        "Evitar completamente para não causar dependência dos dispositivos externos, o que poderia acelerar a atrofia por desuso e comprometer a funcionalidade remanescente",
-        "Utilizar apenas durante a noite para não interferir nas atividades diárias, mantendo o alongamento das estruturas sem comprometer a independência funcional durante o dia",
-        "Usar apenas em fases avançadas da doença, quando as contraturas já estiverem estabelecidas, como medida paliativa para prevenir úlceras por pressão e dor"
-      ],
-      correctAnswer: 0,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "O uso precoce de órteses, especialmente as AFOs (Ankle-Foot Orthosis) articuladas, pode promover mudanças positivas nos parâmetros da marcha em pacientes com DMD, desde que utilizadas antes que o déficit funcional esteja avançado. As órteses ajudam a prevenir deformidades, prolongam a fase ambulatória e melhoram a funcionalidade."
-    },
-    {
-      question: "Qual é o mecanismo que causa a Distrofia Muscular de Duchenne em nível celular?",
-      options: [
-        "Ausência ou deficiência da proteína distrofina, essencial para a integridade da membrana celular durante a contração muscular",
-        "Excesso de produção de miosina, causando hipercontratilidade e subsequente degeneração das fibras musculares por sobrecarga metabólica crônica",
-        "Inflamação crônica do tecido muscular mediada por citocinas pró-inflamatórias, resultando em degradação proteica acelerada e resposta autoimune",
-        "Hipertrofia das fibras musculares tipo II com substituição progressiva das fibras tipo I, alterando o metabolismo energético e a capacidade oxidativa do músculo"
-      ],
-      correctAnswer: 0,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A DMD é causada por um defeito bioquímico intrínseco da célula muscular, relacionado à ausência ou deficiência da proteína distrofina. Esta proteína é essencial para manter a integridade da membrana celular durante a contração muscular. Sua ausência leva à ruptura da membrana e à morte celular, resultando em degeneração muscular progressiva."
-    },
-    {
-      question: "Quais técnicas respiratórias são mais indicadas para pacientes com Distrofia Muscular de Duchenne em fase avançada?",
-      options: [
-        "Técnicas de expansão pulmonar, treino dos músculos respiratórios e tosse assistida, visando manter a complacência pulmonar e prevenir complicações respiratórias",
-        "Exclusivamente manobras de percussão torácica realizadas com alta frequência e baixa intensidade, concentrando-se apenas nas regiões basais do pulmão onde ocorre maior retenção de secreções",
-        "Apenas exercícios de respiração abdominal com padrão diafragmático forçado, evitando completamente o uso de musculatura acessória para não acelerar a fadiga muscular",
-        "Somente técnicas de expiração forçada com pressão positiva expiratória, sem qualquer intervenção durante a fase inspiratória para não sobrecarregar a musculatura já comprometida"
-      ],
-      correctAnswer: 0,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "Na fase avançada da DMD, as técnicas respiratórias mais indicadas incluem uma combinação de técnicas de expansão pulmonar (incentivadores respiratórios, respiração glossofaríngea), treino dos músculos respiratórios (dentro dos limites da fadiga) e técnicas de tosse assistida (manual ou mecânica). Estas abordagens visam manter a complacência pulmonar, a capacidade vital e a eficácia da tosse, prevenindo complicações respiratórias que são causa frequente de morbimortalidade."
-    },
-    {
-      question: "Qual é a definição de cuidados paliativos segundo a Organização Mundial da Saúde (OMS)?",
-      options: [
-        "Apenas controle da dor em pacientes terminais, focando exclusivamente no conforto físico sem considerar aspectos psicológicos, sociais ou espirituais do paciente e seus familiares",
-        "Medidas para acelerar a morte sem sofrimento do paciente, quando solicitado formalmente pelo indivíduo ou seus responsáveis legais em situações de doença terminal irreversível",
-        "Cuidados exclusivos para pacientes nos últimos dias de vida, implementados apenas quando todas as possibilidades terapêuticas curativas foram esgotadas e o óbito é iminente",
-        "Cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo, visando controle de sintomas e melhor qualidade de vida possível"
-      ],
-      correctAnswer: 3,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "A OMS define cuidados paliativos como o cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo. O foco principal é o controle da dor e dos sintomas físicos, psicológicos, sociais e espirituais, visando melhorar a qualidade de vida dos pacientes terminais e de seus familiares."
-    },
-    {
-      question: "No contexto dos cuidados paliativos, o que significa ortotanásia?",
-      options: [
-        "Suspensão de todos os tratamentos médicos em pacientes terminais, incluindo hidratação e nutrição, para acelerar o processo natural de morte sem intervenção médica adicional",
-        "Morte natural, permitindo que ela ocorra no tempo certo, sem abreviação ou prolongamento artificial, proporcionando condições para uma morte digna",
-        "Prolongamento artificial do processo de morte, sem perspectiva de cura ou melhora, utilizando todos os recursos tecnológicos disponíveis independentemente do sofrimento causado",
-        "Prática pela qual se abrevia a vida de um enfermo incurável de maneira deliberada, a pedido do paciente ou família, para eliminar o sofrimento prolongado"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "A ortotanásia refere-se à morte natural, permitindo que ela ocorra no tempo certo, sem abreviação (como na eutanásia) ou prolongamento artificial (como na distanásia). Busca proporcionar ao paciente as condições necessárias para compreender sua mortalidade e prepará-lo para uma morte digna, sem intervenção no processo natural."
-    },
-    {
-      question: "Quais são os tipos mais comuns de câncer em crianças?",
-      options: [
-        "Carcinoma hepatocelular, câncer gástrico e câncer de pâncreas, principalmente associados a síndromes genéticas específicas e exposição a toxinas ambientais durante o desenvolvimento fetal",
-        "Melanoma, carcinoma basocelular e carcinoma espinocelular, frequentemente relacionados à exposição solar excessiva e predisposição genética durante os primeiros anos de vida",
-        "Leucemias, tumores do SNC, linfomas, neuroblastomas e tumor de Wilms, afetando principalmente células com alto índice de proliferação durante o desenvolvimento",
-        "Câncer de pulmão, mama, próstata e colorretal, com manifestações clínicas atípicas quando comparadas às apresentações em adultos, dificultando o diagnóstico precoce"
-      ],
-      correctAnswer: 2,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Os tipos mais comuns de câncer em crianças incluem leucemias (cânceres do sangue), tumores do Sistema Nervoso Central (SNC), linfomas (cânceres do sistema linfático), neuroblastomas (tumor de células nervosas), tumor de Wilms (tumor renal), tumores ósseos, rabdomiossarcoma e retinoblastoma."
-    },
-    {
-      question: "Qual é o principal objetivo da fisioterapia nos cuidados paliativos de crianças com câncer?",
-      options: [
-        "Substituir o tratamento medicamentoso para controle da dor, utilizando exclusivamente técnicas não-farmacológicas como massoterapia e termoterapia, reduzindo os efeitos colaterais da medicação",
-        "Curar a doença de base através de exercícios específicos que estimulam o sistema imunológico a combater as células cancerígenas mais eficientemente durante e após o tratamento",
-        "Apenas prevenir úlceras de decúbito em pacientes acamados, sem intervenção adicional que possa causar fadiga ou desconforto na criança já debilitada pelo tratamento oncológico",
-        "Aumentar ou manter o conforto e a independência, reduzindo o tempo de hospitalização e proporcionando melhor qualidade de vida no tempo restante"
-      ],
-      correctAnswer: 3,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "O objetivo da fisioterapia nos cuidados paliativos é aumentar ou manter o conforto e a independência funcional, reduzindo o tempo de hospitalização e aumentando o tempo com familiares e amigos. A fisioterapia também desempenha um papel preventivo, antecipando possíveis complicações e implementando medidas preventivas."
-    },
-    {
-      question: "Quais componentes devem ser incluídos na avaliação fisioterapêutica de uma criança em cuidados paliativos?",
-      options: [
-        "Exclusivamente avaliação psicológica e nutricional, delegando os aspectos motores e funcionais a outros profissionais para não sobrecarregar a criança com múltiplas avaliações durante o tratamento",
-        "Apenas avaliação da amplitude de movimento e força muscular, focando exclusivamente na preservação da mobilidade articular para prevenir contraturas durante o período de internação",
-        "Somente avaliação da dor e do sistema respiratório, considerando que estas são as principais queixas que afetam a qualidade de vida de crianças em cuidados paliativos oncológicos",
-        "História do paciente/pais, observação clínica, avaliação da amplitude de movimento, força, postura, dor, tônus, estado respiratório e avaliação funcional completa"
-      ],
-      correctAnswer: 3,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Uma avaliação fisioterapêutica completa deve incluir: história do paciente/pais, observação clínica, avaliação da amplitude de movimento, força muscular (com cuidado em pacientes plaquetopênicos), avaliação postural, avaliação da dor, tônus muscular, sistemas sensoriais, estado respiratório, resistência cardiovascular e avaliação funcional (transferência, marcha, mobilidade)."
-    },
-    {
-      question: "Quais são as principais condutas fisioterapêuticas para manejo da dor em crianças com câncer em cuidados paliativos?",
-      options: [
-        "Exclusivamente técnicas de distração psicológica como contação de histórias e jogos cognitivos, evitando completamente qualquer intervenção física que possa agravar o quadro doloroso subjacente",
-        "Eletroterapia, terapia manual, cinesioterapia, crioterapia e termoterapia, adaptadas à condição clínica e tolerância da criança para proporcionar alívio sintomático",
-        "Apenas medicação analgésica prescrita pela equipe médica, sem intervenção fisioterapêutica direta para evitar interações medicamentosas ou efeitos adversos no controle da dor",
-        "Contenção física e sedação durante procedimentos potencialmente dolorosos, com progressiva dessensibilização para reduzir a necessidade de intervenções farmacológicas a longo prazo"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "O manejo da dor em cuidados paliativos pediátricos deve incluir diversas técnicas fisioterapêuticas como eletroterapia (TENS), terapia manual (massagens, mobilizações), cinesioterapia (exercícios terapêuticos adaptados), crioterapia (aplicação de frio) e termoterapia (aplicação de calor), sempre considerando a condição clínica e tolerância da criança."
-    },
-    {
-      question: "Por que as atividades lúdicas são importantes no tratamento fisioterapêutico de crianças com câncer em cuidados paliativos?",
-      options: [
-        "Para proporcionar um ambiente menos traumatizante, mais humanizado e aumentar a adesão ao tratamento fisioterapêutico proposto",
-        "Exclusivamente para agradar aos pais e cuidadores, demonstrando empatia da equipe sem benefícios terapêuticos diretos para o processo de reabilitação ou manejo de sintomas",
-        "Apenas para distrair a criança durante procedimentos dolorosos, sem relação com os objetivos terapêuticos específicos da intervenção fisioterapêutica em oncologia pediátrica",
-        "Somente para ocupar o tempo livre da criança no hospital, reduzindo a ansiedade associada à internação prolongada sem finalidade terapêutica específica"
-      ],
-      correctAnswer: 0,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "As atividades lúdicas são importantes no tratamento de crianças com câncer pois proporcionam um ambiente menos traumatizante e mais humanizado. Recursos lúdicos como brincadeiras, jogos, livros, brinquedos e música podem ser integrados aos exercícios terapêuticos, aumentando a adesão ao tratamento, promovendo conforto e melhorando a qualidade de vida."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 7 anos apresenta dificuldade em arremessar bolas, rebater objetos e chutar com precisão, embora corra e salte adequadamente para sua idade. Qual é a provável área de déficit e a recomendação mais adequada?",
-      options: [
-        "Déficit em habilidades manipulativas; recomenda-se atividades graduadas para manipulação de objetos com progressão sistemática de complexidade",
-        "Déficit em habilidades locomotoras; recomenda-se focar em exercícios de corrida e salto com maior demanda de coordenação e velocidade",
-        "Déficit em controle postural; recomenda-se exercícios de equilíbrio estático em superfícies instáveis para melhorar a base para movimentos manipulativos",
-        "Déficit cognitivo; recomenda-se avaliação neuropsicológica completa antes de qualquer intervenção motora específica"
-      ],
-      correctAnswer: 0,
-      category: "Desenvolvimento Motor",
-      explanation: "A criança apresenta um déficit específico em habilidades manipulativas (arremessar, rebater, chutar) enquanto as habilidades locomotoras (correr, saltar) estão preservadas. A recomendação mais adequada é implementar um programa de atividades graduadas para desenvolvimento de habilidades manipulativas, iniciando com tarefas simples e progredindo para mais complexas, com ênfase na coordenação olho-mão e olho-pé."
-    },
-    {
-      question: "Qual abordagem é mais adequada para estimular o desenvolvimento motor de uma criança de 4 meses?",
-      options: [
-        "Proporcionar tempo supervisionado em decúbito ventral (tummy time) e oportunidades para pegar e explorar objetos seguros e apropriados para a idade",
-        "Posicioná-la sentada com apoio para fortalecer a musculatura cervical, mesmo que ainda não tenha adquirido controle cefálico completo",
-        "Restringir o tempo em decúbito ventral para evitar estresse e desconforto, priorizando apenas posições supinas durante o período de vigília",
-        "Utilizar andadores para estimular a marcha precoce e fortalecer membros inferiores antes do período típico de desenvolvimento desta habilidade"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neurológica",
-      explanation: "Para um bebê de 4 meses, a abordagem mais adequada inclui proporcionar tempo supervisionado em decúbito ventral para fortalecer os músculos do pescoço e tronco, além de oferecer oportunidades para pegar e explorar objetos seguros, estimulando o desenvolvimento motor fino. O uso de andadores não é recomendado em nenhuma idade por questões de segurança e interferência no desenvolvimento motor normal."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 3 anos não atende quando chamada pelo nome, evita contato visual, não brinca com outras crianças e apresenta comportamentos repetitivos como alinhar brinquedos. Quais aspectos da avaliação neurológica devem ser priorizados?",
-      options: [
-        "Triagem específica para autismo e avaliação do desenvolvimento social e comunicativo, utilizando instrumentos validados para esta faixa etária",
-        "Avaliação da força muscular e reflexos tendinosos profundos, que podem indicar comprometimento da via piramidal associado aos déficits comportamentais",
-        "Avaliação da linguagem receptiva e motricidade fina exclusivamente, ignorando outros domínios do desenvolvimento que não apresentam alterações evidentes",
-        "Exames de neuroimagem para detectar lesões estruturais, prioritários antes de qualquer avaliação funcional ou comportamental"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neurológica",
-      explanation: "Os sinais descritos (não responder ao nome, evitar contato visual, não brincar com outras crianças e comportamentos repetitivos) são compatíveis com Transtorno do Espectro Autista (TEA). A avaliação deve priorizar uma triagem específica para autismo (como M-CHAT-R) e avaliação detalhada do desenvolvimento social e comunicativo. A detecção precoce do TEA é fundamental para intervenção precoce e melhores resultados a longo prazo."
-    },
-    {
-      question: "Como são classificadas as queimaduras de segundo grau profundas?",
-      options: [
-        "Comprometem a epiderme e toda a derme, podendo afetar estruturas subcutâneas, com aspecto esbranquiçado e pouca dor pela destruição de terminações nervosas",
-        "Comprometem apenas a epiderme, causando eritema e dor intensa, sendo totalmente reversíveis sem formação de cicatrizes residuais",
-        "Comprometem a epiderme e parte superficial da derme, com formação de bolhas e dor intensa devido à exposição das terminações nervosas",
-        "Comprometem todas as camadas da pele inclusive o tecido subcutâneo, com aspecto carbonizado e indolor pela completa destruição de receptores sensitivos"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "Queimaduras de segundo grau profundas comprometem a epiderme e toda a derme, podendo afetar estruturas subcutâneas. Apresentam aspecto esbranquiçado ou vermelho escuro, superfície mais seca, e relativamente pouca dor devido à destruição de terminações nervosas. Sua cicatrização é mais lenta e frequentemente requer abordagem cirúrgica."
-    },
-    {
-      question: "Na reabilitação de uma criança com queimaduras graves, quais são os principais objetivos do uso de órteses?",
-      options: [
-        "Prevenir ou corrigir contraturas posicionando as articulações em posição funcional e aplicando pressão sobre as cicatrizes para controle da hipertrofia",
-        "Apenas promover a cosmética da área queimada, reduzindo a aparência da cicatriz sem benefícios funcionais significativos no processo de reabilitação",
-        "Substituir a mobilização articular por completo, eliminando a necessidade de exercícios terapêuticos durante o processo de reabilitação",
-        "Apenas limitar o movimento durante o sono para evitar posições viciosas, sem necessidade de uso durante atividades diurnas"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "As órteses na reabilitação de queimados têm dois objetivos principais: prevenir ou corrigir contraturas posicionando as articulações em posição funcional e aplicar pressão sobre as cicatrizes para controlar a hipertrofia. Devem ser usadas em conjunto com mobilização e outras técnicas, não como substituto. O tempo de uso pode variar de acordo com a fase (aguda, subaguda ou crônica) e deve ser monitorado para evitar complicações."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 3 anos com queimadura de segundo grau profunda em face, pescoço e tórax anterior (20% SCQ) está internada há 5 dias. Apresenta dor, medo de movimentação e início de contraturas no pescoço. Qual abordagem fisioterapêutica inicial é mais apropriada?",
-      options: [
-        "Abordagem lúdica com técnicas de distração, posicionamento correto, massagem perilesional e mobilização suave respeitando a dor",
-        "Mobilização passiva forçada do pescoço para evitar contraturas fixas, mesmo que cause desconforto inicial, priorizando a prevenção de sequelas",
-        "Esperar a completa cicatrização (aproximadamente 21 dias) antes de iniciar qualquer intervenção fisioterapêutica para não prejudicar o processo de epitelização",
-        "Confecção imediata de órtese rígida para pescoço em hiperextensão máxima, garantindo a manutenção do comprimento muscular durante o sono"
-      ],
-      correctAnswer: 0,
-      category: "Casos Clínicos",
-      explanation: "Para uma criança de 3 anos com queimadura recente, a abordagem inicial deve ser gentil e considerar o componente psicológico. Uma abordagem lúdica com técnicas de distração para manejo da dor e do medo, combinada com posicionamento correto, massagem perilesional para dessensibilização e mobilização suave respeitando os limites de dor é mais apropriada. A mobilização forçada aumentaria o trauma e o medo, esperar a cicatrização completa permitiria o estabelecimento de contraturas mais difíceis de tratar, e a órtese em hiperextensão máxima seria desconfortável e potencialmente prejudicial nesta fase."
-    },
-    {
-      question: "CASO CLÍNICO: Um adolescente de 14 anos com Distrofia Muscular de Duchenne em estágio avançado usa cadeira de rodas há 3 anos. Apresenta escoliose progressiva, contraturas em membros e capacidade vital forçada de 35% do previsto. Recentemente, começou a apresentar fadiga ao falar e desconforto respiratório noturno. Qual conduta fisioterapêutica é prioritária neste momento?",
-      options: [
-        "Avaliação e manejo da função respiratória, incluindo técnicas de tosse assistida, recrutamento de volume pulmonar e posicionamento adequado",
-        "Fortalecer intensamente a musculatura paravertebral para corrigir a escoliose progressiva e melhorar a mecânica respiratória comprometida",
-        "Encorajar atividades físicas vigorosas para melhorar a capacidade respiratória através de treinamento muscular respiratório de alta intensidade",
-        "Imobilização completa para prevenir progressão da escoliose, com restrição total de mobilidade do tronco durante o dia e a noite"
-      ],
-      correctAnswer: 0,
-      category: "Casos Clínicos",
-      explanation: "Em pacientes com DMD em estágio avançado, o comprometimento respiratório é uma das principais causas de morbimortalidade. Os sintomas descritos (fadiga ao falar, desconforto respiratório noturno) associados à CVF reduzida indicam insuficiência respiratória iminente. A prioridade é a avaliação completa da função respiratória e implementação de técnicas como tosse assistida (manual ou mecânica), exercícios de recrutamento de volume (empilhamento de ar, respiração glossofaríngea), e posicionamento adequado. O fortalecimento intenso é contraindicado neste estágio, atividades vigorosas poderiam agravar a condição, e a imobilização completa causaria mais complicações respiratórias."
-    },
-    {
-      question: "Considerando a Teoria dos Estágios de Habilidades Motoras Fundamentais, analise o caso: Uma professora de educação física relata que uma criança de 8 anos executa o arremesso por cima do ombro sem rotação do tronco, mantendo os pés paralelos e sem transferência de peso. Este padrão é indicativo de qual estágio?",
-      options: [
-        "Estágio maduro, pois aos 8 anos já deveria ter desenvolvido completamente esta habilidade",
-        "Estágio elementar, com alguns componentes ainda não integrados no movimento",
-        "Estágio inicial, com características de tentativas rudimentares da habilidade",
-        "Não se aplica a classificação em estágios, pois trata-se de uma variação normal de execução"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "O padrão descrito (arremesso sem rotação do tronco, pés paralelos, sem transferência de peso) é característico do estágio elementar das habilidades motoras fundamentais. Neste estágio, há maior controle e coordenação rítmica dos movimentos em comparação ao estágio inicial, mas os movimentos ainda são restritos ou exagerados, faltando a integração completa dos componentes. No estágio maduro, esperado para a idade de 8 anos, o arremesso incluiria rotação do tronco, transferência de peso e posicionamento contralateral dos pés, indicando que esta criança não atingiu o nível esperado para sua idade."
-    },
-    {
-      question: "CASO CLÍNICO: Durante uma avaliação, você observa que uma criança de 18 meses não consegue empilhar blocos, não faz rabiscos, não caminha sozinha e não diz palavras com significado. A mãe relata que a gravidez foi sem intercorrências, mas o parto foi prematuro (32 semanas) com baixo peso ao nascer (1850g). Qual interpretação e conduta são mais adequadas?",
-      options: [
-        "Considerar a idade corrigida e usar instrumentos de avaliação normatizados para prematuros, sendo necessária intervenção precoce e acompanhamento multidisciplinar",
-        "Interpretar como atraso do desenvolvimento significativo e encaminhar para neurologista pediátrico urgentemente",
-        "Considerar normal pela prematuridade e reavaliar aos 2 anos de idade",
-        "Diagnosticar como Transtorno do Espectro Autista e iniciar terapia comportamental"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neurológica",
-      explanation: "Para bebês prematuros, é fundamental considerar a idade corrigida até os 2-3 anos de idade ao avaliar o desenvolvimento. Neste caso, a idade corrigida seria aproximadamente 15-16 meses. Mesmo assim, as habilidades descritas estão abaixo do esperado, mas a interpretação deve ser baseada em instrumentos de avaliação normatizados para prematuros. A conduta mais adequada inclui intervenção precoce e acompanhamento multidisciplinar (fisioterapia, terapia ocupacional, fonoaudiologia), considerando os fatores de risco (prematuridade e baixo peso). Não há informações suficientes para diagnósticos específicos como TEA, e esperar até os 2 anos seria inapropriado diante dos atrasos observados."
-    },
-    {
-      question: "Quais das seguintes técnicas fisioterapêuticas são recomendadas para o alívio do estresse em crianças com câncer em cuidados paliativos?",
-      options: [
-        "Apenas técnicas respiratórias isoladas, sem integração com outras abordagens terapêuticas, focando exclusivamente no controle do padrão ventilatório para redução da ansiedade",
-        "Somente alongamentos passivos realizados de forma sistemática, com enfoque na musculatura cervical e escapular, principais áreas de tensão associadas ao estresse emocional",
-        "Terapia manual, hidroterapia (Watsu), consciência corporal e técnicas de relaxamento, combinadas de acordo com a preferência e condição da criança",
-        "Exclusivamente estimulação elétrica de alta frequência em pontos-gatilho miofasciais, associada a biofeedback para ensinar autocontrole da tensão muscular"
-      ],
-      correctAnswer: 2,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Para o alívio do estresse em crianças com câncer em cuidados paliativos, recomenda-se uma combinação de técnicas que incluem terapia manual (massagem terapêutica), hidroterapia (especialmente a técnica Watsu), técnicas de consciência corporal e métodos de relaxamento, que podem ser adaptados à idade e condição da criança."
-    },
-    {
-      question: "Como a fisioterapia pode auxiliar no manejo da fadiga em pacientes oncológicos terminais?",
-      options: [
-        "Conservação de energia, atividades graduadas e adaptação do ambiente, buscando equilíbrio entre atividade e repouso conforme tolerância individual",
-        "Recomendando repouso absoluto para todas as atividades, incluindo alimentação e higiene pessoal, visando preservar ao máximo a energia remanescente do paciente",
-        "Através de exercícios intensos para aumentar a resistência cardiorrespiratória, fortalecendo o sistema cardiovascular contra os efeitos da fadiga crônica",
-        "Apenas com uso de técnicas de respiração profunda, sem qualquer intervenção física que possa exacerbar o quadro de cansaço presente na condição terminal"
-      ],
-      correctAnswer: 0,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "A fisioterapia pode auxiliar no manejo da fadiga através de estratégias de conservação de energia, atividades físicas cuidadosamente graduadas conforme a tolerância do paciente, e adaptação do ambiente para minimizar o gasto energético. O objetivo é manter a capacidade funcional e minimizar as perdas, equilibrando atividade e repouso."
-    },
-    {
-      question: "No contexto dos cuidados paliativos pediátricos, quais são os cinco estágios do processo de morrer descritos na literatura?",
-      options: [
-        "Choque, negação, raiva, tristeza e resignação, sequência vivenciada principalmente por crianças mais velhas com compreensão cognitiva da finitude",
-        "Medo, negação, isolamento, depressão e paz, manifestados de forma não-verbal em lactentes e crianças pequenas através de comportamentos específicos",
-        "Esperança, aceitação, barganha, depressão e raiva, ocorrendo em ordem variável dependendo da idade, cultura e suporte familiar disponível",
-        "Negação, raiva, barganha, depressão e aceitação, com particularidades na expressão de cada fase conforme desenvolvimento cognitivo e emocional"
-      ],
-      correctAnswer: 3,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Os cinco estágios do processo de morrer são: negação ('isso não está acontecendo comigo'), raiva ('por que está acontecendo comigo?'), barganha (tentativas de adiar o inevitável), depressão (tristeza preparatória) e aceitação (paz e entendimento da situação). Compreender esses estágios é crucial para ajudar os pacientes a aceitarem sua condição com menos sofrimento."
-    },
-    {
-      question: "Em crianças de 6 a 8 anos, qual teoria do desenvolvimento motor considera que o desenvolvimento resulta da interação entre múltiplos subsistemas e é influenciado por fatores ambientais?",
-      options: [
-        "Teoria dos Sistemas Dinâmicos, que enfatiza a auto-organização emergente e a não-linearidade do desenvolvimento motor humano",
-        "Teoria Maturacional, que atribui o desenvolvimento exclusivamente a processos neurológicos inatos e predeterminados geneticamente",
-        "Teoria Reflexa, que propõe que todo comportamento motor complexo deriva da integração progressiva de reflexos primitivos durante o neurodesenvolvimento",
-        "Teoria da Integração Sensorial, que prioriza o processamento sensorial como único determinante do desenvolvimento motor na infância"
-      ],
-      correctAnswer: 0,
-      category: "Desenvolvimento Motor",
-      explanation: "A Teoria dos Sistemas Dinâmicos considera que o desenvolvimento motor resulta da interação entre múltiplos subsistemas (neuromuscular, sensorial, biomecânico) e é influenciado por fatores ambientais e pela tarefa a ser realizada. Esta teoria enfatiza a auto-organização e a não-linearidade do desenvolvimento."
-    },
-    {
-      question: "Aos 6-8 anos, qual das seguintes características NÃO é esperada no desenvolvimento motor típico?",
-      options: [
-        "Arremesso por cima do ombro com rotação do tronco e transferência de peso, demonstrando integração de movimentos contralaterais coordenados",
-        "Padrão maduro de corrida com coordenação de braços e pernas, com fase de voo bem definida e uso eficiente da mecânica corporal",
-        "Capacidade de manter o equilíbrio unipodal por 8-10 segundos, refletindo adequado controle postural e propriocepção",
-        "Dificuldade em receber uma bola sem usar o corpo como apoio, mostrando imaturidade na coordenação olho-mão e no timing motor"
-      ],
-      correctAnswer: 3,
-      category: "Desenvolvimento Motor",
-      explanation: "Aos 6-8 anos, espera-se que a criança já consiga receber uma bola com as mãos sem necessidade de usar o corpo. A opção incorreta é 'Dificuldade em receber uma bola sem usar o corpo', pois essa é uma característica de crianças mais jovens. As outras opções representam habilidades esperadas nessa faixa etária."
-    },
-    {
-      question: "Na fase de movimentos fundamentais, o que caracteriza o estágio maduro das habilidades motoras?",
-      options: [
-        "Desenvolvimento inicial das habilidades especializadas esportivas, com adaptação progressiva para contextos competitivos estruturados",
-        "Movimentos descontrolados com sequência temporal e espacial inadequada, evidenciando as primeiras tentativas de desempenhar a habilidade básica",
-        "Maior controle, mas com movimentos ainda restritos ou exagerados, demonstrando progresso parcial na aquisição da habilidade motora fundamental",
-        "Integração de todos os componentes do movimento em uma ação coordenada e eficiente, com mecânica corporal otimizada e consistente"
-      ],
-      correctAnswer: 3,
-      category: "Desenvolvimento Motor",
-      explanation: "O estágio maduro da fase de movimentos fundamentais caracteriza-se pela integração de todos os componentes do movimento em uma ação coordenada e eficiente. Os movimentos são mecanicamente eficientes, coordenados e controlados, representando o nível mais avançado das habilidades fundamentais antes da transição para a fase de movimentos especializados."
-    },
-    {
-      question: "Qual das seguintes habilidades está normalmente mais desenvolvida em meninos de 6-8 anos, conforme estudos sobre diferenças de gênero no desenvolvimento motor?",
-      options: [
-        "Coordenação motora fina, incluindo precisão em atividades como escrita, desenho e manipulação de objetos pequenos",
-        "Flexibilidade corporal global, especialmente em articulações como ombros, quadril e coluna vertebral",
-        "Equilíbrio estático em posições desafiadoras, demonstrando melhor controle postural e propriocepção",
-        "Habilidades manipulativas como arremessar e chutar, influenciadas principalmente por fatores socioculturais e oportunidades de prática"
-      ],
-      correctAnswer: 3,
-      category: "Desenvolvimento Motor",
-      explanation: "Estudos mostram que meninos geralmente apresentam melhor desempenho em habilidades manipulativas como arremessar, chutar e rebater. Estas diferenças são mais influenciadas por fatores socioculturais e oportunidades de prática do que por fatores biológicos. Meninas frequentemente superam meninos em habilidades como equilíbrio, coordenação motora fina e flexibilidade."
-    },
-    {
-      question: "CASO CLÍNICO: Durante a avaliação de um bebê de 9 meses, você nota que ele não consegue sentar-se sem apoio, não transfere objetos entre as mãos e não produz sons como 'mama' ou 'dada'. Qual deve ser sua conduta imediata?",
-      options: [
-        "Comunicar ao pediatra e sugerir uma triagem de desenvolvimento mais completa, considerando o atraso em múltiplos domínios",
-        "Orientar os pais que cada criança tem seu próprio ritmo e reavaliar em 6 meses, pois estas variações individuais são comuns no primeiro ano",
-        "Iniciar imediatamente um programa intensivo de estimulação precoce sem avaliação adicional, para recuperar o tempo perdido",
-        "Diagnosticar um atraso global do desenvolvimento e fornecer um prognóstico detalhado aos pais sobre limitações futuras"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neurológica",
-      explanation: "Esta criança apresenta sinais de atraso nos marcos do desenvolvimento esperados para 9 meses (sentar-se sozinho, transferir objetos entre as mãos e produzir sons específicos). A conduta apropriada é comunicar estes achados ao pediatra e sugerir uma triagem de desenvolvimento mais completa, que é recomendada rotineiramente aos 9 meses. Um diagnóstico formal de atraso global exigiria avaliação multidisciplinar."
-    },
-    {
-      question: "Durante a avaliação dos marcos do desenvolvimento de um bebê de 12 meses, quais sinais são considerados 'bandeiras vermelhas' que indicam necessidade de investigação imediata?",
-      options: [
-        "Preferência por brincar sozinho em vez de com adultos, comportamento que pode ser apenas reflexo do temperamento individual e não necessariamente patológico",
-        "Não engatinhar, mas conseguir deslocar-se sentado (arrastar-se), representando apenas uma variação normal da sequência de aquisição de mobilidade",
-        "Não andar sozinho, mas conseguir andar com apoio, dentro da faixa de normalidade para desenvolvimento motor nesta idade específica",
-        "Não falar palavras como 'mamã' ou 'papá' e não apontar para objetos, indicando possível atraso significativo no desenvolvimento comunicativo"
-      ],
-      correctAnswer: 3,
-      category: "Avaliação Neurológica",
-      explanation: "Aos 12 meses, a ausência de balbucio com intenção comunicativa (como dizer 'mamã' ou 'papá' com significado) e a falta de gestos como apontar são consideradas 'bandeiras vermelhas' que justificam investigação imediata. A ausência destas habilidades comunicativas pode indicar atrasos significativos ou condições como TEA. As variações na mobilidade (ainda não andar sozinho ou preferir arrastar-se) são menos preocupantes nesta idade."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 4 anos sofreu queimadura por água fervente que atingiu toda a face anterior do tórax e abdome, e a região proximal do membro superior direito. Utilizando a 'Regra dos Nove', qual a superfície corporal queimada aproximada?",
-      options: [
-        "Aproximadamente 23%, considerando as proporções corporais específicas da idade pediátrica que diferem do adulto",
-        "Aproximadamente 36%, calculado conforme os percentuais padronizados para adultos sem ajustes para idade",
-        "Aproximadamente 18%, utilizando apenas a soma matemática das regiões afetadas sem considerar o desenvolvimento corporal",
-        "Aproximadamente 9%, contabilizando exclusivamente a área de maior profundidade da lesão térmica"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "Pela Regra dos Nove adaptada para crianças, o tórax anterior representa 9%, o abdome 9% e o braço proximal aproximadamente 4,5% (metade dos 9% de um braço inteiro). A soma resulta em aproximadamente 22,5%, ou seja, cerca de 23% da superfície corporal queimada (SCQ)."
-    },
-    {
-      question: "Qual das seguintes abordagens fisioterapêuticas está CONTRAINDICADA na fase aguda de uma queimadura de segundo grau em uma criança?",
-      options: [
-        "Aplicação de alongamento passivo intenso, que pode romper o tecido em cicatrização e aumentar o risco de infecção e sangramento",
-        "Posicionamento adequado em padrão antideformidade, essencial para prevenir contraturas durante a cicatrização",
-        "Mobilização articular suave dentro dos limites da dor, mantendo a amplitude de movimento sem comprometer a integridade tecidual",
-        "Orientação respiratória e manobras de higiene brônquica quando necessário, especialmente em queimaduras extensas com risco respiratório"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "Na fase aguda de uma queimadura de segundo grau, o alongamento passivo intenso está contraindicado pois pode causar ruptura do tecido em cicatrização, aumentar o sangramento e a dor, além de potencialmente agravar o processo inflamatório. As outras intervenções mencionadas são apropriadas quando realizadas com cuidado e respeitando a condição da criança."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 8 anos com queimadura de terceiro grau em região cervical anterior e lateral bilateral está em fase de reabilitação (pós-enxerto). Qual das seguintes complicações é mais provável de ocorrer sem intervenção fisioterapêutica adequada?",
-      options: [
-        "Contratura em flexão cervical com limitação da extensão e rotação, devido à orientação das fibras colágenas durante o processo cicatricial",
-        "Paralisia diafragmática permanente por comprometimento do nervo frênico, levando a insuficiência respiratória crônica",
-        "Contratura em hiperextensão cervical que compromete a deglutição e respiração, mesmo em queimaduras anteriores",
-        "Escoliose estrutural progressiva como consequência direta da limitação cervical, mesmo sem comprometimento do tronco"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "Em queimaduras cervicais anteriores e laterais, a complicação mais comum é a contratura em flexão cervical com limitação da extensão e rotação. Isso ocorre devido à orientação das fibras colágenas durante a cicatrização, que tendem a encurtar o tecido na direção da lesão. O tratamento precoce deve incluir posicionamento adequado, órteses, mobilização, alongamento e controle cicatricial para prevenir esta complicação."
-    },
-    {
-      question: "CASO CLÍNICO: Um menino de 7 anos com diagnóstico de Distrofia Muscular de Duchenne apresenta sinal de Gowers positivo, dificuldade para subir escadas e correr. A força muscular está preservada em MMSS e diminuída em MMII (grau 4- proximal e 4+ distal). Qual plano terapêutico é mais adequado nesta fase da doença?",
-      options: [
-        "Prescrição imediata de cadeira de rodas para conservação de energia, mesmo que ainda apresente capacidade de deambulação funcional e independente na maioria dos ambientes",
-        "Exercícios resistidos intensos para retardar a progressão da fraqueza muscular, com foco em fortalecimento excêntrico máximo dos grandes grupos musculares",
-        "Programa combinando exercícios aeróbicos submáximos, alongamentos, treino de equilíbrio e funcional, com orientação aos pais sobre adaptações ambientais",
-        "Imobilização noturna dos membros inferiores e repouso para evitar a fadiga muscular, preservando as fibras musculares remanescentes do desgaste excessivo"
-      ],
-      correctAnswer: 2,
-      category: "Casos Clínicos",
-      explanation: "Nesta fase ambulatória da DMD, o plano terapêutico deve visar a manutenção da função, prevenção de contraturas e prolongamento da marcha independente. A abordagem mais adequada é um programa combinando exercícios aeróbicos submáximos (que não aceleram a degeneração), alongamentos para prevenção de contraturas, treino de equilíbrio e funcional para otimizar a mecânica corporal, e orientações aos pais sobre adaptações e manejo. A prescrição de cadeira de rodas seria prematura, exercícios resistidos intensos podem acelerar a degeneração, e a imobilização prolongada promove atrofia."
-    },
-    {
-      question: "CASO CLÍNICO: Uma menina de 5 anos com câncer em estágio terminal está sob cuidados paliativos domiciliares. Apresenta dor generalizada (EVA 8/10), fadiga intensa, edema em membros inferiores, dispneia aos mínimos esforços e tristeza. Os pais relatam dificuldade em administrar os cuidados. Qual deve ser a prioridade da intervenção fisioterapêutica neste momento?",
-      options: [
-        "Manejo da dor e desconforto respiratório, com orientação aos pais sobre posicionamento, transferências seguras e técnicas de conservação de energia",
-        "Implementar um programa de condicionamento cardiorrespiratório leve para reverter a fadiga e melhorar a capacidade funcional global através de múltiplas sessões diárias",
-        "Estimulação cognitiva e treino de AVDs para manter sua independência funcional, focando no fortalecimento muscular para as atividades cotidianas",
-        "Prescrição de órteses para os membros inferiores para controle do edema, com aplicação de compressão graduada para drenagem linfática passiva"
-      ],
-      correctAnswer: 0,
-      category: "Casos Clínicos",
-      explanation: "No contexto de cuidados paliativos em estágio terminal, a prioridade é o manejo dos sintomas e o conforto da criança. A intervenção deve focar no controle da dor (usando técnicas como TENS, massagem, termoterapia), abordagem do desconforto respiratório (posicionamento, técnicas de relaxamento respiratório), e orientação aos pais sobre como realizar movimentações e transferências seguras, além de técnicas para conservação de energia. Programas de condicionamento ou reabilitação funcional intensiva não são apropriados nesta fase, e as intervenções devem ser guiadas pelas necessidades imediatas da criança e família."
-    },
-    {
-      question: "CASO CLÍNICO: Um bebê de 9 meses foi encaminhado para avaliação do desenvolvimento após sua mãe relatar que ele não consegue sentar-se sem apoio. Na avaliação, você observa hipotonia generalizada, reflexos primitivos persistentes (RTCA, Galant), ausência de reações de proteção e paracedismo, e atraso nos marcos motores (não rola, não senta sem apoio, não engatinha). Qual hipótese diagnóstica é mais provável e qual conduta imediata?",
-      options: [
-        "Atraso do desenvolvimento psicomotor; iniciar estimulação precoce e investigar causas subjacentes através de encaminhamento multidisciplinar",
-        "Desenvolvimento motor típico com variação individual; orientações para estimulação em casa com reavaliação após dois meses de intervenção",
-        "Transtorno do espectro autista; encaminhar para avaliação multidisciplinar com neuropediatra e terapeuta ocupacional especializado",
-        "Atraso motor transitório; reavaliar em 3 meses após orientações básicas de estimulação para os pais aplicarem no ambiente domiciliar"
-      ],
-      correctAnswer: 0,
-      category: "Casos Clínicos",
-      explanation: "O quadro descrito sugere fortemente um atraso do desenvolvimento psicomotor: hipotonia generalizada, persistência de reflexos primitivos que deveriam estar integrados aos 9 meses, ausência de reações de proteção esperadas para a idade e atraso em múltiplos marcos motores. A conduta adequada é iniciar imediatamente um programa de estimulação precoce enquanto se investiga as possíveis causas subjacentes (genéticas, neurológicas, metabólicas) através de encaminhamento para avaliação médica e outros profissionais. Este não é um caso de variação individual do desenvolvimento típico nem de atraso transitório."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 7 anos apresenta habilidades locomotoras adequadas para a idade, mas dificuldade significativa em habilidades manipulativas (arremessar, rebater). Seus pais relatam que, além disso, ela tem dificuldade em amarrar cadarços, abotoar roupas e escrever. Com base na Teoria dos Sistemas Dinâmicos, qual seria a abordagem terapêutica mais adequada?",
-      options: [
-        "Exercícios intensivos focados especificamente em amarrar cadarços, abotoar e escrever para aprendizado direto destas tarefas",
-        "Abordagem multissistêmica considerando fatores biomecânicos, perceptuais e ambientais, com tarefas variadas de coordenação olho-mão em diferentes contextos",
-        "Fortalecimento dos músculos das mãos e braços apenas, já que o problema é puramente muscular",
-        "Apenas orientações aos pais para prática em casa, pois são variações normais do desenvolvimento"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "Seguindo a Teoria dos Sistemas Dinâmicos, o desenvolvimento motor resulta da interação de múltiplos subsistemas (motor, perceptual, cognitivo, etc.) sob influência de restrições do indivíduo, ambiente e tarefa. A criança apresenta dificuldades tanto em habilidades motoras grossas manipulativas quanto em motricidade fina, sugerindo um padrão de dificuldade na coordenação olho-mão. A abordagem mais adequada é multissistêmica, considerando fatores biomecânicos (força e coordenação), perceptuais (processamento visual, propriocepção), e ambientais (modificações das tarefas), através de experiências variadas em diferentes contextos, não apenas repetição das tarefas específicas problemáticas."
-    },
-    {
-      question: "Considere um estudo científico que comparou o desenvolvimento motor de crianças de 6-8 anos em escolas públicas e particulares, identificando diferenças significativas em habilidades como equilíbrio, força e habilidades manipulativas. Qual das seguintes interpretações está mais alinhada com a Teoria Ecológica do desenvolvimento motor?",
-      options: [
-        "As diferenças são principalmente genéticas, refletindo características inatas das populações estudadas",
-        "As diferenças representam variações na maturação neurológica causadas por fatores nutricionais",
-        "As diferenças refletem as affordances (oportunidades de ação) presentes nos diferentes ambientes, incluindo espaços físicos, equipamentos e práticas culturais",
-        "As diferenças são temporárias e se equalizarão naturalmente com o avanço da idade"
-      ],
-      correctAnswer: 2,
-      category: "Desenvolvimento Motor",
-      explanation: "A Teoria Ecológica enfatiza a relação entre o indivíduo e o ambiente, considerando que o desenvolvimento motor é fortemente influenciado pelas affordances (oportunidades de ação) presentes no contexto. Diferenças entre escolas públicas e particulares podem refletir variações em fatores ambientais como qualidade e quantidade de espaços para atividade física, disponibilidade de equipamentos esportivos, presença de professores especializados em educação física, valorização cultural de determinadas práticas motoras, e oportunidades estruturadas para desenvolvimento de habilidades específicas. Esta teoria não nega a influência de fatores biológicos, mas destaca como o ambiente molda o desenvolvimento através das oportunidades que oferece ou restringe."
-    },
-    {
-      question: "CASO CLÍNICO COMPLEXO: Um fisioterapeuta está avaliando uma criança de 5 anos com histórico de leucemia linfoblástica aguda, tratada com quimioterapia sistêmica (incluindo vincristina) e radioterapia craniana. A criança apresenta fraqueza muscular generalizada, fadiga crônica, déficit de coordenação, dificuldades de equilíbrio e baixo desempenho em tarefas motoras que antes realizava adequadamente. Que mecanismos fisiopatológicos provavelmente estão contribuindo para este quadro de desenvolvimento motor atípico?",
-      options: [
-        "Apenas efeitos diretos da quimioterapia na mielinização nervosa periférica",
-        "Combinação de neuropatia periférica induzida pela vincristina, miopatia relacionada à inatividade física durante o tratamento, e possíveis efeitos neurocognitivos da radioterapia craniana",
-        "Somente efeitos psicológicos secundários ao estigma da doença",
-        "Exclusivamente encefalopatia metabólica causada pela leucemia"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "O caso apresenta complexidade devido aos múltiplos mecanismos que podem afetar o desenvolvimento motor da criança com histórico oncológico. A vincristina é um quimioterápico neurotóxico que frequentemente causa neuropatia periférica, afetando a condução nervosa e resultando em fraqueza distal, alterações sensoriais e déficits de coordenação. Além disso, o período prolongado de tratamento geralmente leva à inatividade física e subsequente descondicionamento e miopatia. A radioterapia craniana pode causar efeitos neurocognitivos que impactam funções executivas, atenção e processamento visuoespacial, importantes para o desempenho motor. Este caso ilustra como fatores patológicos, medicamentosos e ambientais interagem afetando o desenvolvimento motor, exigindo uma abordagem multidimensional na reabilitação."
-    }
+      
+        "question": "Um bebê de 2 meses é levado ao pediatra para uma consulta de rotina. Durante a avaliação, a mãe relata que o bebê raramente reage a sons altos, não fixa o olhar no rosto dela quando está sendo carregado e não emite sons além do choro. Com base nos marcos do desenvolvimento típicos para essa idade, qual a conduta mais apropriada para o profissional de saúde, considerando a importância da detecção precoce?",
+        "options": [
+          "Orientar os pais a aguardar até os 4 meses, pois variações individuais no desenvolvimento são comuns e essas manifestações podem ser apenas um atraso pontual que se resolverá espontaneamente sem necessidade de intervenção imediata.",
+          "Acalmar os pais, explicando que cada bebê tem seu próprio ritmo e que a ausência de alguns marcos aos 2 meses não é indicativo de problema, mas sim de uma fase de maturação mais lenta que será superada naturalmente.",
+          "Aconselhar os pais a aumentar o tempo de interação com o bebê através de videochamadas com familiares distantes, visando estimular a linguagem e a comunicação, uma vez que a tecnologia pode compensar a falta de estímulos diretos.",
+          "Realizar uma triagem de desenvolvimento, compartilhar as preocupações com os pais e, se necessário, encaminhar para avaliação especializada em intervenção precoce, ressaltando a relevância da ação imediata para maximizar o potencial de desenvolvimento do bebê.",
+          "Recomendar o início imediato de um programa de estimulação motora intensiva, focando em exercícios de fortalecimento do pescoço e membros, visto que o principal foco nesse momento é o desenvolvimento físico e a prevenção de atrofias."
+        ],
+        "correctAnswer": 3,
+        "category": "Detecção Precoce e Marcos de 2 Meses",
+        "explanation": "A detecção precoce é crucial nos primeiros cinco anos de vida. As manifestações descritas (não reagir a sons altos, não fixar o olhar no rosto, não emitir sons diferentes do choro) são desvios importantes dos marcos esperados para um bebê de 2 meses. A conduta mais apropriada é a triagem, encaminhamento para especialista e intervenção precoce, pois a intervenção imediata maximiza o potencial de desenvolvimento. As outras opções representam subestimação do problema, foco inadequado ou condutas paliativas sem a devida investigação."
+      },
+      {
+        "question": "Uma criança de 4 anos demonstra dificuldades significativas em nomear cores básicas, apresenta vocabulário restrito a frases de duas palavras, não consegue recontar eventos simples do seu dia e raramente pede para brincar com outras crianças, preferindo atividades solitárias. Com base nos marcos de desenvolvimento para essa faixa etária, qual seria a principal preocupação e a abordagem inicial mais adequada?",
+        "options": [
+          "Há um indicativo de atraso no desenvolvimento linguístico e social/emocional, justificando uma avaliação multidisciplinar para identificar possíveis transtornos de desenvolvimento e o início de intervenções terapêuticas específicas para essas áreas, como fonoaudiologia e terapia ocupacional.",
+          "A principal preocupação é o desenvolvimento motor grosso, indicando a necessidade de atividades físicas mais desafiadoras para melhorar a coordenação e o equilíbrio, já que a falta de interação social é um reflexo da imaturidade física.",
+          "Sugerir que os pais matriculem a criança em uma pré-escola de período integral, pois a imersão em um ambiente social rico, por si só, garantirá que a criança atinja todos os marcos de desenvolvimento atrasados sem a necessidade de intervenções adicionais.",
+          "Aconselhar os pais a incentivarem a criança a brincar mais com bonecas e carrinhos para desenvolver a imaginação, assumindo que as dificuldades de linguagem e socialização são temporárias e serão superadas com brincadeiras mais estruturadas.",
+          "O foco deve ser na introdução de ferramentas educacionais digitais interativas para estimular o reconhecimento de cores e o vocabulário, pois a exposição tecnológica adequada pode acelerar o aprendizado cognitivo e linguístico nesse período."
+        ],
+        "correctAnswer": 0,
+        "category": "Marcos de 4 Anos e Intervenção",
+        "explanation": "Os marcos de 4 anos incluem dizer frases com quatro ou mais palavras, falar sobre o dia e pedir para brincar com outras crianças. A dificuldade em nomear cores, o vocabulário restrito, a incapacidade de recontar eventos e a preferência por atividades solitárias apontam para atrasos significativos nas áreas linguística e social/emocional. Uma avaliação multidisciplinar e intervenções terapêuticas são cruciais para abordar esses atrasos, ao invés de abordagens isoladas ou simplistas."
+      },
+      {
+        "question": "Um pediatra recebe um bebê de 6 meses para consulta de acompanhamento. Os pais relatam que o bebê leva objetos à boca, alcança brinquedos desejados e fecha os lábios para indicar que não quer mais comida. No entanto, eles estão preocupados porque o bebê ainda não consegue virar de bruços para cima e não demonstra interesse em se olhar no espelho. Qual a melhor orientação do pediatra para os pais, considerando os marcos de desenvolvimento e a necessidade de estimular a criança?",
+        "options": [
+          "Aconselhar os pais a focar exclusivamente em brincadeiras que estimulem a alimentação, como oferecer diferentes texturas e sabores, pois o principal objetivo aos 6 meses é a introdução alimentar e a formação de hábitos saudáveis, e os outros marcos são secundários.",
+          "Recomendar a introdução imediata de andadores para auxiliar o bebê a desenvolver a capacidade de virar e se movimentar, pois a mobilidade precoce é fundamental para o desenvolvimento global da criança e a interação com o ambiente, compensando as dificuldades motoras.",
+          "Instruir os pais a forçar o bebê a virar de bruços repetidamente e a colocar o espelho em locais de difícil acesso, pois a superação de desafios é essencial para o desenvolvimento motor em alta velocidade, e a falta de interesse no espelho é um sinal de subestimulação visual.",
+          "Elogiar o progresso nas áreas cognitiva e de alimentação, mas orientar os pais a incorporar brincadeiras que incentivem o bebê a rolar para alcançar brinquedos e a mostrar fotos coloridas no espelho, além de cantar e apontar para objetos, para estimular os marcos em atraso sem sobrecarregar o bebê.",
+          "Tranquilizar os pais, afirmando que o desenvolvimento de virar e o interesse no espelho são marcos menos importantes e que a criança está progredindo adequadamente nas áreas cognitiva e de alimentação, que são prioritárias nesta fase."
+        ],
+        "correctAnswer": 3,
+        "category": "Marcos de 6 Meses e Estimulação",
+        "explanation": "A criança de 6 meses deve virar de bruços para cima e gostar de se olhar no espelho. Embora o bebê esteja alcançando marcos em outras áreas (cognitiva, alimentação), a ausência de virar e o desinteresse pelo espelho merecem atenção. A melhor orientação é a estimulação adequada e lúdica para esses marcos específicos (incentivar o rolamento, usar o espelho em brincadeiras), sem forçar ou desconsiderar as preocupações dos pais. Andadores não são recomendados."
+      },
+      {
+        "question": "Aos 18 meses, uma criança apresenta dificuldades em seguir instruções simples sem gestos, não tenta dizer mais de três palavras além de 'mamãe' e 'papai', e não demonstra a capacidade de apontar para mostrar algo interessante. Os pais relatam que a criança se afasta deles, mas sempre se certifica de que estão por perto. Diante desses dados, qual a ação mais crucial a ser tomada pelo profissional de saúde?",
+        "options": [
+          "Realizar uma triagem geral de desenvolvimento e, especificamente, uma triagem de autismo, explicando aos pais a importância de identificar precocemente quaisquer sinais de alerta e a necessidade de intervenção especializada, se confirmada a suspeita.",
+          "Considerar que a fase de 'birras' é comum aos 18 meses e focar apenas em estratégias de manejo de comportamento, assumindo que os atrasos de comunicação são uma consequência natural da fase de individuação e que se resolverão com o tempo.",
+          "Sugerir a matrícula em uma creche de tempo integral para promover a socialização e a interação com outras crianças, pois a imitação dos pares será suficiente para que a criança alcance os marcos de linguagem e comunicação sem necessidade de terapias específicas.",
+          "Instruir os pais a utilizar apenas a linguagem de sinais com a criança para reduzir a frustração na comunicação, postergando o estímulo à fala oral até que a criança demonstre maior maturidade neurológica para articular as palavras.",
+          "Recomendar o aumento do tempo de exposição a desenhos animados educativos para estimular a linguagem, pois a imersão em conteúdo audiovisual didático pode acelerar o desenvolvimento do vocabulário e a compreensão de instruções."
+        ],
+        "correctAnswer": 0,
+        "category": "Marcos de 18 Meses e Triagem",
+        "explanation": "Aos 18 meses, a triagem geral de desenvolvimento e a triagem de autismo são recomendadas. Os marcos de comunicação (seguir instruções sem gestos, tentar dizer mais de três palavras, apontar para mostrar algo) e a capacidade de interagir socialmente são cruciais. A ausência desses marcos, mesmo com a busca por proximidade dos pais, é um sinal de alerta que exige investigação aprofundada, incluindo a triagem para autismo, para garantir intervenção precoce se necessário."
+      },
+      {
+        "question": "Um professor de educação infantil observa que uma criança de 5 anos, apesar de interagir com os colegas, tem dificuldades em seguir regras simples de jogos coletivos, não consegue contar histórias que ouviu com pelo menos dois eventos e ainda não nomeia a maioria dos números entre 1 e 5. A criança também apresenta coordenação motora fina aquém do esperado para abotoar botões. Qual a melhor abordagem para auxiliar no desenvolvimento dessa criança, considerando um plano de estimulação multifacetado?",
+        "options": [
+          "Aconselhar os pais a limitarem o tempo de brincadeiras livres e focarem em exercícios estruturados e repetitivos de psicomotricidade para corrigir as dificuldades motoras, pois a correção do atraso motor é o ponto de partida para o desenvolvimento das demais habilidades.",
+          "Priorizar exclusivamente atividades de alfabetização e numeramento, como repetição de letras e números em voz alta, pois a principal meta aos 5 anos é a preparação para a escola e o domínio dos conhecimentos básicos.",
+          "Desenvolver um plano de estimulação que inclua jogos de regras com reforço positivo para o cumprimento das normas, atividades de contação de histórias com incentivo à sequência lógica, exercícios de contagem de objetos, e brincadeiras que fortaleçam a coordenação motora fina, como manipulação de botões e encaixes, com a participação ativa dos pais e da escola.",
+          "Recomendar que a criança seja avaliada por um psicólogo infantil para identificar possíveis problemas emocionais que estejam inibindo o desenvolvimento social e cognitivo, pois as dificuldades de regras e contação de histórias são um reflexo de instabilidade emocional.",
+          "Ignorar as dificuldades de coordenação motora e focar apenas em brincadeiras que incentivem a contação de histórias e a conversação, assumindo que as habilidades motoras se desenvolverão naturalmente à medida que as outras áreas amadurecerem."
+        ],
+        "correctAnswer": 2,
+        "category": "Marcos de 5 Anos e Estimulação Multifacetada",
+        "explanation": "Aos 5 anos, espera-se que a criança siga regras, conte histórias com ao menos dois eventos, nomeie números entre 1 e 5 e abotoe botões. As dificuldades apresentadas indicam a necessidade de um plano de estimulação abrangente e multifacetado, abordando as habilidades sociais (regras de jogos), linguísticas/cognitivas (contar histórias, numeramento) e motoras finas (abotoar). A colaboração entre pais e escola é fundamental para o sucesso dessa intervenção."
+      },
+      {
+        "question": "Um educador físico está planejando atividades para uma turma de crianças de 7 anos. Ele observa que, embora a maioria das crianças corra e salte com bastante agilidade, algumas ainda demonstram dificuldades em manter o equilíbrio em um pé por mais de 5 segundos e ao rebater uma bola pequena com uma raquete. Com base nos conceitos de desenvolvimento motor para essa faixa etária, qual a melhor interpretação dessas observações e a conduta mais indicada?",
+        "options": [
+          "A dificuldade em rebater a bola indica um atraso grave no desenvolvimento motor fino, o que exige um encaminhamento imediato para terapia ocupacional, pois a coordenação fina é a principal habilidade a ser desenvolvida nessa idade.",
+          "Os desafios no equilíbrio unipodal e na rebatida sugerem que essas crianças podem não ter atingido o estágio maduro em algumas habilidades de estabilidade e manipulação. É fundamental oferecer atividades específicas para refiná-las, pois a ausência desse desenvolvimento pode limitar a participação em esportes futuros.",
+          "A melhor conduta é separar as crianças em grupos com base no nível de desenvolvimento de cada habilidade, oferecendo atividades muito mais avançadas para os que dominam e repetindo os mesmos exercícios básicos para os que apresentam dificuldades, priorizando a homogeneidade de desempenho.",
+          "As crianças estão no estágio elementar de movimentos fundamentais, sendo natural que ainda não dominem o equilíbrio ou as habilidades manipulativas complexas. O educador deve focar em atividades lúdicas gerais, sem preocupação com refinamento técnico.",
+          "O equilíbrio unipodal e a rebatida são habilidades especializadas que só devem ser cobradas a partir dos 9 anos. O foco para crianças de 7 anos deve ser apenas em habilidades discretas de locomoção e arremesso, sem complexidade."
+        ],
+        "correctAnswer": 1,
+        "category": "Estágios e Tipos de Habilidades",
+        "explanation": "Crianças de 6 a 8 anos devem estar no estágio maduro para a maioria das habilidades fundamentais. A dificuldade em equilíbrio unipodal (estabilidade) e rebatida (manipulação) indica que essas habilidades podem não ter alcançado o estágio maduro, o que é crucial para a transição para movimentos especializados e a participação em atividades esportivas. A intervenção focada nessas áreas é fundamental para superar a 'barreira de proficiência'."
+      },
+      {
+        "question": "Considere o caso de uma criança de 6 anos que se destaca em atividades como ginástica artística e nado sincronizado, onde os movimentos são executados em ambientes controlados e previsíveis. No entanto, essa mesma criança demonstra dificuldade e hesitação ao jogar futebol ou basquete, onde o ambiente é dinâmico e imprevisível. Com base na classificação das habilidades motoras quanto à previsibilidade ambiental, qual a melhor análise para este cenário?",
+        "options": [
+          "A criança apresenta uma preferência inata por atividades individuais e estruturadas, o que é um traço de personalidade e não um indicativo de atraso no desenvolvimento motor. A melhor abordagem é respeitar essa preferência.",
+          "As dificuldades são um reflexo da imaturidade das habilidades motoras finas, que são essenciais para a coordenação em esportes de equipe. O foco deve ser em atividades como escrever e desenhar para melhorar o controle manual.",
+          "O problema reside na falta de instrução formal em esportes coletivos. Com aulas específicas de futebol ou basquete, a criança superará rapidamente as dificuldades, independentemente de sua capacidade de adaptação a ambientes imprevisíveis.",
+          "A criança está desenvolvendo habilidades motoras grossas de forma inadequada, o que compromete seu desempenho em esportes coletivos. A intervenção deve focar em exercícios de força e resistência.",
+          "As habilidades motoras abertas da criança estão subdesenvolvidas em comparação com suas habilidades fechadas. É necessário proporcionar mais oportunidades em ambientes variáveis para que ela aprenda a adaptar seus movimentos e tomar decisões rápidas."
+        ],
+        "correctAnswer": 4,
+        "category": "Habilidades Abertas e Fechadas",
+        "explanation": "Habilidades fechadas são executadas em ambientes previsíveis (ginástica, nado sincronizado), enquanto habilidades abertas exigem adaptação a ambientes variáveis (futebol, basquete). A criança demonstra bom domínio de habilidades fechadas, mas dificuldade em habilidades abertas, o que é comum nessa fase de transição. É crucial estimular a capacidade de adaptação em ambientes dinâmicos para o desenvolvimento completo e a participação em esportes coletivos."
+      },
+      {
+        "question": "Um estudo com crianças de 6 a 8 anos revelou que 22% apresentaram desenvolvimento motor abaixo do esperado, e que meninos tiveram melhor desempenho em habilidades manipulativas, enquanto meninas se destacaram em habilidades locomotoras. Além disso, crianças de escolas com melhor infraestrutura apresentaram desempenho superior. Quais recomendações de estimulação seriam mais eficazes e abrangentes diante desses achados, considerando a importância da intervenção?",
+        "options": [
+          "Recomendar que as crianças com atraso no desenvolvimento motor participem apenas de esportes individuais de alta precisão, como tiro com arco, para evitar a frustração em atividades coletivas e focar em suas aptidões motoras específicas.",
+          "Ignorar as diferenças de gênero, pois são meras variações individuais, e concentrar os esforços em aulas teóricas sobre esportes para as crianças com desenvolvimento abaixo do esperado, visando a compreensão dos movimentos antes da prática.",
+          "Implementar um programa de treinamento físico intenso e padronizado para todas as crianças, sem considerar as variações de gênero ou nível socioeconômico, pois a repetição exaustiva é o único caminho para o desenvolvimento motor em massa.",
+          "Focar exclusivamente em atividades que melhorem a força e a resistência muscular, pois a infraestrutura está diretamente ligada à capacidade física e aprimorando-a, todas as outras habilidades motoras serão naturalmente desenvolvidas.",
+          "Oferecer atividades motoras diversificadas que contemplem todas as categorias de movimento, com atenção individualizada para crianças com atrasos, estímulo às habilidades manipulativas em meninas e locomotoras em meninos, e garantia de ambientes e materiais adequados, combatendo estereótipos de gênero."
+        ],
+        "correctAnswer": 4,
+        "category": "Estudo de Caso e Recomendações",
+        "explanation": "As recomendações baseadas no estudo destacam a necessidade de atividades diversificadas, atenção individualizada para atrasos, estímulo específico para habilidades manipulativas em meninas e locomotoras em meninos (combatendo estereótipos socioculturais, não biológicos), e a importância de um ambiente adequado. Essa abordagem é a mais abrangente e eficaz para promover o desenvolvimento motor integral das crianças."
+      },
+      {
+        "question": "Uma professora do 2º ano do ensino fundamental (7 anos) percebe que um aluno demonstra dificuldade em coordenar o movimento de chutar uma bola com a aproximação e o balanço da perna oposta. Ele frequentemente chuta a bola de forma estática e sem muita força. Com base nos 'Movimentos de Manipulação' esperados para a idade de 6-8 anos, qual a melhor avaliação e intervenção para este caso?",
+        "options": [
+          "A criança provavelmente está no estágio elementar de movimento de chutar. A professora deve encorajar a prática de atividades que envolvam o chute, oferecendo feedback específico sobre a coordenação e a transferência de peso, e se necessário, buscar orientação de um profissional de educação física.",
+          "A coordenação de braços e pernas no chute é uma habilidade que só se desenvolve plenamente na adolescência. A professora não deve se preocupar com isso e focar apenas nas habilidades de escrita e leitura, que são mais relevantes para essa idade escolar.",
+          "É um sinal claro de que a criança precisa de óculos, pois a falta de precisão ao chutar a bola está diretamente relacionada à visão. A intervenção deve ser apenas o encaminhamento para um oftalmologista.",
+          "Essa dificuldade é um indicativo de que a criança não possui habilidades motoras grossas adequadas para a prática de esportes. A professora deve sugerir que os pais matriculem o aluno em aulas de natação, pois a natação aprimora todas as habilidades motoras.",
+          "A dificuldade é provavelmente resultado da falta de interesse da criança no futebol. A melhor abordagem é oferecer apenas brinquedos que estimulem a coordenação fina, como quebra-cabeças, pois o foco deve ser em atividades que a criança já demonstra aptidão."
+        ],
+        "correctAnswer": 0,
+        "category": "Categorias de Movimento - Manipulação",
+        "explanation": "Aos 6-8 anos, espera-se que a criança realize o chute com aproximação e balanço da perna oposta, indicando um padrão maduro. A dificuldade descrita sugere que a criança ainda está em um estágio anterior (provavelmente elementar) para essa habilidade. A intervenção mais adequada é a prática direcionada e o feedback, buscando refinar a coordenação e a técnica do chute, com o apoio de um profissional se necessário."
+      },
+      {
+        "question": "A Teoria dos Sistemas Dinâmicos é uma das abordagens para compreender o desenvolvimento motor em crianças de 6 a 8 anos. Qual das seguintes situações melhor ilustra a aplicação dessa teoria no entendimento de como uma criança aprende a andar de bicicleta sem rodinhas?",
+        "options": [
+          "A criança consegue andar de bicicleta porque o ambiente oferece uma pista plana e segura, e o tamanho da bicicleta é perfeitamente adequado às suas pernas, fornecendo todas as 'affordances' necessárias para a ação.",
+          "O aprendizado de andar de bicicleta é um processo de repetição mecânica de movimentos até que se tornem automáticos, sem a necessidade de ajuste ou adaptação a diferentes superfícies ou condições.",
+          "A criança aprende a andar de bicicleta através da interação de múltiplos fatores: a força de suas pernas (subsistema biomecânico), o equilíbrio (subsistema sensorial), a coordenação neural (subsistema neuromuscular), o tamanho e o tipo da bicicleta (fator ambiental) e a motivação para pedalar (fator da tarefa).",
+          "A criança aprende a andar de bicicleta somente após atingir uma idade específica, quando seu sistema nervoso central está totalmente maduro para controlar os movimentos complexos, independentemente de qualquer outra influência.",
+          "A capacidade de andar de bicicleta é herdada geneticamente e se manifesta quando a criança atinge um certo nível de crescimento físico, sendo mais influenciada por fatores genéticos do que por experiências de prática ou ambiente."
+        ],
+        "correctAnswer": 2,
+        "category": "Conceitos Fundamentais - Teorias do Desenvolvimento Motor",
+        "explanation": "A Teoria dos Sistemas Dinâmicos enfatiza que o desenvolvimento motor é um resultado da interação complexa entre múltiplos subsistemas do indivíduo (neuromuscular, sensorial, biomecânico), fatores ambientais (condições da pista, tipo de bicicleta) e as características da tarefa em si (a motivação para pedalar). A aprendizagem de andar de bicicleta é um exemplo clássico dessa interação multifatorial, e não apenas de maturação ou influência ambiental isolada."
+      },
+      {
+        "question": "A Paralisia Cerebral (PC) é uma desordem complexa que afeta o desenvolvimento motor. Qual das seguintes afirmações melhor descreve a principal característica da PC e suas consequências diretas no desenvolvimento da criança?",
+        "options": [
+          "É um grupo de desordens do desenvolvimento do movimento e da postura, resultantes de uma lesão não progressiva no encéfalo em desenvolvimento, que podem levar a limitações nas atividades de vida diária e serem acompanhadas de outros distúrbios.",
+          "A PC é uma doença progressiva que causa degeneração muscular contínua, levando a uma perda gradual de todas as habilidades motoras ao longo da vida, independentemente da intervenção terapêutica.",
+          "Define-se como uma doença infecciosa que afeta o sistema nervoso central, levando a deficiências motoras temporárias que podem ser completamente revertidas com fisioterapia intensiva durante a primeira infância.",
+          "Caracteriza-se por lesões no encéfalo em desenvolvimento que são progressivas e irreversíveis, resultando em distúrbios exclusivamente motores e sem afetar outras esferas do desenvolvimento da criança.",
+          "A PC é uma condição puramente genética que se manifesta apenas por espasticidade severa, sem qualquer impacto na função social ou cognitiva da criança, necessitando apenas de intervenções farmacológicas."
+        ],
+        "correctAnswer": 0,
+        "category": "Introdução à Paralisia Cerebral",
+        "explanation": "A Paralisia Cerebral é um grupo de desordens do desenvolvimento do movimento e da postura, resultantes de uma lesão não progressiva no encéfalo em desenvolvimento. As desordens motoras levam a limitações nas AVD e podem ser acompanhadas de outros distúrbios (sensoriais, cognitivos, de comunicação, etc.)."
+      },
+      {
+        "question": "O GMFCS (Sistema de Classificação da Função Motora Ampla) é uma ferramenta importante na avaliação da Paralisia Cerebral. O que o GMFCS avalia?",
+        "options": [
+          "Apenas a presença de distúrbios sensoriais e perceptivos associados à PC.",
+          "Exclusivamente o tônus muscular da criança, classificando-o em espástico, discinético ou atáxico.",
+          "O nível de funcionalidade motora, variando de crianças com bom desempenho (nível I) a crianças com severas limitações (nível V).",
+          "O impacto da epilepsia e dos problemas musculoesqueléticos secundários na qualidade de vida da criança.",
+          "A distribuição topográfica da lesão cerebral, indicando se é hemiplegia, diplegia ou quadriplegia."
+        ],
+        "correctAnswer": 2,
+        "category": "Classificação da Paralisia Cerebral",
+        "explanation": "O GMFCS possui cinco níveis que classificam o nível de funcionalidade motora, de crianças com bom desempenho motor e poucas limitações (nível I) a crianças com múltiplas desordens e limitações severas no controle voluntário dos movimentos (nível V)."
+      },
+      {
+        "question": "Um fisioterapeuta está desenvolvendo um programa de intervenção para uma criança com Paralisia Cerebral. Ele decide utilizar a abordagem da fisioterapia funcional. Qual a principal característica dessa abordagem e por que ela é considerada eficaz?",
+        "options": [
+          "A fisioterapia funcional ignora as características intrínsecas da criança e foca apenas na modificação do ambiente, garantindo que o ambiente seja o único fator determinante para o desempenho funcional da criança.",
+          "Baseia-se unicamente na redução da espasticidade através de técnicas manuais intensivas, acreditando que a diminuição do tônus muscular resolverá automaticamente todas as dificuldades de aquisição de marcos motores e desempenho nas AVD.",
+          "Essa abordagem prioriza o aprendizado de habilidades motoras significativas e relevantes para a vida diária da criança, nas quais ela se engaja ativamente, relacionando a limitação motora com a atividade funcional, o que a torna eficaz na promoção da independência.",
+          "A fisioterapia funcional concentra-se exclusivamente em exercícios de alongamento passivo e fortalecimento muscular isolado, visando aumentar a amplitude de movimento e a força, o que por si só garante a independência funcional da criança.",
+          "A eficácia da fisioterapia funcional advém da imposição de tarefas motoras complexas e descontextualizadas para a criança, visando desafiar suas capacidades e acelerar o desenvolvimento de todas as habilidades de uma só vez, independentemente do desejo da criança ou dos pais."
+        ],
+        "correctAnswer": 2,
+        "category": "Fisioterapia Funcional",
+        "explanation": "A fisioterapia funcional prioriza o aprendizado de habilidades motoras que são significativas no ambiente da criança e nas quais ela deseja se engajar. Ela relaciona a limitação motora com a atividade funcional, o que a torna essencial para a independência funcional, minimizando dificuldades e promovendo a prática de movimentos no repertório motor da criança."
+      },
+      {
+        "question": "Qual a importância da orientação aos pais e cuidadores no programa de fisioterapia para crianças com Paralisia Cerebral?",
+        "options": [
+          "É importante apenas para informar sobre o diagnóstico da PC, sem necessidade de envolvimento prático nas atividades da criança.",
+          "Serve unicamente para que os pais supervisionem as sessões de fisioterapia, garantindo que a criança realize todos os exercícios corretamente.",
+          "É fundamental para integrar os pais nas atividades funcionais do dia a dia da criança, otimizando o programa de fisioterapia e reduzindo o estresse e a ansiedade dos cuidadores.",
+          "A orientação é necessária apenas em casos de PC severa (GMFCS nível V) para auxiliar na mobilidade, sendo dispensável em casos leves (GMFCS nível I).",
+          "Não há importância significativa, pois o desenvolvimento funcional da criança depende exclusivamente da intervenção do fisioterapeuta."
+        ],
+        "correctAnswer": 2,
+        "category": "Orientação aos Pais e Cuidadores",
+        "explanation": "Estudos demonstram a importância de orientar pais e cuidadores de crianças com PC, incentivando-os a estimular as crianças em diferentes habilidades e a promover sua independência funcional. A participação dos pais otimiza o programa de fisioterapia e traz benefícios aos pais, integrando-os nas atividades funcionais do dia a dia da criança e reduzindo o estresse e a ansiedade."
+      },
+      {
+        "question": "O PEDI (Pediatric Evaluation of Disability Inventory) é um instrumento de avaliação funcional utilizado em crianças com Paralisia Cerebral. Quais são as três áreas do desempenho funcional avaliadas pelo PEDI?",
+        "options": [
+          "Autocuidado, mobilidade e função social.",
+          "Equilíbrio, coordenação e agilidade.",
+          "Força muscular, amplitude de movimento e tônus muscular.",
+          "Linguagem, comunicação e comportamento.",
+          "Visão, audição e cognição."
+        ],
+        "correctAnswer": 0,
+        "category": "Procedimentos de Avaliação e Intervenção",
+        "explanation": "O PEDI é dividido em três partes (Habilidades funcionais, Assistência do Cuidador e Modificação do ambiente) que informam sobre as três áreas do desempenho funcional: Autocuidado, Mobilidade e Função Social."
+      },
+      {
+        "question": "A Paralisia Cerebral (PC) é uma condição complexa com diversas características. Qual das seguintes afirmações melhor define a PC, destacando sua natureza e o período de ocorrência da lesão?",
+        "options": [
+          "A PC é uma condição exclusivamente genética, manifestando-se apenas por atrasos motores severos que não são influenciados por fatores ambientais ou terapêuticos.",
+          "Caracteriza-se por uma desordem persistente do movimento e da postura, resultante de uma lesão não progressiva no encéfalo em desenvolvimento, que pode ocorrer nos períodos pré, peri ou pós-natais.",
+          "É uma desordem progressiva que degenera o sistema nervoso central ao longo do tempo, causando deterioração contínua das habilidades motoras e cognitivas em todas as idades.",
+          "Define-se como um transtorno psicomotor que surge na adolescência devido a experiências traumáticas, resultando em distúrbios de movimento e postura sem base neurológica identificável.",
+          "É uma doença contagiosa que afeta apenas o córtex motor do cérebro, levando a alterações de tônus muscular que são sempre reversíveis com tratamento medicamentoso intensivo."
+        ],
+        "correctAnswer": 1,
+        "category": "Introdução à Paralisia Cerebral",
+        "explanation": "A Paralisia Cerebral é definida como uma desordem persistente, porém variável, do movimento e da postura, que surge nos primeiros anos de vida devido a uma interferência no desenvolvimento do Sistema Nervoso Central (SNC), causada por uma desordem cerebral não progressiva. Pode ocorrer nos períodos pré, peri ou pós-natais."
+      },
+      {
+        "question": "Um recém-nascido apresentou complicações severas durante o parto, incluindo anóxia prolongada. Após alguns meses, a equipe médica diagnosticou Paralisia Cerebral. Com base na etiologia da PC, a anóxia durante o parto é classificada como qual tipo de fator?",
+        "options": [
+          "Fator Idiopático, já que a causa da anóxia é desconhecida e não pode ser atribuída a nenhum período específico.",
+          "Fator Perinatal, pois a anóxia ocorrida durante o parto se encaixa na categoria de eventos que acontecem nesse período.",
+          "Fator Pós-natal, pois a anóxia só se manifesta após o nascimento e seus efeitos são tardios.",
+          "Fator Pré-natal, uma vez que a anóxia é uma condição que se estabelece durante a gestação e afeta o desenvolvimento fetal.",
+          "Fator Genético, pois a predisposição à anóxia em recém-nascidos é sempre de origem hereditária."
+        ],
+        "correctAnswer": 1,
+        "category": "Etiologia da Paralisia Cerebral",
+        "explanation": "Os fatores perinatais são aqueles que ocorrem durante o parto. A anóxia (falta de oxigênio) durante o parto é um exemplo de fator perinatal que pode levar à Paralisia Cerebral."
+      },
+      {
+        "question": "Uma criança com Paralisia Cerebral apresenta movimentos involuntários, como distonias axiais e movimentos coreoatetóides das extremidades. Qual tipo de disfunção motora da PC melhor descreve esse quadro clínico?",
+        "options": [
+          "Espástica",
+          "Mista",
+          "Atáxica",
+          "Extrapiramidal ou Discinética",
+          "Hemiplegia"
+        ],
+        "correctAnswer": 3,
+        "category": "Tipos de Paralisia Cerebral - Disfunção Motora",
+        "explanation": "A descrição de movimentos involuntários, como distonias axiais e movimentos coreoatetóides das extremidades, é característica da Paralisia Cerebral do tipo Extrapiramidal ou Discinética."
+      },
+      {
+        "question": "O diagnóstico da Paralisia Cerebral envolve a identificação de diversos sinais. Qual das seguintes opções NÃO é um aspecto comumente considerado para o diagnóstico de PC?",
+        "options": [
+          "Persistência de reflexos primitivos.",
+          "Retardo ou atraso no desenvolvimento motor.",
+          "Histórico de infecções virais frequentes na primeira infância.",
+          "Presença de reflexos anormais.",
+          "Ausência do desenvolvimento dos reflexos protetores, como a resposta de paraquedas."
+        ],
+        "correctAnswer": 2,
+        "category": "Diagnóstico da Paralisia Cerebral",
+        "explanation": "Embora infecções possam ter impacto na saúde infantil, um histórico de infecções virais frequentes na primeira infância não é um aspecto comumente listado como critério direto para o diagnóstico de Paralisia Cerebral, que se baseia primariamente em sinais neurológicos e motores."
+      },
+      {
+        "question": "A toxina botulínica é um tratamento utilizado em casos específicos de Paralisia Cerebral. Em qual situação sua aplicação é mais indicada e qual é o seu principal efeito?",
+        "options": [
+          "É empregada para melhorar a cognição e a linguagem em crianças com PC, agindo diretamente nos centros de fala do cérebro, sem impacto no tônus muscular.",
+          "Sua aplicação é exclusiva para o tratamento de deformidades ortopédicas severas, substituindo a necessidade de cirurgias corretivas complexas e permanentes.",
+          "É indicada para reverter a lesão cerebral e restaurar completamente a função motora em casos de PC grave, pois atua na regeneração neuronal.",
+          "É utilizada para tratar a epilepsia associada à PC, atuando como um anticonvulsivante de ação prolongada no sistema nervoso central.",
+          "É indicada quando outros métodos falham para reduzir a espasticidade, atuando na junção neuromuscular e provocando paresia muscular, com efeito que dura aproximadamente 3 meses."
+        ],
+        "correctAnswer": 4,
+        "category": "Tratamento da Paralisia Cerebral - Toxina Botulínica",
+        "explanation": "A toxina botulínica é indicada para reduzir a espasticidade quando outros métodos falham. Ela atua na junção neuromuscular, provocando paresia muscular, e seu efeito dura aproximadamente 3 meses. Não reverte a lesão cerebral, não trata epilepsia nem é um substituto geral para cirurgias, nem foca em cognição/linguagem."
+      },
+      {
+        "question": "A Paralisia Braquial Obstétrica (PBO) é uma lesão que afeta o membro superior do recém-nascido. Qual a sua causa principal e as raízes nervosas mais comumente envolvidas?",
+        "options": [
+          "É uma doença genética que afeta o desenvolvimento muscular, e as raízes mais afetadas são as torácicas T10-T12.",
+          "Resulta de uma infecção bacteriana no plexo braquial durante a gestação, comprometendo principalmente as raízes cervicais C1-C4.",
+          "É causada por deficiências nutricionais maternas no último trimestre da gravidez, impactando as raízes sacrais S1-S5.",
+          "É uma condição autoimune que se manifesta após o primeiro ano de vida, afetando aleatoriamente qualquer raiz nervosa do plexo braquial.",
+          "Ocorre devido a uma lesão, geralmente distensão ou ruptura, no plexo braquial durante as manobras do parto vaginal, com maior frequência nas raízes cervicais C5 a C8 e torácica T1."
+        ],
+        "correctAnswer": 4,
+        "category": "Definição e Conceitos Básicos",
+        "explanation": "A PBO é uma paralisia flácida do membro superior do recém-nascido devido a uma lesão no plexo braquial, geralmente uma distensão ou ruptura, que ocorre durante as manobras do parto vaginal, especialmente em casos de distocia de ombro. As raízes nervosas mais comumente afetadas são as cervicais C5 a C8 e a torácica T1."
+      },
+      {
+        "question": "A Paralisia de Erb-Duchenne é o tipo mais comum de PBO. Qual é a postura típica do membro afetado neste tipo de lesão e qual o seu prognóstico geral?",
+        "options": [
+          "Acometimento exclusivo dos membros inferiores, com marcha em tesoura, e o prognóstico depende da gravidade da lesão medular.",
+          "Lesão completa de todo o plexo braquial, com Síndrome de Horner, e o prognóstico é sempre de dano permanente.",
+          "Postura de 'mão de mendigo', com flexão do cotovelo e extensão do punho, e o prognóstico é sempre desfavorável.",
+          "Movimentos involuntários e discinéticos dos quatro membros, com prognóstico imprevisível.",
+          "Braço aduzido e rodado internamente, cotovelo estendido e pulso flexionado ('gorjeta do garçom'), geralmente com o melhor prognóstico."
+        ],
+        "correctAnswer": 4,
+        "category": "Classificação e Tipos de Lesão",
+        "explanation": "A Paralisia de Erb-Duchenne (lesão de C5-C6) se caracteriza pela postura de 'gorjeta do garçom': braço aduzido e rodado internamente, cotovelo estendido e pulso flexionado. É o tipo mais comum e geralmente apresenta o melhor prognóstico."
+      },
+      {
+        "question": "Um bebê nasce com 4,8 kg, e a mãe é diabética. Durante o parto, houve uma distocia de ombro significativa. Com base nos fatores de risco para PBO, qual a principal preocupação neste caso?",
+        "options": [
+          "A idade materna, que é o fator mais relevante para distocia de ombro e, consequentemente, PBO.",
+          "O trabalho de parto prolongado, sendo este o único fator que realmente contribui para a lesão do plexo braquial.",
+          "O peso ao nascer superior a 4,5 kg e o diabetes mellitus materno, que são fatores de risco importantes associados à distocia de ombro e PBO.",
+          "A apresentação pélvica, que aumenta exponencialmente o risco de PBO, independentemente de outros fatores.",
+          "A primogenidade da mãe, pois mães de primeira viagem têm maior probabilidade de ter filhos com PBO."
+        ],
+        "correctAnswer": 2,
+        "category": "Fatores de Risco e Incidência",
+        "explanation": "O peso ao nascer superior a 4,5 kg é o fator de risco mais importante para PBO, fortemente relacionado à distocia de ombro. O diabetes mellitus materno também é um fator de risco adicional. A combinação desses fatores aumenta significativamente a preocupação com a PBO."
+      },
+      {
+        "question": "A fisioterapia é crucial no tratamento da Paralisia Braquial Obstétrica (PBO). Qual o principal objetivo do tratamento fisioterapêutico para crianças com PBO e qual a importância da intervenção precoce?",
+        "options": [
+          "Promover a funcionalidade do membro afetado, prevenindo contraturas musculares, estimulando a sensibilidade e motricidade, mantendo amplitude de movimento, e a intervenção precoce é essencial para otimizar essa recuperação.",
+          "Reduzir o peso do recém-nascido para evitar futuras complicações ortopédicas, uma vez que a fisioterapia atua no metabolismo lipídico.",
+          "Atingir a recuperação completa da lesão nervosa, pois a fisioterapia tem a capacidade de regenerar os nervos danificados, independentemente da gravidade da lesão.",
+          "Substituir completamente a necessidade de cirurgias em todos os casos de PBO, independentemente da gravidade da lesão neurológica.",
+          "Focar apenas na estimulação cognitiva e no desenvolvimento da linguagem, pois essas são as áreas mais afetadas em crianças com PBO e a recuperação motora é secundária."
+        ],
+        "correctAnswer": 0,
+        "category": "Abordagens de Tratamento",
+        "explanation": "O principal objetivo da fisioterapia na PBO é promover a funcionalidade do membro afetado, prevenindo contraturas, estimulando sensibilidade e motricidade, e mantendo a amplitude de movimento. A intervenção precoce é essencial para otimizar a recuperação do movimento e da sensibilidade, prevenindo complicações neurofuncionais."
+      },
+      {
+        "question": "Um fisioterapeuta utiliza a Terapia de Movimento Induzido por Restrição (TMIR) em uma criança com PBO. Qual é o princípio fundamental dessa técnica e por que ela é considerada eficaz?",
+        "options": [
+          "A TMIR é uma forma de terapia medicamentosa que utiliza injeções de toxina botulínica no membro saudável para reduzir sua função e, indiretamente, aumentar o uso do membro afetado.",
+          "Consiste na contenção do membro superior afetado para forçar o uso do membro saudável, promovendo assim uma recuperação mais rápida do lado lesionado através da imobilização.",
+          "Baseia-se na contenção do membro superior saudável para estimular o uso do membro afetado em atividades da vida diária, encorajando o cérebro a 'reaprender' a utilizar o membro comprometido e promover ganhos funcionais.",
+          "Envolve a aplicação de choques elétricos de baixa intensidade no membro afetado para estimular a contração muscular e a reativação nervosa, sendo eficaz pela estimulação direta dos neurônios.",
+          "É uma técnica puramente passiva, onde o terapeuta manipula o membro afetado sem qualquer participação ativa da criança, visando apenas a manutenção da amplitude de movimento articular e a prevenção de atrofias."
+        ],
+        "correctAnswer": 2,
+        "category": "Abordagens de Tratamento - Terapia de Movimento Induzido por Restrição",
+        "explanation": "A Terapia de Movimento Induzido por Restrição (TMIR) consiste na contenção do membro superior saudável para estimular o uso do membro afetado em atividades da vida diária. Essa técnica é considerada eficaz porque encoraja o cérebro a reorganizar-se e 'reaprender' a utilizar o membro comprometido, promovendo ganhos funcionais."
+      },
+      {
+        "question": "O Transtorno do Espectro Autista (TEA) é um distúrbio do neurodesenvolvimento com manifestações complexas. Qual a principal característica do TEA e a importância do diagnóstico precoce, conforme o texto?",
+        "options": [
+          "É uma condição psicológica que surge na adolescência devido a traumas, e o diagnóstico precoce serve apenas para indicar a necessidade de psicoterapia individual e isolamento social para evitar sobrecarga sensorial.",
+          "Trata-se de uma doença infecciosa que afeta o sistema nervoso central em idade adulta, e o diagnóstico precoce é crucial para a administração de antibióticos que erradiquem a causa da doença e previnam sequelas neurológicas.",
+          "Caracteriza-se por um distúrbio do neurodesenvolvimento que impacta comunicação, cognição, interação social, comportamento e habilidades motoras/sensoriais. O diagnóstico precoce é fundamental para minimizar sintomas e proporcionar maior bem-estar, aproveitando a neuroplasticidade cerebral.",
+          "É um distúrbio motor progressivo que afeta a força muscular, sendo o diagnóstico precoce importante para iniciar tratamentos que revertam a degeneração muscular e restaurem a função motora completa da criança.",
+          "É um transtorno de aprendizagem que se manifesta apenas na escola, e o diagnóstico precoce visa exclusivamente a adaptação curricular, sem a necessidade de intervenções motoras ou sensoriais, que não são relevantes para essa condição."
+        ],
+        "correctAnswer": 2,
+        "category": "Conceitos Básicos e Diagnóstico",
+        "explanation": "O TEA é um distúrbio do neurodesenvolvimento que se manifesta nos primeiros meses de vida, impactando áreas como comunicação, cognição, interação social, comportamento e habilidades motoras e sensoriais. O diagnóstico precoce é fundamental, pois permite a intervenção temprana para minimizar os sintomas, aproveitar a neuroplasticidade cerebral e proporcionar maior bem-estar e qualidade de vida."
+      },
+      {
+        "question": "Um dos sinais de alerta para TEA, frequentemente observado antes dos dois anos de idade, está relacionado à comunicação. Qual é um dos principais sinais de alerta nesse contexto?",
+        "options": [
+          "Hipersensibilidade a sons altos.",
+          "Desenvolvimento motor acelerado.",
+          "Preferência por interações sociais complexas com estranhos.",
+          "Ausência de primeiras palavras e frases.",
+          "Uso excessivo de frases complexas e elaboradas."
+        ],
+        "correctAnswer": 3,
+        "category": "Características e Manifestações Clínicas",
+        "explanation": "Déficits na comunicação são frequentemente observados antes dos dois anos de idade, sendo a ausência de primeiras palavras e frases um dos principais sinais de alerta."
+      },
+      {
+        "question": "A fisioterapia no TEA visa aprimorar diversas habilidades. Quais são os principais objetivos da fisioterapia no tratamento de crianças com TEA?",
+        "options": [
+          "Realizar apenas massagens relaxantes para diminuir a hipersensibilidade tátil, sem qualquer foco no desenvolvimento de habilidades motoras ou sociais mais complexas.",
+          "Focar exclusivamente na correção de problemas gastrointestinais e no fortalecimento do sistema imunológico, pois essas são as principais comorbidades do TEA que a fisioterapia pode tratar.",
+          "Concentrar-se unicamente na medicação para reduzir a hiperatividade e a ansiedade, sem a necessidade de intervenções motoras, que não impactam diretamente os sintomas do TEA.",
+          "Desenvolver coordenação motora grossa e fina, melhorar equilíbrio e controle postural, estimular a integração sensorial, inibir movimentos estereotipados e promover maior independência nas atividades diárias e interação social.",
+          "Priorizar a alfabetização e o desenvolvimento do raciocínio lógico-matemático, visto que a fisioterapia tem como objetivo principal o desempenho acadêmico em crianças com TEA."
+        ],
+        "correctAnswer": 3,
+        "category": "Papel da Fisioterapia",
+        "explanation": "Os objetivos da fisioterapia no TEA incluem desenvolver coordenação motora grossa e fina, melhorar equilíbrio e controle postural, estimular a integração sensorial, inibir movimentos estereotipados e inadequados, promover maior independência nas atividades diárias, facilitar interação social e comunicação, e melhorar a qualidade de vida geral da criança."
+      },
+      {
+        "question": "A hidroterapia é uma das intervenções complementares utilizadas na fisioterapia para crianças com TEA. Quais são os principais benefícios que o ambiente aquático oferece a essas crianças?",
+        "options": [
+          "Aumento do estresse e agitação devido à temperatura da água, o que dificulta o relaxamento e a coordenação motora em crianças com hipersensibilidade.",
+          "Apenas a melhora da capacidade de flutuação, sem qualquer benefício terapêutico significativo para o desenvolvimento motor ou sensorial em crianças com TEA.",
+          "Exclusivamente o fortalecimento muscular intenso, devido à resistência da água, sem qualquer impacto na estimulação sensorial ou no relaxamento da criança.",
+          "O desenvolvimento exclusivo da natação competitiva, sendo contraindicada para crianças com TEA que apresentam dificuldades de interação social ou hipersensibilidade.",
+          "Estimulação sensorial, diminuição do estresse, liberação de energia e relaxamento, além de melhorar a coordenação motora, tônus muscular, controle de tronco, equilíbrio e habilidades motoras, facilitando também a realização de movimentos no ambiente terrestre."
+        ],
+        "correctAnswer": 4,
+        "category": "Abordagens Terapêuticas",
+        "explanation": "A hidroterapia auxilia na estimulação sensorial, diminuição do estresse, liberação de energia e relaxamento. Além disso, melhora a coordenação motora, tônus muscular, controle de tronco, equilíbrio e habilidades motoras. As propriedades físicas e térmicas da água favorecem a realização de atividades e movimentos, propiciando a facilitação na realização no ambiente terrestre."
+      },
+      {
+        "question": "A abordagem multidisciplinar é fundamental no tratamento do TEA. Quais profissionais, além do fisioterapeuta, geralmente compõem essa equipe?",
+        "options": [
+          "Apenas arquitetos e engenheiros, focados em adaptar o ambiente físico, sem envolvimento direto com as terapias da criança.",
+          "Somente psicólogos e psiquiatras, pois o TEA é um transtorno puramente mental.",
+          "Psicólogos, fonoaudiólogos, terapeutas ocupacionais, neurologistas, psiquiatras, pedagogos e educadores físicos, entre outros, trabalhando em conjunto para uma abordagem integral.",
+          "Apenas nutricionistas e oftalmologistas, focando em dieta e saúde ocular, sem relação com o desenvolvimento motor ou social.",
+          "Exclusivamente dentistas e dermatologistas, para tratar condições de saúde oral e cutânea que afetam a qualidade de vida."
+        ],
+        "correctAnswer": 2,
+        "category": "Integração Multidisciplinar",
+        "explanation": "O trabalho multidisciplinar é fundamental no tratamento do TEA e pode envolver psicólogos, fonoaudiólogos, terapeutas ocupacionais, fisioterapeutas, neurologistas, psiquiatras, pedagogos e educadores físicos, entre outros, para uma abordagem completa e integrada de todas as dimensões da pessoa."
+      },
+      {
+        "question": "Os Cuidados Paliativos Pediátricos são essenciais para crianças com câncer em fase avançada. De acordo com a Organização Mundial da Saúde (OMS), qual é a definição e o principal foco dos cuidados paliativos?",
+        "options": [
+          "Cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo, com foco principal no controle da dor e dos sintomas físicos, psicológicos, sociais e espirituais, visando melhorar a qualidade de vida dos pacientes e seus familiares.",
+          "Conjunto de procedimentos médicos que visam apenas a abreviação da vida de pacientes terminais, sem levar em consideração o controle da dor ou o bem-estar psicológico.",
+          "Tratamento intensivo e agressivo focado exclusivamente na cura da doença, independentemente do estágio da progressão do câncer, visando prolongar a vida a todo custo.",
+          "Apenas o suporte psicológico para os familiares após o falecimento da criança, sem qualquer intervenção direta no controle dos sintomas físicos do paciente durante a vida.",
+          "Intervenções cirúrgicas avançadas para corrigir deformidades causadas pelo câncer, sem preocupação com o alívio de sintomas ou a qualidade de vida no fim da vida."
+        ],
+        "correctAnswer": 0,
+        "category": "Introdução aos Cuidados Paliativos Pediátricos",
+        "explanation": "A OMS define cuidados paliativos como o cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo. O foco principal é o controle da dor e dos sintomas físicos, psicológicos, sociais e espirituais, visando melhorar a qualidade de vida dos pacientes terminais e de seus familiares."
+      },
+      {
+        "question": "No contexto da bioética e dos cuidados paliativos, qual é o conceito que busca proporcionar ao paciente as condições para uma morte digna, sem abreviação ou prolongamento artificial da vida?",
+        "options": [
+          "Distanásia",
+          "Eutanásia",
+          "Ortotanásia",
+          "Ortofunção",
+          "Biointervenção"
+        ],
+        "correctAnswer": 2,
+        "category": "Bioética e Ortotanásia",
+        "explanation": "A ortotanásia busca proporcionar ao paciente as condições necessárias para compreender sua mortalidade e prepará-lo para uma morte digna, sem intervenção no processo natural, ou seja, sem abreviação ou prolongamento artificial da vida."
+      },
+      {
+        "question": "Um fisioterapeuta está avaliando uma criança com câncer em estágio avançado que está recebendo cuidados paliativos. Qual das seguintes avaliações deve ser priorizada, considerando as condições do paciente e os objetivos da fisioterapia nesse contexto?",
+        "options": [
+          "Apenas a observação clínica superficial do paciente, sem qualquer registro ou mensuração de dados, pois a intervenção em cuidados paliativos é puramente intuitiva e não necessita de parâmetros objetivos.",
+          "Avaliação detalhada da performance esportiva e da capacidade de correr longas distâncias para planejar o retorno às atividades competitivas, ignorando o estado atual de fragilidade do paciente.",
+          "Priorizar a avaliação da dor, estado respiratório, resistência cardiovascular e funcionalidade (transferência, marcha, mobilidade), com cuidado na avaliação de força muscular em pacientes plaquetopênicos, adaptando a avaliação à tolerância do paciente e focando no conforto e independência.",
+          "Avaliar unicamente as habilidades cognitivas, como memória e raciocínio lógico, pois a fisioterapia em cuidados paliativos deve focar no bem-estar mental e não no físico.",
+          "Avaliação de força muscular máxima e amplitude de movimento em todas as articulações, mesmo que isso cause dor e fadiga excessiva ao paciente, pois a recuperação total da função é o objetivo principal."
+        ],
+        "correctAnswer": 2,
+        "category": "Atuação Fisioterapêutica Detalhada",
+        "explanation": "A avaliação fisioterapêutica em cuidados paliativos deve ser completa, mas adaptada à tolerância do paciente. É crucial priorizar elementos como dor, estado respiratório, resistência cardiovascular e avaliação funcional (transferência, marcha, mobilidade). A avaliação de força muscular deve ser feita com cuidado em pacientes plaquetopênicos. O objetivo é aumentar ou manter o conforto e a independência, e não focar em recuperação total ou atividades que causem exaustão desnecessária."
+      },
+      {
+        "question": "A fadiga é um sintoma comum em pacientes oncológicos terminais, comprometendo significativamente sua qualidade de vida. Qual é o principal objetivo do controle da fadiga na fisioterapia paliativa?",
+        "options": [
+          "Aumentar a dor do paciente para que ele possa identificar os limites de seu corpo.",
+          "Minimizar as perdas funcionais e manter a capacidade funcional do paciente, proporcionando conforto e bem-estar.",
+          "Reverter completamente a doença e restaurar a energia do paciente para atividades de alta intensidade.",
+          "Estimular a fadiga para fortalecer a musculatura residual e prevenir atrofia.",
+          "Isolar o paciente para evitar que a fadiga afete seu relacionamento com os familiares."
+        ],
+        "correctAnswer": 1,
+        "category": "Condutas Fisioterapêuticas Específicas",
+        "explanation": "O controle da fadiga em pacientes oncológicos terminais visa manter a capacidade funcional do paciente e minimizar as perdas, contribuindo para o conforto e a qualidade de vida. Não se trata de reverter a doença, aumentar a dor ou isolar o paciente, mas sim de gerenciar o sintoma para otimizar o bem-estar."
+      },
+      {
+        "question": "Em pacientes pediátricos com câncer em cuidados paliativos, qual o papel das atividades lúdicas e da música na atuação fisioterapêutica?",
+        "options": [
+          "São recursos desnecessários que desviam o foco do tratamento principal, que deve ser estritamente técnico e objetivo, sem elementos recreativos.",
+          "Devem ser utilizadas apenas para entreter a criança durante procedimentos dolorosos, sem qualquer propósito terapêutico no desenvolvimento motor ou emocional.",
+          "São importantes para proporcionar um ambiente menos traumatizante e mais humanizado, aumentando a adesão ao tratamento e promovendo conforto e qualidade de vida através de brincadeiras, jogos e música.",
+          "Apenas para crianças com prognóstico muito favorável, como forma de recompensa, sendo contraindicadas para pacientes em estágio terminal, que precisam de repouso absoluto.",
+          "Têm como objetivo principal reverter os efeitos da quimioterapia no sistema nervoso central, atuando como um tipo de terapia cognitiva para melhorar a memória."
+        ],
+        "correctAnswer": 2,
+        "category": "Condutas Fisioterapêuticas Específicas - Atividades Lúdicas",
+        "explanation": "As atividades lúdicas são importantes no tratamento de crianças com câncer, proporcionando um ambiente menos traumatizante e mais humanizado. Materiais, equipamentos e recursos como brincadeiras, jogos, livros e brinquedos, além da música, podem ser utilizados para promover conforto e qualidade de vida, e aumentar a adesão ao tratamento."
+      },
+      {
+        "question": "Um paciente pediátrico é admitido no hospital com uma queimadura que apresenta bolhas e atinge a epiderme e parte da derme. Como essa queimadura seria classificada quanto à profundidade, e qual a principal característica clínica que a diferencia de outros graus?",
+        "options": [
+          "Primeiro grau; a principal característica é a presença de necrose tecidual e dor intensa.",
+          "Terceiro grau; a principal característica é a área esbranquiçada ou negra e a ausência total de dor.",
+          "Quarto grau; a principal característica é o envolvimento de ossos e músculos profundos, sem bolhas.",
+          "Segundo grau; a principal característica é a formação de flictenas (bolhas).",
+          "Primeiro grau profundo; a principal característica é a presença de eritema e dor leve, sem bolhas."
+        ],
+        "correctAnswer": 3,
+        "category": "Classificação por Profundidade",
+        "explanation": "Queimaduras de segundo grau atingem a epiderme e parte da derme, provocando a formação de flictenas (bolhas). As queimaduras de primeiro grau apresentam apenas vermelhidão e dor, enquanto as de terceiro grau envolvem todas as estruturas da pele, são esbranquiçadas/negras e pouco dolorosas."
+      },
+      {
+        "question": "A quantificação da superfície corporal queimada em crianças é crucial para determinar a gravidade. Qual método é considerado mais preciso para avaliar a área queimada em pacientes pediátricos, e por quê?",
+        "options": [
+          "Regra da palma da mão do paciente; por ser a maneira mais prática e acessível para qualquer faixa etária, independentemente da idade.",
+          "Apenas a estimativa visual do profissional, pois a precisão não é tão relevante na avaliação inicial.",
+          "Regra dos nove; pois é um método rápido e universalmente aceito para todas as idades.",
+          "Esquema de Lund Browder; por avaliar a superfície corporal de acordo com a idade, sendo mais preciso devido às proporções corporais variáveis na infância.",
+          "Utilização de balanças eletrônicas, que medem a massa queimada e fornecem dados precisos sobre a área."
+        ],
+        "correctAnswer": 3,
+        "category": "Métodos de Quantificação",
+        "explanation": "O Esquema de Lund Browder avalia a superfície corporal queimada de acordo com a idade do paciente, o que o torna mais preciso em crianças, pois suas proporções corporais (especialmente a cabeça e os membros inferiores) diferem significativamente das dos adultos, ao contrário da Regra dos Nove adaptada ou da palma da mão."
+      },
+      {
+        "question": "As queimaduras em crianças representam um grave problema de saúde pública. Qual a faixa etária com maior incidência de queimaduras e qual o tipo mais comum de queimadura nessa população?",
+        "options": [
+          "Crianças de 1 a 5 anos, principalmente por escaldamento com líquidos quentes.",
+          "Recém-nascidos (até 28 dias), principalmente por queimaduras químicas.",
+          "Adolescentes de 10 a 18 anos, principalmente por acidentes com fogo.",
+          "Bebês de 0 a 6 meses, causadas principalmente por contato com superfícies quentes.",
+          "Crianças em idade escolar (6 a 9 anos), devido a acidentes com eletricidade."
+        ],
+        "correctAnswer": 0,
+        "category": "A Magnitude do Problema",
+        "explanation": "A epidemiologia das queimaduras em crianças mostra um pico de incidência em crianças de 1 a 5 anos, sendo as queimaduras por escaldamento com líquidos quentes o tipo mais comum nessa faixa etária."
+      },
+      {
+        "question": "A fisioterapia desempenha um papel crucial na reabilitação de pacientes pediátricos vítimas de queimaduras. Qual é o principal objetivo da atuação fisioterapêutica, desde a internação até o acompanhamento ambulatorial?",
+        "options": [
+          "Promover a cura da lesão tecidual primária da queimadura através de técnicas manuais intensivas, substituindo a necessidade de cirurgias ou enxertias.",
+          "Diminuir as sequelas, melhorar a qualidade de vida e promover a integração social do indivíduo, visando uma cicatrização correta e evitando complicações futuras que comprometam a estrutura e função do corpo.",
+          "Apenas a mobilização passiva diária para prevenir rigidez articular, sem qualquer outra intervenção funcional ou de prevenção de sequelas.",
+          "O uso exclusivo de realidade virtual para o alívio da dor durante os curativos, sem a necessidade de exercícios terapêuticos ou outras abordagens de reabilitação física.",
+          "Exclusivamente o manejo da dor aguda nas primeiras 24 horas pós-queimadura, sem preocupação com a reabilitação a longo prazo ou a reinserção social do paciente."
+        ],
+        "correctAnswer": 1,
+        "category": "Atuação da Fisioterapia",
+        "explanation": "A intervenção fisioterapêutica é de extrema importância para diminuir as sequelas, melhorar a qualidade de vida e promover a integração do indivíduo na sociedade. Ela atua desde a internação até o acompanhamento ambulatorial, visando uma cicatrização correta e evitando complicações futuras que possam comprometer a estrutura e função do corpo, limitando as atividades de vida diária."
+      },
+      {
+        "question": "As queimaduras podem levar a complicações sistêmicas importantes. Nos primeiros sete dias após a queimadura, o organismo pode sofrer alterações funcionais em múltiplos órgãos vitais. Como é conhecida essa complicação inicial e o que pode ocorrer após esse período?",
+        "options": [
+          "Choque hipovolêmico; após esse período, o paciente desenvolve anemia severa.",
+          "Disfunção de Múltiplos Órgãos e Sistemas (DMOS) primária; após esse período, pode ocorrer uma resposta inflamatória sistêmica que leva a infecções (DMOS secundária).",
+          "Sepsia generalizada; após esse período, ocorre a falência renal aguda.",
+          "Hipermetabolismo agudo; após esse período, ocorre um processo de regeneração celular completa em todos os órgãos.",
+          "Síndrome da Resposta Inflamatória Sistêmica (SIRS); e após, pode ocorrer a formação de cicatrizes queloides."
+        ],
+        "correctAnswer": 1,
+        "category": "Fisiopatologia e Complicações",
+        "explanation": "Nos primeiros sete dias após a queimadura, o organismo pode sofrer a Disfunção de Múltiplos Órgãos e Sistemas (DMOS) primária. Após esse período, ocorre uma resposta inflamatória sistêmica, que pode levar a infecções, conhecida como DMOS secundária."
+      },
+      {
+        "question": "A Distrofia Muscular de Duchenne (DMD) é uma doença genética grave. Qual das seguintes afirmações melhor descreve a DMD, incluindo um de seus sinais clínicos mais característicos e o impacto no desenvolvimento muscular?",
+        "options": [
+          "Trata-se de uma condição hereditária benigna que causa pseudo-hipertrofia muscular sem progressão para paralisia, e a manobra de Gowers é uma técnica de alongamento para prevenir contraturas.",
+          "É uma doença que se manifesta exclusivamente na fase adulta, causando dor crônica e rigidez articular, e a manobra de Gowers é um exercício para aliviar a dor lombar.",
+          "Caracteriza-se por fraqueza muscular progressiva devido a um defeito na proteína distrofina, levando à atrofia muscular e apresentando a manobra de Gowers como um sinal de fraqueza nos músculos proximais dos membros inferiores.",
+          "É uma doença infecciosa que causa inflamação muscular reversível com antibióticos, e a manobra de Gowers é um sinal de recuperação da força nos músculos distais dos membros superiores.",
+          "É um distúrbio neurológico que afeta a coordenação e o equilíbrio, sem causar fraqueza muscular significativa, e a manobra de Gowers indica apenas um problema de equilíbrio na marcha."
+        ],
+        "correctAnswer": 2,
+        "category": "O que é Distrofia Muscular de Duchenne",
+        "explanation": "A DMD é uma doença genética que se manifesta através da fraqueza muscular progressiva, levando à paralisia. É causada pela ausência ou deficiência da proteína distrofina, resultando em atrofia muscular. A manobra de Gowers é um sinal clínico característico que indica fraqueza nos músculos proximais dos membros inferiores."
+      },
+      {
+        "question": "O diagnóstico precoce da DMD é fundamental. Qual a importância principal de um diagnóstico oportuno da doença para a intervenção e a qualidade de vida do paciente?",
+        "options": [
+          "Apenas facilita a obtenção de benefícios financeiros para a família, sem impacto real na progressão da doença ou no bem-estar físico do paciente.",
+          "É crucial para iniciar intervenções que possam retardar a progressão da doença e prevenir complicações secundárias, melhorando significativamente a qualidade de vida dos pacientes, embora não haja cura.",
+          "Permite o início de um tratamento curativo que reverte completamente a ausência de distrofina e elimina os sintomas da doença, garantindo uma vida normal e sem sequelas.",
+          "Serve para identificar a necessidade de cirurgias corretivas de emergência que podem eliminar completamente a fraqueza muscular e as deformidades logo nos primeiros anos de vida.",
+          "Permite o isolamento social da criança para evitar a exposição a ambientes que possam acelerar a degeneração muscular e o aparecimento de complicações cardiorrespiratórias."
+        ],
+        "correctAnswer": 1,
+        "category": "Diagnóstico e Incidência",
+        "explanation": "O diagnóstico precoce da DMD é fundamental para iniciar intervenções que possam retardar a progressão da doença e prevenir complicações secundárias, melhorando significativamente a qualidade de vida dos pacientes, mesmo sabendo que não há cura."
+      },
+      {
+        "question": "Um dos principais objetivos da fisioterapia na DMD é manter a função muscular. Quais são as estratégias de reabilitação recomendadas para atrasar ou impedir o desenvolvimento de contraturas e a atrofia muscular por desuso?",
+        "options": [
+          "Uso de cadeiras de rodas desde o início para evitar qualquer tipo de esforço muscular, o que prolongaria a vida da criança sem o risco de fadiga.",
+          "Apenas o repouso absoluto em leito para preservar a energia muscular e evitar a sobrecarga dos músculos enfraquecidos, sem qualquer tipo de exercício ou alongamento.",
+          "Exclusivamente cirurgias ortopédicas precoces para corrigir todas as deformidades articulares, sem a necessidade de fisioterapia complementar para manutenção dos resultados.",
+          "Administração de altas doses de corticosteroides como única medida terapêutica, pois esses medicamentos são capazes de reverter completamente a fraqueza muscular sem a necessidade de intervenção fisioterapêutica.",
+          "Alongamentos regulares e uso de órteses para manter o comprimento e a extensibilidade muscular, combinados com exercícios submáximos para evitar atrofia por desuso e outras complicações da inatividade."
+        ],
+        "correctAnswer": 4,
+        "category": "Princípios de Reabilitação",
+        "explanation": "Dentro dos princípios de reabilitação, o tratamento deve incluir opções para manter o comprimento e a extensibilidade dos grupos musculares afetados, como alongamentos regulares e o uso de órteses. Adicionalmente, o exercício submáximo regular é recomendado para evitar a atrofia muscular por desuso e outras complicações da inatividade."
+      },
+      {
+        "question": "A hidroterapia tem se mostrado uma intervenção eficaz no tratamento da DMD. Quais são os principais benefícios que as propriedades físicas da água oferecem a crianças com DMD, impactando sua movimentação e bem-estar?",
+        "options": [
+          "O ambiente aquático promove apenas o relaxamento sem qualquer benefício para o fortalecimento muscular ou o treino de marcha, sendo mais indicado para o manejo da dor em outras condições, não na DMD.",
+          "A flutuabilidade da água aumenta a força gravitacional sobre os músculos, tornando os movimentos mais desafiadores e acelerando a degeneração muscular em pacientes com DMD avançada.",
+          "A resistência da água dificulta a movimentação e o fortalecimento muscular, sendo um ambiente contraindicado para crianças com fraqueza muscular progressiva, aumentando o risco de quedas.",
+          "A hidroterapia é benéfica apenas para a redução da dor articular em pacientes com DMD, não possuindo impacto sobre a função respiratória ou o equilíbrio, que são comprometidos pela doença.",
+          "A flutuabilidade facilita os movimentos ativos, a resistência da água proporciona fortalecimento gradual, e as propriedades térmicas auxiliam no relaxamento muscular, além de permitir exercícios respiratórios e de equilíbrio em um ambiente lúdico, reduzindo o risco de quedas."
+        ],
+        "correctAnswer": 4,
+        "category": "Hidroterapia e DMD",
+        "explanation": "A hidroterapia é eficaz na DMD porque as propriedades físicas da água facilitam a movimentação (flutuabilidade), proporcionam fortalecimento gradual (resistência), e o ambiente aquático, com suas propriedades térmicas, auxilia no relaxamento muscular. Além disso, permite exercícios respiratórios, treino de marcha e atividades lúdicas, melhorando o equilíbrio e reduzindo o risco de quedas."
+      },
+      {
+        "question": "Além das técnicas fisioterapêuticas tradicionais, a tecnologia assistiva, como a realidade virtual, tem sido explorada no tratamento da DMD. Qual o potencial benefício do uso da realidade virtual nessa população?",
+        "options": [
+          "Causar sobrecarga sensorial e desorientação em crianças com DMD, tornando-se uma ferramenta contraindicada para o desenvolvimento motor e funcional.",
+          "Promover o isolamento social da criança, visto que o uso de jogos de computador reduz a necessidade de interação humana e foca apenas no desenvolvimento de habilidades cognitivas.",
+          "Apenas diagnosticar a progressão da doença de forma mais precisa, sem oferecer qualquer tipo de intervenção terapêutica para o paciente, focando em avaliação e não em tratamento.",
+          "Melhorar a condição física e funcional dos pacientes, ativando a função muscular distal e facilitando ajustes por meio de interfaces virtuais, proporcionando uma abordagem mais lúdica e motivadora.",
+          "Substituir completamente a necessidade de exercícios físicos e alongamentos, pois a estimulação visual da realidade virtual é suficiente para manter a massa muscular e prevenir contraturas."
+        ],
+        "correctAnswer": 3,
+        "category": "Tecnologia Assistiva",
+        "explanation": "O uso de tecnologia assistiva, como a realidade virtual, tem demonstrado potencial para melhorar a condição física e funcional de pacientes com DMD. Estudos indicam que o uso de jogos de computador com interfaces específicas pode proporcionar melhor desempenho, ativando a função muscular distal e facilitando ajustes por meio de interfaces virtuais, tornando a abordagem mais lúdica e motivadora."
+      },
+  
   ]
 
   useEffect(() => {
@@ -855,7 +1015,16 @@ export default function ProvaPediatricaPage() {
 
   if (!hasStarted) {
   return (
-      <div className="relative min-h-screen bg-gradient-to-b from-white to-[#F8FAFF]">
+      <div className="relative min-h-screen bg-white">
+        <AnimatePresence>
+          {isModalOpen && (
+            <UpdateModal 
+              isOpen={isModalOpen} 
+              onClose={handleCloseModal} 
+            />
+          )}
+        </AnimatePresence>
+        
         {/* Background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute w-[800px] h-[800px] rounded-full bg-[#6EC1E4]/5 blur-[120px] -top-[400px] -left-[300px]" />
@@ -953,7 +1122,16 @@ export default function ProvaPediatricaPage() {
 
   if (showResults) {
     return (
-      <div className="relative min-h-screen bg-gradient-to-b from-white to-[#F8FAFF]">
+      <div className="relative min-h-screen bg-white">
+        <AnimatePresence>
+          {isModalOpen && (
+            <UpdateModal 
+              isOpen={isModalOpen} 
+              onClose={handleCloseModal} 
+            />
+          )}
+        </AnimatePresence>
+        
         {/* Background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute w-[800px] h-[800px] rounded-full bg-[#6EC1E4]/5 blur-[120px] -top-[400px] -left-[300px]" />
@@ -1041,6 +1219,15 @@ export default function ProvaPediatricaPage() {
 
   return (
     <div className="relative min-h-screen pb-20">
+      <AnimatePresence>
+        {isModalOpen && (
+          <UpdateModal 
+            isOpen={isModalOpen} 
+            onClose={handleCloseModal} 
+          />
+        )}
+      </AnimatePresence>
+      
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute w-[500px] h-[500px] rounded-full bg-[#6EC1E4]/5 blur-3xl -top-64 -left-64 pointer-events-none" />
