@@ -9,6 +9,8 @@ import { supabase } from "@/lib/supabase"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
+import Link from "next/link"
+import { MagneticButton } from "@/components/ui/magnetic-button"
 
 // Componente do Modal/Popup
 interface AnnouncementModalProps {
@@ -497,17 +499,25 @@ export default function Home() {
               <p className="text-gray-700 text-lg mb-2">“A Fisioneo me ajudou a entender de verdade o raciocínio clínico neonatal. Os simulados e materiais são muito didáticos e práticos!”</p>
               <div className="text-sm text-gray-500">— Depoimento de um estudante de Fisioterapia</div>
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 1 }}
-              className="flex justify-center mt-10"
-            >
-              <a href="/pediatria" className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white rounded-lg font-semibold text-lg shadow-md hover:scale-105 hover:shadow-lg transition-all">
-                Explorar conteúdos
-                <ArrowRight className="h-5 w-5" />
-              </a>
-            </motion.div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/register" className="hidden sm:block">
+                <MagneticButton
+                  backgroundGradient={true}
+                  className="px-8 py-3 text-lg font-medium text-white"
+                >
+                  Começar Agora
+                </MagneticButton>
+              </Link>
+              <button
+                onClick={() => {
+                  const event = new CustomEvent('openMobileMenu');
+                  document.dispatchEvent(event);
+                }}
+                className="sm:hidden bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white px-8 py-3 rounded-full text-lg font-medium hover:opacity-90 transition-opacity"
+              >
+                Ver Menu
+              </button>
+            </div>
           </div>
         </div>
       </section>

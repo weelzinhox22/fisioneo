@@ -31,6 +31,16 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Adicionar listener para o evento openMobileMenu
+  useEffect(() => {
+    const handleOpenMobileMenu = () => {
+      setIsOpen(true)
+    }
+
+    document.addEventListener('openMobileMenu', handleOpenMobileMenu)
+    return () => document.removeEventListener('openMobileMenu', handleOpenMobileMenu)
+  }, [])
+
   // Check for Supabase session and subscribe to auth changes
   useEffect(() => {
     const checkSupabaseAuth = async () => {
@@ -242,7 +252,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: navItems.length * 0.1 }}
           >
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <div className="flex items-center gap-4">
                 <ProfileDropdown 
                   email={userEmail || ''} 
@@ -250,16 +260,6 @@ export default function Navbar() {
                   onLogout={handleLogout}
                 />
               </div>
-            ) : (
-              <Link href="/login">
-                <MagneticButton
-                  backgroundGradient={true}
-                  className="px-4 py-2 text-sm font-medium text-white flex items-center gap-1.5"
-                >
-                  <LogIn className="h-4 w-4" />
-                  Entrar
-                </MagneticButton>
-              </Link>
             )}
           </motion.div>
 
@@ -297,7 +297,7 @@ export default function Navbar() {
                     transition={{ duration: 0.2, delay: navItems.length * 0.05 }}
                     className="mt-4 pt-4 border-t border-[#E0E0E0]"
                   >
-                    {isAuthenticated ? (
+                    {isAuthenticated && (
                       <div className="space-y-2">
                         <div className="px-4 py-2 text-sm text-[#666666]">
                           <User className="h-4 w-4 inline-block mr-2" />
@@ -314,15 +314,6 @@ export default function Navbar() {
                           Sair
                         </button>
                       </div>
-                    ) : (
-                      <Link
-                        href="/login"
-                        className="w-full bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white py-3 px-4 rounded-lg flex items-center gap-3 hover:shadow-lg transition-all duration-300"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <LogIn className="h-4 w-4" />
-                        Entrar
-                      </Link>
                     )}
                   </motion.div>
                 </div>
