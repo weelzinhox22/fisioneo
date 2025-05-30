@@ -370,12 +370,12 @@ export default function Home() {
                 <BookOpen className="h-7 w-7 text-[#B9A9FF] mb-1" />
                 <span className="text-2xl font-bold text-[#B9A9FF]">+{statValues[0]}</span>
                 <span className="text-xs text-gray-500">Materiais</span>
-              </div>
+          </div>
               <div className="flex flex-col items-center bg-white/80 rounded-xl px-6 py-4 shadow border border-gray-100 min-w-[120px]">
                 <FileText className="h-7 w-7 text-[#FFB347] mb-1" />
                 <span className="text-2xl font-bold text-[#FFB347]">+{statValues[1]}</span>
                 <span className="text-xs text-gray-500">Questões</span>
-              </div>
+                  </div>
               <div className="flex flex-col items-center bg-white/80 rounded-xl px-6 py-4 shadow border border-gray-100 min-w-[120px]">
                 <Star className="h-7 w-7 text-[#FFD700] mb-1" />
                 <span className="text-2xl font-bold text-[#FFD700]">{statValues[2]}</span>
@@ -383,7 +383,7 @@ export default function Home() {
               </div>
             </motion.div>
             {/* Timeline horizontal de atualizações */}
-            <motion.div
+            <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.6 }}
@@ -405,7 +405,7 @@ export default function Home() {
                     {
                       icon: <Calendar className="h-6 w-6 text-[#FFB347]" />, date: "30/05/2025", title: "Lançamento do Simulado Pediátrico", desc: "Questões inéditas para prática clínica." },
                   ].map((event, i, arr) => (
-                    <motion.div
+                <motion.div 
                       key={i}
                       initial={{ opacity: 0, scale: 0.95, y: 30 }}
                       whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -421,14 +421,14 @@ export default function Home() {
                         <div className="text-xs font-semibold text-gray-500 mb-1 text-center tracking-wide">{event.date}</div>
                         <div className="font-bold text-gray-800 text-center mb-1 text-base">{event.title}</div>
                         <div className="text-gray-500 text-sm text-center">{event.desc}</div>
-                      </div>
+                  </div>
                       {/* Linha de conexão (mobile: oculta, desktop: visível) */}
                       {i < arr.length - 1 && (
                         <div className="hidden md:block absolute right-0 top-5 w-12 h-1 bg-gradient-to-r from-[#6EC1E4]/30 to-[#B9A9FF]/30 rounded-full z-0" />
                       )}
-                    </motion.div>
+                </motion.div>
                   ))}
-                </div>
+                  </div>
               </div>
             </motion.div>
             {/* Cards principais */}
@@ -450,8 +450,8 @@ export default function Home() {
                 <motion.h3 className="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2" variants={titleVariants}><Star className="h-5 w-5 text-[#FFD700]" /> Evidências</motion.h3>
                 <p className="text-gray-600 mb-2">Conteúdo baseado em pesquisas científicas atualizadas para sua formação acadêmica.</p>
                 <span className="inline-block text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded-full font-medium">Atualização científica</span>
-              </motion.div>
-            </motion.div>
+                  </motion.div>
+                  </motion.div>
             {/* Timeline animada: Como funciona */}
             <div className="max-w-2xl mx-auto mt-16">
               <h3 className="text-xl font-bold text-center mb-8 text-gray-700">Como funciona a Fisioneo?</h3>
@@ -461,7 +461,7 @@ export default function Home() {
                   { icon: <FileText className="h-6 w-6 text-[#B9A9FF]" />, title: "Estude com materiais exclusivos", desc: "Acesse resumos, PDFs e artigos científicos." },
                   { icon: <Star className="h-6 w-6 text-[#FFD700]" />, title: "Teste seus conhecimentos", desc: "Realize avaliações interativas e veja seu desempenho na hora." },
                 ].map((step, i) => (
-                  <motion.div
+                  <motion.div 
                     key={i}
                     custom={i}
                     initial="hidden"
@@ -477,7 +477,7 @@ export default function Home() {
                     </div>
                   </motion.div>
                 ))}
-              </div>
+                </div>
             </div>
             {/* Depoimento de aluno */}
             <motion.div

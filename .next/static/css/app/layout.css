@@ -1360,6 +1360,9 @@ video {
 .w-px {
   width: 1px;
 }
+.w-\[95vw\] {
+  width: 95vw;
+}
 .min-w-0 {
   min-width: 0px;
 }
@@ -4393,6 +4396,15 @@ img.fade-in {
 
 .hover\:bg-white\/70:hover {
   background-color: rgb(255 255 255 / 0.7);
+}
+
+.hover\:bg-white:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-white\/20:hover {
+  background-color: rgb(255 255 255 / 0.2);
 }
 
 .hover\:bg-gradient-to-r:hover {
