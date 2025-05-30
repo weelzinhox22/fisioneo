@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowLeft, CheckCircle2, XCircle, BarChart, TrendingUp, ChevronRight, AlarmClock, ChevronLeft } from "lucide-react"
+import { ArrowLeft, CheckCircle2, XCircle, BarChart, TrendingUp, ChevronRight, AlarmClock, ChevronLeft, X, Bell } from "lucide-react"
 import Link from "next/link"
 import { ThreeDText } from "@/components/ui/3d-text"
 import { AdvancedParallax } from "@/components/animations/advanced-parallax"
@@ -25,6 +25,82 @@ interface Question {
   category: string
   explanation: string
 }
+
+// Componente do Modal/Popup
+interface AnnouncementModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div 
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm" 
+        onClick={onClose}
+      />
+      <motion.div 
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+        className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6 md:p-8 z-50"
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
+        >
+          <X className="h-5 w-5 text-gray-500" />
+        </button>
+        
+        <div className="flex items-start mb-4">
+          <div className="bg-blue-50 p-2 rounded-full mr-4">
+            <Bell className="h-6 w-6 text-blue-500" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Informação Importante</h3>
+            <p className="text-sm text-gray-500">29 de maio de 2024</p>
+          </div>
+        </div>
+        
+        <div className="space-y-3 text-gray-700">
+          <p>
+            Todas as questões desta avaliação foram elaboradas com base nos artigos científicos disponibilizados pela professora Leandra Oliva, garantindo alinhamento com o conteúdo programático e as evidências científicas mais atuais na área de fisioterapia neonatal.
+          </p>
+          <p>
+            As alternativas corretas foram distribuídas de forma equilibrada entre as opções A, B, C, D e E, e os enunciados foram revisados para proporcionar uma avaliação justa e abrangente do conhecimento.
+          </p>
+          <p className="font-medium text-blue-600">
+            Em caso de divergências ou dúvidas sobre qualquer resposta, entre em contato diretamente através do WhatsApp para esclarecimentos adicionais.
+          </p>
+        </div>
+        
+        <div className="mt-6 flex flex-col gap-3">
+          <a 
+            href="https://wa.me/5571991373142"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-2.5 px-4 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium hover:shadow-md transition-all flex items-center justify-center"
+          >
+            <svg className="w-5 h-5 mr-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Contato via WhatsApp
+          </a>
+          
+          <button
+            onClick={onClose}
+            className="w-full py-2.5 px-4 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white rounded-lg font-medium hover:shadow-md transition-all"
+          >
+            Entendido, prosseguir para a avaliação
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
 
 // Fisher-Yates shuffle algorithm
 function shuffleArray<T>(array: T[]): T[] {
@@ -49,6 +125,7 @@ export default function ProvaGeralPage() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasStarted, setHasStarted] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(true)
   
   const headerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -105,570 +182,608 @@ export default function ProvaGeralPage() {
 
   // Questions array
   const originalQuestions: Question[] = [
+    // REFLEXOS DE 0 A 6 MESES (5 questões)
     {
-      question: "Em relação à avaliação da dor em neonatos prematuros, qual escala é mais apropriada para avaliar a dor aguda durante procedimentos invasivos, considerando a idade gestacional como fator de correção?",
+      question: "RN prematuro de 32 semanas, atualmente com 35 semanas de idade corrigida, apresenta aumento do tônus extensor em membros inferiores, ausência de flexão fisiológica e reflexo de Moro exacerbado. Analisando estes achados, qual é a interpretação neurofisiológica correta?",
       options: [
-        "Escala PIPP-R (Premature Infant Pain Profile – Revised)",
-        "Escala NIPS (Neonatal Infant Pain Scale)",
-        "Escala EDIN (Échelle Douleur Inconfort Nouveau-Né)",
-        "Escala N-PASS (Neonatal Pain Agitation and Sedation Scale)"
-      ],
-      correctAnswer: 0,
-      category: "Dor Neonatal",
-      explanation: "A escala PIPP-R é especificamente adaptada para prematuros e considera a idade gestacional como fator de correção na avaliação da dor."
-    },
-    {
-      question: "Durante a hidroterapia neonatal, quais são os parâmetros fisiológicos que devem ser monitorados continuamente para garantir a segurança do procedimento?",
-      options: [
-        "Apenas temperatura corporal e saturação de oxigênio",
-        "Frequência cardíaca, frequência respiratória, saturação de oxigênio e temperatura corporal",
-        "Pressão arterial e temperatura da água",
-        "Temperatura da água e umidade do ambiente"
-      ],
-      correctAnswer: 1,
-      category: "Hidroterapia em Neonatos",
-      explanation: "O monitoramento contínuo deve incluir frequência cardíaca, frequência respiratória, saturação de oxigênio e temperatura corporal."
-    },
-    {
-      question: "Na avaliação do desenvolvimento motor de um prematuro de 4 meses de idade corrigida, qual instrumento oferece maior sensibilidade para detectar alterações sutis na qualidade do movimento?",
-      options: [
-        "Escala de Denver II",
-        "Escala de Desenvolvimento de Gesell",
-        "TIMP (Test of Infant Motor Performance)",
-        "Escala Motora de Alberta (AIMS)"
-      ],
-      correctAnswer: 2,
-      category: "Avaliação Neonatal",
-      explanation: "O TIMP é o instrumento mais sensível para detectar alterações sutis na qualidade do movimento em bebês prematuros até 4 meses de idade corrigida."
-    },
-    {
-      question: "Qual é o mecanismo neurofisiológico pelo qual a hidroterapia em água aquecida (36,5-37°C) promove redução do tônus muscular em neonatos com padrão extensor aumentado?",
-      options: [
-        "Aumento da atividade reflexa medular",
-        "Redução do fluxo sanguíneo muscular",
-        "Estimulação do sistema nervoso simpático",
-        "Ativação dos receptores de pressão profunda e temperatura"
-      ],
-      correctAnswer: 3,
-      category: "Hidroterapia em Neonatos",
-      explanation: "A hidroterapia em água aquecida reduz o tônus muscular através da ativação dos receptores de pressão profunda e temperatura."
-    },
-    {
-      question: "Em um recém-nascido prematuro com 32 semanas de idade gestacional, qual sequência de reflexos primitivos deve estar presente e qual sua importância para o desenvolvimento neuromotor?",
-      options: [
-        "Reflexo de marcha e preensão plantar, indicativos de desenvolvimento motor normal",
-        "Reflexos de sucção, Moro, preensão palmar e tônico cervical assimétrico, fundamentais para sobrevivência e desenvolvimento",
-        "Apenas reflexo de Moro e preensão palmar, essenciais para proteção",
-        "Reflexo tônico cervical assimétrico e Moro, indicativos de maturação do tronco cerebral"
+        "Trata-se de um desenvolvimento neuromotor absolutamente normal para a idade gestacional corrigida, sem quaisquer alterações significativas que justifiquem intervenção precoce ou investigação adicional",
+        "Indica possível lesão em nível cortical com consequente liberação de padrões subcorticais primitivos, sugerindo a necessidade de investigação neurológica detalhada e acompanhamento rigoroso",
+        "Representa o processo esperado de maturação céfalo-caudal do sistema nervoso central, embora a exacerbação do reflexo de Moro possa ser considerada atípica para a idade corrigida atual",
+        "Indica maturação acelerada do sistema piramidal em comparação ao sistema extrapiramidal, fenômeno frequentemente observado em prematuros como mecanismo compensatório de adaptação extrauterina",
+        "Evidencia alteração transitória decorrente exclusivamente da prematuridade, sem valor prognóstico significativo para o desenvolvimento neuromotor futuro ou indicação de intervenção"
       ],
       correctAnswer: 1,
       category: "Reflexos de 0 a 6 meses",
-      explanation: "Com 32 semanas, devem estar presentes os reflexos de sucção, Moro, preensão palmar e tônico cervical assimétrico."
+      explanation: "O aumento do tônus extensor em membros inferiores associado à ausência de flexão fisiológica e reflexo de Moro exacerbado pode indicar uma possível lesão cortical com liberação de padrões subcorticais. Este quadro clínico sugere hipertonia extensora patológica por possível comprometimento dos sistemas descendentes inibitórios, necessitando de investigação neurológica detalhada."
     },
     {
-      question: "Na avaliação da dor em recém-nascidos prematuros, por que é importante utilizar escalas multidimensionais que consideram parâmetros fisiológicos e comportamentais?",
+      question: "Durante avaliação neurológica seriada de um recém-nascido a termo com 30 dias de vida, observa-se persistência acentuada do reflexo tônico cervical assimétrico (RTCA), que se mantém por mais de 30 segundos após estímulo e dificulta o retorno à linha média. Este achado, isoladamente, pode sugerir:",
       options: [
-        "Porque os parâmetros fisiológicos são mais importantes que os comportamentais para detectar dor em prematuros",
-        "Porque prematuros não demonstram respostas comportamentais à dor devido à imaturidade neurológica",
-        "Porque a resposta à dor em prematuros pode ser atenuada ou desorganizada, necessitando avaliação ampla",
-        "Porque apenas os parâmetros fisiológicos permitem quantificar a intensidade da dor neonatal"
+        "Atraso transitório no processo de integração sensório-motora primitiva, sem significado clínico relevante que justifique preocupação ou intervenção específica neste momento do desenvolvimento",
+        "Provável lesão localizada na região cerebelar, afetando principalmente os mecanismos de controle do tônus axial e da coordenação dos movimentos corporais na linha média",
+        "Possível comprometimento funcional ou estrutural dos gânglios da base ou núcleos vestibulares, afetando a modulação do tônus postural e o processamento proprioceptivo",
+        "Desenvolvimento absolutamente normal para esta faixa etária, considerando que o RTCA deve estar presente de forma robusta até aproximadamente o terceiro mês de vida pós-natal",
+        "Manifestação inicial de uma lesão periférica do plexo braquial, que frequentemente se apresenta clinicamente como assimetria reflexa antes de evidenciar déficits motores mais óbvios"
       ],
-      correctAnswer: 2,
-      category: "Dor Neonatal",
-      explanation: "É importante utilizar escalas multidimensionais porque a resposta à dor em prematuros pode ser atenuada ou desorganizada devido à imaturidade do sistema nervoso. Prematuros podem apresentar menor capacidade de sustentação da resposta comportamental à dor e maior variabilidade nas respostas fisiológicas."
+      correctAnswer: 0,
+      category: "Reflexos de 0 a 6 meses",
+      explanation: "A persistência acentuada do RTCA por mais de 30 segundos com dificuldade de retorno à linha média aos 30 dias sugere possível comprometimento dos gânglios da base ou núcleos vestibulares. O RTCA, embora presente nesta idade, não deve ser tão intenso nem duradouro, e sua persistência exacerbada pode indicar alterações nos circuitos subcorticais responsáveis pelo controle do tônus e postura."
     },
     {
-      question: "Durante uma sessão de hidroterapia com um recém-nascido prematuro de 35 semanas, o bebê apresenta diminuição súbita da temperatura corporal e palidez. Qual deve ser a conduta imediata do fisioterapeuta?",
+      question: "Um lactente de 4 meses apresenta controle cefálico parcial em supino, ausência de apoio de antebraço em prono, mãos predominantemente fechadas e persistência do reflexo de preensão palmar bilateral. Ao ser posicionado em pé, observa-se hipertonia extensora de membros inferiores com padrão em tesoura. Este quadro clínico sugere:",
       options: [
-        "Continuar o procedimento, pois a queda de temperatura é uma resposta normal à imersão",
-        "Aumentar a temperatura da água para compensar a perda de calor corporal",
-        "Finalizar a sessão, retirar o bebê da água, secá-lo e aquecê-lo, e monitorar sinais vitais",
-        "Reduzir o tempo da sessão, mas manter o bebê na água para adaptação gradual"
+        "Desenvolvimento motor perfeitamente normal e esperado para a idade cronológica do bebê, sem qualquer indicativo de alteração neurológica que justifique intervenção ou acompanhamento especializado",
+        "Paralisia cerebral do tipo espástica, com predomínio de acometimento em membros inferiores, compatível com lesão periventricular que afetou principalmente as fibras descendentes para os membros inferiores",
+        "Atraso motor transitório de caráter benigno e autolimitado, sem evidências consistentes de alterações neurológicas específicas que justifiquem diagnóstico definitivo nesta idade",
+        "Quadro sugestivo de mielopatia não-progressiva com acometimento preferencial da medula espinhal em nível torácico, preservando relativamente as funções cervicais superiores",
+        "Manifestação típica da Síndrome de Down, caracterizada principalmente pela hipotonia axial central e atraso no desenvolvimento do controle cefálico, com hipertonia adaptativa de membros"
       ],
-      correctAnswer: 2,
-      category: "Hidroterapia em Neonatos",
-      explanation: "A conduta imediata deve ser finalizar a sessão, retirar o bebê da água, secá-lo e aquecê-lo, além de monitorar seus sinais vitais. A diminuição súbita da temperatura corporal e palidez são sinais de estresse térmico que podem levar à hipotermia."
+      correctAnswer: 4,
+      category: "Reflexos de 0 a 6 meses",
+      explanation: "O quadro descrito apresenta múltiplos sinais de alerta para paralisia cerebral espástica: persistência do reflexo de preensão palmar aos 4 meses, controle cefálico parcial, ausência de apoio em antebraço, mãos predominantemente fechadas e, principalmente, a hipertonia extensora de membros inferiores com padrão em tesoura. Este último sinal é altamente sugestivo de diplegia espástica, forma comum de paralisia cerebral."
     },
     {
-      question: "No desenvolvimento motor normal de um bebê no primeiro ano de vida, qual é a sequência correta de aquisição das reações posturais?",
+      question: "Durante avaliação seriada da motricidade espontânea de um RN prematuro de 34 semanas, agora com 2 meses de idade corrigida, o fisioterapeuta observa ausência de 'fidgety movements' (movimentos irregulares, pequenos e circulares de baixa amplitude em todas as direções) que normalmente surgem nesta fase. Qual a interpretação correta deste achado segundo a Avaliação dos Movimentos Generalizados de Prechtl?",
       options: [
-        "Reação de proteção para frente, reação de proteção lateral, reação de proteção para trás",
-        "Reação de proteção lateral, reação de proteção para trás, reação de proteção para frente",
-        "Reação de proteção para trás, reação de proteção para frente, reação de proteção lateral",
-        "Reação de proteção para frente, reação de proteção para trás, reação de proteção lateral"
+        "Trata-se de uma variação absolutamente normal do desenvolvimento neuromotor típico para esta idade corrigida, sem qualquer relevância clínica que justifique preocupação ou acompanhamento específico",
+        "Constitui um forte preditor de desenvolvimento motor normal, particularmente em prematuros, indicando maturação adequada das vias neuromotoras responsáveis pelos movimentos finos e coordenados",
+        "Representa apenas um atraso transitório na maturação dos circuitos do sistema extrapiramidal, sem valor prognóstico significativo para o desenvolvimento neuropsicomotor futuro da criança",
+        "Configura um forte preditor de disfunção neurológica futura, particularmente associado ao desenvolvimento de paralisia cerebral, com valor preditivo de aproximadamente 95% segundo estudos longitudinais",
+        "Indica possíveis alterações na formação e funcionamento das estruturas cerebelares, porém sem correlação direta com déficits motores futuros que possam comprometer o desenvolvimento funcional"
+      ],
+      correctAnswer: 3,
+      category: "Reflexos de 0 a 6 meses",
+      explanation: "A ausência dos 'fidgety movements', que normalmente surgem entre 6-20 semanas de idade corrigida, é considerada um forte preditor de disfunção neurológica, particularmente paralisia cerebral, com alto valor preditivo (cerca de 95%). Segundo a Avaliação dos Movimentos Generalizados de Prechtl, esta alteração reflete comprometimento dos circuitos neuronais responsáveis pelo controle motor fino e é considerada um biomarcador precoce de lesão cerebral."
+    },
+    {
+      question: "Recém-nascido de 15 dias apresenta reflexo de Moro completo, simétrico, porém com ausência da fase de abdução do membro superior esquerdo. Durante a avaliação, observa-se também ausência de movimentação ativa do ombro e cotovelo esquerdos, com preservação dos movimentos de punho e dedos. Este quadro clínico é mais sugestivo de:",
+      options: [
+        "Lesão traumática do nervo radial esquerdo causada por compressão durante o parto, comprometendo principalmente a inervação dos músculos extensores do antebraço, porém preservando os movimentos de pronação e supinação",
+        "Paralisia braquial obstétrica do tipo Duchenne-Erb, decorrente de lesão das raízes nervosas C5-C6 do plexo braquial, afetando predominantemente os movimentos de abdução e rotação externa do ombro e flexão do cotovelo",
+        "Paralisia braquial obstétrica do tipo Klumpke, caracterizada por lesão das raízes nervosas C8-T1, resultando em comprometimento da musculatura intrínseca da mão e flexores profundos dos dedos, com preservação parcial da função proximal",
+        "Manifestação precoce de hemiparesia de origem central, decorrente de lesão cerebral perinatal, potencialmente associada a eventos hipóxico-isquêmicos ocorridos durante o trabalho de parto ou no período neonatal imediato",
+        "Limitação funcional temporária secundária a fratura de clavícula em processo de consolidação, gerando dor à movimentação do membro superior e consequente imobilização protetora dos grupos musculares proximais"
+      ],
+      correctAnswer: 1,
+      category: "Reflexos de 0 a 6 meses",
+      explanation: "O quadro descrito é altamente sugestivo de paralisia braquial obstétrica do tipo Duchenne-Erb, que afeta as raízes nervosas C5-C6 do plexo braquial. Esta lesão compromete os movimentos do ombro e cotovelo (abdução, rotação externa do ombro e flexão do cotovelo), preservando os movimentos de punho e dedos, controlados por raízes inferiores. A assimetria do reflexo de Moro é um sinal clássico desta condição, pois sua execução completa depende da integridade das raízes superiores do plexo braquial."
+    },
+
+    // REFLEXOS DE 7 A 15 MESES (5 questões)
+    {
+      question: "Lactente de 10 meses, nascido a termo, sem intercorrências perinatais, apresenta atraso na aquisição de marcos motores, não conseguindo manter-se sentado sem apoio e demonstrando transferência de peso lateral limitada. Durante avaliação fisioterapêutica, observa-se aumento de tônus em membros inferiores, persistência do reflexo tônico cervical assimétrico e ausência das reações de proteção lateral. Qual hipótese diagnóstica é mais provável?",
+      options: [
+        "Atraso motor simples de causa idiopática, sem evidências concretas de comprometimento neurológico estrutural, possivelmente relacionado a fatores ambientais ou estimulação insuficiente no ambiente domiciliar",
+        "Diplegia espástica de intensidade leve a moderada, caracterizada pelo acometimento predominante dos membros inferiores, com envolvimento parcial da funcionalidade de tronco e presença de reflexos primitivos persistentes",
+        "Ataxia cerebelar congênita de manifestação precoce, evidenciada pela instabilidade postural, dificuldade na transferência de peso e incoordenação dos movimentos direcionados, afetando principalmente o controle axial",
+        "Forma congênita de distrofia muscular com manifestação progressiva e comprometimento predominante da musculatura proximal, causando fraqueza significativa e limitação na aquisição dos marcos motores antigravitacionais",
+        "Síndrome de hipermobilidade articular generalizada associada a déficit proprioceptivo significativo, resultando em atraso na estabilização postural e dificuldades no desenvolvimento das reações de equilíbrio"
+      ],
+      correctAnswer: 1,
+      category: "Reflexos de 7 a 15 meses",
+      explanation: "O quadro descrito sugere diplegia espástica leve a moderada, evidenciada pelo atraso na aquisição de marcos motores (não senta sem apoio aos 10 meses), aumento de tônus em membros inferiores, persistência patológica de reflexos primitivos (RTCA) e ausência de reações posturais adequadas para a idade (proteção lateral). Este conjunto de sinais é altamente sugestivo de paralisia cerebral do tipo diplégica, frequentemente associada a lesões periventriculares em prematuros, embora neste caso tenha ocorrido em um bebê a termo."
+    },
+    {
+      question: "Um bebê de 8 meses consegue sentar-se sem apoio, mas não realiza rotação de tronco durante o alcance lateral de objetos e apresenta transferência de peso anterior limitada. Não realiza mudanças posturais ativas como passar de sentado para quatro apoios. A avaliação revela hipotonia axial com hipertonia de membros inferiores e reações de equilíbrio sentado deficitárias. Qual seria a melhor conduta fisioterapêutica para este caso?",
+      options: [
+        "Facilitação sistemática das rotações de tronco em múltiplas posturas e treinamento intensivo de transferências posturais com descarga de peso adequada em membros superiores, focando na dissociação entre cinturas escapular e pélvica",
+        "Implementação de protocolo de posicionamento exclusivamente em decúbito dorsal para estimular ativamente os padrões de flexão e cruzamento da linha média, evitando posturas que favoreçam padrões extensores patológicos",
+        "Aplicação de programa intensivo de treino de marcha com suporte parcial de peso corporal, visando normalizar o tônus muscular dos membros inferiores através da ativação dos geradores centrais de padrão",
+        "Prescrição de protocolo específico de fortalecimento isolado da musculatura abdominal profunda, objetivando melhorar primariamente o controle de tronco antes de qualquer intervenção em outros segmentos corporais",
+        "Utilização contínua de órteses rígidas de posicionamento em membros inferiores como intervenção primária, visando controlar a hipertonia antes de qualquer abordagem funcional de tronco e membros superiores"
+      ],
+      correctAnswer: 0,
+      category: "Reflexos de 7 a 15 meses",
+      explanation: "A melhor conduta envolve a facilitação das rotações de tronco em diferentes posturas e treino de transferências posturais com descarga de peso em membros superiores. Esta abordagem visa melhorar a dissociação entre cinturas escapular e pélvica, promover ajustes posturais antecipatórios, facilitar as transferências de peso e estimular as reações de equilíbrio, abordando diretamente os déficits identificados (ausência de rotação de tronco, limitação na transferência de peso e dificuldade nas mudanças posturais ativas)."
+    },
+    {
+      question: "Bebê de 12 meses nascido prematuro (32 semanas) apresenta dificuldade para ficar em pé sem apoio e iniciou recentemente o engatinhar com padrão assimétrico (arrastar-se com predomínio de um lado do corpo). Observa-se persistência do reflexo de Galant à esquerda, reação de proteção lateral incompleta bilateralmente e reações de equilíbrio em pé deficitárias. A avaliação da motricidade espontânea revela movimentos estereotipados dos membros superiores durante a excitação. Qual a hipótese diagnóstica mais provável?",
+      options: [
+        "Manifestação inicial de paralisia cerebral do tipo hemiplégico com predomínio de comprometimento do hemicorpo direito, decorrente de provável lesão no hemisfério cerebral esquerdo associada à prematuridade",
+        "Alterações neuromotoras e comportamentais características do transtorno do espectro autista de alto funcionamento, com comprometimento motor associado às manifestações sociocomunicativas atípicas",
+        "Quadro neurogenético compatível com Síndrome de Angelman, caracterizada por atraso motor, movimentos atáxicos, comportamento feliz e alterações eletroencefalográficas específicas",
+        "Atraso motor transitório diretamente relacionado à prematuridade, sem significado patológico específico, com expectativa de normalização espontânea até os 18-24 meses de idade corrigida",
+        "Comprometimento funcional primário do sistema vestibular periférico e central, resultando em insegurança gravitacional, atraso nas reações de equilíbrio e assimetria motora compensatória"
+      ],
+      correctAnswer: 0,
+      category: "Reflexos de 7 a 15 meses",
+      explanation: "Os achados sugerem paralisia cerebral hemiplégica leve à direita. O engatinhar assimétrico (arrastando-se com predomínio de um lado) é um sinal clássico de hemiparesia. A persistência unilateral do reflexo de Galant, a assimetria nas reações posturais e os movimentos estereotipados dos membros superiores durante a excitação também são consistentes com esta hipótese. Embora a prematuridade seja um fator de risco, o padrão de déficit motor assimétrico é mais indicativo de hemiparesia do que um atraso global."
+    },
+    {
+      question: "Um lactente de 14 meses, com desenvolvimento prévio normal, apresenta subitamente perda da capacidade de ficar em pé sem apoio e regressão das habilidades manuais, com surgimento de movimentos estereotipados de 'lavar as mãos'. Mantém contato visual, mas demonstra irritabilidade e choro inconsolável durante a noite. A avaliação fisioterapêutica revela hipertonia de membros inferiores com manutenção dos reflexos posturais previamente adquiridos. Qual a hipótese diagnóstica mais provável?",
+      options: [
+        "Paralisia cerebral discinética de início tardio",
+        "Síndrome de Rett",
+        "Autismo regressivo",
+        "Encefalopatia epiléptica",
+        "Doença de Tay-Sachs"
+      ],
+      correctAnswer: 1,
+      category: "Reflexos de 7 a 15 meses",
+      explanation: "O quadro descrito é altamente sugestivo de Síndrome de Rett, especialmente pelos sinais característicos: regressão do desenvolvimento após período normal, perda de habilidades manuais adquiridas, movimentos estereotipados de 'lavar as mãos' (marca registrada desta síndrome), preservação relativa do contato visual, irritabilidade e distúrbios do sono. A hipertonia de membros inferiores com preservação dos reflexos posturais também é consistente com esta condição, que afeta predominantemente meninas e se manifesta tipicamente entre 6-18 meses após desenvolvimento inicial normal."
+    },
+    {
+      question: "Bebê de 9 meses apresenta dificuldade para manter-se sentado sem apoio por períodos prolongados, demonstrando oscilações de tronco e quedas frequentes para os lados. Consegue rolar em bloco, mas não apresenta rotações segmentares de tronco. Ao ser colocado em pé, observa-se hipotonia axial com transferência excessiva de peso sobre os membros inferiores, que apresentam base alargada. Qual alteração no desenvolvimento dos reflexos posturais melhor explica este quadro clínico?",
+      options: [
+        "Hipersensibilidade do sistema vestibular periférico, causando interpretação errônea dos estímulos de movimento e posição da cabeça no espaço, gerando insegurança postural e respostas adaptativas inadequadas",
+        "Hipoatividade crônica do sistema proprioceptivo muscular e articular, resultando em feedback deficiente sobre a posição dos segmentos corporais e limitando a capacidade de ajustes posturais antecipatórios",
+        "Persistência anormal do reflexo tônico labiríntico além do período esperado de integração, interferindo na capacidade de dissociação entre os segmentos corporais e na transferência de peso durante movimentos ativos",
+        "Atraso significativo no desenvolvimento das conexões cerebelares responsáveis pela coordenação dos movimentos voluntários e pelo controle fino da ativação muscular durante tarefas que exigem equilíbrio dinâmico",
+        "Desenvolvimento inadequado das reações de equilíbrio axial, fundamentais para manutenção da postura contra a gravidade e para realização de ajustes posturais automáticos durante movimentos ou perturbações externas"
+      ],
+      correctAnswer: 4,
+      category: "Reflexos de 7 a 15 meses",
+      explanation: "O quadro descrito evidencia principalmente um déficit no desenvolvimento das reações de equilíbrio axial, que são fundamentais para a manutenção da postura sentada e em pé. As oscilações de tronco, quedas frequentes para os lados, ausência de rotações segmentares, hipotonia axial e base alargada em pé são sinais clássicos de comprometimento das reações de equilíbrio, que dependem da integração dos sistemas vestibular, proprioceptivo e visual, além da integridade cerebelar."
+    },
+
+    // REAÇÕES DE 0 A 15 MESES (5 questões)
+    {
+      question: "Bebê de 3 meses nascido a termo apresenta alteração na qualidade dos movimentos generalizados, com repertório limitado, amplitude reduzida e ausência de variabilidade. Durante a avaliação em supino, observa-se dificuldade de alinhamento da cabeça na linha média, assimetria postural com preferência por rotação cefálica para a direita e retração escapular ipsilateral. Qual intervenção precoce seria mais adequada neste caso?",
+      options: [
+        "Estimulação sensorial multimodal com reorganização postural, favorecendo alinhamento médio e experiências simétricas",
+        "Mobilização passiva articular global três vezes ao dia",
+        "Fortalecimento muscular específico dos rotadores cervicais esquerdos",
+        "Estímulos vestibulares intensos para normalização do tônus postural",
+        "Posicionamento contínuo em decúbito ventral para fortalecimento extensor"
       ],
       correctAnswer: 0,
       category: "Reações de 0 a 15 meses",
-      explanation: "A sequência correta de aquisição das reações posturais é: reação de proteção para frente (surge por volta dos 6 meses), reação de proteção lateral (surge por volta dos 7-8 meses) e reação de proteção para trás (surge por volta dos 9-10 meses)."
+      explanation: "A intervenção mais adequada para este caso é a estimulação sensorial multimodal com reorganização postural. Esta abordagem visa enriquecer o repertório motor do bebê através de experiências sensoriais variadas (táteis, proprioceptivas, vestibulares e visuais), favorecendo o alinhamento na linha média e experiências posturais simétricas. A alteração na qualidade dos movimentos generalizados e a assimetria postural são sinais de alerta que requerem intervenção precoce focada na neuroplasticidade e prevenção de deformidades posicionais."
     },
     {
-      question: "Na terceira fase do Método Canguru, qual é o papel do fisioterapeuta no acompanhamento ambulatorial do recém-nascido e sua família?",
+      question: "Durante avaliação de um lactente de 6 meses com atraso no desenvolvimento motor, o fisioterapeuta testa a reação de proteção anterior (para frente). Ao inclinar o bebê para frente na posição sentada, observa-se que ele não estende os braços para se proteger da queda. A ausência desta reação nesta idade indica:",
       options: [
-        "Supervisionar exclusivamente a posição canguru no ambiente domiciliar",
-        "Realizar apenas procedimentos respiratórios para prevenir complicações pulmonares",
-        "Avaliar o desenvolvimento neuropsicomotor, orientar posicionamento e estimulação em domicílio",
-        "Interromper a intervenção fisioterapêutica, pois nesta fase só é necessário acompanhamento médico"
+        "Atraso significativo no desenvolvimento motor com possível comprometimento neurológico subjacente, considerando que esta reação protetora normalmente está presente entre 4-6 meses e é fundamental para segurança durante transições posturais",
+        "Padrão completamente normal de desenvolvimento, uma vez que esta reação protetora tipicamente só emerge após os 8 meses de idade, quando o controle postural sentado está plenamente estabelecido",
+        "Evidência sugestiva de comprometimento bilateral do sistema vestibular, responsável pela detecção de mudanças posicionais da cabeça no espaço e ativação reflexa das respostas protetoras apropriadas",
+        "Alteração sugestiva de déficit proprioceptivo periférico isolado, sem relação com o controle motor central ou com o desenvolvimento global do sistema nervoso da criança",
+        "Manifestação comum em quadros de hipermobilidade articular generalizada, onde a hiperlassidão ligamentar compromete o feedback proprioceptivo necessário para desencadear respostas protetoras adequadas"
+      ],
+      correctAnswer: 0,
+      category: "Reações de 0 a 15 meses",
+      explanation: "A ausência da reação de proteção anterior aos 6 meses indica atraso significativo no desenvolvimento motor com possível comprometimento neurológico. Esta reação normalmente surge entre 4-6 meses e é fundamental para a segurança do bebê durante a transição para a postura sentada. Sua ausência nesta idade sugere déficit no controle postural e nas reações adaptativas, podendo estar associada a comprometimento das vias sensório-motoras ou atraso global no desenvolvimento neuropsicomotor."
+    },
+    {
+      question: "Lactente de 7 meses apresenta persistência da reação tônica cervical assimétrica (RTCA) e ausência das reações de proteção laterais. Durante a avaliação em prono, observa-se incapacidade de transferir peso para um dos membros superiores para alcançar objetos. Em supino, o bebê não realiza rolamentos para prono, mesmo com facilitação. Estes achados sugerem principalmente um déficit no desenvolvimento de qual componente do controle motor?",
+      options: [
+        "Força muscular global",
+        "Coordenação olho-mão",
+        "Integração bilateral e rotação axial",
+        "Controle antigravitacional de cabeça",
+        "Ajustes posturais nos membros inferiores"
+      ],
+      correctAnswer: 2,
+      category: "Reações de 0 a 15 meses",
+      explanation: "Os achados sugerem principalmente déficit no desenvolvimento da integração bilateral e rotação axial. A persistência do RTCA impede a integração dos hemicorpos e a capacidade de cruzar a linha média. A ausência das reações de proteção laterais e a dificuldade na transferência de peso unilateral em prono indicam comprometimento na coordenação entre os dois lados do corpo. A incapacidade de realizar rolamentos para prono, mesmo com facilitação, confirma a dificuldade nas rotações axiais, componente fundamental para a transição entre posturas e desenvolvimento da mobilidade."
+    },
+    {
+      question: "Um bebê de 10 meses com paralisia cerebral diparetica é submetido a uma avaliação da função manual. Ele consegue realizar preensão palmar bilateral, mas demonstra dificuldade na preensão de pinça e na transferência de objetos entre as mãos. Durante a manipulação de objetos, observa-se aumento do tônus extensor em membros inferiores. Qual abordagem terapêutica focada nas reações posturais seria mais adequada neste caso?",
+      options: [
+        "Inibição dos padrões extensores através de posicionamento exclusivo em flexão",
+        "Mobilização passiva intensa das articulações dos membros inferiores",
+        "Facilitação das reações de equilíbrio em sedestação com dissociação entre cinturas escapular e pélvica",
+        "Treino repetitivo de preensão de pinça em mesa, com membro superior apoiado",
+        "Estabilização dos membros inferiores em abdução e rotação externa através de órteses rígidas"
+      ],
+      correctAnswer: 2,
+      category: "Reações de 0 a 15 meses",
+      explanation: "A facilitação das reações de equilíbrio em sedestação com dissociação entre cinturas escapular e pélvica é a abordagem mais adequada. Em casos de paralisia cerebral diparética, a função manual frequentemente é prejudicada pelo aumento do tônus em membros inferiores durante atividades que exigem controle postural. Ao trabalhar as reações de equilíbrio em sedestação e promover a dissociação entre tronco superior e inferior, o fisioterapeuta facilita o controle postural independente da cintura escapular, permitindo maior liberdade de movimentos dos membros superiores sem ativação excessiva do padrão extensor em membros inferiores."
+    },
+    {
+      question: "Bebê de 11 meses, nascido prematuro (34 semanas), apresenta atraso no desenvolvimento da marcha independente. Durante avaliação neuromotora, observa-se presença adequada das reações de proteção anterior e lateral, bom controle de tronco sentado, mas ausência das reações de equilíbrio em pé e resposta extensora excessiva quando colocado em ortostase. O tônus muscular é normotônico em repouso, com leve hipertonia distal em membros inferiores durante atividades. Qual seria o diagnóstico funcional mais apropriado?",
+      options: [
+        "Atraso motor simples relacionado à prematuridade tardia",
+        "Diplegia espástica leve",
+        "Síndrome de hipermobilidade articular",
+        "Ataxia cerebelar congênita",
+        "Distúrbio de integração sensorial com hipersensibilidade tátil distal"
+      ],
+      correctAnswer: 1,
+      category: "Reações de 0 a 15 meses",
+      explanation: "O diagnóstico funcional mais apropriado é diplegia espástica leve. O quadro apresenta sinais típicos desta condição: prematuridade como fator de risco, atraso na marcha independente com preservação do controle de tronco (característica da diplegia), ausência específica das reações de equilíbrio em pé, resposta extensora excessiva em ortostase e hipertonia distal em membros inferiores durante atividades. A apresentação é leve, pois o tônus em repouso é normal e as reações de proteção estão preservadas, mas os sinais de comprometimento específico dos membros inferiores são consistentes com diplegia espástica."
+    },
+
+    // DOR NEONATAL (5 questões)
+    {
+      question: "Recém-nascido prematuro de 32 semanas, atualmente com 35 semanas de idade corrigida, está na UTIN e será submetido a diversos procedimentos dolorosos em um mesmo dia (punção de calcâneo, aspiração traqueal e troca de curativo de cateter central). Baseando-se nas evidências científicas atuais sobre o manejo da dor neonatal, qual seria a abordagem mais adequada?",
+      options: [
+        "Administração profilática de analgésicos opioides por via intravenosa antes de cada procedimento, independentemente da intensidade do estímulo doloroso, para garantir completa analgesia durante todas as intervenções",
+        "Utilização exclusiva de anestésicos tópicos aplicados nos locais de punção ou manipulação como medida analgésica principal, evitando completamente medicações sistêmicas devido ao risco de efeitos adversos em prematuros",
+        "Implementação de protocolos de sedação leve contínua durante todo o período dos procedimentos, mantendo o neonato em estado de sonolência para minimizar a percepção e memorização da experiência dolorosa",
+        "Ausência de intervenções específicas para manejo da dor, considerando que recém-nascidos prematuros desta idade gestacional possuem limiar de dor naturalmente elevado e sistema nervoso imaturo para processamento completo da experiência dolorosa",
+        "Combinação estratégica de métodos não-farmacológicos (como sucção não-nutritiva com solução adocicada, contenção facilitada, enrolamento) e intervenções farmacológicas escalonadas conforme a intensidade e invasividade de cada procedimento específico"
+      ],
+      correctAnswer: 4,
+      category: "Dor Neonatal",
+      explanation: "A abordagem mais adequada é a combinação de métodos não-farmacológicos e farmacológicos conforme a intensidade de cada procedimento. Para procedimentos leves a moderados, a combinação de solução adocicada (glicose 25% ou sacarose), sucção não-nutritiva e técnicas de contenção facilitada oferece efeito sinérgico. Para procedimentos mais invasivos, pode-se adicionar analgesia farmacológica. O manejo multimodal da dor é recomendado pelas diretrizes atuais, evitando tanto a subdose quanto a exposição desnecessária a medicamentos."
+    },
+    {
+      question: "Um neonato de 28 semanas de idade gestacional está em ventilação mecânica e necessita de um procedimento doloroso. Durante o procedimento, você observa os seguintes sinais: sobrancelhas salientes, olhos espremidos firmemente fechados, sulco nasolabial aprofundado, boca aberta e estirada, tremor de queixo e língua tensa. De acordo com a escala NFCS (Neonatal Facial Coding System), como você interpretaria estes achados?",
+      options: [
+        "Resposta comportamental normal em prematuros, sem indicativo de dor",
+        "Reação exagerada, sugerindo hipersensibilidade ao toque",
+        "Comportamento de estresse não específico, sem relação com dor",
+        "Manifestação típica de dor aguda, evidenciada pelos movimentos faciais característicos",
+        "Sinais de sedação inadequada, não relacionados à percepção dolorosa"
+      ],
+      correctAnswer: 3,
+      category: "Dor Neonatal",
+      explanation: "Os sinais faciais descritos (sobrancelhas salientes, olhos espremidos, sulco nasolabial aprofundado, boca aberta e estirada, tremor de queixo e língua tensa) são exatamente os componentes da escala NFCS, que avalia especificamente as expressões faciais durante eventos dolorosos. Estes movimentos faciais são altamente específicos para dor aguda em neonatos, mesmo em prematuros, e representam uma resposta comportamental consistente e validada para avaliação da dor neonatal."
+    },
+    {
+      question: "Um recém-nascido a termo de 3 dias de vida será submetido a um procedimento de punção lombar diagnóstica. A equipe médica questiona qual estratégia não-farmacológica baseada em evidências seria mais eficaz para reduzir a dor durante este procedimento. Qual das seguintes opções você recomendaria?",
+      options: [
+        "Aplicação localizada de compressa fria no local da punção por aproximadamente 30 segundos imediatamente antes do procedimento, visando anestesia por diminuição da condução nervosa local",
+        "Oferta de solução concentrada de sacarose (24%) por via oral, aproximadamente 2 minutos antes do procedimento, combinada com posicionamento adequado e contenção facilitada durante a intervenção",
+        "Implementação de protocolo intensivo de musicoterapia com volume sonoro moderadamente elevado, utilizando melodias rítmicas para mascarar estímulos ambientais adversos e promover distração sensorial",
+        "Aplicação de técnicas de contenção física com imobilização completa dos quatro membros, garantindo estabilidade absoluta durante o procedimento e minimizando o risco de movimentação e lesão iatrogenica",
+        "Amamentação iniciada entre 2-5 minutos antes do procedimento e mantida continuamente durante toda a intervenção, combinando os efeitos analgésicos do contato materno, sucção nutritiva e propriedades do leite materno"
+      ],
+      correctAnswer: 4,
+      category: "Dor Neonatal",
+      explanation: "A amamentação iniciada 2-5 minutos antes e mantida durante o procedimento é a estratégia não-farmacológica com maior evidência científica para redução da dor durante procedimentos como punção lombar em recém-nascidos a termo. A amamentação combina múltiplos elementos analgésicos: contato pele a pele, sucção, sabor adocicado do leite materno e contenção leve. Estudos demonstram que esta abordagem reduz significativamente os escores de dor, o tempo de choro e as alterações fisiológicas durante procedimentos dolorosos."
+    },
+    {
+      question: "Um recém-nascido prematuro de 30 semanas, atualmente com 33 semanas de idade corrigida, demonstra os seguintes sinais durante um procedimento doloroso: saturação de O₂ de 88% (queda de 5% em relação à linha de base), frequência cardíaca de 175 bpm (aumento de 20 bpm), expressão facial de dor (sobrancelhas franzidas, olhos espremidos), extensão de membros com hipertonia e choro. Após o procedimento, ele permanece agitado por mais de 10 minutos. Como você classificaria esta resposta à dor?",
+      options: [
+        "Resposta exagerada, indicando possível hipersensibilidade patológica",
+        "Resposta atenuada típica de prematuros, que têm menor capacidade de expressar dor",
+        "Resposta adequada à dor aguda, compatível com a idade gestacional",
+        "Sinais de estresse não específico, sem relação com experiência dolorosa",
+        "Resposta prolongada, sugerindo dor persistente que necessita intervenção farmacológica"
+      ],
+      correctAnswer: 4,
+      category: "Dor Neonatal",
+      explanation: "A resposta descrita indica dor persistente que necessita intervenção farmacológica. Embora os sinais durante o procedimento sejam esperados (alterações fisiológicas e comportamentais), a persistência da agitação por mais de 10 minutos após o término do estímulo doloroso sugere que a dor não foi adequadamente manejada. Prematuros podem ter maior sensibilidade e respostas prolongadas à dor, sendo importante não apenas a prevenção/tratamento durante o procedimento, mas também a observação e intervenção no período posterior."
+    },
+    {
+      question: "Um estudo clínico está avaliando a eficácia de diferentes intervenções para manejo da dor durante a inserção de PICC (Cateter Central de Inserção Periférica) em prematuros. Os pesquisadores utilizaram a escala PIPP-R (Premature Infant Pain Profile-Revised) para mensurar a resposta à dor. Por que esta escala é considerada mais apropriada para prematuros em comparação com outras escalas de dor neonatal?",
+      options: [
+        "Por basear-se exclusivamente na avaliação de parâmetros comportamentais observáveis, excluindo completamente indicadores fisiológicos que apresentam alta variabilidade e instabilidade em recém-nascidos prematuros",
+        "Por ser a única escala validada internacionalmente para utilização específica em ambiente de Unidade de Terapia Intensiva Neonatal, tendo sido testada em diferentes populações e contextos clínicos",
+        "Por apresentar a vantagem significativa de não requerer qualquer tipo de equipamento específico ou monitorização especial para sua aplicação, facilitando o uso rotineiro mesmo em unidades com recursos limitados",
+        "Por incorporar metodologicamente ajustes específicos para a idade gestacional e estado comportamental prévio ao procedimento doloroso, reconhecendo as particularidades da expressão da dor em diferentes estágios de maturidade neurológica",
+        "Por ser comprovadamente a escala mais rápida e simples de aplicar em ambiente crítico, exigindo menos de 30 segundos para avaliação completa, o que garante sua viabilidade durante procedimentos de emergência"
+      ],
+      correctAnswer: 3,
+      category: "Dor Neonatal",
+      explanation: "A escala PIPP-R é considerada mais apropriada para prematuros porque inclui ajustes para a idade gestacional e estado comportamental prévio ao procedimento doloroso. Esta característica é essencial, pois reconhece que prematuros em diferentes idades gestacionais podem apresentar respostas comportamentais e fisiológicas distintas à dor. A escala considera que prematuros mais jovens possuem menor capacidade de manifestar respostas comportamentais robustas, fornecendo pontuação ajustada que evita a subestimação da dor nesta população vulnerável."
+    },
+
+    // MÉTODO CANGURU (5 questões)
+    {
+      question: "Uma mãe de gêmeos prematuros (32 semanas), atualmente com 34 semanas de idade corrigida e peso de 1.600g cada, manifesta ansiedade sobre como poderá realizar o Método Canguru com ambos os bebês. Qual orientação baseada em evidências seria mais apropriada por parte do fisioterapeuta?",
+      options: [
+        "Desaconselhar o Método Canguru com gêmeos, pois aumenta o risco de intercorrências respiratórias",
+        "Recomendar que o Método Canguru seja realizado alternadamente com cada bebê, nunca simultaneamente",
+        "Orientar técnicas de posicionamento seguro para realizar o Método Canguru simultaneamente com ambos os bebês, incluindo suporte adequado para cabeças e vias aéreas",
+        "Sugerir que apenas o pai realize o Método Canguru, já que a mãe não conseguirá executá-lo adequadamente com gêmeos",
+        "Adiar o início do Método Canguru até que os bebês atinjam 2.000g cada, quando terão maior estabilidade"
       ],
       correctAnswer: 2,
       category: "Método Canguru",
-      explanation: "Na terceira fase do Método Canguru, que ocorre após a alta hospitalar, o papel do fisioterapeuta inclui avaliar periodicamente o desenvolvimento neuropsicomotor do bebê, orientar os pais quanto ao posicionamento adequado e atividades de estimulação em domicílio."
+      explanation: "A orientação mais apropriada é ensinar técnicas de posicionamento seguro para realizar o Método Canguru simultaneamente com ambos os bebês. Estudos demonstram que o Método Canguru pode ser realizado com segurança e eficácia em gêmeos simultaneamente, desde que sejam respeitados princípios de posicionamento que garantam estabilidade respiratória e térmica. O fisioterapeuta deve ensinar técnicas específicas, incluindo suporte adequado para cabeça e vias aéreas, garantindo semiflexão e leve lateralização da cabeça, evitando obstrução das vias aéreas e permitindo contato visual entre mãe e bebês."
     },
     {
-      question: "Bebê prematuro de 28 semanas, atualmente com 34 semanas de idade corrigida, está internado na UTI Neonatal e será submetido a múltiplos procedimentos dolorosos em um mesmo dia. Qual estratégia não-farmacológica combinada oferece maior efeito analgésico nesta situação?",
+      question: "Um recém-nascido prematuro de 28 semanas, atualmente com 32 semanas de idade corrigida, peso de 1.400g, está em ar ambiente com estabilidade clínica e iniciará o Método Canguru. Durante a primeira sessão, apresenta queda na saturação de oxigênio (88-90%) e aumento da frequência respiratória. A mãe demonstra insegurança e questiona se o método está prejudicando seu filho. Qual conduta o fisioterapeuta deve adotar?",
       options: [
-        "Apenas sucção não-nutritiva com chupeta ou dedo enluvado",
-        "Contenção facilitada com envolvimento em ninho ou rolos",
-        "Combinação de glicose oral, contato pele a pele e sucção não-nutritiva",
-        "Musicoterapia com redução da luminosidade ambiental"
+        "Interromper definitivamente o Método Canguru, pois este prematuro não apresenta estabilidade clínica suficiente",
+        "Avaliar o posicionamento, realizar ajustes na postura (especialmente alinhamento e inclinação da cabeça) e monitorar parâmetros vitais por 15-20 minutos antes de decidir pela continuidade",
+        "Manter o posicionamento inalterado por pelo menos 60 minutos, pois as alterações são transitórias e tendem a estabilizar espontaneamente",
+        "Solicitar prescrição de oxigenoterapia suplementar durante as sessões de Método Canguru",
+        "Adiar o Método Canguru até que o bebê atinja 1.800g, quando terá maior estabilidade respiratória"
+      ],
+      correctAnswer: 1,
+      category: "Método Canguru",
+      explanation: "A conduta mais adequada é avaliar o posicionamento, realizar ajustes na postura e monitorar os parâmetros vitais. Alterações como queda na saturação e taquipneia durante o Método Canguru frequentemente estão relacionadas a posicionamento inadequado, especialmente flexão excessiva do pescoço ou compressão torácica. O fisioterapeuta deve verificar a posição da cabeça (leve extensão, evitando flexão excessiva), inclinação do tronco (semi-reclinado entre 30-45°) e livre expansão torácica. Após os ajustes, é fundamental monitorar os parâmetros por 15-20 minutos, pois a maioria dos bebês apresenta estabilização ou melhora dos sinais vitais."
+    },
+    {
+      question: "Um prematuro de 34 semanas, atualmente com 15 dias de vida (36 semanas de idade corrigida), peso de 1.950g, está na segunda fase do Método Canguru. Durante avaliação fisioterapêutica, são observadas retrações intercostais leves e uso de musculatura acessória quando posicionado em decúbito dorsal no berço, que melhoram significativamente durante o contato pele a pele. Os pais questionam sobre o impacto do Método Canguru na função respiratória. Qual seria a explicação fisiopatológica mais adequada para este achado?",
+      options: [
+        "O contato pele a pele diminui o consumo de oxigênio pela melhora da termorregulação, reduzindo a demanda metabólica",
+        "A posição vertical favorece a sincronia toracoabdominal e melhora a mecânica diafragmática, otimizando a ventilação",
+        "O Método Canguru induz broncodilatação mediada por ocitocina durante o contato materno",
+        "O calor materno fluidifica secreções e facilita a depuração mucociliar",
+        "A respiração materna induz um padrão de acoplamento respiratório no bebê, atuando como um metrônomo externo"
+      ],
+      correctAnswer: 1,
+      category: "Método Canguru",
+      explanation: "A explicação fisiopatológica mais adequada é que a posição vertical durante o Método Canguru favorece a sincronia toracoabdominal e melhora a mecânica diafragmática. Em prematuros, que frequentemente apresentam imaturidade da musculatura respiratória e maior complacência da caixa torácica, a posição vertical com leve inclinação proporciona melhor relação comprimento-tensão do diafragma, reduz o efeito da pressão abdominal sobre este músculo e diminui o trabalho respiratório. Estudos demonstram que esta posição melhora parâmetros ventilatórios como volume corrente e capacidade residual funcional, além de reduzir assincronia toracoabdominal frequentemente observada em prematuros."
+    },
+    {
+      question: "Um prematuro de 32 semanas, atualmente com 38 semanas de idade corrigida, está na terceira fase do Método Canguru e comparece para acompanhamento ambulatorial. Durante a avaliação fisioterapêutica, observam-se atrasos em alguns marcos motores: controle cefálico incompleto, dificuldade para manter-se em prono com apoio de antebraços e ausência de direcionamento das mãos à linha média. Os pais relatam que fazem o Método Canguru apenas uma vez ao dia, por 20 minutos, pois acreditam que o bebê precisa 'treinar' ficar em supino no berço para se desenvolver melhor. Qual orientação o fisioterapeuta deve fornecer?",
+      options: [
+        "Suspender o Método Canguru e iniciar fisioterapia motora convencional três vezes por semana",
+        "Manter o tempo atual de Método Canguru, complementado com posicionamento exclusivo em supino no berço",
+        "Aumentar a duração e frequência do Método Canguru, orientar períodos supervisionados em prono quando acordado, e ensinar técnicas de facilitação do desenvolvimento neuropsicomotor durante as atividades diárias",
+        "Substituir o Método Canguru por alongamentos passivos diários realizados pelos pais",
+        "Prescrever órteses de posicionamento para uso durante o sono"
       ],
       correctAnswer: 2,
-      category: "Dor Neonatal",
-      explanation: "A combinação de glicose oral, contato pele a pele e sucção não-nutritiva oferece maior efeito analgésico por atuar em diferentes mecanismos. A glicose ativa receptores gustativos e libera endorfinas endógenas; o contato pele a pele promove liberação de ocitocina e reduz o estresse."
+      category: "Método Canguru",
+      explanation: "A orientação mais adequada é aumentar a duração e frequência do Método Canguru, orientar períodos supervisionados em prono quando acordado ('tummy time'), e ensinar técnicas de facilitação do desenvolvimento neuropsicomotor durante as atividades diárias. O contato pele a pele prolongado proporciona estímulos proprioceptivos, vestibulares e táteis que favorecem o desenvolvimento neuromotor. A posição prona supervisionada, quando o bebê está acordado, estimula o controle cefálico, fortalece a musculatura extensora e facilita a organização da linha média. As técnicas de facilitação integradas às atividades diárias (troca de fraldas, banho, alimentação) potencializam o desenvolvimento através da repetição e variabilidade de experiências sensório-motoras."
     },
     {
-      question: "Um fisioterapeuta planeja realizar ofuroterapia em um recém-nascido prematuro de 36 semanas que apresenta irritabilidade após procedimentos dolorosos. Quais cuidados são essenciais para a aplicação segura desta técnica?",
+      question: "Uma mãe de um prematuro tardio (36 semanas) com 20 dias de vida, em aleitamento materno exclusivo, relata dificuldades na amamentação durante as sessões de Método Canguru. O bebê apresenta tosse, engasgos frequentes e períodos de dessaturação (quedas até 89-90%) durante a mamada na posição canguru. Na avaliação, observa-se hipotonia leve generalizada, reflexo de procura presente mas débil, e coordenação sucção-deglutição-respiração ainda imatura. Qual seria a intervenção mais apropriada do fisioterapeuta?",
       options: [
-        "Utilizar água morna (35°C) e procedimento por 20 minutos sem monitoramento contínuo",
-        "Manter água aquecida (38-40°C) e bebê totalmente imerso para maior relaxamento",
-        "Água entre 36,5-37°C, monitoramento contínuo de sinais vitais e duração de 5-10 minutos",
-        "Adicionar óleos essenciais à água para potencializar o efeito relaxante da terapia"
+        "Contraindicar o aleitamento materno durante o Método Canguru, orientando que sejam momentos separados",
+        "Recomendar transição para aleitamento artificial com fórmula espessada",
+        "Orientar técnicas de posicionamento específicas durante o Método Canguru para facilitar o aleitamento seguro, incluindo elevação mais vertical, suporte adequado de cabeça e pausas frequentes",
+        "Suspender temporariamente o Método Canguru até que o bebê apresente coordenação sucção-deglutição-respiração madura",
+        "Indicar uso de sonda nasogástrica para alimentação durante as sessões de Método Canguru"
+      ],
+      correctAnswer: 2,
+      category: "Método Canguru",
+      explanation: "A intervenção mais apropriada é orientar técnicas de posicionamento específicas durante o Método Canguru para facilitar o aleitamento seguro. Em prematuros tardios com imaturidade na coordenação sucção-deglutição-respiração, o posicionamento adequado pode minimizar significativamente o risco de engasgos e dessaturação. O fisioterapeuta deve ensinar: posição mais verticalizada (60-80° de inclinação), suporte adequado da cabeça em leve extensão para manter vias aéreas alinhadas, técnicas de compressão mamária para facilitar o fluxo de leite, e orientação para pausas frequentes durante a mamada, permitindo períodos de recuperação respiratória. Esta abordagem preserva os benefícios combinados do Método Canguru e aleitamento materno, fundamentais para o desenvolvimento do prematuro."
+    },
+
+    // HIDROTERAPIA EM NEONATOS (5 questões)
+    {
+      question: "Um recém-nascido prematuro de 34 semanas, atualmente com 38 semanas de idade corrigida e peso de 2.100g, apresenta hipertonia extensora de membros inferiores e hiperextensão cervical. A equipe médica solicita avaliação para possível indicação de hidroterapia. Durante sua avaliação, você observa: controle cefálico incompleto, retração escapular, reações posturais deficientes e irritabilidade ao manuseio. Quais parâmetros específicos você deve monitorar durante a primeira sessão de hidroterapia?",
+      options: [
+        "Apenas os parâmetros básicos de frequência cardíaca e saturação de oxigênio, uma vez que outros sinais vitais tendem a permanecer estáveis durante a imersão aquática em temperatura adequada",
+        "Exclusivamente as respostas comportamentais como expressão facial, padrão de choro e estado de alerta, pois são os indicadores mais sensíveis de conforto e adaptação ao meio aquático",
+        "Apenas a temperatura axilar do bebê, mantendo-a rigorosamente entre 36,5°C e 37,0°C, ignorando outros parâmetros fisiológicos que apresentam maior variabilidade natural",
+        "Somente os parâmetros respiratórios, incluindo frequência respiratória e presença de retrações, já que são os primeiros a se alterarem em caso de intolerância à terapia",
+        "Múltiplos parâmetros de forma simultânea e contínua: temperatura axilar, saturação de oxigênio, frequência cardíaca, estado comportamental, resposta à manipulação e alterações nas respostas posturais durante a intervenção"
+      ],
+      correctAnswer: 4,
+      category: "Hidroterapia em Neonatos",
+      explanation: "Durante a primeira sessão de hidroterapia neonatal, é fundamental monitorar: temperatura axilar (para detectar hipotermia, contraindicação absoluta para continuidade), saturação de oxigênio (detectar alterações respiratórias), frequência cardíaca (taquicardia ou bradicardia indicam intolerância), estado comportamental (irritabilidade ou sonolência excessiva são sinais de estresse) e respostas posturais (hipertonia persistente ou hipotonia súbita são sinais de alerta). Este monitoramento multiparamétrico permite avaliação contínua da tolerância fisiológica e comportamental, fundamentais para segurança e eficácia da intervenção em neonatos vulneráveis."
+    },
+    {
+      question: "Um prematuro de 32 semanas, atualmente com 37 semanas de idade corrigida e 2.050g, diagnosticado com displasia broncopulmonar leve, iniciará hidroterapia. Nas primeiras sessões na piscina aquecida (36,8°C), apresentou melhora significativa dos parâmetros respiratórios, com redução da frequência respiratória de 65 para 48 rpm, diminuição das retrações intercostais e melhora da ausculta pulmonar. Qual mecanismo fisiológico melhor explica estes benefícios respiratórios?",
+      options: [
+        "Broncodilatação induzida pelo calor da água",
+        "Efeito da pressão hidrostática sobre a caixa torácica, favorecendo maior eficiência ventilatória",
+        "Diminuição da viscosidade do muco pela umidade do ambiente",
+        "Aumento da perfusão pulmonar por vasodilatação periférica",
+        "Indução de tosse produtiva pela imersão"
+      ],
+      correctAnswer: 1,
+      category: "Hidroterapia em Neonatos",
+      explanation: "O mecanismo fisiológico que melhor explica os benefícios respiratórios observados é o efeito da pressão hidrostática sobre a caixa torácica. A imersão em água aquecida até o nível do tórax cria uma pressão hidrostática gradiente que: (1) oferece resistência à inspiração, fortalecendo a musculatura inspiratória; (2) facilita a expiração por compressão torácica, auxiliando a eliminação de ar retido em pacientes com obstrução como na displasia broncopulmonar; (3) aumenta a pressão transmural nas vias aéreas, reduzindo a tendência ao colapso; e (4) melhora a relação ventilação-perfusão. Estes efeitos resultam em padrão respiratório mais eficiente, com redução da frequência respiratória e melhora da mecânica ventilatória."
+    },
+    {
+      question: "Na avaliação para hidroterapia de um recém-nascido a termo de 10 dias com diagnóstico de hipertonia congênita a esclarecer, você identifica os seguintes sinais: abertura limitada das mãos, polegar aduzido e em flexão, dificuldade de abdução dos quadris, hiperreflexia patelar bilateral e clônus aquileu esgotável. A mãe questiona se a hidroterapia pode auxiliar no manejo da hipertonia. Com base nas evidências científicas, qual seria sua resposta?",
+      options: [
+        "A hidroterapia é contraindicada para hipertonia de origem central, pois pode aumentar o tônus pela estimulação sensorial excessiva",
+        "A hidroterapia tem benefícios limitados, sendo indicada apenas após 3 meses de idade",
+        "A hidroterapia é potencialmente benéfica por combinar efeitos térmicos, mecânicos e sensoriais que favorecem a redução temporária do tônus, facilitando a aquisição de padrões motores mais funcionais",
+        "A hidroterapia deve ser evitada em casos de hipertonia congênita até a conclusão da investigação diagnóstica",
+        "A hidroterapia tem eficácia comprovada apenas para hipertonias de origem periférica, não para casos de origem central"
       ],
       correctAnswer: 2,
       category: "Hidroterapia em Neonatos",
-      explanation: "Para a aplicação segura da ofuroterapia, a água deve estar entre 36,5°C e 37°C (similar à temperatura corporal), com monitoramento contínuo dos sinais vitais durante toda a sessão, que deve durar entre 5-10 minutos para evitar estresse térmico."
+      explanation: "A hidroterapia é potencialmente benéfica para recém-nascidos com hipertonia por combinar múltiplos efeitos terapêuticos: (1) o efeito térmico da água aquecida (36,5-37°C) promove relaxamento muscular por redução da atividade fusimotora; (2) a flutuabilidade diminui os efeitos da gravidade, facilitando movimentos que seriam difíceis em terra; (3) a pressão hidrostática proporciona input proprioceptivo constante, que pode modular o tônus; e (4) o ambiente aquático oferece estimulação sensorial multimodal que favorece a neuroplasticidade. Estudos mostram que estes efeitos combinados podem reduzir temporariamente a hipertonia, criando uma 'janela terapêutica' para trabalhar padrões motores mais funcionais e experiências sensório-motoras variadas."
     },
     {
-      question: "Uma criança nascida prematura com 30 semanas, agora com 4 anos, apresenta dificuldades de aprendizagem, especialmente em matemática e habilidades visuoespaciais, apesar de ter QI na faixa normal. Qual é a explicação neurofisiológica mais provável para este quadro?",
+      question: "Durante uma sessão de hidroterapia, um neonato de 39 semanas com 15 dias de vida, previamente diagnosticado com encefalopatia hipóxico-isquêmica moderada, apresenta súbita deterioração do estado comportamental, com diminuição do nível de consciência, extremidades moteadas e bradicardia leve (FC=90 bpm). Qual deve ser a conduta imediata do fisioterapeuta?",
       options: [
-        "Lesão focal do córtex motor primário com preservação das áreas de associação",
-        "Comprometimento da mielinização e conectividade entre diferentes regiões cerebrais",
-        "Atrofia cortical progressiva secundária à epilepsia não tratada",
-        "Sequela de acidente vascular cerebral neonatal em território da artéria cerebral média"
+        "Intensificar a estimulação sensorial para reverter o quadro",
+        "Mudar a posição do bebê na água, mas continuar a terapia para avaliar se há melhora",
+        "Administrar oxigênio suplementar e manter a sessão por mais 5 minutos",
+        "Remover imediatamente o bebê da água, secar e aquecer rapidamente, monitorar sinais vitais e acionar equipe médica",
+        "Reduzir a temperatura da água para estimular resposta adrenérgica"
+      ],
+      correctAnswer: 3,
+      category: "Hidroterapia em Neonatos",
+      explanation: "A conduta imediata deve ser remover o bebê da água, secá-lo e aquecê-lo rapidamente, monitorar continuamente os sinais vitais e acionar a equipe médica. Os sinais apresentados (deterioração do nível de consciência, extremidades moteadas e bradicardia) sugerem instabilidade hemodinâmica aguda, possivelmente desencadeada por hipotermia, alteração cardiovascular ou neurológica. Em bebês com histórico de encefalopatia hipóxico-isquêmica, estas alterações podem indicar comprometimento da autorregulação cerebral ou cardiovascular. A prioridade é estabilizar o paciente, prevenir perda adicional de calor e permitir avaliação médica imediata para determinar a causa e tratamento específico."
+    },
+    {
+      question: "Um recém-nascido a termo de 25 dias, com diagnóstico de Síndrome de Down e hipotonia generalizada, iniciará um programa de hidroterapia. Durante a avaliação pré-intervenção, você observa: dificuldade de controle cefálico, hipermobilidade articular, ligamentos frouxos e episódios de apneia leve durante a alimentação. A mãe questiona qual a melhor abordagem para a primeira sessão de hidroterapia. Qual seria sua recomendação baseada em evidências?",
+      options: [
+        "Contraindicar a hidroterapia até os 3 meses, devido aos episódios de apneia",
+        "Iniciar com imersão total, incluindo face, para estimular o reflexo de mergulho",
+        "Começar com sessão curta (5-10 minutos), imersão até o nível do tórax, com ênfase em estabilização cervical e tronco, monitorando continuamente os sinais vitais e comportamentais",
+        "Utilizar técnicas de turbulência e correntes fortes para estimulação proprioceptiva intensa",
+        "Iniciar com temperatura da água mais baixa (33-34°C) para estimular tônus muscular"
+      ],
+      correctAnswer: 2,
+      category: "Hidroterapia em Neonatos",
+      explanation: "A abordagem mais adequada é iniciar com sessão curta (5-10 minutos), imersão até o nível do tórax, com ênfase em estabilização cervical e tronco, monitorando continuamente os sinais vitais e comportamentais. Esta abordagem considera as particularidades da Síndrome de Down: a hipotonia generalizada e frouxidão ligamentar exigem cuidado especial com a estabilização cervical para evitar sobrecarga nas estruturas atlanto-axiais (instabilidade comum nesta síndrome). Os episódios de apneia durante alimentação sugerem imaturidade no controle respiratório, sendo prudente evitar imersão facial inicialmente. Sessões curtas permitem avaliar a tolerância fisiológica e comportamental, fundamentais para segurança e progressão do tratamento."
+    },
+
+    // SEQUELAS NEUROLÓGICAS EM PREMATUROS (5 questões)
+    {
+      question: "Recém-nascido prematuro de 28 semanas apresentou hemorragia peri-intraventricular grau III à direita na primeira semana de vida. Atualmente com 6 meses de idade corrigida, demonstra assimetria postural com preferência por rotação cefálica para a esquerda, membro superior direito com padrão flexor persistente e membro inferior direito com rigidez à mobilização passiva. Qual alteração do neurodesenvolvimento é mais provável neste caso?",
+      options: [
+        "Paralisia cerebral discinética",
+        "Paralisia cerebral hemiplégica à direita",
+        "Ataxia cerebelar congênita",
+        "Transtorno de coordenação motora leve",
+        "Hemiparesia flácida transitória"
       ],
       correctAnswer: 1,
       category: "Sequelas Neurológicas em Prematuros",
-      explanation: "A explicação neurofisiológica mais provável é o comprometimento da mielinização e conectividade entre diferentes regiões cerebrais. A lesão difusa da substância branca, comum em prematuros, resulta em perda de oligodendrócitos e prejuízo na mielinização."
+      explanation: "A hemorragia peri-intraventricular grau III à direita frequentemente lesa estruturas periventriculares do hemisfério cerebral direito, resultando em sequelas motoras contralaterais (lado esquerdo do corpo). No entanto, o quadro descrito apresenta sinais clássicos de hemiparesia espástica à direita (membro superior com padrão flexor persistente e membro inferior com rigidez à mobilização), o que sugere que a lesão principal afetou o hemisfério esquerdo, provavelmente por lesão isquêmica associada ou leucomalácia periventricular, frequentemente concomitante à HPIV em prematuros extremos."
     },
     {
-      question: "Na aplicação do Método Canguru para um recém-nascido prematuro de 1500g, que recentemente saiu da ventilação mecânica e está em ar ambiente, qual posicionamento o fisioterapeuta deve orientar aos pais para otimizar a função respiratória durante o contato pele a pele?",
+      question: "Um prematuro de 30 semanas, atualmente com 18 meses de idade corrigida, apresenta atraso no desenvolvimento da linguagem expressiva (apenas 2-3 palavras com significado), mas desenvolvimento motor grosseiro aparentemente normal. Na avaliação neurológica, observam-se alterações sutis da coordenação, dificuldade na preensão fina e déficit de atenção compartilhada. Ressonância magnética prévia havia identificado lesão difusa da substância branca periventricular. Qual perfil cognitivo-comportamental este paciente provavelmente desenvolverá em idade escolar?",
       options: [
-        "Posição supina com cabeça lateralizada sobre o tórax do cuidador",
-        "Posição pronada com cabeça em flexão encostada no pescoço do cuidador",
-        "Posição vertical, levemente reclinada, com cabeça lateralizada e vias aéreas livres",
-        "Posição látero-lateral com membros em extensão para facilitar a expansão torácica"
+        "Quadro global de deficiência intelectual severa e progressiva, comprometendo todos os domínios cognitivos e necessitando suporte educacional especializado contínuo com adaptações curriculares significativas",
+        "Alterações exclusivamente relacionadas ao domínio da linguagem expressiva e receptiva, sem qualquer impacto em outras funções cognitivas, executivas ou de interação social durante o desenvolvimento escolar",
+        "Padrão característico de comprometimento específico das funções executivas (planejamento, memória operacional, controle inibitório) e habilidades visuoespaciais, frequentemente manifestando-se como transtorno de aprendizagem não-verbal",
+        "Manifestações compatíveis com transtorno do espectro autista clássico, caracterizado por interesses restritos, comportamentos estereotipados, alterações sensoperceptivas significativas e comprometimento grave da reciprocidade socioemocional",
+        "Desenvolvimento cognitivo-comportamental completamente normal a partir dos 24 meses, com recuperação espontânea das funções neurológicas comprometidas devido à neuroplasticidade intensificada nos primeiros anos de vida"
       ],
       correctAnswer: 2,
-      category: "Método Canguru",
-      explanation: "O fisioterapeuta deve orientar a posição vertical, levemente reclinada, com cabeça lateralizada e vias aéreas livres. Esta posição otimiza a função respiratória ao promover melhor expansão diafragmática e reduzir o trabalho respiratório."
+      category: "Sequelas Neurológicas em Prematuros",
+      explanation: "Prematuros com lesão difusa da substância branca periventricular frequentemente desenvolvem um perfil neuropsicológico caracterizado por déficits específicos nas funções executivas (atenção, memória operacional, controle inibitório, flexibilidade cognitiva) e habilidades visuoespaciais, mesmo com QI global normal ou limítrofe. Estas alterações se manifestam clinicamente como transtorno de aprendizagem não-verbal, dificuldades na matemática, compreensão de leitura, integração visuomotora e habilidades sociais pragmáticas. As conexões de substância branca afetadas na prematuridade são particularmente importantes para redes neurais envolvidas nestas funções."
     },
     {
-      question: "Durante a avaliação fisioterapêutica de um recém-nascido a termo com 2 dias de vida, é observada assimetria nos movimentos espontâneos dos membros superiores, com mão direita predominantemente fechada. O que estes achados sugerem?",
+      question: "Um prematuro extremo (26 semanas), atualmente com 4 meses de idade corrigida, passou por ultrassonografia transfontanelar seriada que identificou leucomalácia periventricular cística bilateral extensa. Na avaliação atual, observa-se controle cefálico parcial, hipertonia de membros inferiores com padrão extensor e cruzamento adutório, reflexos tendíneos exaltados e clônus aquileu bilateral. Qual intervenção fisioterapêutica precoce seria mais indicada neste caso?",
       options: [
-        "Características normais do desenvolvimento neuromotor neonatal",
-        "Reflexo tônico cervical assimétrico fisiológico para a idade",
-        "Possível lesão do plexo braquial tipo Erb-Duchenne",
-        "Imaturidade transitória do controle motor fino"
-      ],
-      correctAnswer: 2,
-      category: "Avaliação Neonatal",
-      explanation: "Os achados de assimetria nos movimentos espontâneos com mão predominantemente fechada e restrição na abertura dos dedos unilateralmente sugerem possível lesão do plexo braquial tipo Erb-Duchenne."
-    },
-    {
-      question: "Bebê de 4 meses, nascido a termo, apresenta persistência do Reflexo Tônico Cervical Assimétrico (RTCA) além do tempo esperado. Como este reflexo influencia o desenvolvimento motor?",
-      options: [
-        "Facilita o desenvolvimento do controle cefálico e não causa prejuízos significativos",
-        "Dificulta o alcance de marcos como rolar e sentar, prejudicando a simetria e orientação na linha média",
-        "Acelera o processo de controle de tronco, mas prejudica a coordenação entre membros superiores e inferiores",
-        "Não interfere no desenvolvimento motor típico, sendo uma variação normal do desenvolvimento"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "A persistência do RTCA dificulta a aquisição de marcos motores como rolar e sentar, pois impede que o bebê explore a linha média, desenvolvendo padrões de movimento assimétricos."
-    },
-    {
-      question: "Recém-nascido prematuro de 34 semanas apresenta hipertonia em membros inferiores e hipotonia axial. Durante a avaliação fisioterapêutica, observa-se persistência do reflexo tônico cervical assimétrico e ausência de reação de proteção lateral. Qual a conduta fisioterapêutica mais adequada para este caso?",
-      options: [
-        "Realizar apenas alongamentos passivos dos membros inferiores",
-        "Estimulação sensorial multimodal com posicionamento em flexão e contenção facilitada",
-        "Aplicar padrões de facilitação neuromuscular proprioceptiva em diagonal",
-        "Iniciar treino de marcha com suporte parcial de peso imediatamente"
-      ],
-      correctAnswer: 1,
-      category: "Intervenção Neurológica em Prematuros",
-      explanation: "A estimulação sensorial multimodal com posicionamento em flexão e contenção facilitada é a conduta mais adequada, pois respeita o desenvolvimento neurológico do prematuro e promove organização postural."
-    },
-    {
-      question: "Entre as evidências científicas que comprovam os benefícios da hidroterapia em neonatos, qual resultado está diretamente relacionado à imersão em água aquecida?",
-      options: [
-        "Aumento da frequência cardíaca e frequência respiratória",
-        "Diminuição da saturação de oxigênio",
-        "Aumento dos níveis de cortisol salivar",
-        "Redução do estresse e estabilização dos sinais vitais"
+        "Apenas observação clínica trimestral, sem intervenção específica até os 12 meses",
+        "Programa intensivo de fortalecimento muscular com resistência progressiva",
+        "Órteses rígidas de posicionamento em membros inferiores",
+        "Intervenção baseada em neurodesenvolvimento com controle de tônus, facilitação de padrões posturais adequados e orientação familiar para estimulação sensório-motora em ambiente natural",
+        "Bloqueio neuroquímico com toxina botulínica em adutores e flexores plantares"
       ],
       correctAnswer: 3,
-      category: "Hidroterapia em Neonatos",
-      explanation: "A imersão em água aquecida durante a hidroterapia neonatal promove a redução do estresse e estabilização dos sinais vitais, com diminuição da frequência cardíaca e respiratória."
+      category: "Sequelas Neurológicas em Prematuros",
+      explanation: "A leucomalácia periventricular cística bilateral extensa é um forte preditor de paralisia cerebral espástica, já evidenciada pelos sinais neurológicos descritos (hipertonia de membros inferiores com padrão extensor e cruzamento adutório, hiperreflexia e clônus). A intervenção fisioterapêutica precoce mais indicada é baseada nos princípios do neurodesenvolvimento, incluindo técnicas de modulação do tônus, facilitação de alinhamento e movimentos mais funcionais, e orientação familiar para atividades em ambiente natural. Esta abordagem aproveita a neuroplasticidade desta fase crítica do desenvolvimento, buscando prevenir deformidades secundárias e favorecer a aquisição de padrões motores mais adequados."
     },
     {
-      question: "Qual é a principal função do posicionamento terapêutico em prematuros na UTI Neonatal?",
+      question: "Durante avaliação do neurodesenvolvimento de um prematuro de 32 semanas, atualmente com 8 meses de idade corrigida, são observados os seguintes achados: dificuldade de manutenção da atenção, resposta exagerada a estímulos sensoriais, irritabilidade frequente, padrão de sono irregular e dificuldade para autorregulação durante transições de atividades. Exames de neuroimagem não evidenciaram lesões estruturais significativas. Qual hipótese diagnóstica melhor explica estes achados?",
       options: [
-        "Facilitar procedimentos de enfermagem",
-        "Prevenir lesões de pele",
-        "Melhorar padrão respiratório",
-        "Promover organização neuromotora e desenvolvimento simétrico"
+        "Transtorno do espectro autista precoce",
+        "Transtorno de déficit de atenção e hiperatividade",
+        "Distúrbio regulatório do processamento sensorial associado à prematuridade",
+        "Transtorno de ansiedade generalizada infantil",
+        "Manifestações comportamentais normais para a idade corrigida"
+      ],
+      correctAnswer: 2,
+      category: "Sequelas Neurológicas em Prematuros",
+      explanation: "Os achados descritos são característicos do distúrbio regulatório do processamento sensorial associado à prematuridade. Prematuros frequentemente apresentam dificuldades na modulação sensorial (hiper ou hiporresponsividade a estímulos), problemas de autorregulação e organização comportamental. Estas alterações decorrem do desenvolvimento neurológico atípico em ambiente extrauterino, exposição a estímulos sensoriais inapropriados durante período crítico de desenvolvimento cerebral, estresse neonatal e possíveis micro-lesões não detectáveis em exames convencionais. Este distúrbio pode persistir até a idade escolar, manifestando-se como dificuldades atencionais, comportamentais e de aprendizagem."
+    },
+    {
+      question: "Um prematuro de 29 semanas, atualmente com 12 meses de idade corrigida, apresenta atraso significativo na aquisição da marcha independente. Na avaliação fisioterapêutica, observa-se diparesia espástica leve, com maior comprometimento distal dos membros inferiores. Ressonância magnética realizada aos 6 meses identificou leucomalácia periventricular bilateral simétrica, predominante em regiões posteriores. A mãe questiona sobre o prognóstico funcional da marcha. Qual resposta seria mais apropriada?",
+      options: [
+        "A criança não desenvolverá marcha funcional devido à extensão da lesão cerebral",
+        "A marcha será adquirida normalmente até os 18 meses de idade corrigida, sem sequelas",
+        "Há alta probabilidade de aquisição de marcha independente, possivelmente entre 18-24 meses, com padrão equinovaro e possível necessidade de órteses suropodálicas",
+        "A criança necessitará de dispositivos auxiliares permanentes como andadores ou muletas",
+        "O desenvolvimento motor será normalizado completamente com fisioterapia intensiva três vezes por semana"
+      ],
+      correctAnswer: 2,
+      category: "Sequelas Neurológicas em Prematuros",
+      explanation: "O prognóstico mais provável para este caso é a aquisição de marcha independente entre 18-24 meses, com padrão equinovaro e possível necessidade de órteses suropodálicas. A leucomalácia periventricular bilateral simétrica, predominante em regiões posteriores, afeta principalmente as fibras descendentes que controlam os membros inferiores (diparesia espástica). Quando a manifestação clínica é leve a moderada aos 12 meses, e a lesão é predominantemente posterior, o prognóstico para marcha independente é geralmente favorável, embora com atraso na aquisição e alterações qualitativas do padrão (típico equinovaro). A maioria destas crianças se beneficia de órteses suropodálicas para otimizar o alinhamento e eficiência da marcha."
+    },
+
+    // SEQUELAS PULMONARES EM PREMATUROS (5 questões)
+    {
+      question: "Um prematuro extremo (26 semanas) com história de síndrome do desconforto respiratório grave e ventilação mecânica prolongada (45 dias) desenvolveu displasia broncopulmonar (DBP). Atualmente com 18 meses de idade corrigida, apresenta episódios recorrentes de sibilância desencadeados por infecções virais, com necessidade frequente de broncodilatadores. Na avaliação fisioterapêutica, observa-se aumento do diâmetro ântero-posterior do tórax, uso de musculatura acessória em repouso e ausculta com sibilos expiratórios difusos. Qual alteração fisiopatológica melhor explica este quadro clínico?",
+      options: [
+        "Aumento da complacência pulmonar com colapso expiratório das vias aéreas",
+        "Redução da capacidade residual funcional com aumento do trabalho respiratório",
+        "Diminuição do calibre das vias aéreas periféricas com aumento da resistência ao fluxo expiratório",
+        "Aumento da produção de muco sem alteração da mecânica ventilatória",
+        "Comprometimento exclusivo da força muscular inspiratória"
+      ],
+      correctAnswer: 2,
+      category: "Sequelas Pulmonares em Prematuros",
+      explanation: "A displasia broncopulmonar em prematuros extremos resulta em sequelas anatômicas e funcionais persistentes, incluindo diminuição do calibre das vias aéreas periféricas, aumento da reatividade brônquica e remodelamento da árvore brônquica. Estas alterações aumentam a resistência ao fluxo expiratório, manifestando-se clinicamente como sibilância recorrente, especialmente durante infecções virais que provocam inflamação adicional. O aumento do diâmetro ântero-posterior do tórax (tórax em barril) e o uso de musculatura acessória são adaptações à hiperinsuflação secundária, resultante da limitação ao fluxo expiratório."
+    },
+    {
+      question: "Um lactente de 8 meses (idade cronológica), nascido com 30 semanas de idade gestacional, tem diagnóstico de displasia broncopulmonar moderada. Durante episódio de bronquiolite viral aguda, apresenta insuficiência respiratória com necessidade de internação. Os seguintes parâmetros são observados: FR=68 ipm, uso intenso de musculatura acessória, retração intercostal e subcostal, SpO₂=88% em ar ambiente. Ausculta pulmonar com sibilos expiratórios difusos e crepitações basais bilaterais. Qual estratégia fisioterapêutica seria mais adequada na fase aguda?",
+      options: [
+        "Técnicas de aceleração de fluxo expiratório forçado (AFE rápida) seguidas de aspiração nasotraqueal",
+        "Manobras de compressão torácica vigorosa para mobilização de secreções",
+        "Vibração torácica prolongada em todos os campos pulmonares",
+        "Posicionamento otimizado, técnicas de desobstrução brônquica suaves com modulação de fluxo e estabilização torácica durante a tosse",
+        "Apenas oxigenoterapia e hidratação, sem intervenção fisioterapêutica na fase aguda"
       ],
       correctAnswer: 3,
-      category: "Intervenção em UTI Neonatal",
-      explanation: "O posicionamento terapêutico tem como principal função promover a organização neuromotora e o desenvolvimento simétrico do prematuro."
+      category: "Sequelas Pulmonares em Prematuros",
+      explanation: "Na fase aguda de uma bronquiolite em paciente com displasia broncopulmonar, a estratégia fisioterapêutica mais adequada consiste em posicionamento otimizado (elevação de tronco, leve extensão cervical), técnicas de desobstrução brônquica suaves com modulação de fluxo (evitando manobras forçadas que podem provocar broncoespasmo e colapso de vias aéreas instáveis) e estabilização torácica durante a tosse (para compensar a fraqueza muscular e aumentar a eficácia da eliminação de secreções). Esta abordagem considera as peculiaridades fisiopatológicas do ex-prematuro com DBP: vias aéreas colapsáveis, hiperreatividade brônquica, alteração da mecânica respiratória e diminuição da reserva funcional."
     },
     {
-      question: "Quais são os sinais de estresse durante a manipulação do recém-nascido prematuro que indicam necessidade de pausa na intervenção?",
+      question: "Um prematuro de 28 semanas com displasia broncopulmonar grave está em programação de alta hospitalar após 4 meses de internação. Mantém necessidade de oxigênio suplementar contínuo (0,5L/min em cânula nasal) e apresenta episódios frequentes de dessaturação durante a alimentação. A equipe multidisciplinar solicita avaliação fisioterapêutica para orientações domiciliares. Qual recomendação seria mais importante para prevenir complicações respiratórias após a alta?",
       options: [
-        "Alteração de frequência cardíaca, dessaturação e mudança de coloração",
-        "Apenas choro e agitação motora",
-        "Somente alterações respiratórias",
-        "Exclusivamente alterações de temperatura"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neonatal",
-      explanation: "Os principais sinais de estresse são alterações de frequência cardíaca, dessaturação e mudança de coloração da pele."
-    },
-    {
-      question: "Em relação ao desenvolvimento motor típico, qual é a idade esperada para o surgimento do controle cervical completo em um bebê nascido a termo?",
-      options: [
-        "2 meses",
-        "3-4 meses",
-        "5-6 meses",
-        "7-8 meses"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "O controle cervical completo é tipicamente alcançado entre 3-4 meses em bebês nascidos a termo."
-    },
-    {
-      question: "Qual é a temperatura ideal da água para a realização de hidroterapia em recém-nascidos prematuros estáveis?",
-      options: [
-        "34-35°C",
-        "35-36°C",
-        "36,5-37°C",
-        "38-39°C"
+        "Manter o bebê exclusivamente em posição de decúbito dorsal durante os períodos de sono, conforme recomendações internacionais para prevenção da síndrome da morte súbita infantil, independentemente das considerações respiratórias",
+        "Implementar protocolo domiciliar intensivo de fisioterapia respiratória com técnicas de percussão torácica manual três vezes ao dia, independentemente da presença de secreções ou sinais de desconforto respiratório",
+        "Orientar cuidadosamente os cuidadores sobre posicionamentos que otimizem a relação ventilação-perfusão, cuidados especiais durante a alimentação e reconhecimento precoce dos sinais de desconforto respiratório",
+        "Instituir rotina profilática de nebulizações diárias com solução salina hipertônica (3%), associada ou não a broncodilatadores, independentemente da presença de sintomas ou ausculta pulmonar alterada",
+        "Restringir rigorosamente o contato do bebê com outras crianças e ambientes externos por período mínimo de 12 meses, implementando isolamento social completo para evitar exposição a patógenos respiratórios"
       ],
       correctAnswer: 2,
-      category: "Hidroterapia em Neonatos",
-      explanation: "A temperatura ideal é entre 36,5-37°C, similar à temperatura corporal do bebê."
+      category: "Sequelas Pulmonares em Prematuros",
+      explanation: "Para pacientes com displasia broncopulmonar grave em alta hospitalar, as recomendações mais importantes incluem orientações sobre posicionamentos que otimizem a relação ventilação-perfusão (elevação de tronco, alternância de decúbitos, evitando flexão cervical excessiva), cuidados durante a alimentação (pausas frequentes, posicionamento semi-vertical) e capacitação dos cuidadores para reconhecimento precoce de sinais de desconforto respiratório ou infecções. Esta abordagem preventiva é fundamental, pois estes pacientes têm reserva funcional reduzida e são extremamente vulneráveis a descompensações durante intercorrências comuns como infecções virais, aspiração durante alimentação ou posicionamentos inadequados."
     },
     {
-      question: "Qual é o principal objetivo da estimulação tátil-cinestésica em prematuros?",
+      question: "Uma lactente de 15 meses de idade (12 meses corrigida), nascida com 29 semanas de idade gestacional, tem diagnóstico de displasia broncopulmonar. Apresenta atraso nas aquisições motoras: ainda não engatinha e tem dificuldade para manter-se sentada por períodos prolongados. Durante atividades como manipulação de brinquedos, observa-se aumento do trabalho respiratório. A avaliação respiratória revela padrão ventilatório predominantemente torácico, com limitada expansibilidade basal e uso de musculatura acessória durante esforços. Qual relação existe entre o quadro respiratório e o atraso motor?",
       options: [
-        "Promover ganho de peso e desenvolvimento neuromotor",
-        "Apenas melhorar o vínculo mãe-bebê",
-        "Reduzir o tempo de internação",
-        "Prevenir infecções hospitalares"
+        "Não há relação direta; o atraso motor decorre exclusivamente de lesão neurológica associada à prematuridade",
+        "O atraso motor é secundário à oxigenoterapia prolongada, que causa fraqueza muscular generalizada",
+        "O aumento do trabalho respiratório requer maior gasto energético, limitando a energia disponível para o desenvolvimento motor; além disso, a instabilidade do tronco prejudica o controle postural necessário para as aquisições motoras",
+        "Medicações broncodilatadoras causam atraso no desenvolvimento neuropsicomotor como efeito colateral",
+        "A relação é apenas temporal, sem nexo causal entre os problemas respiratórios e o desenvolvimento motor"
       ],
-      correctAnswer: 0,
-      category: "Intervenção em UTI Neonatal",
-      explanation: "O principal objetivo é promover o ganho de peso e o desenvolvimento neuromotor do prematuro."
+      correctAnswer: 2,
+      category: "Sequelas Pulmonares em Prematuros",
+      explanation: "Existe uma relação bidirecional entre a função respiratória comprometida e o atraso no desenvolvimento motor em prematuros com displasia broncopulmonar. O aumento do trabalho respiratório exige maior gasto energético, reduzindo a energia disponível para atividades motoras e exploração do ambiente. Além disso, o uso constante de musculatura acessória e o padrão ventilatório predominantemente torácico comprometem a estabilidade do tronco, prejudicando o desenvolvimento do controle postural, essencial para aquisições como sentar e engatinhar. As limitações na mobilidade torácica e função diafragmática também afetam a capacidade de gerar pressão intra-abdominal adequada, componente importante para estabilização central durante atividades motoras."
     },
     {
-      question: "Em que idade gestacional o reflexo de sucção-deglutição está completamente desenvolvido?",
+      question: "Um prematuro de 26 semanas com histórico de displasia broncopulmonar grave foi acompanhado longitudinalmente até os 7 anos de idade. Atualmente apresenta função pulmonar com padrão obstrutivo moderado, capacidade de exercício reduzida no teste de caminhada de 6 minutos (73% do previsto) e múltiplas hospitalizações por exacerbações respiratórias. Seus pais questionam sobre o prognóstico respiratório a longo prazo. Com base nas evidências científicas atuais, qual informação seria mais precisa?",
       options: [
-        "28-30 semanas",
-        "32-34 semanas",
-        "34-36 semanas",
-        "36-38 semanas"
+        "A função pulmonar normalizará completamente na adolescência, sem sequelas na vida adulta",
+        "O comprometimento é permanente e progressivo, com declínio contínuo da função pulmonar até a vida adulta",
+        "A função pulmonar tende a melhorar gradualmente até a adolescência, mas permanecerá abaixo do normal, com risco aumentado para doença pulmonar obstrutiva crônica precoce na vida adulta",
+        "Não há correlação entre a gravidade da displasia broncopulmonar na infância e o prognóstico pulmonar a longo prazo",
+        "O prognóstico depende exclusivamente da adesão ao tratamento medicamentoso"
+      ],
+      correctAnswer: 2,
+      category: "Sequelas Pulmonares em Prematuros",
+      explanation: "Estudos longitudinais mostram que a função pulmonar em prematuros com displasia broncopulmonar grave tende a melhorar gradualmente até a adolescência, devido ao crescimento pulmonar e desenvolvimento de novas unidades alveolares (que continua até aproximadamente 8 anos de idade). No entanto, a função pulmonar geralmente permanece abaixo do normal, com padrão obstrutivo residual e hiperreatividade brônquica. Estes indivíduos apresentam risco aumentado para o desenvolvimento de doença pulmonar obstrutiva crônica precoce na vida adulta, especialmente se expostos a fatores adicionais como tabagismo, poluição ou infecções respiratórias recorrentes. O declínio fisiológico da função pulmonar com o envelhecimento começa a partir de um patamar inferior, podendo atingir níveis clinicamente significativos mais precocemente."
+    },
+
+    // ESCALAS DE AVALIAÇÃO EM NEONATOS (5 questões)
+    {
+      question: "Um fisioterapeuta avalia um recém-nascido prematuro de 32 semanas, atualmente com 36 semanas de idade corrigida, utilizando a escala TIMP (Test of Infant Motor Performance). Durante a avaliação, observa que o bebê apresenta pontuação significativamente abaixo do esperado para a idade corrigida, principalmente nos itens relacionados ao controle cefálico e reações posturais contra a gravidade. Os pais questionam sobre a confiabilidade deste resultado para predizer o desenvolvimento futuro. Qual seria a resposta mais apropriada?",
+      options: [
+        "A escala TIMP não é validada para prematuros, tornando o resultado irrelevante",
+        "Pontuações baixas na TIMP entre 34-36 semanas têm valor preditivo significativo para atraso motor aos 12 meses, justificando intervenção precoce",
+        "A avaliação só tem valor diagnóstico após os 6 meses de idade corrigida",
+        "O resultado atual garante diagnóstico de paralisia cerebral futura",
+        "A escala avalia apenas aspectos cognitivos, não permitindo conclusões sobre o desenvolvimento motor"
+      ],
+      correctAnswer: 1,
+      category: "Escalas de Avaliação em Neonatos",
+      explanation: "A escala TIMP (Test of Infant Motor Performance) é especificamente validada para avaliação de prematuros a partir de 34 semanas de idade gestacional até 4 meses de idade corrigida. Estudos longitudinais demonstram que pontuações significativamente abaixo do esperado entre 34-36 semanas têm valor preditivo significativo para atraso motor aos 12 meses. Esta escala avalia controle postural, alinhamento e movimentos seletivos contra a gravidade, sendo particularmente sensível para identificar alterações sutis no desenvolvimento motor precoce. Resultados abaixo do esperado justificam intervenção fisioterapêutica precoce para potencializar o desenvolvimento neuromotor, aproveitando a neuroplasticidade nesta fase crítica."
+    },
+    {
+      question: "Durante avaliação de um recém-nascido a termo de 5 dias de vida com suspeita de encefalopatia hipóxico-isquêmica leve, o neurologista solicita aplicação da escala de Dubowitz/Ballard. Quais aspectos do neurodesenvolvimento são avaliados por esta escala?",
+      options: [
+        "Exclusivamente tônus muscular em diferentes segmentos corporais",
+        "Apenas reflexos primitivos e sua intensidade",
+        "Movimentos generalizados e qualidade dos movimentos espontâneos",
+        "Múltiplos parâmetros neurológicos incluindo postura, tônus, reflexos primitivos, movimentos e comportamento",
+        "Somente estados comportamentais e reatividade a estímulos"
       ],
       correctAnswer: 3,
-      category: "Desenvolvimento Motor",
-      explanation: "O reflexo de sucção-deglutição está completamente desenvolvido entre 36-38 semanas de idade gestacional."
+      category: "Escalas de Avaliação em Neonatos",
+      explanation: "A escala de Dubowitz/Ballard (Avaliação Neurológica do Recém-Nascido) é uma avaliação abrangente que inclui múltiplos parâmetros neurológicos: postura (observação do padrão postural em repouso), tônus muscular (avaliado em diferentes segmentos e em diferentes manobras passivas), reflexos primitivos (qualidade e intensidade), movimentos (quantidade, qualidade e simetria) e comportamento (estados de consciência, consolabilidade, irritabilidade). Esta escala é particularmente útil para detectar alterações neurológicas sutis em recém-nascidos com suspeita de encefalopatia hipóxico-isquêmica leve, fornecendo uma avaliação padronizada que pode ser repetida para monitoramento da evolução neurológica."
     },
     {
-      question: "Qual é a frequência recomendada de mudança de decúbito em prematuros estáveis na UTI Neonatal?",
+      question: "Um lactente nascido prematuro (30 semanas) será avaliado aos 4 meses de idade corrigida com a Alberta Infant Motor Scale (AIMS). A mãe pergunta quais aspectos específicos do desenvolvimento motor serão observados. Qual seria a resposta correta?",
       options: [
-        "A cada 8 horas",
-        "A cada 3-4 horas",
-        "A cada 12 horas",
-        "A cada 6 horas"
+        "A escala avalia primariamente os reflexos primitivos e sua integração",
+        "O teste mensura a força muscular em diferentes grupos musculares",
+        "A avaliação foca na qualidade dos movimentos espontâneos e controle postural em quatro posições: prono, supino, sentado e em pé",
+        "A AIMS examina principalmente a função cognitiva e sua relação com o movimento",
+        "O teste avalia exclusivamente o controle cefálico e tronco em posição sentada"
+      ],
+      correctAnswer: 2,
+      category: "Escalas de Avaliação em Neonatos",
+      explanation: "A Alberta Infant Motor Scale (AIMS) é uma escala observacional que avalia a qualidade dos movimentos espontâneos e o controle postural em quatro posições distintas: prono, supino, sentado e em pé. Para cada posição, são observados aspectos específicos como alinhamento postural, transferência de peso, movimentos antigravitacionais e controle motor. A escala não utiliza manuseio ou facilitação, baseando-se na observação do comportamento motor espontâneo. É particularmente útil para prematuros por ser sensível a alterações sutis na qualidade do movimento e permitir acompanhamento longitudinal do desenvolvimento motor, com boa validade preditiva para desfechos motores futuros."
+    },
+    {
+      question: "Na avaliação de um prematuro de 32 semanas, atualmente com 39 semanas de idade corrigida, o fisioterapeuta utiliza a Avaliação dos Movimentos Generalizados de Prechtl. O bebê apresenta 'writhing movements' (padrão de contorção) durante a avaliação. Como este achado deve ser interpretado?",
+      options: [
+        "Trata-se de um sinal patológico indicativo de lesão cerebral grave",
+        "É um padrão normal esperado para esta idade, que precede o surgimento dos 'fidgety movements'",
+        "Indica atraso no desenvolvimento motor, mas sem correlação com prognóstico neurológico",
+        "Sugere distúrbio metabólico agudo requerendo investigação imediata",
+        "É um achado não específico, sem valor diagnóstico ou prognóstico"
       ],
       correctAnswer: 1,
-      category: "Intervenção em UTI Neonatal",
-      explanation: "A mudança de decúbito deve ser realizada a cada 3-4 horas em prematuros estáveis."
+      category: "Escalas de Avaliação em Neonatos",
+      explanation: "Na Avaliação dos Movimentos Generalizados de Prechtl, os 'writhing movements' (movimentos de contorção) são considerados um padrão normal esperado entre 36-46 semanas de idade gestacional. Caracterizam-se por movimentos de pequena a moderada amplitude, velocidade lenta a moderada, com sequência variável de flexão/extensão/rotação dos membros. Estes movimentos normalmente precedem o surgimento dos 'fidgety movements', que aparecem entre 6-20 semanas pós-termo. A presença de 'writhing movements' com qualidade normal (variáveis, fluentes, complexos) em um prematuro de 39 semanas de idade corrigida é, portanto, um achado favorável, sugerindo integridade dos sistemas neurais responsáveis pelo controle motor espontâneo."
     },
     {
-      question: "Qual é o principal benefício da posição canguru para o desenvolvimento neuromotor do prematuro?",
+      question: "Durante a aplicação da escala Bayley III em um lactente de 9 meses (6 meses de idade corrigida) nascido prematuro (32 semanas), são observadas dificuldades específicas nas tarefas que envolvem coordenação olho-mão e manipulação de objetos pequenos. O desenvolvimento cognitivo e de linguagem está dentro dos parâmetros esperados. Qual abordagem de intervenção precoce seria mais adequada com base nestes achados?",
       options: [
-        "Melhora do padrão respiratório",
-        "Redução do estresse",
-        "Promoção da autorregulação e organização comportamental",
-        "Prevenção de refluxo gastroesofágico"
+        "Encaminhamento para terapia de integração sensorial intensiva em ambiente clínico",
+        "Estimulação exclusiva da função cognitiva para compensar o déficit motor",
+        "Programa domiciliar focado em atividades funcionais que promovam experiências de coordenação bimanual, preensão e manipulação, integradas às rotinas diárias",
+        "Abordagem 'wait and see', sem intervenção específica até a reavaliação aos 12 meses",
+        "Treinamento de habilidades motoras grosseiras para posterior desenvolvimento da motricidade fina"
       ],
       correctAnswer: 2,
-      category: "Método Canguru",
-      explanation: "O principal benefício neuromotor é a promoção da autorregulação e organização comportamental."
-    },
-    {
-      question: "Qual é o principal objetivo da contenção facilitada durante procedimentos dolorosos?",
-      options: [
-        "Reduzir o estresse e promover autorregulação",
-        "Imobilizar o bebê",
-        "Facilitar o procedimento",
-        "Prevenir lesões"
-      ],
-      correctAnswer: 0,
-      category: "Dor Neonatal",
-      explanation: "A contenção facilitada visa reduzir o estresse e promover a autorregulação do bebê durante procedimentos dolorosos."
-    },
-    {
-      question: "Qual é a idade gestacional mínima recomendada para início da hidroterapia em prematuros estáveis?",
-      options: [
-        "30 semanas",
-        "34 semanas",
-        "32 semanas",
-        "36 semanas"
-      ],
-      correctAnswer: 3,
-      category: "Hidroterapia em Neonatos",
-      explanation: "A hidroterapia é recomendada a partir de 36 semanas de idade gestacional em prematuros estáveis."
-    },
-    {
-      question: "Qual é a duração recomendada para uma sessão de fisioterapia respiratória em um recém-nascido prematuro estável?",
-      options: [
-        "30-40 minutos",
-        "15-20 minutos",
-        "45-60 minutos",
-        "5-10 minutos"
-      ],
-      correctAnswer: 1,
-      category: "Fisioterapia Respiratória",
-      explanation: "A duração recomendada é de 15-20 minutos, respeitando os sinais de estresse do bebê."
-    },
-    {
-      question: "Qual é o momento mais adequado para realizar a avaliação do desenvolvimento motor em prematuros?",
-      options: [
-        "Sempre pela idade cronológica",
-        "Apenas após termo",
-        "Utilizando a idade corrigida até 2 anos",
-        "Sem necessidade de correção da idade"
-      ],
-      correctAnswer: 2,
-      category: "Avaliação Neonatal",
-      explanation: "A avaliação deve ser realizada utilizando a idade corrigida até 2 anos de idade."
-    },
-    {
-      question: "Qual é a principal contraindicação para a realização de hidroterapia em neonatos?",
-      options: [
-        "Peso inferior a 2500g",
-        "Idade gestacional menor que 40 semanas",
-        "Uso de antibióticos",
-        "Instabilidade clínica e sinais vitais alterados"
-      ],
-      correctAnswer: 3,
-      category: "Hidroterapia em Neonatos",
-      explanation: "A principal contraindicação é a instabilidade clínica com alteração dos sinais vitais."
-    },
-    {
-      question: "Qual é o padrão respiratório típico de um recém-nascido saudável?",
-      options: [
-        "Respiração predominantemente abdominal",
-        "Respiração predominantemente torácica",
-        "Respiração paradoxal",
-        "Respiração exclusivamente nasal"
-      ],
-      correctAnswer: 0,
-      category: "Fisioterapia Respiratória",
-      explanation: "O padrão respiratório típico do recém-nascido é predominantemente abdominal."
-    },
-    {
-      question: "Um recém-nascido prematuro extremo (24 semanas) com 80 dias de vida apresenta piora da função respiratória após tentativa de extubação. O exame de imagem revela áreas de enfisema intersticial pulmonar difuso. Com base na fisiopatologia da displasia broncopulmonar e mecanotransdução celular em pulmões imaturos, qual a estratégia ventilatória que minimizaria o dano induzido pela ventilação mecânica neste caso específico?",
-      options: [
-        "Ventilação oscilatória de alta frequência com volume garantido, visando reduzir o barotrauma e o volutrauma simultaneamente",
-        "Ventilação convencional com pressões inspiratórias elevadas para recrutar alvéolos colapsados e reduzir o enfisema",
-        "Estratégia permissiva de hipercapnia com volumes correntes ultrabaixos (3-4ml/kg) e PEEP otimizada para evitar lesão por estiramento celular",
-        "CPAP nasal com pressões progressivamente crescentes para facilitar o recrutamento alveolar gradual"
-      ],
-      correctAnswer: 2,
-      category: "Fisioterapia Respiratória Avançada",
-      explanation: "A estratégia permissiva de hipercapnia com volumes correntes ultrabaixos minimiza o dano induzido pela ventilação ao reduzir significativamente o estiramento celular, que é o principal gatilho para cascatas inflamatórias e fibrogênicas. A mecanotransdução celular em pulmões imaturos é especialmente sensível ao estresse mecânico, e volumes menores reduzem a ativação de vias de sinalização pró-inflamatórias. A PEEP otimizada previne o colapso cíclico evitando atelectrauma, enquanto tolerar níveis mais elevados de CO2 (hipercapnia permissiva) permite redução do volume minuto, protegendo de lesão adicional um pulmão já enfisematoso."
-    },
-    {
-      question: "Em um estudo de análise tridimensional de movimento em bebês de 4 meses nascidos prematuros extremos, foi identificada alteração na variabilidade de movimento e na riqueza do repertório motor. Qual mecanismo neurofisiológico explica melhor esta alteração, considerando os atuais conhecimentos sobre organização cortical, plasticidade atividade-dependente e especificidade sináptica?",
-      options: [
-        "Redução do volume cerebelar resultando em déficit no refinamento dos padrões motores",
-        "Limitação da formação de conexões tálamo-corticais devido à privação sensório-motora durante período crítico de desenvolvimento",
-        "Interrupção das trajetórias desenvolvimentais dos sistemas propriospinal e corticospinal, combinada com atividade neural aberrante durante períodos sensíveis de organização cortical",
-        "Deficiência de mielinização dos tratos corticospinais laterais causada por risco metabólico aumentado"
-      ],
-      correctAnswer: 2,
-      category: "Neurociência do Desenvolvimento",
-      explanation: "A interrupção das trajetórias desenvolvimentais dos sistemas propriospinal e corticospinal, combinada com atividade neural aberrante durante períodos sensíveis, explica melhor as alterações observadas. A prematuridade extrema interrompe a formação normal dos circuitos sensório-motores em um período crítico de desenvolvimento das conexões tálamo-corticais e corticospinais. A plasticidade atividade-dependente fica comprometida devido à atividade neural insuficiente ou aberrante, prejudicando a especificidade sináptica necessária para a formação de mapas somatotópicos precisos, resultando em redução da variabilidade e riqueza do repertório motor. O timing da conectividade neuronal é crítico, e problemas nesta fase podem levar a redes neurais subótimas, mesmo com intervenção posterior."
-    },
-    {
-      question: "Uma recém-nascida de 36 semanas apresenta assimetria no padrão de movimentos espontâneos e irritabilidade extrema ao manuseio do membro superior direito. A ressonância magnética revela lesão parcial do plexo braquial direito (C5-C6). Considerando os princípios de recuperação neural, plasticidade cruzada inter-hemisférica e neuroproteção, qual abordagem terapêutica teria maior potencial para otimizar a reorganização dos mapas corticais e prevenir distorções somatotópicas?",
-      options: [
-        "Restrição do membro não afetado com terapia intensiva do lado afetado para evitar dominância do hemisfério não afetado",
-        "Estimulação elétrica funcional de baixa intensidade combinada com treino bimanual respeitando períodos de recuperação neural",
-        "Terapia por restrição induzida por três horas diárias em regime domiciliar",
-        "Abordagem integrada com feedback sensorial enriquecido, estimulação tátil-proprioceptiva refinada das aferências lesadas, combinada com treinamento motor bilateral para modular a competição inter-hemisférica durante a reorganização cortical"
-      ],
-      correctAnswer: 3,
-      category: "Neuroplasticidade e Reabilitação",
-      explanation: "A abordagem integrada representa a escolha ideal baseada nos princípios atuais de neuroplasticidade. Em uma lesão parcial do plexo braquial em desenvolvimento, a competição entre hemisférios pode levar à supressão do hemisfério afetado pelas projeções do hemisfério não afetado. O feedback sensorial enriquecido estimula a reorganização adaptativa dos mapas somatossensoriais, enquanto a estimulação tátil-proprioceptiva refinada preserva as aferências parcialmente intactas. O treinamento bilateral modula a competição inter-hemisférica durante um período crítico de formação de conexões corticais, evitando o fenômeno de 'learned non-use' (não-uso aprendido) sem os efeitos potencialmente negativos da restrição excessiva em um sistema nervoso em desenvolvimento."
-    },
-    {
-      question: "Um neonato a termo com encefalopatia hipóxico-isquêmica moderada será submetido a hipotermia terapêutica. Considerando os mecanismos celulares e moleculares de neuroproteção, em qual janela temporal e por quais mecanismos específicos a abordagem fisioterapêutica poderia potencializar os efeitos neuroprotetores da hipotermia?",
-      options: [
-        "Nas primeiras 12 horas pós-insulto, através de mobilização ativa para aumentar o fluxo sanguíneo cerebral e oxigenação",
-        "Entre 24-48 horas após o início da hipotermia, através de posicionamento terapêutico e mínima estimulação para reduzir a demanda metabólica neuronal durante inibição da excitotoxicidade glutamatérgica",
-        "Após 72 horas, com estimulação sensorial intensiva para acelerar a reorganização sináptica",
-        "Durante as primeiras 6 horas, com manobras vestibulares para estimular a neuroplasticidade precoce"
-      ],
-      correctAnswer: 1,
-      category: "Neuroproteção Avançada",
-      explanation: "Durante a fase de 24-48 horas após o início da hipotermia terapêutica, ocorrem processos-chave de inibição da excitotoxicidade glutamatérgica e redução da cascata inflamatória neurotóxica. O posicionamento terapêutico e a mínima estimulação nesta fase são sinérgicos aos mecanismos de ação da hipotermia, pois reduzem a demanda metabólica neuronal, potencializando a supressão de radicais livres e preservando a integridade mitocondrial. A estimulação excessiva neste período poderia aumentar o metabolismo neuronal, antagonizando os efeitos da hipotermia e potencialmente exacerbando o dano celular durante a fase de lesão secundária."
-    },
-    {
-      question: "Em um estudo randomizado controlado sobre desenvolvimento motor em prematuros, observou-se que bebês submetidos a um programa específico de fisioterapia apresentaram melhores escores no General Movements Assessment (GMA) aos 3 meses de idade corrigida, porém sem diferença significativa no TIMP. Como você interpretaria estes achados considerando as bases neurofisiológicas avaliadas por cada instrumento e o impacto prognóstico para paralisia cerebral?",
-      options: [
-        "O resultado indica que a intervenção foi ineficaz, pois o TIMP é mais sensível que o GMA para detectar alterações motoras sutis",
-        "A intervenção afetou positivamente a função dos centros geradores de padrões centrais e a integridade das redes subcorticais que regulam os movimentos generalizados, sem impacto significativo nas habilidades motoras específicas de caráter mais cortical avaliadas pelo TIMP",
-        "Os resultados são inconsistentes e metodologicamente questionáveis, já que ambos os instrumentos deveriam mostrar resultados similares",
-        "O GMA é exclusivamente influenciado por fatores ambientais, enquanto o TIMP reflete apenas o desenvolvimento neurológico inato"
-      ],
-      correctAnswer: 1,
-      category: "Avaliação Neurológica Avançada",
-      explanation: "Esta discrepância nos resultados reflete a diferença fundamental entre os construtos neurológicos avaliados por cada instrumento. O GMA avalia primariamente a função dos centros geradores de padrões centrais e a integridade das redes neurais subcorticais que regulam os movimentos generalizados, sendo altamente preditivo para paralisia cerebral. O TIMP avalia habilidades motoras mais específicas e funcionais que dependem de maior controle cortical. A melhora no GMA sem alteração significativa no TIMP sugere que a intervenção foi eficaz em modular os circuitos neurais responsáveis pela qualidade dos movimentos espontâneos, mas essa modulação ainda não se traduziu em ganhos funcionais específicos mensuráveis pelo TIMP. Este é um achado importante, pois a qualidade dos movimentos generalizados é um preditor mais forte para paralisia cerebral do que as habilidades funcionais específicas em estágios muito precoces."
-    },
-    {
-      question: "Na avaliação seriada de um neonato com hemorragia periventricular grau III, você observa desenvolvimento de hidrocefalia pós-hemorrágica e sinais de leucomalácia periventricular. Integrando os conhecimentos sobre vias motoras descendentes, desenvolvimento dos tratos corticoespinhais e neuroplasticidade do SNC imaturo, qual seria o padrão esperado de comprometimento motor e sua justificativa neurofisiológica?",
-      options: [
-        "Diplegia espástica leve, pois a substância branca periventricular contém principalmente fibras motoras para membros inferiores, com preservação relativa dos membros superiores",
-        "Hemiparesia espástica severa contralateral à lesão, devido ao comprometimento unilateral das fibras que cruzam na decussação das pirâmides",
-        "Quadriplegia espástica com maior acometimento de membros inferiores, devido à distribuição periventricular das fibras descendentes e ao comprometimento da organização somatotópica do trato corticoespinhal",
-        "Déficit motor mínimo devido à extensa neuroplasticidade e reorganização cortical nesta idade"
-      ],
-      correctAnswer: 2,
-      category: "Neurologia Neonatal Avançada",
-      explanation: "O padrão de quadriplegia espástica com maior comprometimento de membros inferiores ocorre porque a hemorragia periventricular grau III associada à leucomalácia periventricular afeta a substância branca periventricular bilateralmente. As fibras do trato corticoespinhal para os membros inferiores passam mais medialmente na coroa radiada e são mais vulneráveis à lesão periventricular do que as fibras destinadas aos membros superiores, que passam mais lateralmente. Além disso, a hidrocefalia pós-hemorrágica causa pressão adicional sobre essas vias, exacerbando o dano às fibras descendentes. Em um SNC imaturo, embora exista potencial para reorganização cortical, lesões extensas bilaterais como esta comprometem significativamente esse potencial plástico, resultando em déficits motores permanentes com padrão espástico característico devido à liberação do controle inibitório supraespinal sobre os reflexos espinais."
-    },
-    {
-      question: "Um prematuro de 26 semanas com 45 dias de vida desenvolveu displasia broncopulmonar grave e permanece em ventilação mecânica. Os parâmetros ventilatórios atuais incluem: PIP 24 cmH2O, PEEP 6 cmH2O, FR 45 ipm, Tempo inspiratório 0,35s e FiO2 45%. Gasometria arterial: pH 7,29, PaCO2 58 mmHg, PaO2 62 mmHg, HCO3 26 mEq/L, BE -2. Considerando os princípios de proteção pulmonar, mecânica respiratória neonatal e prevenção de lesão induzida pela ventilação, qual seria a melhor estratégia de ajuste ventilatório?",
-      options: [
-        "Aumentar PIP para 26 cmH2O e reduzir FR para 40 ipm, visando melhorar a ventilação alveolar",
-        "Manter parâmetros atuais, pois a hipercapnia permissiva é aceitável na displasia broncopulmonar",
-        "Implementar volume garantido com volume corrente de 4-5ml/kg, reduzir o tempo inspiratório para 0,30s e aumentar PEEP para 7-8 cmH2O, objetivando homogeneização da distribuição ventilatória e redução do espaço morto",
-        "Aumentar FiO2 para 60% e FR para 60 ipm para normalizar os valores gasométricos"
-      ],
-      correctAnswer: 2,
-      category: "Ventilação Mecânica Avançada",
-      explanation: "A implementação de volume garantido com volume corrente baixo (4-5ml/kg) é a estratégia mais adequada para proteção pulmonar em um prematuro com displasia broncopulmonar grave. O volume garantido proporciona ventilação mais homogênea e reduz o risco de volutrauma e barotrauma por ajustar automaticamente a pressão inspiratória à complacência pulmonar variável. A redução do tempo inspiratório para 0,30s é benéfica pois diminui o risco de air trapping em pulmões com constante de tempo aumentada devido à obstrução de vias aéreas característica da DBP. O aumento da PEEP para 7-8 cmH2O otimiza o recrutamento alveolar nas áreas colapsadas, melhorando a relação ventilação-perfusão e reduzindo o shunt intrapulmonar. Esta abordagem equilibra a necessidade de adequada troca gasosa com a proteção contra lesão pulmonar adicional, aceitando uma hipercapnia leve a moderada (hipercapnia permissiva) como trade-off para uma ventilação mais protetora."
-    },
-    {
-      question: "Qual das seguintes estratégias fisioterapêuticas é mais recomendada para o tratamento da Distrofia Muscular de Duchenne?",
-      options: [
-        "Exercícios resistidos intensos para fortalecer a musculatura",
-        "Imobilização prolongada para preservar a energia muscular",
-        "Exercícios submáximos regulares combinados com alongamentos",
-        "Terapia por restrição de movimento para focar na funcionalidade"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "O exercício submáximo regular combinado com alongamentos é recomendado para evitar a atrofia muscular por desuso e prevenir contraturas. Exercícios resistidos intensos podem acelerar a degeneração muscular, enquanto a imobilização prolongada promove a atrofia e as contraturas."
-    },
-    {
-      question: "Qual é a definição de cuidados paliativos segundo a Organização Mundial da Saúde (OMS)?",
-      options: [
-        "Cuidados exclusivos para pacientes nos últimos dias de vida",
-        "Medidas para acelerar a morte sem sofrimento do paciente",
-        "Cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo",
-        "Apenas controle da dor em pacientes terminais"
-      ],
-      correctAnswer: 2,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "A OMS define cuidados paliativos como o cuidado ativo e integral de pacientes cuja doença não responde mais ao tratamento curativo. O foco principal é o controle da dor e dos sintomas físicos, psicológicos, sociais e espirituais, visando melhorar a qualidade de vida dos pacientes terminais e de seus familiares."
-    },
-    {
-      question: "No contexto dos cuidados paliativos, o que significa ortotanásia?",
-      options: [
-        "Prática pela qual se abrevia a vida de um enfermo incurável de maneira deliberada",
-        "Prolongamento artificial do processo de morte, sem perspectiva de cura ou melhora",
-        "Morte natural, permitindo que ela ocorra no tempo certo, sem abreviação ou prolongamento artificial",
-        "Suspensão de todos os tratamentos médicos em pacientes terminais"
-      ],
-      correctAnswer: 2,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "A ortotanásia refere-se à morte natural, permitindo que ela ocorra no tempo certo, sem abreviação (como na eutanásia) ou prolongamento artificial (como na distanásia). Busca proporcionar ao paciente as condições necessárias para compreender sua mortalidade e prepará-lo para uma morte digna, sem intervenção no processo natural."
-    },
-    {
-      question: "Qual é o principal papel da fisioterapia em pacientes com Distrofia Muscular de Duchenne (DMD)?",
-      options: [
-        "Reverter o processo de degeneração muscular",
-        "Realizar apenas alongamentos passivos para evitar atrofia",
-        "Retardar a progressão da doença e prevenir complicações secundárias",
-        "Iniciar precocemente o uso de cadeira de rodas para preservar energia"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A fisioterapia desempenha um papel fundamental no retardo da progressão da doença e na prevenção de complicações secundárias. Embora não possa reverter o processo degenerativo, intervenções fisioterapêuticas adequadas podem melhorar significativamente a qualidade de vida dos pacientes com DMD."
-    },
-    {
-      question: "Na Distrofia Muscular de Duchenne, o que caracteriza a manobra de Gowers?",
-      options: [
-        "Capacidade de elevar os braços acima da cabeça",
-        "Uso sequencial dos membros e tronco para levantar-se do chão, indicando fraqueza dos músculos proximais dos membros inferiores",
-        "Padrão respiratório com predominância torácica",
-        "Contração involuntária dos músculos faciais durante o esforço"
-      ],
-      correctAnswer: 1,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A manobra de Gowers é um sinal clínico característico da DMD que indica fraqueza nos músculos proximais dos membros inferiores devido à atrofia muscular. O paciente utiliza as mãos para 'escalar' o próprio corpo ao se levantar do chão, apoiando-se sequencialmente nos joelhos e coxas."
-    },
-    {
-      question: "Quais são os principais benefícios da hidroterapia no tratamento da Distrofia Muscular de Duchenne?",
-      options: [
-        "Apenas recreação e socialização",
-        "Fortalecimento muscular através de alta resistência",
-        "Flutuabilidade que facilita movimentos, fortalecimento muscular gradual e relaxamento muscular",
-        "Aumento da rigidez muscular e melhora do equilíbrio"
-      ],
-      correctAnswer: 2,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A hidroterapia oferece múltiplos benefícios para pacientes com DMD: as propriedades físicas da água facilitam a movimentação através da flutuabilidade, proporcionam resistência gradual para fortalecimento dos músculos atrofiados, e as propriedades térmicas auxiliam no relaxamento muscular. Além disso, permite exercícios respiratórios, treino de marcha e atividades lúdicas em ambiente de baixo impacto."
-    },
-    {
-      question: "Por que a adequação postural em cadeiras de rodas é fundamental para pacientes com Distrofia Muscular de Duchenne?",
-      options: [
-        "Apenas para proporcionar conforto",
-        "Para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral",
-        "Somente para facilitar o transporte do paciente",
-        "Para fortalecer a musculatura paravertebral"
-      ],
-      correctAnswer: 1,
-      category: "Distrofia Muscular de Duchenne",
-      explanation: "A adequação postural em cadeiras de rodas é fundamental para diminuir o desconforto respiratório e prevenir deformidades na coluna vertebral. A postura inadequada pode levar à escoliose e comprometer a eficácia da respiração. O alinhamento postural adequado evita compensações na coluna vertebral, beneficiando a função respiratória, que é frequentemente afetada pela doença."
-    },
-    {
-      question: "Quais são os tipos mais comuns de câncer em crianças?",
-      options: [
-        "Câncer de pulmão, mama, próstata e colorretal",
-        "Leucemias, tumores do SNC, linfomas, neuroblastomas e tumor de Wilms",
-        "Melanoma, carcinoma basocelular e carcinoma espinocelular",
-        "Carcinoma hepatocelular, câncer gástrico e câncer de pâncreas"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "Os tipos mais comuns de câncer em crianças incluem leucemias (cânceres do sangue), tumores do Sistema Nervoso Central (SNC), linfomas (cânceres do sistema linfático), neuroblastomas (tumor de células nervosas), tumor de Wilms (tumor renal), tumores ósseos, rabdomiossarcoma e retinoblastoma."
-    },
-    {
-      question: "Qual é o principal objetivo da fisioterapia nos cuidados paliativos de crianças com câncer?",
-      options: [
-        "Curar a doença de base através de exercícios específicos",
-        "Aumentar ou manter o conforto e a independência, reduzindo o tempo de hospitalização",
-        "Apenas prevenir úlceras de decúbito",
-        "Substituir o tratamento medicamentoso para controle da dor"
-      ],
-      correctAnswer: 1,
-      category: "Cuidados Paliativos Pediátricos",
-      explanation: "O objetivo da fisioterapia nos cuidados paliativos é aumentar ou manter o conforto e a independência funcional, reduzindo o tempo de hospitalização e aumentando o tempo com familiares e amigos. A fisioterapia também desempenha um papel preventivo, antecipando possíveis complicações e implementando medidas preventivas."
-    },
+      category: "Escalas de Avaliação em Neonatos",
+      explanation: "A abordagem mais adequada para um lactente com dificuldades específicas na coordenação olho-mão e manipulação é um programa domiciliar focado em atividades funcionais que promovam experiências de coordenação bimanual, preensão e manipulação, integradas às rotinas diárias. Esta abordagem se baseia nos princípios de aprendizagem motora, que enfatizam a prática repetitiva, variada e contextualizada de habilidades específicas. A integração às rotinas diárias (alimentação, banho, troca, brincadeiras) aumenta a frequência das experiências motoras e facilita a adesão familiar. Intervenções precoces baseadas em atividades funcionais têm demonstrado maior eficácia para prematuros com alterações específicas do desenvolvimento, especialmente quando envolvem ativamente os cuidadores e ocorrem em ambientes naturais."
+    }
   ]
 
   useEffect(() => {
@@ -818,6 +933,16 @@ export default function ProvaGeralPage() {
   if (!hasStarted) {
   return (
       <div className="relative min-h-screen bg-gradient-to-b from-white to-[#F8FAFF]">
+        {/* Modal de anúncio */}
+        <AnimatePresence>
+          {isModalOpen && (
+            <AnnouncementModal 
+              isOpen={isModalOpen} 
+              onClose={() => setIsModalOpen(false)} 
+            />
+          )}
+        </AnimatePresence>
+        
         {/* Background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute w-[800px] h-[800px] rounded-full bg-[#6EC1E4]/5 blur-[120px] -top-[400px] -left-[300px]" />

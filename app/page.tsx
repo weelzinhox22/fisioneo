@@ -15,9 +15,11 @@ import {
   MessageSquare, 
   BookOpen, 
   RefreshCw, 
-  Sparkles 
+  Sparkles,
+  X,
+  Bell
 } from "lucide-react"
-import { motion, useScroll, useTransform, useSpring } from "framer-motion"
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Hero } from "@/app/components/Hero"
@@ -34,6 +36,70 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// Componente do Modal/Popup
+interface AnnouncementModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div 
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm" 
+        onClick={onClose}
+      />
+      <motion.div 
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+        className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6 md:p-8 z-50"
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
+        >
+          <X className="h-5 w-5 text-gray-500" />
+        </button>
+        
+        <div className="flex items-start mb-4">
+          <div className="bg-blue-50 p-2 rounded-full mr-4">
+            <Bell className="h-6 w-6 text-blue-500" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Comunicado Importante</h3>
+            <p className="text-sm text-gray-500">29 de maio de 2024</p>
+          </div>
+        </div>
+        
+        <div className="space-y-3 text-gray-700">
+          <p>
+            Pensando em proporcionar uma experiência mais fluida e acessível, e por dificuldades por parte dos usuários, decidimos remover a necessidade de cadastro para acesso aos conteúdos da plataforma Fisioneo.
+          </p>
+          <p>
+            Esta mudança foi implementada após análise cuidadosa do feedback dos usuários, tornando a plataforma mais acessível para os estudantes.
+          </p>
+          <p className="font-medium text-blue-600">
+            Atualização de conteúdo: As questões do módulo de Fisioterapia Neonatal foram revisadas e atualizadas em 29/05/2024, com distribuição otimizada das alternativas corretas e enunciados mais elaborados.
+          </p>
+        </div>
+        
+        <div className="mt-6">
+          <button
+            onClick={onClose}
+            className="w-full py-2.5 px-4 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white rounded-lg font-medium hover:shadow-md transition-all"
+          >
+            Entendido, obrigado!
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function Home() {
   const pdfSectionRef = useRef(null);
   const assessSectionRef = useRef(null);
@@ -43,10 +109,25 @@ export default function Home() {
   const [showLoginAlert, setShowLoginAlert] = useState(false)
   const { data: nextAuthSession, status: nextAuthStatus } = useSession()
   const [supabaseSession, setSupabaseSession] = useState<any>(null)
+  const [isModalOpen, setIsModalOpen] = useState(true)
+
+  // Função para fechar o modal e salvar no localStorage
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hasSeenAnnouncement-May2024', 'true');
+    }
+  }
 
   // Set up advanced scroll animations with GSAP
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    
+    // Verificar se o usuário já viu o popup
+    const hasSeenAnnouncement = localStorage.getItem('hasSeenAnnouncement-May2024');
+    if (hasSeenAnnouncement) {
+      setIsModalOpen(false);
+    }
     
     const sections = [pdfSectionRef, assessSectionRef, finalSectionRef, aiAssistantSectionRef];
     
@@ -126,10 +207,6 @@ export default function Home() {
   }
 
   const handleAIAssistantClick = () => {
-    if (!isAuthenticated) {
-      setShowLoginAlert(true)
-      return
-    }
     alert('Assistente IA ativado!') // Replace with actual functionality
   }
 
@@ -140,6 +217,15 @@ export default function Home() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      <AnimatePresence>
+        {isModalOpen && (
+          <AnnouncementModal 
+            isOpen={isModalOpen} 
+            onClose={handleCloseModal} 
+          />
+        )}
+      </AnimatePresence>
+      
       <Hero />
       
       <AboutSection />
@@ -490,9 +576,7 @@ export default function Home() {
                 backgroundGradient={true}
                 glowOnHover={true}
                 strength={15}
-                className={`px-8 py-4 font-medium ${
-                  !isAuthenticated ? 'opacity-50' : ''
-                }`}
+                className="px-8 py-4 font-medium"
                 onClick={handleAIAssistantClick}
               >
                 <span className="flex items-center gap-2">

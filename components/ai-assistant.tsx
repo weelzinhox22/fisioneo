@@ -85,10 +85,11 @@ export default function AIAssistant() {
   }, [isOpen])
 
   const handleOpenChat = () => {
-    if (!isAuthenticated) {
-      setShowLoginAlert(true)
-      return
-    }
+    // Não precisamos mais verificar autenticação
+    // if (!isAuthenticated) {
+    //   setShowLoginAlert(true)
+    //   return
+    // }
     setIsOpen(true)
   }
 
@@ -199,6 +200,7 @@ export default function AIAssistant() {
 
   return (
     <>
+      {/* Não precisamos mais do alerta de login
       <AlertDialog
         isOpen={showLoginAlert}
         onClose={() => setShowLoginAlert(false)}
@@ -206,16 +208,13 @@ export default function AIAssistant() {
         message="Para acessar o Assistente IA, faça login na plataforma."
         type="success"
       />
+      */}
 
       {/* Botão flutuante */}
       <ZoomIn className="fixed bottom-6 right-6 z-50">
         <button
           onClick={handleOpenChat}
-          className={`bg-gradient-to-r ${
-            isAuthenticated 
-              ? "from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5BA8CB] hover:to-[#A090E0]" 
-              : "from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600"
-          } text-white rounded-full p-4 shadow-lg transition-all duration-300 flex items-center gap-2`}
+          className={`bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] hover:from-[#5BA8CB] hover:to-[#A090E0] text-white rounded-full p-4 shadow-lg transition-all duration-300 flex items-center gap-2`}
           aria-label="Abrir assistente de IA"
         >
           <Sparkles className="h-5 w-5" />

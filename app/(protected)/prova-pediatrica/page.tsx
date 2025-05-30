@@ -382,18 +382,6 @@ export default function ProvaPediatricaPage() {
       explanation: "Queimaduras de segundo grau profundas comprometem a epiderme e toda a derme, podendo afetar estruturas subcutâneas. Apresentam aspecto esbranquiçado ou vermelho escuro, superfície mais seca, e relativamente pouca dor devido à destruição de terminações nervosas. Sua cicatrização é mais lenta e frequentemente requer abordagem cirúrgica."
     },
     {
-      question: "CASO CLÍNICO: Uma criança de 4 anos sofreu queimadura por água fervente que atingiu toda a face anterior do tórax e abdome, e a região proximal do membro superior direito. Utilizando a 'Regra dos Nove', qual a superfície corporal queimada aproximada?",
-      options: [
-        "Aproximadamente 23%, considerando as proporções corporais específicas da idade pediátrica que diferem do adulto",
-        "Aproximadamente 36%, calculado conforme os percentuais padronizados para adultos sem ajustes para idade",
-        "Aproximadamente 18%, utilizando apenas a soma matemática das regiões afetadas sem considerar o desenvolvimento corporal",
-        "Aproximadamente 9%, contabilizando exclusivamente a área de maior profundidade da lesão térmica"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "Pela Regra dos Nove adaptada para crianças, o tórax anterior representa 9%, o abdome 9% e o braço proximal aproximadamente 4,5% (metade dos 9% de um braço inteiro). A soma resulta em aproximadamente 22,5%, ou seja, cerca de 23% da superfície corporal queimada (SCQ)."
-    },
-    {
       question: "Qual das seguintes abordagens fisioterapêuticas está CONTRAINDICADA na fase aguda de uma queimadura de segundo grau em uma criança?",
       options: [
         "Aplicação de alongamento passivo intenso, que pode romper o tecido em cicatrização e aumentar o risco de infecção e sangramento",
@@ -536,18 +524,6 @@ export default function ProvaPediatricaPage() {
       correctAnswer: 2,
       category: "Desenvolvimento Motor",
       explanation: "A Teoria Ecológica enfatiza a relação entre o indivíduo e o ambiente, considerando que o desenvolvimento motor é fortemente influenciado pelas affordances (oportunidades de ação) presentes no contexto. Diferenças entre escolas públicas e particulares podem refletir variações em fatores ambientais como qualidade e quantidade de espaços para atividade física, disponibilidade de equipamentos esportivos, presença de professores especializados em educação física, valorização cultural de determinadas práticas motoras, e oportunidades estruturadas para desenvolvimento de habilidades específicas. Esta teoria não nega a influência de fatores biológicos, mas destaca como o ambiente molda o desenvolvimento através das oportunidades que oferece ou restringe."
-    },
-    {
-      question: "CASO CLÍNICO COMPLEXO: Um fisioterapeuta está avaliando uma criança de 5 anos com histórico de leucemia linfoblástica aguda, tratada com quimioterapia sistêmica (incluindo vincristina) e radioterapia craniana. A criança apresenta fraqueza muscular generalizada, fadiga crônica, déficit de coordenação, dificuldades de equilíbrio e baixo desempenho em tarefas motoras que antes realizava adequadamente. Que mecanismos fisiopatológicos provavelmente estão contribuindo para este quadro de desenvolvimento motor atípico?",
-      options: [
-        "Apenas efeitos diretos da quimioterapia na mielinização nervosa periférica",
-        "Combinação de neuropatia periférica induzida pela vincristina, miopatia relacionada à inatividade física durante o tratamento, e possíveis efeitos neurocognitivos da radioterapia craniana",
-        "Somente efeitos psicológicos secundários ao estigma da doença",
-        "Exclusivamente encefalopatia metabólica causada pela leucemia"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "O caso apresenta complexidade devido aos múltiplos mecanismos que podem afetar o desenvolvimento motor da criança com histórico oncológico. A vincristina é um quimioterápico neurotóxico que frequentemente causa neuropatia periférica, afetando a condução nervosa e resultando em fraqueza distal, alterações sensoriais e déficits de coordenação. Além disso, o período prolongado de tratamento geralmente leva à inatividade física e subsequente descondicionamento e miopatia. A radioterapia craniana pode causar efeitos neurocognitivos que impactam funções executivas, atenção e processamento visuoespacial, importantes para o desempenho motor. Este caso ilustra como fatores patológicos, medicamentosos e ambientais interagem afetando o desenvolvimento motor, exigindo uma abordagem multidimensional na reabilitação."
     },
     {
       question: "Quais das seguintes técnicas fisioterapêuticas são recomendadas para o alívio do estresse em crianças com câncer em cuidados paliativos?",
