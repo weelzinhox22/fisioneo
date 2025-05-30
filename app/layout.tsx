@@ -18,9 +18,12 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Fisioterapia Neonatal e Pediátrica",
-  description: "Portal educacional sobre Fisioterapia Neonatal e Pediátrica",
-  generator: 'v0.dev'
+  title: "Fisioneo",
+  description: "Plataforma de fisioterapia neonatal e pediátrica",
+  icons: {
+    icon: "/baby-icon.svg",
+  },
+  manifest: "/manifest.json"
 }
 
 export default function RootLayout({
@@ -30,6 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        {/* Add any additional head elements here */}
+      </head>
       <body className={`${inter.variable} font-sans min-h-screen bg-[#F7FAFC]`}>
         <Providers>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
