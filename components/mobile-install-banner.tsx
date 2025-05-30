@@ -24,7 +24,7 @@ export default function MobileInstallBanner() {
   if (!show) return null
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[95vw] max-w-md bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-4 animate-fade-in">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9999] w-[95vw] max-w-md bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-4 animate-fade-in">
       <span className="flex-1 text-base font-medium">
         📱 Acessando pelo celular? <span className="font-bold">Instale nosso app</span> e tenha acesso facilitado!
       </span>
