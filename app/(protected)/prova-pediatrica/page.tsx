@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowLeft, CheckCircle2, XCircle, BarChart, TrendingUp, ChevronRight, AlarmClock, ChevronLeft } from "lucide-react"
+import { ArrowLeft, CheckCircle2, XCircle, BarChart, TrendingUp, ChevronRight, AlarmClock, ChevronLeft, FileDown } from "lucide-react"
 import Link from "next/link"
 import { ThreeDText } from "@/components/ui/3d-text"
 import { AdvancedParallax } from "@/components/animations/advanced-parallax"
@@ -752,6 +752,99 @@ export default function ProvaPediatricaPage() {
     return percentage.toFixed(1)
   }
 
+  // Função para gerar e baixar PDF com as questões e respostas
+  const generatePDF = () => {
+    import('jspdf').then(({ default: jsPDF }) => {
+      const doc = new jsPDF();
+      
+      // Configurações do documento
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      const lineHeight = 7;
+      let yPosition = 20;
+      
+      // Título
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Prova de Fisioterapia Pediátrica - Questões e Gabarito", pageWidth / 2, yPosition, { align: "center" });
+      yPosition += lineHeight * 2;
+      
+      // Data
+      const today = new Date();
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Gerado em: ${today.toLocaleDateString()}`, pageWidth / 2, yPosition, { align: "center" });
+      yPosition += lineHeight * 2;
+      
+      // Questões
+      doc.setFontSize(12);
+      originalQuestions.forEach((question, index) => {
+        // Adicionar nova página se necessário
+        if (yPosition > doc.internal.pageSize.getHeight() - 40) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        
+        // Número e texto da questão
+        doc.setFont("helvetica", "bold");
+        doc.text(`Questão ${index + 1}: ${question.category}`, margin, yPosition);
+        yPosition += lineHeight;
+        
+        // Texto da questão (com quebra de linha se necessário)
+        doc.setFont("helvetica", "normal");
+        const questionLines = doc.splitTextToSize(question.question, pageWidth - (margin * 2));
+        doc.text(questionLines, margin, yPosition);
+        yPosition += lineHeight * questionLines.length;
+        
+        // Alternativas
+        question.options.forEach((option, optionIndex) => {
+          // Adicionar nova página se necessário
+          if (yPosition > doc.internal.pageSize.getHeight() - 40) {
+            doc.addPage();
+            yPosition = 20;
+          }
+          
+          const letter = String.fromCharCode(65 + optionIndex); // A, B, C, D, E
+          const isCorrect = optionIndex === question.correctAnswer;
+          
+          // Destacar resposta correta
+          if (isCorrect) {
+            doc.setFont("helvetica", "bold");
+          } else {
+            doc.setFont("helvetica", "normal");
+          }
+          
+          // Adicionar letra da alternativa
+          doc.text(`${letter}. `, margin, yPosition);
+          
+          // Adicionar texto da alternativa com quebra de linha
+          const optionLines = doc.splitTextToSize(option, pageWidth - (margin * 2) - 10);
+          doc.text(optionLines, margin + 10, yPosition);
+          yPosition += lineHeight * optionLines.length + 2;
+        });
+        
+        // Adicionar nova página se necessário
+        if (yPosition > doc.internal.pageSize.getHeight() - 60) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        
+        // Explicação
+        doc.setFont("helvetica", "bold");
+        doc.text("Explicação:", margin, yPosition);
+        yPosition += lineHeight;
+        
+        doc.setFont("helvetica", "normal");
+        const explanationLines = doc.splitTextToSize(question.explanation, pageWidth - (margin * 2));
+        doc.text(explanationLines, margin, yPosition);
+        yPosition += lineHeight * explanationLines.length + 10;
+      });
+      
+      // Salvar o PDF
+      doc.save("prova-fisioterapia-pediatrica.pdf");
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -841,6 +934,16 @@ export default function ProvaPediatricaPage() {
                 <span className="mr-2">Começar Avaliação</span>
                 <ChevronRight className="h-5 w-5" />
               </MagneticButton>
+              
+              <div className="mt-6">
+                <button
+                  onClick={generatePDF}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
+                >
+                  <FileDown className="h-5 w-5" />
+                  Baixar PDF com questões e gabarito
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1191,6 +1294,16 @@ export default function ProvaPediatricaPage() {
                   Voltar para Provas Temáticas
                 </span>
               </MagneticButton>
+            </div>
+            
+            <div className="mt-6 text-center">
+              <button
+                onClick={generatePDF}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
+              >
+                <FileDown className="h-5 w-5" />
+                Baixar PDF com questões e gabarito
+              </button>
             </div>
           </motion.div>
         )}
