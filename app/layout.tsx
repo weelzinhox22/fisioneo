@@ -20,9 +20,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Fisioneo",
-  description: "Plataforma de fisioterapia neonatal e pediátrica",
+  description: "Portal educacional sobre fisioterapia neonatal",
   icons: {
-    icon: "/baby-icon.svg",
+    icon: "/icons/baby-boy.png",
+    shortcut: "/icons/baby-boy.png",
+    apple: "/icons/baby-boy.png"
   },
   manifest: "/manifest.json"
 }
