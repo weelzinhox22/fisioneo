@@ -419,7 +419,7 @@ export default function ProvaGeralPage() {
       "explanation": "De acordo com a Tabela 1, o 'Teste de Triagem Sobre o Desenvolvimento de Milani-Comparetti' é um teste de investigação padronizado de comportamentos motores espontâneos e respostas evocadas em crianças de 0 a 2 anos, útil para descrever o desenvolvimento baseado na integração de reflexos primitivos para o controle postural."
     },
     {
-      "question": "Um pesquisador está buscando um instrumento de avaliação padronizado que seja útil para identificar recém-nascidos com risco de resultado motor pobre, avaliando movimentos funcionais da cabeça e controle do tronco em diferentes posições. O teste deve ser aplicável a bebês pré-termo nascidos com 34 semanas pós-concepção e até 4 meses após o nascimento. Qual instrumento da Tabela 1 seria o mais indicado para o estudo?",
+      "question": "Um pesquisador está buscando um instrumento de avaliação padronizado que seja útil para identificar recém-nascidos com risco de resultado motor pobre, avaliando movimentos funcionais da cabeça e controle do tronco em diferentes posições. O teste deve ser aplicável a bebês pré-termo nascidos com 34 semanas pós-concepção e até 4 meses após o nascimento. Qual instrumento seria o mais indicado para o estudo?",
       "options": [
         "Escala de Avaliação do Comportamento do Neonato (NBAS).",
         "Avaliação dos Movimentos da Criança (MAI).",
