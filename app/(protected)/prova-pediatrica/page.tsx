@@ -310,30 +310,6 @@ export default function ProvaPediatricaPage() {
       explanation: "A criança apresenta um déficit específico em habilidades manipulativas (arremessar, rebater, chutar) enquanto as habilidades locomotoras (correr, saltar) estão preservadas. A recomendação mais adequada é implementar um programa de atividades graduadas para desenvolvimento de habilidades manipulativas, iniciando com tarefas simples e progredindo para mais complexas, com ênfase na coordenação olho-mão e olho-pé."
     },
     {
-      question: "Qual das seguintes habilidades está normalmente mais desenvolvida em meninos de 6-8 anos, conforme estudos sobre diferenças de gênero no desenvolvimento motor?",
-      options: [
-        "Coordenação motora fina, incluindo precisão em atividades como escrita, desenho e manipulação de objetos pequenos",
-        "Flexibilidade corporal global, especialmente em articulações como ombros, quadril e coluna vertebral",
-        "Equilíbrio estático em posições desafiadoras, demonstrando melhor controle postural e propriocepção",
-        "Habilidades manipulativas como arremessar e chutar, influenciadas principalmente por fatores socioculturais e oportunidades de prática"
-      ],
-      correctAnswer: 3,
-      category: "Desenvolvimento Motor",
-      explanation: "Estudos mostram que meninos geralmente apresentam melhor desempenho em habilidades manipulativas como arremessar, chutar e rebater. Estas diferenças são mais influenciadas por fatores socioculturais e oportunidades de prática do que por fatores biológicos. Meninas frequentemente superam meninos em habilidades como equilíbrio, coordenação motora fina e flexibilidade."
-    },
-    {
-      question: "CASO CLÍNICO: Durante a avaliação de um bebê de 9 meses, você nota que ele não consegue sentar-se sem apoio, não transfere objetos entre as mãos e não produz sons como 'mama' ou 'dada'. Qual deve ser sua conduta imediata?",
-      options: [
-        "Comunicar ao pediatra e sugerir uma triagem de desenvolvimento mais completa, considerando o atraso em múltiplos domínios",
-        "Orientar os pais que cada criança tem seu próprio ritmo e reavaliar em 6 meses, pois estas variações individuais são comuns no primeiro ano",
-        "Iniciar imediatamente um programa intensivo de estimulação precoce sem avaliação adicional, para recuperar o tempo perdido",
-        "Diagnosticar um atraso global do desenvolvimento e fornecer um prognóstico detalhado aos pais sobre limitações futuras"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neurológica",
-      explanation: "Esta criança apresenta sinais de atraso nos marcos do desenvolvimento esperados para 9 meses (sentar-se sozinho, transferir objetos entre as mãos e produzir sons específicos). A conduta apropriada é comunicar estes achados ao pediatra e sugerir uma triagem de desenvolvimento mais completa, que é recomendada rotineiramente aos 9 meses. Um diagnóstico formal de atraso global exigiria avaliação multidisciplinar."
-    },
-    {
       question: "Qual abordagem é mais adequada para estimular o desenvolvimento motor de uma criança de 4 meses?",
       options: [
         "Proporcionar tempo supervisionado em decúbito ventral (tummy time) e oportunidades para pegar e explorar objetos seguros e apropriados para a idade",
@@ -358,18 +334,6 @@ export default function ProvaPediatricaPage() {
       explanation: "Os sinais descritos (não responder ao nome, evitar contato visual, não brincar com outras crianças e comportamentos repetitivos) são compatíveis com Transtorno do Espectro Autista (TEA). A avaliação deve priorizar uma triagem específica para autismo (como M-CHAT-R) e avaliação detalhada do desenvolvimento social e comunicativo. A detecção precoce do TEA é fundamental para intervenção precoce e melhores resultados a longo prazo."
     },
     {
-      question: "Durante a avaliação dos marcos do desenvolvimento de um bebê de 12 meses, quais sinais são considerados 'bandeiras vermelhas' que indicam necessidade de investigação imediata?",
-      options: [
-        "Preferência por brincar sozinho em vez de com adultos, comportamento que pode ser apenas reflexo do temperamento individual e não necessariamente patológico",
-        "Não engatinhar, mas conseguir deslocar-se sentado (arrastar-se), representando apenas uma variação normal da sequência de aquisição de mobilidade",
-        "Não andar sozinho, mas conseguir andar com apoio, dentro da faixa de normalidade para desenvolvimento motor nesta idade específica",
-        "Não falar palavras como 'mamã' ou 'papá' e não apontar para objetos, indicando possível atraso significativo no desenvolvimento comunicativo"
-      ],
-      correctAnswer: 3,
-      category: "Avaliação Neurológica",
-      explanation: "Aos 12 meses, a ausência de balbucio com intenção comunicativa (como dizer 'mamã' ou 'papá' com significado) e a falta de gestos como apontar são consideradas 'bandeiras vermelhas' que justificam investigação imediata. A ausência destas habilidades comunicativas pode indicar atrasos significativos ou condições como TEA. As variações na mobilidade (ainda não andar sozinho ou preferir arrastar-se) são menos preocupantes nesta idade."
-    },
-    {
       question: "Como são classificadas as queimaduras de segundo grau profundas?",
       options: [
         "Comprometem a epiderme e toda a derme, podendo afetar estruturas subcutâneas, com aspecto esbranquiçado e pouca dor pela destruição de terminações nervosas",
@@ -380,30 +344,6 @@ export default function ProvaPediatricaPage() {
       correctAnswer: 0,
       category: "Queimaduras Pediátricas",
       explanation: "Queimaduras de segundo grau profundas comprometem a epiderme e toda a derme, podendo afetar estruturas subcutâneas. Apresentam aspecto esbranquiçado ou vermelho escuro, superfície mais seca, e relativamente pouca dor devido à destruição de terminações nervosas. Sua cicatrização é mais lenta e frequentemente requer abordagem cirúrgica."
-    },
-    {
-      question: "Qual das seguintes abordagens fisioterapêuticas está CONTRAINDICADA na fase aguda de uma queimadura de segundo grau em uma criança?",
-      options: [
-        "Aplicação de alongamento passivo intenso, que pode romper o tecido em cicatrização e aumentar o risco de infecção e sangramento",
-        "Posicionamento adequado em padrão antideformidade, essencial para prevenir contraturas durante a cicatrização",
-        "Mobilização articular suave dentro dos limites da dor, mantendo a amplitude de movimento sem comprometer a integridade tecidual",
-        "Orientação respiratória e manobras de higiene brônquica quando necessário, especialmente em queimaduras extensas com risco respiratório"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "Na fase aguda de uma queimadura de segundo grau, o alongamento passivo intenso está contraindicado pois pode causar ruptura do tecido em cicatrização, aumentar o sangramento e a dor, além de potencialmente agravar o processo inflamatório. As outras intervenções mencionadas são apropriadas quando realizadas com cuidado e respeitando a condição da criança."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 8 anos com queimadura de terceiro grau em região cervical anterior e lateral bilateral está em fase de reabilitação (pós-enxerto). Qual das seguintes complicações é mais provável de ocorrer sem intervenção fisioterapêutica adequada?",
-      options: [
-        "Contratura em flexão cervical com limitação da extensão e rotação, devido à orientação das fibras colágenas durante o processo cicatricial",
-        "Paralisia diafragmática permanente por comprometimento do nervo frênico, levando a insuficiência respiratória crônica",
-        "Contratura em hiperextensão cervical que compromete a deglutição e respiração, mesmo em queimaduras anteriores",
-        "Escoliose estrutural progressiva como consequência direta da limitação cervical, mesmo sem comprometimento do tronco"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "Em queimaduras cervicais anteriores e laterais, a complicação mais comum é a contratura em flexão cervical com limitação da extensão e rotação. Isso ocorre devido à orientação das fibras colágenas durante a cicatrização, que tendem a encurtar o tecido na direção da lesão. O tratamento precoce deve incluir posicionamento adequado, órteses, mobilização, alongamento e controle cicatricial para prevenir esta complicação."
     },
     {
       question: "Na reabilitação de uma criança com queimaduras graves, quais são os principais objetivos do uso de órteses?",
@@ -418,18 +358,6 @@ export default function ProvaPediatricaPage() {
       explanation: "As órteses na reabilitação de queimados têm dois objetivos principais: prevenir ou corrigir contraturas posicionando as articulações em posição funcional e aplicar pressão sobre as cicatrizes para controlar a hipertrofia. Devem ser usadas em conjunto com mobilização e outras técnicas, não como substituto. O tempo de uso pode variar de acordo com a fase (aguda, subaguda ou crônica) e deve ser monitorado para evitar complicações."
     },
     {
-      question: "CASO CLÍNICO: Um menino de 7 anos com diagnóstico de Distrofia Muscular de Duchenne apresenta sinal de Gowers positivo, dificuldade para subir escadas e correr. A força muscular está preservada em MMSS e diminuída em MMII (grau 4- proximal e 4+ distal). Qual plano terapêutico é mais adequado nesta fase da doença?",
-      options: [
-        "Prescrição imediata de cadeira de rodas para conservação de energia, mesmo que ainda apresente capacidade de deambulação funcional e independente na maioria dos ambientes",
-        "Exercícios resistidos intensos para retardar a progressão da fraqueza muscular, com foco em fortalecimento excêntrico máximo dos grandes grupos musculares",
-        "Programa combinando exercícios aeróbicos submáximos, alongamentos, treino de equilíbrio e funcional, com orientação aos pais sobre adaptações ambientais",
-        "Imobilização noturna dos membros inferiores e repouso para evitar a fadiga muscular, preservando as fibras musculares remanescentes do desgaste excessivo"
-      ],
-      correctAnswer: 2,
-      category: "Casos Clínicos",
-      explanation: "Nesta fase ambulatória da DMD, o plano terapêutico deve visar a manutenção da função, prevenção de contraturas e prolongamento da marcha independente. A abordagem mais adequada é um programa combinando exercícios aeróbicos submáximos (que não aceleram a degeneração), alongamentos para prevenção de contraturas, treino de equilíbrio e funcional para otimizar a mecânica corporal, e orientações aos pais sobre adaptações e manejo. A prescrição de cadeira de rodas seria prematura, exercícios resistidos intensos podem acelerar a degeneração, e a imobilização prolongada promove atrofia."
-    },
-    {
       question: "CASO CLÍNICO: Uma criança de 3 anos com queimadura de segundo grau profunda em face, pescoço e tórax anterior (20% SCQ) está internada há 5 dias. Apresenta dor, medo de movimentação e início de contraturas no pescoço. Qual abordagem fisioterapêutica inicial é mais apropriada?",
       options: [
         "Abordagem lúdica com técnicas de distração, posicionamento correto, massagem perilesional e mobilização suave respeitando a dor",
@@ -442,30 +370,6 @@ export default function ProvaPediatricaPage() {
       explanation: "Para uma criança de 3 anos com queimadura recente, a abordagem inicial deve ser gentil e considerar o componente psicológico. Uma abordagem lúdica com técnicas de distração para manejo da dor e do medo, combinada com posicionamento correto, massagem perilesional para dessensibilização e mobilização suave respeitando os limites de dor é mais apropriada. A mobilização forçada aumentaria o trauma e o medo, esperar a cicatrização completa permitiria o estabelecimento de contraturas mais difíceis de tratar, e a órtese em hiperextensão máxima seria desconfortável e potencialmente prejudicial nesta fase."
     },
     {
-      question: "CASO CLÍNICO: Uma menina de 5 anos com câncer em estágio terminal está sob cuidados paliativos domiciliares. Apresenta dor generalizada (EVA 8/10), fadiga intensa, edema em membros inferiores, dispneia aos mínimos esforços e tristeza. Os pais relatam dificuldade em administrar os cuidados. Qual deve ser a prioridade da intervenção fisioterapêutica neste momento?",
-      options: [
-        "Manejo da dor e desconforto respiratório, com orientação aos pais sobre posicionamento, transferências seguras e técnicas de conservação de energia",
-        "Implementar um programa de condicionamento cardiorrespiratório leve para reverter a fadiga e melhorar a capacidade funcional global através de múltiplas sessões diárias",
-        "Estimulação cognitiva e treino de AVDs para manter sua independência funcional, focando no fortalecimento muscular para as atividades cotidianas",
-        "Prescrição de órteses para os membros inferiores para controle do edema, com aplicação de compressão graduada para drenagem linfática passiva"
-      ],
-      correctAnswer: 0,
-      category: "Casos Clínicos",
-      explanation: "No contexto de cuidados paliativos em estágio terminal, a prioridade é o manejo dos sintomas e o conforto da criança. A intervenção deve focar no controle da dor (usando técnicas como TENS, massagem, termoterapia), abordagem do desconforto respiratório (posicionamento, técnicas de relaxamento respiratório), e orientação aos pais sobre como realizar movimentações e transferências seguras, além de técnicas para conservação de energia. Programas de condicionamento ou reabilitação funcional intensiva não são apropriados nesta fase, e as intervenções devem ser guiadas pelas necessidades imediatas da criança e família."
-    },
-    {
-      question: "CASO CLÍNICO: Um bebê de 9 meses foi encaminhado para avaliação do desenvolvimento após sua mãe relatar que ele não consegue sentar-se sem apoio. Na avaliação, você observa hipotonia generalizada, reflexos primitivos persistentes (RTCA, Galant), ausência de reações de proteção e paracedismo, e atraso nos marcos motores (não rola, não senta sem apoio, não engatinha). Qual hipótese diagnóstica é mais provável e qual conduta imediata?",
-      options: [
-        "Atraso do desenvolvimento psicomotor; iniciar estimulação precoce e investigar causas subjacentes através de encaminhamento multidisciplinar",
-        "Desenvolvimento motor típico com variação individual; orientações para estimulação em casa com reavaliação após dois meses de intervenção",
-        "Transtorno do espectro autista; encaminhar para avaliação multidisciplinar com neuropediatra e terapeuta ocupacional especializado",
-        "Atraso motor transitório; reavaliar em 3 meses após orientações básicas de estimulação para os pais aplicarem no ambiente domiciliar"
-      ],
-      correctAnswer: 0,
-      category: "Casos Clínicos",
-      explanation: "O quadro descrito sugere fortemente um atraso do desenvolvimento psicomotor: hipotonia generalizada, persistência de reflexos primitivos que deveriam estar integrados aos 9 meses, ausência de reações de proteção esperadas para a idade e atraso em múltiplos marcos motores. A conduta adequada é iniciar imediatamente um programa de estimulação precoce enquanto se investiga as possíveis causas subjacentes (genéticas, neurológicas, metabólicas) através de encaminhamento para avaliação médica e outros profissionais. Este não é um caso de variação individual do desenvolvimento típico nem de atraso transitório."
-    },
-    {
       question: "CASO CLÍNICO: Um adolescente de 14 anos com Distrofia Muscular de Duchenne em estágio avançado usa cadeira de rodas há 3 anos. Apresenta escoliose progressiva, contraturas em membros e capacidade vital forçada de 35% do previsto. Recentemente, começou a apresentar fadiga ao falar e desconforto respiratório noturno. Qual conduta fisioterapêutica é prioritária neste momento?",
       options: [
         "Avaliação e manejo da função respiratória, incluindo técnicas de tosse assistida, recrutamento de volume pulmonar e posicionamento adequado",
@@ -476,18 +380,6 @@ export default function ProvaPediatricaPage() {
       correctAnswer: 0,
       category: "Casos Clínicos",
       explanation: "Em pacientes com DMD em estágio avançado, o comprometimento respiratório é uma das principais causas de morbimortalidade. Os sintomas descritos (fadiga ao falar, desconforto respiratório noturno) associados à CVF reduzida indicam insuficiência respiratória iminente. A prioridade é a avaliação completa da função respiratória e implementação de técnicas como tosse assistida (manual ou mecânica), exercícios de recrutamento de volume (empilhamento de ar, respiração glossofaríngea), e posicionamento adequado. O fortalecimento intenso é contraindicado neste estágio, atividades vigorosas poderiam agravar a condição, e a imobilização completa causaria mais complicações respiratórias."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 7 anos apresenta habilidades locomotoras adequadas para a idade, mas dificuldade significativa em habilidades manipulativas (arremessar, rebater). Seus pais relatam que, além disso, ela tem dificuldade em amarrar cadarços, abotoar roupas e escrever. Com base na Teoria dos Sistemas Dinâmicos, qual seria a abordagem terapêutica mais adequada?",
-      options: [
-        "Exercícios intensivos focados especificamente em amarrar cadarços, abotoar e escrever para aprendizado direto destas tarefas",
-        "Abordagem multissistêmica considerando fatores biomecânicos, perceptuais e ambientais, com tarefas variadas de coordenação olho-mão em diferentes contextos",
-        "Fortalecimento dos músculos das mãos e braços apenas, já que o problema é puramente muscular",
-        "Apenas orientações aos pais para prática em casa, pois são variações normais do desenvolvimento"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "Seguindo a Teoria dos Sistemas Dinâmicos, o desenvolvimento motor resulta da interação de múltiplos subsistemas (motor, perceptual, cognitivo, etc.) sob influência de restrições do indivíduo, ambiente e tarefa. A criança apresenta dificuldades tanto em habilidades motoras grossas manipulativas quanto em motricidade fina, sugerindo um padrão de dificuldade na coordenação olho-mão. A abordagem mais adequada é multissistêmica, considerando fatores biomecânicos (força e coordenação), perceptuais (processamento visual, propriocepção), e ambientais (modificações das tarefas), através de experiências variadas em diferentes contextos, não apenas repetição das tarefas específicas problemáticas."
     },
     {
       question: "Considerando a Teoria dos Estágios de Habilidades Motoras Fundamentais, analise o caso: Uma professora de educação física relata que uma criança de 8 anos executa o arremesso por cima do ombro sem rotação do tronco, mantendo os pés paralelos e sem transferência de peso. Este padrão é indicativo de qual estágio?",
@@ -512,18 +404,6 @@ export default function ProvaPediatricaPage() {
       correctAnswer: 0,
       category: "Avaliação Neurológica",
       explanation: "Para bebês prematuros, é fundamental considerar a idade corrigida até os 2-3 anos de idade ao avaliar o desenvolvimento. Neste caso, a idade corrigida seria aproximadamente 15-16 meses. Mesmo assim, as habilidades descritas estão abaixo do esperado, mas a interpretação deve ser baseada em instrumentos de avaliação normatizados para prematuros. A conduta mais adequada inclui intervenção precoce e acompanhamento multidisciplinar (fisioterapia, terapia ocupacional, fonoaudiologia), considerando os fatores de risco (prematuridade e baixo peso). Não há informações suficientes para diagnósticos específicos como TEA, e esperar até os 2 anos seria inapropriado diante dos atrasos observados."
-    },
-    {
-      question: "Considere um estudo científico que comparou o desenvolvimento motor de crianças de 6-8 anos em escolas públicas e particulares, identificando diferenças significativas em habilidades como equilíbrio, força e habilidades manipulativas. Qual das seguintes interpretações está mais alinhada com a Teoria Ecológica do desenvolvimento motor?",
-      options: [
-        "As diferenças são principalmente genéticas, refletindo características inatas das populações estudadas",
-        "As diferenças representam variações na maturação neurológica causadas por fatores nutricionais",
-        "As diferenças refletem as affordances (oportunidades de ação) presentes nos diferentes ambientes, incluindo espaços físicos, equipamentos e práticas culturais",
-        "As diferenças são temporárias e se equalizarão naturalmente com o avanço da idade"
-      ],
-      correctAnswer: 2,
-      category: "Desenvolvimento Motor",
-      explanation: "A Teoria Ecológica enfatiza a relação entre o indivíduo e o ambiente, considerando que o desenvolvimento motor é fortemente influenciado pelas affordances (oportunidades de ação) presentes no contexto. Diferenças entre escolas públicas e particulares podem refletir variações em fatores ambientais como qualidade e quantidade de espaços para atividade física, disponibilidade de equipamentos esportivos, presença de professores especializados em educação física, valorização cultural de determinadas práticas motoras, e oportunidades estruturadas para desenvolvimento de habilidades específicas. Esta teoria não nega a influência de fatores biológicos, mas destaca como o ambiente molda o desenvolvimento através das oportunidades que oferece ou restringe."
     },
     {
       question: "Quais das seguintes técnicas fisioterapêuticas são recomendadas para o alívio do estresse em crianças com câncer em cuidados paliativos?",
@@ -598,18 +478,6 @@ export default function ProvaPediatricaPage() {
       explanation: "O estágio maduro da fase de movimentos fundamentais caracteriza-se pela integração de todos os componentes do movimento em uma ação coordenada e eficiente. Os movimentos são mecanicamente eficientes, coordenados e controlados, representando o nível mais avançado das habilidades fundamentais antes da transição para a fase de movimentos especializados."
     },
     {
-      question: "CASO CLÍNICO: Uma criança de 7 anos apresenta dificuldade em arremessar bolas, rebater objetos e chutar com precisão, embora corra e salte adequadamente para sua idade. Qual é a provável área de déficit e a recomendação mais adequada?",
-      options: [
-        "Déficit em habilidades manipulativas; recomenda-se atividades graduadas para manipulação de objetos com progressão sistemática de complexidade",
-        "Déficit em habilidades locomotoras; recomenda-se focar em exercícios de corrida e salto com maior demanda de coordenação e velocidade",
-        "Déficit em controle postural; recomenda-se exercícios de equilíbrio estático em superfícies instáveis para melhorar a base para movimentos manipulativos",
-        "Déficit cognitivo; recomenda-se avaliação neuropsicológica completa antes de qualquer intervenção motora específica"
-      ],
-      correctAnswer: 0,
-      category: "Desenvolvimento Motor",
-      explanation: "A criança apresenta um déficit específico em habilidades manipulativas (arremessar, rebater, chutar) enquanto as habilidades locomotoras (correr, saltar) estão preservadas. A recomendação mais adequada é implementar um programa de atividades graduadas para desenvolvimento de habilidades manipulativas, iniciando com tarefas simples e progredindo para mais complexas, com ênfase na coordenação olho-mão e olho-pé."
-    },
-    {
       question: "Qual das seguintes habilidades está normalmente mais desenvolvida em meninos de 6-8 anos, conforme estudos sobre diferenças de gênero no desenvolvimento motor?",
       options: [
         "Coordenação motora fina, incluindo precisão em atividades como escrita, desenho e manipulação de objetos pequenos",
@@ -634,30 +502,6 @@ export default function ProvaPediatricaPage() {
       explanation: "Esta criança apresenta sinais de atraso nos marcos do desenvolvimento esperados para 9 meses (sentar-se sozinho, transferir objetos entre as mãos e produzir sons específicos). A conduta apropriada é comunicar estes achados ao pediatra e sugerir uma triagem de desenvolvimento mais completa, que é recomendada rotineiramente aos 9 meses. Um diagnóstico formal de atraso global exigiria avaliação multidisciplinar."
     },
     {
-      question: "Qual abordagem é mais adequada para estimular o desenvolvimento motor de uma criança de 4 meses?",
-      options: [
-        "Proporcionar tempo supervisionado em decúbito ventral (tummy time) e oportunidades para pegar e explorar objetos seguros e apropriados para a idade",
-        "Posicioná-la sentada com apoio para fortalecer a musculatura cervical, mesmo que ainda não tenha adquirido controle cefálico completo",
-        "Restringir o tempo em decúbito ventral para evitar estresse e desconforto, priorizando apenas posições supinas durante o período de vigília",
-        "Utilizar andadores para estimular a marcha precoce e fortalecer membros inferiores antes do período típico de desenvolvimento desta habilidade"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neurológica",
-      explanation: "Para um bebê de 4 meses, a abordagem mais adequada inclui proporcionar tempo supervisionado em decúbito ventral para fortalecer os músculos do pescoço e tronco, além de oferecer oportunidades para pegar e explorar objetos seguros, estimulando o desenvolvimento motor fino. O uso de andadores não é recomendado em nenhuma idade por questões de segurança e interferência no desenvolvimento motor normal."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 3 anos não atende quando chamada pelo nome, evita contato visual, não brinca com outras crianças e apresenta comportamentos repetitivos como alinhar brinquedos. Quais aspectos da avaliação neurológica devem ser priorizados?",
-      options: [
-        "Triagem específica para autismo e avaliação do desenvolvimento social e comunicativo, utilizando instrumentos validados para esta faixa etária",
-        "Avaliação da força muscular e reflexos tendinosos profundos, que podem indicar comprometimento da via piramidal associado aos déficits comportamentais",
-        "Avaliação da linguagem receptiva e motricidade fina exclusivamente, ignorando outros domínios do desenvolvimento que não apresentam alterações evidentes",
-        "Exames de neuroimagem para detectar lesões estruturais, prioritários antes de qualquer avaliação funcional ou comportamental"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neurológica",
-      explanation: "Os sinais descritos (não responder ao nome, evitar contato visual, não brincar com outras crianças e comportamentos repetitivos) são compatíveis com Transtorno do Espectro Autista (TEA). A avaliação deve priorizar uma triagem específica para autismo (como M-CHAT-R) e avaliação detalhada do desenvolvimento social e comunicativo. A detecção precoce do TEA é fundamental para intervenção precoce e melhores resultados a longo prazo."
-    },
-    {
       question: "Durante a avaliação dos marcos do desenvolvimento de um bebê de 12 meses, quais sinais são considerados 'bandeiras vermelhas' que indicam necessidade de investigação imediata?",
       options: [
         "Preferência por brincar sozinho em vez de com adultos, comportamento que pode ser apenas reflexo do temperamento individual e não necessariamente patológico",
@@ -668,18 +512,6 @@ export default function ProvaPediatricaPage() {
       correctAnswer: 3,
       category: "Avaliação Neurológica",
       explanation: "Aos 12 meses, a ausência de balbucio com intenção comunicativa (como dizer 'mamã' ou 'papá' com significado) e a falta de gestos como apontar são consideradas 'bandeiras vermelhas' que justificam investigação imediata. A ausência destas habilidades comunicativas pode indicar atrasos significativos ou condições como TEA. As variações na mobilidade (ainda não andar sozinho ou preferir arrastar-se) são menos preocupantes nesta idade."
-    },
-    {
-      question: "Como são classificadas as queimaduras de segundo grau profundas?",
-      options: [
-        "Comprometem a epiderme e toda a derme, podendo afetar estruturas subcutâneas, com aspecto esbranquiçado e pouca dor pela destruição de terminações nervosas",
-        "Comprometem apenas a epiderme, causando eritema e dor intensa, sendo totalmente reversíveis sem formação de cicatrizes residuais",
-        "Comprometem a epiderme e parte superficial da derme, com formação de bolhas e dor intensa devido à exposição das terminações nervosas",
-        "Comprometem todas as camadas da pele inclusive o tecido subcutâneo, com aspecto carbonizado e indolor pela completa destruição de receptores sensitivos"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "Queimaduras de segundo grau profundas comprometem a epiderme e toda a derme, podendo afetar estruturas subcutâneas. Apresentam aspecto esbranquiçado ou vermelho escuro, superfície mais seca, e relativamente pouca dor devido à destruição de terminações nervosas. Sua cicatrização é mais lenta e frequentemente requer abordagem cirúrgica."
     },
     {
       question: "CASO CLÍNICO: Uma criança de 4 anos sofreu queimadura por água fervente que atingiu toda a face anterior do tórax e abdome, e a região proximal do membro superior direito. Utilizando a 'Regra dos Nove', qual a superfície corporal queimada aproximada?",
@@ -718,18 +550,6 @@ export default function ProvaPediatricaPage() {
       explanation: "Em queimaduras cervicais anteriores e laterais, a complicação mais comum é a contratura em flexão cervical com limitação da extensão e rotação. Isso ocorre devido à orientação das fibras colágenas durante a cicatrização, que tendem a encurtar o tecido na direção da lesão. O tratamento precoce deve incluir posicionamento adequado, órteses, mobilização, alongamento e controle cicatricial para prevenir esta complicação."
     },
     {
-      question: "Na reabilitação de uma criança com queimaduras graves, quais são os principais objetivos do uso de órteses?",
-      options: [
-        "Prevenir ou corrigir contraturas posicionando as articulações em posição funcional e aplicando pressão sobre as cicatrizes para controle da hipertrofia",
-        "Apenas promover a cosmética da área queimada, reduzindo a aparência da cicatriz sem benefícios funcionais significativos no processo de reabilitação",
-        "Substituir a mobilização articular por completo, eliminando a necessidade de exercícios terapêuticos durante o processo de reabilitação",
-        "Apenas limitar o movimento durante o sono para evitar posições viciosas, sem necessidade de uso durante atividades diurnas"
-      ],
-      correctAnswer: 0,
-      category: "Queimaduras Pediátricas",
-      explanation: "As órteses na reabilitação de queimados têm dois objetivos principais: prevenir ou corrigir contraturas posicionando as articulações em posição funcional e aplicar pressão sobre as cicatrizes para controlar a hipertrofia. Devem ser usadas em conjunto com mobilização e outras técnicas, não como substituto. O tempo de uso pode variar de acordo com a fase (aguda, subaguda ou crônica) e deve ser monitorado para evitar complicações."
-    },
-    {
       question: "CASO CLÍNICO: Um menino de 7 anos com diagnóstico de Distrofia Muscular de Duchenne apresenta sinal de Gowers positivo, dificuldade para subir escadas e correr. A força muscular está preservada em MMSS e diminuída em MMII (grau 4- proximal e 4+ distal). Qual plano terapêutico é mais adequado nesta fase da doença?",
       options: [
         "Prescrição imediata de cadeira de rodas para conservação de energia, mesmo que ainda apresente capacidade de deambulação funcional e independente na maioria dos ambientes",
@@ -740,18 +560,6 @@ export default function ProvaPediatricaPage() {
       correctAnswer: 2,
       category: "Casos Clínicos",
       explanation: "Nesta fase ambulatória da DMD, o plano terapêutico deve visar a manutenção da função, prevenção de contraturas e prolongamento da marcha independente. A abordagem mais adequada é um programa combinando exercícios aeróbicos submáximos (que não aceleram a degeneração), alongamentos para prevenção de contraturas, treino de equilíbrio e funcional para otimizar a mecânica corporal, e orientações aos pais sobre adaptações e manejo. A prescrição de cadeira de rodas seria prematura, exercícios resistidos intensos podem acelerar a degeneração, e a imobilização prolongada promove atrofia."
-    },
-    {
-      question: "CASO CLÍNICO: Uma criança de 3 anos com queimadura de segundo grau profunda em face, pescoço e tórax anterior (20% SCQ) está internada há 5 dias. Apresenta dor, medo de movimentação e início de contraturas no pescoço. Qual abordagem fisioterapêutica inicial é mais apropriada?",
-      options: [
-        "Abordagem lúdica com técnicas de distração, posicionamento correto, massagem perilesional e mobilização suave respeitando a dor",
-        "Mobilização passiva forçada do pescoço para evitar contraturas fixas, mesmo que cause desconforto inicial, priorizando a prevenção de sequelas",
-        "Esperar a completa cicatrização (aproximadamente 21 dias) antes de iniciar qualquer intervenção fisioterapêutica para não prejudicar o processo de epitelização",
-        "Confecção imediata de órtese rígida para pescoço em hiperextensão máxima, garantindo a manutenção do comprimento muscular durante o sono"
-      ],
-      correctAnswer: 0,
-      category: "Casos Clínicos",
-      explanation: "Para uma criança de 3 anos com queimadura recente, a abordagem inicial deve ser gentil e considerar o componente psicológico. Uma abordagem lúdica com técnicas de distração para manejo da dor e do medo, combinada com posicionamento correto, massagem perilesional para dessensibilização e mobilização suave respeitando os limites de dor é mais apropriada. A mobilização forçada aumentaria o trauma e o medo, esperar a cicatrização completa permitiria o estabelecimento de contraturas mais difíceis de tratar, e a órtese em hiperextensão máxima seria desconfortável e potencialmente prejudicial nesta fase."
     },
     {
       question: "CASO CLÍNICO: Uma menina de 5 anos com câncer em estágio terminal está sob cuidados paliativos domiciliares. Apresenta dor generalizada (EVA 8/10), fadiga intensa, edema em membros inferiores, dispneia aos mínimos esforços e tristeza. Os pais relatam dificuldade em administrar os cuidados. Qual deve ser a prioridade da intervenção fisioterapêutica neste momento?",
@@ -778,18 +586,6 @@ export default function ProvaPediatricaPage() {
       explanation: "O quadro descrito sugere fortemente um atraso do desenvolvimento psicomotor: hipotonia generalizada, persistência de reflexos primitivos que deveriam estar integrados aos 9 meses, ausência de reações de proteção esperadas para a idade e atraso em múltiplos marcos motores. A conduta adequada é iniciar imediatamente um programa de estimulação precoce enquanto se investiga as possíveis causas subjacentes (genéticas, neurológicas, metabólicas) através de encaminhamento para avaliação médica e outros profissionais. Este não é um caso de variação individual do desenvolvimento típico nem de atraso transitório."
     },
     {
-      question: "CASO CLÍNICO: Um adolescente de 14 anos com Distrofia Muscular de Duchenne em estágio avançado usa cadeira de rodas há 3 anos. Apresenta escoliose progressiva, contraturas em membros e capacidade vital forçada de 35% do previsto. Recentemente, começou a apresentar fadiga ao falar e desconforto respiratório noturno. Qual conduta fisioterapêutica é prioritária neste momento?",
-      options: [
-        "Avaliação e manejo da função respiratória, incluindo técnicas de tosse assistida, recrutamento de volume pulmonar e posicionamento adequado",
-        "Fortalecer intensamente a musculatura paravertebral para corrigir a escoliose progressiva e melhorar a mecânica respiratória comprometida",
-        "Encorajar atividades físicas vigorosas para melhorar a capacidade respiratória através de treinamento muscular respiratório de alta intensidade",
-        "Imobilização completa para prevenir progressão da escoliose, com restrição total de mobilidade do tronco durante o dia e a noite"
-      ],
-      correctAnswer: 0,
-      category: "Casos Clínicos",
-      explanation: "Em pacientes com DMD em estágio avançado, o comprometimento respiratório é uma das principais causas de morbimortalidade. Os sintomas descritos (fadiga ao falar, desconforto respiratório noturno) associados à CVF reduzida indicam insuficiência respiratória iminente. A prioridade é a avaliação completa da função respiratória e implementação de técnicas como tosse assistida (manual ou mecânica), exercícios de recrutamento de volume (empilhamento de ar, respiração glossofaríngea), e posicionamento adequado. O fortalecimento intenso é contraindicado neste estágio, atividades vigorosas poderiam agravar a condição, e a imobilização completa causaria mais complicações respiratórias."
-    },
-    {
       question: "CASO CLÍNICO: Uma criança de 7 anos apresenta habilidades locomotoras adequadas para a idade, mas dificuldade significativa em habilidades manipulativas (arremessar, rebater). Seus pais relatam que, além disso, ela tem dificuldade em amarrar cadarços, abotoar roupas e escrever. Com base na Teoria dos Sistemas Dinâmicos, qual seria a abordagem terapêutica mais adequada?",
       options: [
         "Exercícios intensivos focados especificamente em amarrar cadarços, abotoar e escrever para aprendizado direto destas tarefas",
@@ -800,30 +596,6 @@ export default function ProvaPediatricaPage() {
       correctAnswer: 1,
       category: "Desenvolvimento Motor",
       explanation: "Seguindo a Teoria dos Sistemas Dinâmicos, o desenvolvimento motor resulta da interação de múltiplos subsistemas (motor, perceptual, cognitivo, etc.) sob influência de restrições do indivíduo, ambiente e tarefa. A criança apresenta dificuldades tanto em habilidades motoras grossas manipulativas quanto em motricidade fina, sugerindo um padrão de dificuldade na coordenação olho-mão. A abordagem mais adequada é multissistêmica, considerando fatores biomecânicos (força e coordenação), perceptuais (processamento visual, propriocepção), e ambientais (modificações das tarefas), através de experiências variadas em diferentes contextos, não apenas repetição das tarefas específicas problemáticas."
-    },
-    {
-      question: "Considerando a Teoria dos Estágios de Habilidades Motoras Fundamentais, analise o caso: Uma professora de educação física relata que uma criança de 8 anos executa o arremesso por cima do ombro sem rotação do tronco, mantendo os pés paralelos e sem transferência de peso. Este padrão é indicativo de qual estágio?",
-      options: [
-        "Estágio maduro, pois aos 8 anos já deveria ter desenvolvido completamente esta habilidade",
-        "Estágio elementar, com alguns componentes ainda não integrados no movimento",
-        "Estágio inicial, com características de tentativas rudimentares da habilidade",
-        "Não se aplica a classificação em estágios, pois trata-se de uma variação normal de execução"
-      ],
-      correctAnswer: 1,
-      category: "Desenvolvimento Motor",
-      explanation: "O padrão descrito (arremesso sem rotação do tronco, pés paralelos, sem transferência de peso) é característico do estágio elementar das habilidades motoras fundamentais. Neste estágio, há maior controle e coordenação rítmica dos movimentos em comparação ao estágio inicial, mas os movimentos ainda são restritos ou exagerados, faltando a integração completa dos componentes. No estágio maduro, esperado para a idade de 8 anos, o arremesso incluiria rotação do tronco, transferência de peso e posicionamento contralateral dos pés, indicando que esta criança não atingiu o nível esperado para sua idade."
-    },
-    {
-      question: "CASO CLÍNICO: Durante uma avaliação, você observa que uma criança de 18 meses não consegue empilhar blocos, não faz rabiscos, não caminha sozinha e não diz palavras com significado. A mãe relata que a gravidez foi sem intercorrências, mas o parto foi prematuro (32 semanas) com baixo peso ao nascer (1850g). Qual interpretação e conduta são mais adequadas?",
-      options: [
-        "Considerar a idade corrigida e usar instrumentos de avaliação normatizados para prematuros, sendo necessária intervenção precoce e acompanhamento multidisciplinar",
-        "Interpretar como atraso do desenvolvimento significativo e encaminhar para neurologista pediátrico urgentemente",
-        "Considerar normal pela prematuridade e reavaliar aos 2 anos de idade",
-        "Diagnosticar como Transtorno do Espectro Autista e iniciar terapia comportamental"
-      ],
-      correctAnswer: 0,
-      category: "Avaliação Neurológica",
-      explanation: "Para bebês prematuros, é fundamental considerar a idade corrigida até os 2-3 anos de idade ao avaliar o desenvolvimento. Neste caso, a idade corrigida seria aproximadamente 15-16 meses. Mesmo assim, as habilidades descritas estão abaixo do esperado, mas a interpretação deve ser baseada em instrumentos de avaliação normatizados para prematuros. A conduta mais adequada inclui intervenção precoce e acompanhamento multidisciplinar (fisioterapia, terapia ocupacional, fonoaudiologia), considerando os fatores de risco (prematuridade e baixo peso). Não há informações suficientes para diagnósticos específicos como TEA, e esperar até os 2 anos seria inapropriado diante dos atrasos observados."
     },
     {
       question: "Considere um estudo científico que comparou o desenvolvimento motor de crianças de 6-8 anos em escolas públicas e particulares, identificando diferenças significativas em habilidades como equilíbrio, força e habilidades manipulativas. Qual das seguintes interpretações está mais alinhada com a Teoria Ecológica do desenvolvimento motor?",

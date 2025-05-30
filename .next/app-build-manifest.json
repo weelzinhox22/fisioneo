@@ -25,26 +25,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/auth/[...nextauth]/route.js"
-    ],
-    "/(protected)/prova-geral/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/prova-geral/layout.js"
-    ],
-    "/(protected)/prova-geral/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/prova-geral/page.js"
-    ],
-    "/(protected)/provas/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/provas/layout.js"
-    ],
-    "/(protected)/provas/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/provas/page.js"
     ]
   }
 }
