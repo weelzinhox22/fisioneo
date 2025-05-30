@@ -106,7 +106,6 @@ export default function Navbar() {
     { name: "Início", href: "/", icon: <Home className="h-4 w-4" /> },
     { name: "Temas Neo.", href: "/temas", icon: <BookOpen className="h-4 w-4" /> },
     { name: " Temas Ped.", href: "/pediatria", icon: <Baby className="h-4 w-4" /> },
-    { name: "Provas", href: "/provas", icon: <GraduationCap className="h-4 w-4" /> },
     { name: "Prova Neo.", href: "/prova-geral", icon: <Award className="h-4 w-4" /> },
     { name: "Prova Ped.", href: "/prova-pediatrica", icon: <Award className="h-4 w-4" /> },
     { name: "Documentos", href: "/documentos", icon: <FileText className="h-4 w-4" /> },

@@ -1,8 +1,8 @@
-// File: D:\fisioneo-b6cc3e5430ab9b023e5415f4a3004b087810a49c\fisioneo-b6cc3e5430ab9b023e5415f4a3004b087810a49c\app\(protected)\layout.tsx
-import * as entry from '../../../../app/(protected)/layout.js'
+// File: D:\fisioneo-b6cc3e5430ab9b023e5415f4a3004b087810a49c\fisioneo-b6cc3e5430ab9b023e5415f4a3004b087810a49c\app\pediatria\layout.tsx
+import * as entry from '../../../../app/pediatria/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../app/(protected)/layout.js')
+type TEntry = typeof import('../../../../app/pediatria/layout.js')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }

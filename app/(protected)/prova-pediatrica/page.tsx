@@ -1037,11 +1037,11 @@ export default function ProvaPediatricaPage() {
         {/* Start screen content */}
         <div className="container mx-auto px-6 py-16 relative z-10">
       <Link
-        href="/provas"
+        href="/pediatria"
             className="inline-flex items-center text-[#666666] hover:text-[#333333] transition-colors mb-12 group"
           >
             <ChevronLeft className="h-5 w-5 mr-1 transition-transform group-hover:-translate-x-1" />
-            Voltar para Provas
+            Voltar para conteúdo pediátrico
           </Link>
 
           <div className="max-w-4xl mx-auto">
