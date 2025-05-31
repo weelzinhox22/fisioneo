@@ -11,6 +11,7 @@ import OnboardingWalkthrough from "@/components/onboarding-walkthrough"
 import { SmoothScrollProvider } from '@/components/animations/smooth-scroll'
 import { Providers } from "./providers"
 import MobileInstallBanner from "@/components/mobile-install-banner"
+import ServiceWorkerRegister from "@/components/service-worker-register"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
         {/* Add any additional head elements here */}
       </head>
       <body className={`${inter.variable} font-sans min-h-screen bg-[#F7FAFC]`}>
+        <ServiceWorkerRegister />
         <MobileInstallBanner />
         <Providers>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
