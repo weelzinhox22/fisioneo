@@ -11,6 +11,7 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Particles } from "@/components/ui/particles"
+import NotificationButton from "@/components/notification-button"
 
 // Register GSAP plugins on client-side only
 if (typeof window !== "undefined") {
@@ -1118,7 +1119,7 @@ export default function ProvaGeralPage() {
                 <ChevronRight className="h-5 w-5" />
               </MagneticButton>
               
-              <div className="mt-6">
+              <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <button
                   onClick={generatePDF}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
@@ -1126,6 +1127,8 @@ export default function ProvaGeralPage() {
                   <FileDown className="h-5 w-5" />
                   Baixar PDF com questões e gabarito
                 </button>
+                
+                <NotificationButton className="mt-2 sm:mt-0" />
               </div>
             </div>
           </div>

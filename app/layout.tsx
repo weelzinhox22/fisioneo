@@ -12,6 +12,7 @@ import { SmoothScrollProvider } from '@/components/animations/smooth-scroll'
 import { Providers } from "./providers"
 import MobileInstallBanner from "@/components/mobile-install-banner"
 import ServiceWorkerRegister from "@/components/service-worker-register"
+import Notification from "@/components/notification"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -56,6 +57,7 @@ export default function RootLayout({
                 <Footer />
                 <AIAssistant />
                 <OnboardingWalkthrough />
+                <Notification />
               </div>
             </SmoothScrollProvider>
           </ThemeProvider>

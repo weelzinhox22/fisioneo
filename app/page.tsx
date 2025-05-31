@@ -11,6 +11,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 gsap.registerPlugin(ScrollTrigger)
 import Link from "next/link"
 import { MagneticButton } from "@/components/ui/magnetic-button"
+import RandomNotificationButton from "@/components/random-notification-button"
+import NotificationRandomButton from "@/components/notification-random-button"
 
 // Componente do Modal/Popup
 interface AnnouncementModalProps {
@@ -524,6 +526,10 @@ export default function Home() {
       {/* Shapes de parallax extra */}
       <div ref={parallaxRef1} className="absolute left-0 top-[30%] w-[300px] h-[180px] bg-[#B9A9FF]/20 blur-2xl rounded-full -z-20" />
       <div ref={parallaxRef2} className="absolute right-0 top-[70%] w-[220px] h-[120px] bg-[#6EC1E4]/20 blur-2xl rounded-full -z-20" />
+      {/* Adicionar botão de notificação aleatória, com posição fixa no canto inferior direito */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <NotificationRandomButton />
+      </div>
     </motion.div>
   )
 }

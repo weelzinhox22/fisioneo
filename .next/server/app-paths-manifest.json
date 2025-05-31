@@ -1,4 +1,3 @@
 {
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/(protected)/prova-geral/page": "app/(protected)/prova-geral/page.js"
+  "/api/notifications/send/route": "app/api/notifications/send/route.js"
 }

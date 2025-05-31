@@ -59,6 +59,122 @@ self.addEventListener('activate', event => {
   console.log('Service Worker ativado');
 });
 
+// Evento de recebimento de notificação push
+self.addEventListener('push', event => {
+  if (!event.data) return;
+  
+  try {
+    const data = event.data.json();
+    
+    const options = {
+      body: data.body || 'Fisioneo tem uma mensagem para você',
+      icon: '/icons/baby-boy.png',
+      badge: '/icons/baby-icon-192.png',
+      vibrate: [100, 50, 100],
+      data: {
+        url: data.url || '/',
+        dateOfArrival: Date.now(),
+        primaryKey: 1
+      },
+      actions: [
+        {
+          action: 'explore',
+          title: 'Ver agora',
+          icon: '/icons/baby-icon-192.png'
+        },
+        {
+          action: 'close',
+          title: 'Depois',
+          icon: '/icons/baby-icon-192.png'
+        }
+      ]
+    };
+    
+    event.waitUntil(
+      self.registration.showNotification(data.title || 'Fisioneo', options)
+    );
+  } catch (error) {
+    console.error('Erro ao processar notificação push:', error);
+    
+    // Fallback para notificação simples caso o JSON esteja inválido
+    const text = event.data.text();
+    event.waitUntil(
+      self.registration.showNotification('Fisioneo', {
+        body: text,
+        icon: '/icons/baby-boy.png'
+      })
+    );
+  }
+});
+
+// Manipulador de mensagens para simular notificações push
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'PUSH_SIMULATION') {
+    console.log('Simulando notificação push', event.data);
+    const data = event.data.data;
+    
+    const options = {
+      body: data.body || 'Fisioneo tem uma mensagem para você',
+      icon: '/icons/baby-boy.png',
+      badge: '/icons/baby-icon-192.png',
+      vibrate: [100, 50, 100],
+      data: {
+        url: data.url || '/',
+        dateOfArrival: Date.now(),
+        primaryKey: 1
+      },
+      actions: [
+        {
+          action: 'explore',
+          title: 'Ver agora',
+          icon: '/icons/baby-icon-192.png'
+        },
+        {
+          action: 'close',
+          title: 'Depois',
+          icon: '/icons/baby-icon-192.png'
+        }
+      ]
+    };
+    
+    self.registration.showNotification(data.title || 'Fisioneo', options);
+  }
+});
+
+// Evento de clique em notificação
+self.addEventListener('notificationclick', event => {
+  const notification = event.notification;
+  const action = event.action;
+  const data = notification.data;
+  
+  notification.close();
+  
+  // Ignora se a ação for "close"
+  if (action === 'close') return;
+  
+  // Abre a URL especificada na notificação ou a homepage
+  const urlToOpen = data?.url || '/';
+  
+  event.waitUntil(
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true
+    }).then(windowClients => {
+      // Verifica se já há uma janela aberta e a foca
+      for (const client of windowClients) {
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      
+      // Se não houver janela aberta, abre uma nova
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
+
 // Estratégia de cache: Network First para a maioria, Cache First para provas
 self.addEventListener('fetch', event => {
   // Ignorar requisições não GET

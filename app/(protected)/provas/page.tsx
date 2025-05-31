@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react"
 import Link from "next/link"
-import { Baby, Brain, Droplets, HeartPulse, Stethoscope, BarChart, ChevronRight } from "lucide-react"
+import { Baby, Brain, Droplets, HeartPulse, Stethoscope, BarChart, ChevronRight, ArrowRight } from "lucide-react"
 import { motion, useScroll, useTransform, useAnimation } from "framer-motion"
 import { FadeIn } from "@/components/animations/fade-in"
 import { StaggerContainer } from "@/components/animations/stagger-container"
@@ -14,6 +14,7 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Particles } from "@/components/ui/particles"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import NotificationButton from "@/components/notification-button"
 
 // Register GSAP plugins on client-side only
 if (typeof window !== "undefined") {
@@ -335,18 +336,20 @@ export default function ProvasPage() {
                   <p className="text-[#666666] text-sm mb-6">{quiz.description}</p>
                   
                   <div className="flex justify-end mt-auto">
-                    <div 
-                      className="inline-flex items-center text-sm font-medium transition-all duration-300 relative"
-                      style={{ color: quiz.color }}
-                    >
-                      <span className="relative group-hover:mr-1">
-                        Iniciar prova
-                        <span className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300" style={{ backgroundColor: quiz.color }}></span>
-                      </span>
-                      <ChevronRight className="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" />
+                    <div className="flex flex-col gap-2 mt-4">
+                      <Link 
+                        href={quiz.href}
+                        className="w-full bg-primary text-white py-3 px-6 rounded-lg flex items-center justify-center hover:bg-primary-dark transition-colors"
+                      >
+                        Iniciar Prova
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                      <NotificationButton 
+                        className="w-full bg-secondary-light text-secondary py-2 px-6 rounded-lg flex items-center justify-center hover:bg-secondary-lighter transition-colors" 
+                      />
                     </div>
                   </div>
-          </Link>
+                </Link>
               </motion.div>
             ))}
           </div>
