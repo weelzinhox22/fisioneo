@@ -303,7 +303,7 @@ export const Hero = () => {
                 className="sm:hidden bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] text-white px-8 py-3 rounded-full text-lg font-medium hover:opacity-90 transition-opacity w-full max-w-[280px]"
               >
                 Começar Agora
-              </button>
+                        </button>
             </motion.div>
           </motion.div>
         </div>
