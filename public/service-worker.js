@@ -1,5 +1,5 @@
 // Service Worker para Fisioneo PWA - Com suporte offline
-const CACHE_NAME = 'fisioneo-cache-v1';
+const CACHE_NAME = 'fisioneo-cache-v2';
 
 // Recursos que serão cacheados para acesso offline
 const urlsToCache = [
@@ -51,14 +51,15 @@ self.addEventListener('activate', event => {
           }
         })
       );
+    }).then(() => {
+      return self.clients.claim();
     })
   );
   
-  self.clients.claim();
   console.log('Service Worker ativado');
 });
 
-// Estratégia de cache: Cache First, depois Network
+// Estratégia de cache: Network First para a maioria, Cache First para provas
 self.addEventListener('fetch', event => {
   // Ignorar requisições não GET
   if (event.request.method !== 'GET') return;
@@ -78,6 +79,19 @@ self.addEventListener('fetch', event => {
         .then(response => {
           // Retorna do cache se existir
           if (response) {
+            // Atualiza o cache em segundo plano
+            fetch(event.request)
+              .then(networkResponse => {
+                if (networkResponse && networkResponse.status === 200) {
+                  caches.open(CACHE_NAME)
+                    .then(cache => {
+                      cache.put(event.request, networkResponse.clone());
+                    });
+                }
+              })
+              .catch(() => {
+                console.log('Falha ao atualizar cache, usando versão existente');
+              });
             return response;
           }
 
@@ -94,39 +108,55 @@ self.addEventListener('fetch', event => {
               }
               return networkResponse;
             })
-            .catch(() => {
-              // Se falhar a rede, tenta servir uma página offline
-              return caches.match('/offline.html');
+            .catch(error => {
+              console.log('Falha ao buscar recurso:', error);
+              // Se falhar a rede e for uma página HTML, retorna a página offline
+              if (event.request.headers.get('Accept')?.includes('text/html')) {
+                return caches.match('/offline.html');
+              }
+              return new Response('Recurso não disponível offline', {
+                status: 503,
+                statusText: 'Serviço indisponível'
+              });
             });
         })
     );
     return;
   }
   
-  // Para outros recursos, usa estratégia Stale-While-Revalidate
+  // Para outros recursos, usa estratégia Network First
   event.respondWith(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.match(event.request).then(cachedResponse => {
-        const fetchPromise = fetch(event.request)
-          .then(networkResponse => {
-            // Atualiza o cache com a nova resposta se for bem-sucedida
-            if (networkResponse && networkResponse.status === 200) {
-              cache.put(event.request, networkResponse.clone());
+    fetch(event.request)
+      .then(networkResponse => {
+        // Salva uma cópia no cache
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+        }
+        return networkResponse;
+      })
+      .catch(error => {
+        console.log('Falha ao buscar recurso da rede, tentando cache:', error);
+        return caches.match(event.request)
+          .then(cachedResponse => {
+            if (cachedResponse) {
+              return cachedResponse;
             }
-            return networkResponse;
-          })
-          .catch(error => {
-            console.log('Falha ao buscar recurso:', error);
-            // Se falhar a rede e for uma página HTML, retorna a página offline
-            if (event.request.headers.get('Accept').includes('text/html')) {
+            
+            // Se não estiver no cache e for uma página HTML, retorna a página offline
+            if (event.request.headers.get('Accept')?.includes('text/html')) {
               return caches.match('/offline.html');
             }
-            return null;
+            
+            // Para outros recursos (imagens, scripts, etc.), retorna um erro
+            return new Response('Recurso não disponível offline', {
+              status: 503,
+              statusText: 'Serviço indisponível'
+            });
           });
-          
-        // Retorna o cache enquanto busca da rede em segundo plano
-        return cachedResponse || fetchPromise;
-      });
-    })
+      })
   );
 }); 

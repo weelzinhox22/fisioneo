@@ -86,6 +86,36 @@
     .reconnect-btn:hover {
       opacity: 0.9;
     }
+    .connection-status {
+      padding: 0.5rem 1rem;
+      border-radius: 1rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+    .offline {
+      background-color: #fff0f0;
+      color: #e74c3c;
+    }
+    .online {
+      background-color: #f0fff0;
+      color: #2ecc71;
+    }
+    .home-btn {
+      margin-top: 1rem;
+      background: white;
+      color: #6EC1E4;
+      border: 1px solid #6EC1E4;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .home-btn:hover {
+      background-color: #f0f9ff;
+    }
   </style>
 </head>
 <body>
@@ -97,10 +127,15 @@
         <line x1="12" y1="19" x2="12" y2="22"></line>
       </svg>
     </div>
-    <div class="status-icon">📶</div>
-    <h1>Você está offline</h1>
-    <p>Não foi possível conectar à internet. Verifique sua conexão e tente novamente.</p>
-    <button class="reconnect-btn" onclick="window.location.reload()">Tentar novamente</button>
+    
+    <div id="connection-status" class="connection-status offline">
+      Você está offline
+    </div>
+    
+    <h1>Modo Offline</h1>
+    <p>Você está acessando o Fisioneo sem conexão com a internet. Conteúdos que você já visitou anteriormente estão disponíveis para acesso offline.</p>
+    
+    <button class="reconnect-btn" onclick="window.location.reload()">Atualizar página</button>
     
     <div class="cached-content">
       <h2>Conteúdo disponível offline:</h2>
@@ -111,17 +146,32 @@
         <li><a href="/temas">Temas</a></li>
       </ul>
     </div>
+    
+    <button class="home-btn" onclick="window.location.href='/'">Voltar para a página inicial</button>
   </div>
 
   <script>
-    // Verificar periodicamente a conexão
-    setInterval(() => {
+    // Verificar status de conexão inicial
+    function updateConnectionStatus() {
+      const statusElement = document.getElementById('connection-status');
       if (navigator.onLine) {
-        document.querySelector('.status-icon').textContent = '✅';
+        statusElement.textContent = 'Você está online';
+        statusElement.className = 'connection-status online';
       } else {
-        document.querySelector('.status-icon').textContent = '📶';
+        statusElement.textContent = 'Você está offline';
+        statusElement.className = 'connection-status offline';
       }
-    }, 5000);
+    }
+    
+    // Verificar status inicial
+    updateConnectionStatus();
+    
+    // Adicionar listeners para mudanças de conexão
+    window.addEventListener('online', updateConnectionStatus);
+    window.addEventListener('offline', updateConnectionStatus);
+    
+    // Verificar periodicamente
+    setInterval(updateConnectionStatus, 5000);
   </script>
 </body>
 </html> 
