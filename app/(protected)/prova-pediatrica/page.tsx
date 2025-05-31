@@ -1057,7 +1057,7 @@ export default function ProvaPediatricaPage() {
                 <div className="absolute -z-10 blur-3xl opacity-20 bg-gradient-to-r from-[#6EC1E4] to-[#B9A9FF] w-full h-full top-0" />
               </h1>
               <p className="text-[#666666] text-xl leading-relaxed mb-4 max-w-2xl mx-auto mt-8">
-                Esta avaliação contém {questions.length} questões sobre Distrofia Muscular de Duchenne e Cuidados Paliativos em Pediatria.
+                Esta avaliação contém 5 questões sobre cada um dos 9 artigos, totalizando 45 questões.
               </p>
               <p className="text-[#888888] text-lg mb-12">
                 Você poderá ver a explicação detalhada após responder cada questão.
