@@ -13,6 +13,7 @@ import { Providers } from "./providers"
 import MobileInstallBanner from "@/components/mobile-install-banner"
 import ServiceWorkerRegister from "@/components/service-worker-register"
 import Notification from "@/components/notification"
+import { cn } from "@/lib/utils"
 
 const inter = Inter({
   subsets: ["latin"],

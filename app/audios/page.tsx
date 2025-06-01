@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Headphones, Volume2, VolumeX, Play, Pause, SkipBack, Heart, Share2, Download, Music, Baby } from "lucide-react"
+import React, { useState, useEffect, useRef } from "react"
+import { Headphones, Volume2, VolumeX, Play, Pause, SkipBack, Heart, Share2, Download, Music, Baby, X } from "lucide-react"
 import { motion } from "framer-motion"
 import Head from "next/head"
 
@@ -10,6 +10,141 @@ interface AudioPlayerProps {
   title: string;
   description: string;
   icon: React.ReactNode;
+}
+
+// Criando um objeto global para armazenar instâncias de áudio
+const globalAudioInstances: Record<string, HTMLAudioElement> = {};
+
+// Componente de popup modal
+function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [step, setStep] = useState(1);
+  const totalSteps = 2;
+  
+  if (!isOpen) return null;
+  
+  const handleWhatsAppRedirect = () => {
+    const message = encodeURIComponent("Olá! Gostaria de solicitar um tema para os áudios educacionais da FisioNeo.");
+    window.open(`https://wa.me/5571991373142?text=${message}`, "_blank");
+    onClose();
+  };
+  
+  const nextStep = () => {
+    if (step < totalSteps) {
+      setStep(step + 1);
+    } else {
+      onClose();
+    }
+  };
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="relative bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-2xl w-full max-w-4xl animate-fadeIn overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
+        
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold text-blue-800 flex items-center">
+              <Music className="h-5 w-5 mr-2 text-blue-600" />
+              Informação sobre os Áudios
+            </h3>
+            <button 
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-100 rounded-full"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          
+          {/* Conteúdo do modal - versão desktop */}
+          <div className="hidden md:grid grid-cols-2 gap-6">
+            <div className="text-gray-700 space-y-3">
+              <p className="border-l-4 border-blue-400 pl-3 py-1">
+                Devido à complexidade e ao tempo necessário para a edição e preparação de conteúdo em formato de áudio, 
+                estamos disponibilizando os materiais gradativamente.
+              </p>
+              
+              <p>
+                Caso tenha interesse em algum conteúdo específico que ainda não está disponível em nossa biblioteca, 
+                entre em contato diretamente com a administração do site.
+              </p>
+            </div>
+            
+            <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
+              <p className="font-medium text-amber-800 mb-1">⚠️ Aviso importante sobre provas</p>
+              <p className="text-amber-700">
+                Infelizmente, talvez não seja possível adicionar áudios sobre todos os conteúdos a tempo para as 
+                provas oficiais da sua faculdade. Estamos priorizando os temas mais solicitados, mas o processo 
+                de produção demanda tempo para garantir a qualidade do material.
+              </p>
+            </div>
+          </div>
+          
+          {/* Conteúdo do modal - versão mobile (passos) */}
+          <div className="md:hidden">
+            {step === 1 && (
+              <div className="text-gray-700 space-y-3 animate-fadeInRight">
+                <p className="border-l-4 border-blue-400 pl-3 py-1">
+                  Devido à complexidade e ao tempo necessário para a edição e preparação de conteúdo em formato de áudio, 
+                  estamos disponibilizando os materiais gradativamente.
+                </p>
+                
+                <p>
+                  Caso tenha interesse em algum conteúdo específico que ainda não está disponível em nossa biblioteca, 
+                  entre em contato diretamente com a administração do site.
+                </p>
+              </div>
+            )}
+            
+            {step === 2 && (
+              <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400 animate-fadeInRight">
+                <p className="font-medium text-amber-800 mb-1">⚠️ Aviso importante sobre provas</p>
+                <p className="text-amber-700">
+                  Infelizmente, talvez não seja possível adicionar áudios sobre todos os conteúdos a tempo para as 
+                  provas oficiais da sua faculdade. Estamos priorizando os temas mais solicitados, mas o processo 
+                  de produção demanda tempo para garantir a qualidade do material.
+                </p>
+              </div>
+            )}
+            
+            {/* Indicador de passos */}
+            <div className="flex justify-center mt-4 space-x-1">
+              {Array.from({ length: totalSteps }).map((_, index) => (
+                <div 
+                  key={index}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    index + 1 === step ? "w-6 bg-blue-500" : "w-2 bg-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+          
+          <div className="flex justify-end items-center mt-6 pt-4 border-t border-gray-100">
+            <div className="mr-auto flex items-center text-sm text-blue-800">
+              <Baby className="h-4 w-4 mr-2 text-blue-600" />
+              <span><span className="font-medium">FisioNeo</span> - Conteúdo especializado</span>
+            </div>
+            
+            <div className="flex gap-3">
+              <button
+                onClick={handleWhatsAppRedirect}
+                className="px-5 py-2 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+              >
+                Solicitar tema
+              </button>
+              
+              <button
+                onClick={step < totalSteps ? nextStep : onClose}
+                className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-colors shadow-md font-medium"
+              >
+                {step < totalSteps ? "Avançar" : "Entendi"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
@@ -25,41 +160,77 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
   const previousVolume = useRef(volume)
 
   useEffect(() => {
-    const audio = new Audio(audioSrc)
-    setAudioElement(audio)
-
-    audio.addEventListener("loadedmetadata", () => {
-      setDuration(audio.duration)
-    })
-
-    audio.addEventListener("timeupdate", () => {
-      setCurrentTime(audio.currentTime)
-    })
-
-    audio.addEventListener("ended", () => {
-      setIsPlaying(false)
-      setCurrentTime(0)
-    })
-
-    return () => {
-      audio.pause()
-      audio.src = ""
-      audio.removeEventListener("loadedmetadata", () => {})
-      audio.removeEventListener("timeupdate", () => {})
-      audio.removeEventListener("ended", () => {})
-    }
-  }, [audioSrc])
-
-  const togglePlay = () => {
-    if (!audioElement) return
-
-    if (isPlaying) {
-      audioElement.pause()
+    // Verifica se já existe uma instância global para este áudio
+    let audio: HTMLAudioElement;
+    
+    if (globalAudioInstances[audioSrc]) {
+      audio = globalAudioInstances[audioSrc];
     } else {
-      audioElement.play()
+      // Criar nova instância de áudio e armazená-la globalmente
+      audio = new Audio(audioSrc);
+      audio.volume = volume;
+      globalAudioInstances[audioSrc] = audio;
     }
     
-    setIsPlaying(!isPlaying)
+    setAudioElement(audio);
+
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+    };
+    
+    const handleTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+    };
+    
+    const handleEnded = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+    };
+
+    // Adiciona event listeners
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleEnded);
+
+    // Se o áudio já estiver carregado, definir a duração
+    if (audio.readyState >= 2) {
+      setDuration(audio.duration);
+    }
+
+    return () => {
+      // Remove event listeners
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleEnded);
+      
+      // Não destruímos a instância do áudio para manter a reprodução entre navegações
+    }
+  }, [audioSrc, volume])
+
+  const togglePlay = () => {
+    if (!audioElement) return;
+
+    // Pausar todos os outros áudios primeiro
+    Object.entries(globalAudioInstances).forEach(([src, audio]) => {
+      if (src !== audioSrc && !audio.paused) {
+        audio.pause();
+      }
+    });
+
+    if (isPlaying) {
+      audioElement.pause();
+    } else {
+      // Tenta reproduzir e lida com possíveis erros
+      const playPromise = audioElement.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.error("Erro ao reproduzir áudio:", error);
+        });
+      }
+    }
+    
+    setIsPlaying(!isPlaying);
   }
 
   const toggleMute = () => {
@@ -166,7 +337,7 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
               <button
                 onClick={togglePlay}
                 className={`px-6 py-3 rounded-full font-medium flex items-center gap-2 transition-colors ${
-                  isPlaying 
+                  isPlaying
                     ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
                     : "bg-blue-600 text-white hover:bg-blue-700"
                 }`}
@@ -285,6 +456,17 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
 }
 
 export default function AudiosPage() {
+  const [showModal, setShowModal] = useState(false);
+  
+  useEffect(() => {
+    // Mostrar o modal automaticamente quando a página carrega
+    const timer = setTimeout(() => {
+      setShowModal(true);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Head>
@@ -305,6 +487,15 @@ export default function AudiosPage() {
               Bem-vindo à nossa biblioteca de áudios! Aqui você encontrará materiais educacionais 
               sobre fisioterapia neonatal e pediátrica em formato de áudio, perfeitos para estudar 
               durante deslocamentos ou enquanto realiza outras atividades.
+              <br />
+              <div className="bg-red-50 border-l-4 border-red-500 p-5 rounded-r mb-8">
+                <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                  Informação importante
+                </h4>
+                <p className="text-gray-700 mb-2">
+                  O download dos áudios está temporariamente desabilitado.
+                </p>
+              </div>
             </p>
           </div>
           
@@ -313,6 +504,13 @@ export default function AudiosPage() {
             audioSrc="/audio/0-6-meses.mp3"
             title="Desenvolvimento Infantil: 0-6 meses"
             description="Guia completo sobre o desenvolvimento neuromotor do bebê durante os primeiros 6 meses de vida."
+            icon={<Baby className="h-24 w-24 text-white" />}
+          />
+          
+          <AudioPlayer 
+            audioSrc="/audio/7-15-meses.mp3"
+            title="Desenvolvimento Infantil: 7-15 meses"
+            description="Explicação detalhada das habilidades motoras e marcos de desenvolvimento esperados entre 7 e 15 meses de idade."
             icon={<Baby className="h-24 w-24 text-white" />}
           />
           
@@ -329,7 +527,7 @@ export default function AudiosPage() {
               Sobre os áudios
             </h3>
             <p className="text-gray-700 mb-4">
-              Nossos áudios educacionais são gravados por especialistas em fisioterapia neonatal e pediátrica,
+              Nossos áudios educacionais são gerados com IA, utilizando o conteúdo neonatal e pediátrico do site Fisioneo.vercel.app,
               oferecendo explicações detalhadas sobre conceitos importantes do desenvolvimento infantil.
             </p>
             <p className="text-gray-700">
@@ -342,7 +540,7 @@ export default function AudiosPage() {
               Sugestões de uso:
             </h3>
             <ul className="list-disc pl-5 space-y-2 text-gray-700">
-              <li>Ouça enquanto se desloca para o trabalho ou faculdade</li>
+              <li>Ouça enquanto está ocupado com outras atividades</li>
               <li>Use como material complementar de estudo</li>
               <li>Baixe para ouvir offline quando necessário</li>
               <li>Compartilhe com colegas que também estão estudando fisioterapia neonatal</li>
@@ -350,6 +548,26 @@ export default function AudiosPage() {
           </div>
         </div>
       </main>
+      
+      {/* Modal de informações */}
+      <InfoModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInRight {
+          from { opacity: 0; transform: translateX(10px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-fadeInRight {
+          animation: fadeInRight 0.3s ease-out forwards;
+        }
+      `}</style>
     </div>
   )
 } 
