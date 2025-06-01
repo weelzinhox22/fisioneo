@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useLayoutEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Bell, X, ArrowRight, BookOpen, FileText, Star, Users, CheckCircle, Calendar, Sparkles, FilePlus, LayoutDashboard } from "lucide-react"
+import { Bell, X, ArrowRight, BookOpen, FileText, Star, Users, CheckCircle, Calendar, Sparkles, FilePlus, LayoutDashboard, Headphones } from "lucide-react"
 import { Hero } from "@/app/components/Hero"
 import { useSession } from "next-auth/react"
 import { supabase } from "@/lib/supabase"
@@ -76,8 +76,71 @@ const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ isOpen, onClose }
   );
 };
 
+// Modal de aviso sobre os áudios
+const AudiosAnnouncementModal: React.FC<AnnouncementModalProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div 
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm" 
+        onClick={onClose}
+      />
+      <motion.div 
+        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+        className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6 md:p-8 z-50"
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
+        >
+          <X className="h-5 w-5 text-gray-500" />
+        </button>
+        
+        <div className="flex items-start mb-4">
+          <div className="bg-amber-50 p-2 rounded-full mr-4">
+            <Headphones className="h-6 w-6 text-amber-500" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900">Aviso Importante Sobre os Áudios</h3>
+            <p className="text-sm text-gray-500">31 de maio de 2024</p>
+          </div>
+        </div>
+        
+        <div className="space-y-3 text-gray-700">
+          <p>
+            Adicionamos um sistema de áudios educacionais à plataforma para facilitar o aprendizado e oferecer uma experiência 
+            mais completa, especialmente para pessoas com diferentes estilos de aprendizagem.
+          </p>
+          <p className="font-medium text-amber-700">
+            <strong>Atenção:</strong> Os áudios e demais conteúdos da Fisioneo são ferramentas complementares de estudo. 
+            Para uma formação adequada, é fundamental consultar também artigos científicos originais, livros-texto recomendados 
+            e outras fontes primárias de informação.
+          </p>
+        </div>
+        
+        <div className="mt-6 flex flex-col space-y-3">
+          <Link href="/audios" className="w-full py-2.5 px-4 bg-gradient-to-r from-amber-400 to-amber-500 text-white rounded-lg font-medium hover:shadow-md transition-all text-center">
+            Confira nossa biblioteca de áudios
+          </Link>
+          <button
+            onClick={onClose}
+            className="w-full py-2.5 px-4 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all"
+          >
+            Entendido, obrigado!
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(true)
+  const [isAudioModalOpen, setIsAudioModalOpen] = useState(true)
   const { data: nextAuthSession, status: nextAuthStatus } = useSession()
   const [supabaseSession, setSupabaseSession] = useState<any>(null)
 
@@ -101,14 +164,27 @@ export default function Home() {
       localStorage.setItem('hasSeenAnnouncement-May2024', 'true');
     }
   }
+  
+  // Função para fechar o modal de áudios e salvar no localStorage
+  const handleCloseAudioModal = () => {
+    setIsAudioModalOpen(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('hasSeenAudioAnnouncement-May2024', 'true');
+    }
+  }
 
-  // Verificar se o usuário já viu o popup
+  // Verificar se o usuário já viu os popups
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
     const hasSeenAnnouncement = localStorage.getItem('hasSeenAnnouncement-May2024');
     if (hasSeenAnnouncement) {
       setIsModalOpen(false);
+    }
+    
+    const hasSeenAudioAnnouncement = localStorage.getItem('hasSeenAudioAnnouncement-May2024');
+    if (hasSeenAudioAnnouncement) {
+      setIsAudioModalOpen(false);
     }
   }, []);
 
@@ -348,6 +424,12 @@ export default function Home() {
             onClose={handleCloseModal} 
           />
         )}
+        {isAudioModalOpen && (
+          <AudiosAnnouncementModal 
+            isOpen={isAudioModalOpen} 
+            onClose={handleCloseAudioModal} 
+          />
+        )}
       </AnimatePresence>
       <Hero />
       {/* BG animado sutil */}
@@ -454,6 +536,7 @@ export default function Home() {
                 <span className="inline-block text-xs bg-[#FFD700]/10 text-[#FFD700] px-2 py-1 rounded-full font-medium">Atualização científica</span>
                   </motion.div>
                   </motion.div>
+                  
             {/* Timeline animada: Como funciona */}
             <div className="max-w-2xl mx-auto mt-16">
               <h3 className="text-xl font-bold text-center mb-8 text-gray-700">Como funciona a Fisioneo?</h3>

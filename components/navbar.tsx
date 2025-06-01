@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, Baby, FileText, Home, BookOpen, GraduationCap, Award, MessageSquare, LogIn, LogOut, User } from "lucide-react"
+import { Menu, X, Baby, FileText, Home, BookOpen, GraduationCap, Award, MessageSquare, LogIn, LogOut, User, Headphones } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { usePathname, useRouter } from "next/navigation"
 import { useSession, signOut } from "next-auth/react"
@@ -119,6 +119,7 @@ export default function Navbar() {
     { name: "Prova Neo.", href: "/prova-geral", icon: <Award className="h-4 w-4" /> },
     { name: "Prova Ped.", href: "/prova-pediatrica", icon: <Award className="h-4 w-4" /> },
     { name: "Documentos", href: "/documentos", icon: <FileText className="h-4 w-4" /> },
+    { name: "Áudios", href: "/audios", icon: <Headphones className="h-4 w-4" /> },
     { 
       name: "Sugestões", 
       type: "button",
