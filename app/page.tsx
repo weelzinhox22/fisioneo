@@ -47,7 +47,7 @@ const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ isOpen, onClose }
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900">Comunicado Importante</h3>
-            <p className="text-sm text-gray-500">29 de maio de 2024</p>
+            <p className="text-sm text-gray-500">29 de maio de 2025</p>
           </div>
         </div>
         
@@ -59,7 +59,7 @@ const AnnouncementModal: React.FC<AnnouncementModalProps> = ({ isOpen, onClose }
             Esta mudança foi implementada após análise cuidadosa do feedback dos usuários, tornando a plataforma mais acessível para os estudantes.
           </p>
           <p className="font-medium text-blue-600">
-            Atualização de conteúdo: As questões do módulo de Fisioterapia Neonatal foram revisadas e atualizadas em 29/05/2024, com distribuição otimizada das alternativas corretas e enunciados mais elaborados.
+            Atualização de conteúdo: As questões do módulo de Fisioterapia Neonatal foram revisadas e atualizadas em 29/05/2025, com distribuição otimizada das alternativas corretas e enunciados mais elaborados.
           </p>
         </div>
         
@@ -106,7 +106,7 @@ const AudiosAnnouncementModal: React.FC<AnnouncementModalProps> = ({ isOpen, onC
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900">Aviso Importante Sobre os Áudios</h3>
-            <p className="text-sm text-gray-500">31 de maio de 2024</p>
+            <p className="text-sm text-gray-500">31 de maio de 2025</p>
           </div>
         </div>
         
