@@ -1,6 +1,6 @@
 "use client"
 
-import { Baby, Brain, Droplets, HeartPulse, Stethoscope, Search, X } from "lucide-react"
+import { Baby, Brain, Droplets, HeartPulse, Stethoscope, Search, X, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -184,6 +184,34 @@ export default function PediatriaPage() {
       )
     );
   };
+
+  // Adicionar o novo conteúdo aos destaques
+  const featuredContent = [
+    {
+      title: "Padrões Motores do Bebê",
+      description: "Da posição supina aos primeiros passos: conheça as etapas cruciais do desenvolvimento motor nos primeiros anos de vida.",
+      href: "/pediatria/desenvolvimento-motor/padroes-motores",
+      icon: <Baby className="h-12 w-12" />,
+      color: "bg-blue-50 border-blue-200",
+      iconBg: "bg-blue-100 text-blue-600"
+    },
+    {
+      title: "Desenvolvimento Motor Infantil",
+      description: "Acompanhe o desenvolvimento motor da criança desde o nascimento até os 5 anos de idade.",
+      href: "/pediatria/desenvolvimento-motor",
+      icon: <Baby className="h-12 w-12" />,
+      color: "bg-green-50 border-green-200",
+      iconBg: "bg-green-100 text-green-600"
+    },
+    {
+      title: "Avaliação Neurológica",
+      description: "Técnicas e abordagens para avaliação neurológica completa em crianças.",
+      href: "/pediatria/avaliacao-neurologica",
+      icon: <Brain className="h-12 w-12" />,
+      color: "bg-purple-50 border-purple-200",
+      iconBg: "bg-purple-100 text-purple-600"
+    }
+  ];
 
   return (
     <div className="relative overflow-hidden pb-16">
@@ -463,6 +491,31 @@ export default function PediatriaPage() {
             </div>
           </motion.div>
         )}
+
+        {/* Seção de Conteúdo em Destaque */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-[#4A96D1] mb-6">Conteúdo em Destaque</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredContent.map((item, index) => (
+              <Link href={item.href} key={index} className="block group">
+                <div className={`p-6 rounded-lg shadow-sm border ${item.color || "bg-gray-50 border-gray-200"} h-full transition-transform transform group-hover:-translate-y-1 group-hover:shadow-md`}>
+                  <div className="flex items-start mb-4">
+                    <div className={`p-3 rounded-lg ${item.iconBg || "bg-gray-100 text-gray-600"} mr-4`}>
+                      {item.icon}
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
+                  </div>
+                  <p className="text-gray-600">{item.description}</p>
+                  <div className="mt-4 flex justify-end">
+                    <span className="inline-flex items-center text-[#6EC1E4] group-hover:text-[#4A96D1] transition-colors">
+                      Acessar <ArrowRight className="ml-2 h-4 w-4" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
       
       {/* Estilos CSS para a scrollbar personalizada */}

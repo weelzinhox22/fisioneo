@@ -11,22 +11,31 @@ export default function NotificationRandomButton() {
 
   // Função para enviar uma notificação aleatória
   const sendRandomNotification = async () => {
-    if (permission !== "granted") {
-      // Solicitar permissão primeiro
-      const granted = await requestPermission()
-      if (!granted) {
-        toast({
-          title: "Permissão negada",
-          description: "Você precisa permitir notificações para receber alertas",
-          variant: "destructive",
-        })
-        return
-      }
-    }
-
     setLoading(true)
     
     try {
+      // Primeiro, verificar a permissão
+      if (permission !== "granted") {
+        console.log("Permissão não concedida, solicitando...")
+        toast({
+          title: "Solicitando permissão",
+          description: "Por favor, permita as notificações na janela que vai aparecer",
+          variant: "default",
+        })
+        
+        // Solicitar permissão primeiro
+        const granted = await requestPermission()
+        if (!granted) {
+          toast({
+            title: "Permissão negada",
+            description: "Você precisa permitir notificações para receber alertas",
+            variant: "destructive",
+          })
+          setLoading(false)
+          return
+        }
+      }
+      
       // Gerar um texto aleatório para a notificação
       const titleOptions = [
         "Novo conteúdo disponível!",
@@ -59,28 +68,17 @@ export default function NotificationRandomButton() {
       
       const randomUrl = urlOptions[Math.floor(Math.random() * urlOptions.length)]
       
-      // Enviar a notificação local
+      console.log("Enviando notificação aleatória:", randomTitle)
+      
+      // Enviar a notificação local, removendo as propriedades que causam erro no linter
       await sendLocalNotification(randomTitle, {
         body: randomBody,
         icon: "/icons/baby-boy.png",
         badge: "/icons/baby-icon-192.png",
-        vibrate: [100, 50, 100],
         data: {
           url: randomUrl,
           dateOfArrival: Date.now()
-        },
-        actions: [
-          {
-            action: "explore",
-            title: "Ver agora",
-            icon: "/icons/baby-icon-192.png"
-          },
-          {
-            action: "close",
-            title: "Depois",
-            icon: "/icons/baby-icon-192.png"
-          }
-        ]
+        }
       })
       
       toast({

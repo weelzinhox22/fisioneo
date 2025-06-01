@@ -72,6 +72,12 @@ export default function DesenvolvimentoMotorPage() {
     },
   }
 
+  // Remover referência a padrões motores
+  const relatedContent = [
+    // Remover o item de padrões motores
+    // Manter apenas outros conteúdos relacionados existentes
+  ]
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-[#F0F9FF]">
       {/* Barra de progresso fixa no topo da página */}
@@ -694,6 +700,26 @@ export default function DesenvolvimentoMotorPage() {
             </motion.div>
           </div>
         </motion.div>
+
+        {/* Seção para conteúdo relacionado */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold text-[#4A96D1] mb-6">Conteúdo Relacionado</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {relatedContent.map((item, index) => (
+              <Link key={index} href={item.href} className="block">
+                <div className="bg-white rounded-lg shadow-sm border border-[#E0E0E0] p-5 h-full hover:shadow-md transition-shadow">
+                  <div className="flex items-start mb-3">
+                    <div className="p-3 bg-[#F0F9FF] rounded-lg mr-3">
+                      {item.icon}
+                    </div>
+                    <h3 className="font-medium text-[#333333]">{item.title}</h3>
+                  </div>
+                  <p className="text-sm text-[#666666]">{item.description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   )

@@ -1,3 +1,4 @@
 {
-  "/api/notifications/send/route": "app/api/notifications/send/route.js"
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/temas/padroes-motores/page": "app/temas/padroes-motores/page.js"
 }

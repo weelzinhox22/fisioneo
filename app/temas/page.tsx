@@ -18,6 +18,14 @@ export default function TemasPage() {
   
   const topics = [
     {
+      id: "padroes-motores",
+      title: "Padrões Motores do Bebê",
+      description: "Da posição supina aos primeiros passos: etapas do desenvolvimento motor do bebê.",
+      icon: <Baby className="h-10 w-10 text-[#6EC1E4]" />,
+      href: "/temas/padroes-motores",
+      category: "desenvolvimento",
+    },
+    {
       id: "reflexos-0-6",
       title: "Reflexos de 0 a 6 meses",
       description: "Estudo dos reflexos primitivos e sua evolução nos primeiros 6 meses de vida.",
@@ -191,6 +199,34 @@ export default function TemasPage() {
     );
   };
 
+  // Conteúdo em destaque
+  const featuredContent = [
+    {
+      title: "Padrões Motores do Bebê",
+      description: "Da posição supina aos primeiros passos: conheça as etapas cruciais do desenvolvimento motor nos primeiros anos de vida.",
+      href: "/temas/padroes-motores",
+      icon: <Baby className="h-12 w-12" />,
+      color: "bg-blue-50 border-blue-200",
+      iconBg: "bg-blue-100 text-blue-600"
+    },
+    {
+      title: "Reflexos em Neonatos",
+      description: "Explore os reflexos primitivos e sua evolução nos primeiros meses de vida.",
+      href: "/temas/reflexos-0-6",
+      icon: <Brain className="h-12 w-12" />,
+      color: "bg-purple-50 border-purple-200",
+      iconBg: "bg-purple-100 text-purple-600"
+    },
+    {
+      title: "Método Canguru",
+      description: "Benefícios e aplicação do método canguru para o desenvolvimento neonatal.",
+      href: "/temas/metodo-canguru",
+      icon: <Baby className="h-12 w-12" />,
+      color: "bg-green-50 border-green-200",
+      iconBg: "bg-green-100 text-green-600"
+    }
+  ];
+
   return (
     <div className="relative overflow-hidden pb-16">
       <DraggableAIButton />
@@ -357,6 +393,40 @@ export default function TemasPage() {
       
       {/* Conteúdo principal */}
       <div className="container mx-auto px-4 py-8 relative z-10">
+        {/* Seção de Conteúdo em Destaque */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-[#4A96D1] mb-6">Conteúdo em Destaque</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredContent.map((item, index) => (
+              <Link href={item.href} key={index} className="block group">
+                <div className={`p-6 rounded-lg shadow-sm border ${item.color || "bg-gray-50 border-gray-200"} h-full transition-all duration-300 transform group-hover:-translate-y-1 group-hover:shadow-md`}>
+                  <div className="flex items-start mb-4">
+                    <div className={`p-3 rounded-lg ${item.iconBg || "bg-gray-100 text-gray-600"} mr-4`}>
+                      {item.icon}
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4">{item.description}</p>
+                  <div className="mt-auto flex justify-end">
+                    <span className="inline-flex items-center text-[#6EC1E4] group-hover:text-[#4A96D1] transition-colors">
+                      Acessar 
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 ml-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* Filtro de categorias */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           {categories.map((category, idx) => (
