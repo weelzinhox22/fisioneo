@@ -1035,6 +1035,9 @@ video {
 .-mt-6 {
   margin-top: -1.5rem;
 }
+.-mt-20 {
+  margin-top: -5rem;
+}
 .line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;
@@ -2500,6 +2503,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(35 35 35 / var(--tw-bg-opacity, 1));
 }
+.bg-\[\#1ED760\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 215 96 / var(--tw-bg-opacity, 1));
+}
 .bg-opacity-95 {
   --tw-bg-opacity: 0.95;
 }
@@ -3338,6 +3345,12 @@ video {
 }
 .pt-12 {
   padding-top: 3rem;
+}
+.pb-24 {
+  padding-bottom: 6rem;
+}
+.pb-32 {
+  padding-bottom: 8rem;
 }
 .text-left {
   text-align: left;
@@ -4880,6 +4893,11 @@ img.fade-in {
   background-color: rgb(51 51 51 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:bg-\[\#1DB954\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 185 84 / var(--tw-bg-opacity, 1));
+}
+
 .hover\:bg-gradient-to-r:hover {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
@@ -6252,6 +6270,22 @@ img.fade-in {
     margin-bottom: 0px;
   }
 
+  .md\:-mt-16 {
+    margin-top: -4rem;
+  }
+
+  .md\:mt-0 {
+    margin-top: 0px;
+  }
+
+  .md\:mb-16 {
+    margin-bottom: 4rem;
+  }
+
+  .md\:mb-4 {
+    margin-bottom: 1rem;
+  }
+
   .md\:block {
     display: block;
   }
@@ -6296,6 +6330,30 @@ img.fade-in {
     height: 800px;
   }
 
+  .md\:h-64 {
+    height: 16rem;
+  }
+
+  .md\:h-8 {
+    height: 2rem;
+  }
+
+  .md\:h-12 {
+    height: 3rem;
+  }
+
+  .md\:h-20 {
+    height: 5rem;
+  }
+
+  .md\:h-40 {
+    height: 10rem;
+  }
+
+  .md\:h-48 {
+    height: 12rem;
+  }
+
   .md\:max-h-\[calc\(100vh-200px\)\] {
     max-height: calc(100vh - 200px);
   }
@@ -6338,6 +6396,26 @@ img.fade-in {
 
   .md\:w-72 {
     width: 18rem;
+  }
+
+  .md\:w-8 {
+    width: 2rem;
+  }
+
+  .md\:w-12 {
+    width: 3rem;
+  }
+
+  .md\:w-20 {
+    width: 5rem;
+  }
+
+  .md\:w-40 {
+    width: 10rem;
+  }
+
+  .md\:w-48 {
+    width: 12rem;
   }
 
   .md\:min-w-0 {
@@ -6416,6 +6494,10 @@ img.fade-in {
     gap: 2rem;
   }
 
+  .md\:gap-6 {
+    gap: 1.5rem;
+  }
+
   .md\:overflow-y-auto {
     overflow-y: auto;
   }
@@ -6471,6 +6553,24 @@ img.fade-in {
   .md\:py-28 {
     padding-top: 7rem;
     padding-bottom: 7rem;
+  }
+
+  .md\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .md\:py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .md\:pb-16 {
+    padding-bottom: 4rem;
+  }
+
+  .md\:pt-12 {
+    padding-top: 3rem;
   }
 
   .md\:text-left {

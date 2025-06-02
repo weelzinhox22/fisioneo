@@ -652,15 +652,15 @@ function PlaylistPlayer({ playlist }: { playlist: AudioInfo[] }) {
   };
   
   return (
-    <div className="rounded-2xl shadow-lg overflow-hidden mb-8 bg-gradient-to-b from-[#121212] to-[#181818] text-white">
-      <div className="flex flex-col md:flex-row">
+    <div className="rounded-2xl shadow-lg overflow-hidden mb-8 bg-gradient-to-b from-[#121212] to-[#181818] text-white w-full max-w-full">
+      <div className="flex flex-col md:flex-row overflow-hidden">
         {/* Lista de músicas (sidebar à esquerda) - visível em telas médias e grandes */}
-        <div className={`md:w-72 lg:w-80 md:block ${isPlaylistOpen ? 'block' : 'hidden'} bg-[#121212] border-r border-[#282828]`}>
+        <div className={`md:w-72 lg:w-80 md:block ${isPlaylistOpen ? 'block' : 'hidden'} bg-[#121212] border-r border-[#282828] overflow-hidden`}>
           {/* Header fixo da sidebar */}
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-xl font-bold flex items-center">
-                <Music className="h-5 w-5 mr-2 text-green-500" />
+                <Music className="h-5 w-5 mr-2 text-[#1ED760]" />
                 Playlist Neonatal
               </h4>
               <button 
@@ -673,7 +673,7 @@ function PlaylistPlayer({ playlist }: { playlist: AudioInfo[] }) {
             <p className="text-sm text-gray-400 mb-6">7 áudios • Desenvolvimento infantil</p>
           </div>
           {/* Lista de faixas sem altura fixa e sem overflow */}
-          <div className="px-6 pb-6">
+          <div className="px-6 pb-6 overflow-y-auto">
             {playlist.map((item, index) => (
               <button
                 key={index}
@@ -702,9 +702,9 @@ function PlaylistPlayer({ playlist }: { playlist: AudioInfo[] }) {
                     <Pause className="h-5 w-5 text-white hidden group-hover:block absolute inset-0 m-auto" />
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 overflow-hidden">
                   <p className={`font-medium truncate ${
-                    index === currentIndex ? "text-green-500" : "text-white"
+                    index === currentIndex ? "text-[#1ED760]" : "text-white"
                   }`}>
                     {item.title}
                   </p>
@@ -716,7 +716,7 @@ function PlaylistPlayer({ playlist }: { playlist: AudioInfo[] }) {
         </div>
         
         {/* Player e detalhes do áudio atual (conteúdo principal) */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col overflow-hidden">
           {/* Barra superior com toggle da playlist em mobile */}
           <div className="bg-[#181818] p-4 flex items-center md:hidden">
             <button 
@@ -725,30 +725,30 @@ function PlaylistPlayer({ playlist }: { playlist: AudioInfo[] }) {
             >
               <List className="h-5 w-5" />
             </button>
-            <div className="ml-3">
-              <p className="font-medium text-sm">Playlist: Neonatal</p>
+            <div className="ml-3 overflow-hidden">
+              <p className="font-medium text-sm truncate">Playlist: Neonatal</p>
               <p className="text-xs text-gray-400">{currentIndex + 1} de {playlist.length}</p>
             </div>
           </div>
           
           {/* Capa e detalhes do áudio atual */}
-          <div className="p-6 flex flex-col items-center md:items-start md:flex-row md:gap-8">
-            <div className="w-48 h-48 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-lg shadow-lg flex items-center justify-center flex-shrink-0 mb-6 md:mb-0">
+          <div className="p-6 flex flex-col items-center md:items-start md:flex-row md:gap-8 overflow-hidden">
+            <div className="w-40 h-40 md:w-48 md:h-48 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-lg shadow-lg flex items-center justify-center flex-shrink-0 mb-6 md:mb-0">
               {currentAudio.icon}
             </div>
             
-            <div className="flex-1 text-center md:text-left">
-              <h3 className="text-2xl font-bold mb-2">
+            <div className="flex-1 text-center md:text-left overflow-hidden">
+              <h3 className="text-xl md:text-2xl font-bold mb-2 truncate">
                 {currentAudio.title}
               </h3>
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-400 mb-4 line-clamp-2">
                 {currentAudio.description}
               </p>
               
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
                 <button
                   onClick={togglePlayPause}
-                  className="p-4 rounded-full bg-green-500 text-white hover:bg-green-400 transition-colors shadow-md"
+                  className="p-4 rounded-full bg-[#1ED760] text-black hover:bg-[#1DB954] transition-colors shadow-md"
                 >
                   {isPlaying ? (
                     <Pause className="h-6 w-6" />
@@ -785,7 +785,7 @@ function PlaylistPlayer({ playlist }: { playlist: AudioInfo[] }) {
           </div>
           
           {/* Player de áudio real (invisível mas funcional) */}
-          <div className="px-6 pb-6">
+          <div className="px-6 pb-6 overflow-hidden">
             <AudioPlayer 
               audioSrc={currentAudio.src}
               title={currentAudio.title}
@@ -868,7 +868,7 @@ export default function AudiosPage() {
   ];
   
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#181818] text-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#181818] text-white overflow-x-hidden">
       <Head>
         <title>Áudios | FisioNeo</title>
       </Head>
@@ -878,51 +878,51 @@ export default function AudiosPage() {
         {isLoading && <LoadingScreen />}
       </AnimatePresence>
       
-      <main className="pb-20">
-        {/* Header com gradiente e título */}
-        <div className="h-64 bg-gradient-to-b from-[#3D3D3D] to-transparent relative px-4 pt-12 pb-8">
+      <main className="pb-20 overflow-x-hidden max-w-full">
+        {/* Header com gradiente e título - ajustado para mobile */}
+        <div className="bg-gradient-to-b from-[#3D3D3D] to-transparent relative px-4 pt-16 pb-32 md:pb-16 md:pt-12 md:h-64">
           <div className="container mx-auto max-w-5xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 flex items-center">
-              <Headphones className="h-8 w-8 mr-3 text-[#1ED760]" />
-              Biblioteca de Áudios
+            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 flex items-start md:items-center">
+              <Headphones className="h-7 w-7 md:h-8 md:w-8 mr-3 text-[#1ED760] mt-1 md:mt-0 flex-shrink-0" />
+              <span>Biblioteca de Áudios</span>
             </h1>
-            <p className="text-gray-300 text-lg max-w-2xl">
+            <p className="text-gray-300 text-base md:text-lg max-w-2xl">
               Material educacional em áudio sobre fisioterapia neonatal e pediátrica para otimizar seus estudos.
             </p>
           </div>
         </div>
         
-        {/* Conteúdo principal */}
-        <div className="container mx-auto max-w-5xl px-4 -mt-16">
+        {/* Conteúdo principal - ajustado offset para mobile */}
+        <div className="container mx-auto max-w-5xl px-4 -mt-20 md:-mt-16">
           {/* Seção da Playlist */}
-          <div className="mb-16">
+          <div className="mb-16 overflow-hidden">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white flex items-center">
+              <h2 className="text-xl md:text-2xl font-bold text-white flex items-center">
                 <Music className="h-5 w-5 mr-2 text-[#1ED760]" />
                 <span>Playlist Recomendada</span>
               </h2>
             </div>
             
             {/* Card da Playlist em destaque */}
-            <div className="bg-gradient-to-r from-[#303030] to-[#1c1c1c] rounded-lg p-6 shadow-lg mb-8">
-              <div className="flex flex-col md:flex-row gap-6 items-center">
-                <div className="w-40 h-40 bg-gradient-to-br from-[#1DB954] via-[#1DB954]/80 to-[#1c1c1c] rounded-lg flex items-center justify-center shadow-xl">
-                  <Music className="h-20 w-20 text-white/90" />
+            <div className="bg-gradient-to-r from-[#303030] to-[#1c1c1c] rounded-lg p-5 md:p-6 shadow-lg mb-8 overflow-hidden w-full">
+              <div className="flex flex-col md:flex-row gap-5 md:gap-6 items-center">
+                <div className="w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-[#1DB954] via-[#1DB954]/80 to-[#1c1c1c] rounded-lg flex items-center justify-center shadow-xl flex-shrink-0">
+                  <Music className="h-16 w-16 md:h-20 md:w-20 text-white/90" />
                 </div>
-                <div className="flex-1 text-center md:text-left">
+                <div className="flex-1 text-center md:text-left overflow-hidden">
                   <div className="text-sm font-medium text-gray-300 mb-1">PLAYLIST</div>
-                  <h3 className="text-4xl font-bold mb-2">Fisioterapia Neonatal</h3>
-                  <p className="text-gray-300 mb-4">
+                  <h3 className="text-3xl md:text-4xl font-bold mb-2 truncate">Fisioterapia Neonatal</h3>
+                  <p className="text-gray-300 mb-3 md:mb-4 text-sm md:text-base line-clamp-2">
                     Coleção completa com 7 áudios sobre desenvolvimento infantil e avaliação neonatal.
                   </p>
                   <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                    <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
+                    <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-xs md:text-sm">
                       7 áudios
                     </div>
-                    <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
+                    <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-xs md:text-sm">
                       Desenvolvimento infantil
                     </div>
-                    <div className="bg-[#1DB954]/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-[#1DB954]">
+                    <div className="bg-[#1DB954]/30 backdrop-blur-sm px-3 py-1 rounded-full text-xs md:text-sm text-[#1DB954]">
                       FisioNeo
                     </div>
                   </div>
@@ -931,33 +931,35 @@ export default function AudiosPage() {
             </div>
             
             {/* Player da playlist */}
-            <PlaylistPlayer playlist={neonatalPlaylist} />
+            <div className="w-full overflow-hidden">
+              <PlaylistPlayer playlist={neonatalPlaylist} />
+            </div>
           </div>
           
           {/* Informações adicionais em cards modernos */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-            <div className="bg-[#232323] rounded-lg p-6 hover:bg-[#282828] transition-colors">
-              <div className="flex items-start mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#1DB954]/10 flex items-center justify-center mr-4">
-                  <Baby className="h-6 w-6 text-[#1DB954]" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-12 md:mb-16">
+            <div className="bg-[#232323] rounded-lg p-5 md:p-6 hover:bg-[#282828] transition-colors">
+              <div className="flex items-start">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1DB954]/10 flex items-center justify-center mr-4 flex-shrink-0">
+                  <Baby className="h-5 w-5 md:h-6 md:w-6 text-[#1DB954]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-1">Conteúdo especializado</h3>
-                  <p className="text-gray-400 text-sm">
+                  <h3 className="text-base md:text-lg font-bold text-white mb-1">Conteúdo especializado</h3>
+                  <p className="text-gray-400 text-xs md:text-sm">
                     Áudios criados com base em artigos científicos e conteúdo educacional validado.
                   </p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-[#232323] rounded-lg p-6 hover:bg-[#282828] transition-colors">
-              <div className="flex items-start mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#1DB954]/10 flex items-center justify-center mr-4">
-                  <Download className="h-6 w-6 text-[#1DB954]" />
+            <div className="bg-[#232323] rounded-lg p-5 md:p-6 hover:bg-[#282828] transition-colors">
+              <div className="flex items-start">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#1DB954]/10 flex items-center justify-center mr-4 flex-shrink-0">
+                  <Download className="h-5 w-5 md:h-6 md:w-6 text-[#1DB954]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-1">Material para estudo</h3>
-                  <p className="text-gray-400 text-sm">
+                  <h3 className="text-base md:text-lg font-bold text-white mb-1">Material para estudo</h3>
+                  <p className="text-gray-400 text-xs md:text-sm">
                     Ouça durante atividades ou baixe para estudo offline (funcionalidade em breve).
                   </p>
                 </div>
@@ -966,11 +968,11 @@ export default function AudiosPage() {
           </div>
           
           {/* Rodapé com chamada para ação */}
-          <div className="bg-gradient-to-r from-[#1e3264] to-[#2d46b9] rounded-lg p-8 shadow-lg">
+          <div className="bg-gradient-to-r from-[#1e3264] to-[#2d46b9] rounded-lg p-6 md:p-8 shadow-lg">
             <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="mb-6 md:mb-0">
-                <h3 className="text-xl font-bold text-white mb-2">Quer mais conteúdo em áudio?</h3>
-                <p className="text-gray-300">
+              <div className="mb-6 md:mb-0 text-center md:text-left">
+                <h3 className="text-lg md:text-xl font-bold text-white mb-2">Quer mais conteúdo em áudio?</h3>
+                <p className="text-gray-300 text-sm md:text-base">
                   Nos envie sugestões de temas para expandir nossa biblioteca de áudios.
                 </p>
               </div>
@@ -978,7 +980,7 @@ export default function AudiosPage() {
                 href="https://wa.me/5571991373142"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 bg-white text-[#2d46b9] rounded-full font-medium hover:bg-gray-100 transition-colors"
+                className="px-5 py-2.5 md:px-6 md:py-3 bg-white text-[#2d46b9] rounded-full font-medium hover:bg-gray-100 transition-colors text-sm md:text-base"
               >
                 Enviar sugestão
               </a>
@@ -1026,6 +1028,20 @@ export default function AudiosPage() {
         * {
           scrollbar-width: thin;
           scrollbar-color: #4d4d4d #181818;
+        }
+        
+        /* Prevenir scroll horizontal em toda a aplicação */
+        html, body {
+          overflow-x: hidden;
+          max-width: 100%;
+        }
+        
+        /* Garantir que todos os textos quebrem */
+        p, h1, h2, h3, h4, h5, h6, span, div {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          -ms-word-break: break-all;
+          word-break: break-word;
         }
       `}</style>
     </div>
