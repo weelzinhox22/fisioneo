@@ -1,3 +1,5 @@
 {
-  "/audios/page": "app/audios/page.js"
+  "/audios/page": "app/audios/page.js",
+  "/pediatria/page": "app/pediatria/page.js",
+  "/(protected)/documentos/page": "app/(protected)/documentos/page.js"
 }
