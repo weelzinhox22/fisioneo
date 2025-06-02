@@ -14,6 +14,7 @@ import MobileInstallBanner from "@/components/mobile-install-banner"
 import ServiceWorkerRegister from "@/components/service-worker-register"
 import Notification from "@/components/notification"
 import { cn } from "@/lib/utils"
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,6 +64,7 @@ export default function RootLayout({
             </SmoothScrollProvider>
           </ThemeProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
