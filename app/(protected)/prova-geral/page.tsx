@@ -252,7 +252,7 @@ export default function ProvaGeralPage() {
     {
       "question": "No sétimo mês de vida, um bebê demonstra grande desejo de se movimentar e explorar o ambiente. Durante uma avaliação, o fisioterapeuta observa que, ao colocar brinquedos ao alcance lateral, o bebê não consegue se apoiar com uma das mãos para alcançá-los, e não demonstra interesse em tentar passar da posição sentada para 'quatro apoios'. Qual o sinal de alerta mais relevante e a conduta inicial recomendada?",
       "options": [
-        "A dificuldade em realizar transferências de peso lateralmente (reação de apoio lateral) e não demonstrar interesse em explorar objetos ou iniciar transições para 'quatro apoios' são sinais de alerta. De acordo com a Tabela 2 ('Falta ganho em 1 área de avaliação'), a conduta inicial é Orientar estímulos e avaliar doenças; observar em 1 mês.",
+        "A dificuldade em realizar transferências de peso lateralmente (reação de apoio lateral) e não demonstrar interesse em explorar objetos ou iniciar transições para 'quatro apoios' são sinais de alerta. De acordo com a Tabela de avaliação de desenvolvimento infantil ('Falta ganho em 1 área de avaliação'), a conduta inicial é Orientar estímulos e avaliar doenças; observar em 1 mês.",
         "A principal preocupação é a ausência de balbucio e imitação de sons, indicando um atraso na comunicação, que exige encaminhamento imediato para fonoaudiologia, pois a motricidade é secundária nesse mês.",
         "A criança apresenta falta de interesse em explorar objetos, o que é um sinal de alerta para problemas visuais. A conduta inicial deve ser um encaminhamento para avaliação oftalmológica para corrigir a visão e estimular o interesse.",
         "O atraso em passar de sentado para 'quatro apoios' é normal, pois a sedestação independente é o marco mais importante do sétimo mês. A conduta deve ser apenas esperar o desenvolvimento natural sem intervenção.",
@@ -406,7 +406,7 @@ export default function ProvaGeralPage() {
       "explanation": "O Teste Denver II tem como objetivo direcionar o cuidado dos adultos para crianças com riscos, e não diagnosticar atrasos no desenvolvimento. Ele avalia quatro áreas distintas do desenvolvimento neuropsicomotor: motricidade ampla, motricidade fina-adaptativa, comportamento pessoal-social e linguagem."
     },
     {
-      "question": "Considerando a Tabela 1, um fisioterapeuta busca um instrumento de avaliação que se concentre na investigação de comportamentos motores espontâneos e respostas evocadas em crianças de 0 a 2 anos, sendo útil para descrever o desenvolvimento baseado na integração de reflexos primitivos para o controle postural. Qual instrumento seria o mais adequado para essa finalidade?",
+      "question": "Um fisioterapeuta busca um instrumento de avaliação que se concentre na investigação de comportamentos motores espontâneos e respostas evocadas em crianças de 0 a 2 anos, sendo útil para descrever o desenvolvimento baseado na integração de reflexos primitivos para o controle postural. Qual instrumento seria o mais adequado para essa finalidade?",
       "options": [
         "Teste de Gesell.",
         "Escala de Desenvolvimento Infantil de Bayley (BSID).",
@@ -707,11 +707,11 @@ export default function ProvaGeralPage() {
     {
       "question": "A prematuridade afeta o desenvolvimento pulmonar em fases críticas. Qual das seguintes opções descreve corretamente a Fase Sacular do desenvolvimento pulmonar intrauterino e um evento crucial que se inicia nessa fase?",
       "options": [
-        "Fase Pseudoglandular; com a formação das vias aéreas condutoras e o início da produção de surfactante.",
-        "Fase Alveolar; caracterizada pela multiplicação alveolar intensa e o desenvolvimento da barreira alvéolo-capilar.",
-        "Fase Canalicular; com o aumento do calibre das vias aéreas e a formação dos alvéolos verdadeiros por septação secundária.",
-        "Fase Sacular; caracterizada pelo desenvolvimento dos ácinos, afinamento do epitélio respiratório, aproximação dos capilares e início da produção de surfactante.",
-        "Fase de Maturação; com a formação de todas as estruturas pulmonares e o desenvolvimento completo da troca gasosa, que ocorre apenas após o nascimento."
+        "Fase de formação das vias aéreas condutoras e o início da produção de surfactante.",
+        "É caracterizada pela multiplicação alveolar intensa e o desenvolvimento da barreira alvéolo-capilar.",
+        "É marcada pelo aumento do calibre das vias aéreas e a formação dos alvéolos verdadeiros por septação secundária.",
+        "É caracterizada pelo desenvolvimento dos ácinos, afinamento do epitélio respiratório, aproximação dos capilares e início da produção de surfactante.",
+        "Fase de formação de todas as estruturas pulmonares e o desenvolvimento completo da troca gasosa, que ocorre apenas após o nascimento."
       ],
       "correctAnswer": 3,
       "category": "Desenvolvimento Pulmonar Intrauterino",
