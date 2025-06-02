@@ -94,13 +94,13 @@ export default function PadroesMotoresPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <ReadingProgress />
       <BackToTop />
       <DraggableAIButton />
       
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-blue-100">
+      <header className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border-b border-blue-100">
         <div className="container mx-auto py-6 px-4">
           <div className="flex justify-between items-center mb-2">
             <Link href="/temas" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors">
@@ -169,7 +169,7 @@ export default function PadroesMotoresPage() {
                         <button
                           onClick={() => scrollToSection(section.id)}
                           className={`text-left w-full px-2 py-1 rounded text-sm hover:bg-blue-50 hover:text-blue-700 transition-colors
-                            ${section.level === 1 ? 'font-medium' : 'pl-4 text-gray-600'}`}
+                            ${section.level === 1 ? 'font-medium text-gray-800' : 'pl-4 text-gray-600'}`}
                         >
                           {section.title}
                         </button>
@@ -188,7 +188,7 @@ export default function PadroesMotoresPage() {
               className="w-full flex items-center justify-between bg-gray-50 rounded-lg p-4 border border-gray-100"
             >
               <div className="flex items-center">
-                <BookOpen className="h-4 w-4 mr-2" />
+                <BookOpen className="h-4 w-4 mr-2 text-gray-800" />
                 <span className="font-medium text-gray-800">Tabela de Conteúdo</span>
               </div>
               {showMobileTableOfContents ? 
@@ -213,7 +213,7 @@ export default function PadroesMotoresPage() {
                           <button
                             onClick={() => scrollToSection(section.id)}
                             className={`text-left w-full px-2 py-1 rounded text-sm hover:bg-blue-50 hover:text-blue-700 transition-colors
-                              ${section.level === 1 ? 'font-medium' : 'pl-4 text-gray-600'}`}
+                              ${section.level === 1 ? 'font-medium text-gray-800' : 'pl-4 text-gray-600'}`}
                           >
                             {section.title}
                           </button>

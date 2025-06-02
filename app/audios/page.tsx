@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
-import { Headphones, Volume2, VolumeX, Play, Pause, SkipBack, Heart, Share2, Download, Music, Baby, X } from "lucide-react"
+import { Headphones, Volume2, VolumeX, Play, Pause, SkipBack, Heart, Share2, Download, Music, Baby, X, List, ChevronRight, SkipForward } from "lucide-react"
 import { motion } from "framer-motion"
 import Head from "next/head"
 
@@ -10,12 +10,28 @@ interface AudioPlayerProps {
   title: string;
   description: string;
   icon: React.ReactNode;
+  playlist?: AudioInfo[];
+  currentIndex?: number;
+  onPlayNext?: () => void;
+  onPlayPrevious?: () => void;
+  onTogglePlaylist?: () => void;
+  isPlaylistOpen?: boolean;
+  isPlaying?: boolean;
+  onTogglePlay?: () => void;
+  spotifyMode?: boolean;
+}
+
+interface AudioInfo {
+  src: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
 }
 
 // Criando um objeto global para armazenar instâncias de áudio
 const globalAudioInstances: Record<string, HTMLAudioElement> = {};
 
-// Componente de popup modal
+// Componente do Modal/Popup com estilo Spotify
 function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [step, setStep] = useState(1);
   const totalSteps = 2;
@@ -37,19 +53,19 @@ function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
   };
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-2xl w-full max-w-4xl animate-fadeIn overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="relative bg-gradient-to-br from-[#282828] to-[#181818] rounded-xl shadow-2xl w-full max-w-4xl animate-fadeIn overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-blue-500"></div>
         
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-bold text-blue-800 flex items-center">
-              <Music className="h-5 w-5 mr-2 text-blue-600" />
+            <h3 className="text-xl font-bold text-white flex items-center">
+              <Music className="h-5 w-5 mr-2 text-green-500" />
               Informação sobre os Áudios
             </h3>
             <button 
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-100 rounded-full"
+              className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-[#333333] rounded-full"
             >
               <X className="h-5 w-5" />
             </button>
@@ -57,8 +73,8 @@ function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
           
           {/* Conteúdo do modal - versão desktop */}
           <div className="hidden md:grid grid-cols-2 gap-6">
-            <div className="text-gray-700 space-y-3">
-              <p className="border-l-4 border-blue-400 pl-3 py-1">
+            <div className="text-gray-300 space-y-3">
+              <p className="border-l-4 border-green-500 pl-3 py-1">
                 Devido à complexidade e ao tempo necessário para a edição e preparação de conteúdo em formato de áudio, 
                 estamos disponibilizando os materiais gradativamente.
               </p>
@@ -69,9 +85,12 @@ function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
               </p>
             </div>
             
-            <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
-              <p className="font-medium text-amber-800 mb-1">⚠️ Aviso importante sobre provas</p>
-              <p className="text-amber-700">
+            <div className="bg-[#3D3D3D] p-4 rounded-lg border-l-4 border-amber-500">
+              <p className="font-medium text-amber-400 mb-1 flex items-center">
+                <span className="mr-2">⚠️</span>
+                Aviso importante sobre provas
+              </p>
+              <p className="text-gray-300">
                 Infelizmente, talvez não seja possível adicionar áudios sobre todos os conteúdos a tempo para as 
                 provas oficiais da sua faculdade. Estamos priorizando os temas mais solicitados, mas o processo 
                 de produção demanda tempo para garantir a qualidade do material.
@@ -82,8 +101,8 @@ function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
           {/* Conteúdo do modal - versão mobile (passos) */}
           <div className="md:hidden">
             {step === 1 && (
-              <div className="text-gray-700 space-y-3 animate-fadeInRight">
-                <p className="border-l-4 border-blue-400 pl-3 py-1">
+              <div className="text-gray-300 space-y-3 animate-fadeInRight">
+                <p className="border-l-4 border-green-500 pl-3 py-1">
                   Devido à complexidade e ao tempo necessário para a edição e preparação de conteúdo em formato de áudio, 
                   estamos disponibilizando os materiais gradativamente.
                 </p>
@@ -96,9 +115,12 @@ function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
             )}
             
             {step === 2 && (
-              <div className="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400 animate-fadeInRight">
-                <p className="font-medium text-amber-800 mb-1">⚠️ Aviso importante sobre provas</p>
-                <p className="text-amber-700">
+              <div className="bg-[#3D3D3D] p-4 rounded-lg border-l-4 border-amber-500 animate-fadeInRight">
+                <p className="font-medium text-amber-400 mb-1 flex items-center">
+                  <span className="mr-2">⚠️</span>
+                  Aviso importante sobre provas
+                </p>
+                <p className="text-gray-300">
                   Infelizmente, talvez não seja possível adicionar áudios sobre todos os conteúdos a tempo para as 
                   provas oficiais da sua faculdade. Estamos priorizando os temas mais solicitados, mas o processo 
                   de produção demanda tempo para garantir a qualidade do material.
@@ -112,30 +134,30 @@ function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                 <div 
                   key={index}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    index + 1 === step ? "w-6 bg-blue-500" : "w-2 bg-gray-300"
+                    index + 1 === step ? "w-6 bg-green-500" : "w-2 bg-[#535353]"
                   }`}
                 />
               ))}
             </div>
           </div>
           
-          <div className="flex justify-end items-center mt-6 pt-4 border-t border-gray-100">
-            <div className="mr-auto flex items-center text-sm text-blue-800">
-              <Baby className="h-4 w-4 mr-2 text-blue-600" />
-              <span><span className="font-medium">FisioNeo</span> - Conteúdo especializado</span>
+          <div className="flex justify-end items-center mt-6 pt-4 border-t border-[#3D3D3D]">
+            <div className="mr-auto flex items-center text-sm text-gray-300">
+              <Baby className="h-4 w-4 mr-2 text-blue-400" />
+              <span><span className="font-medium text-white">FisioNeo</span> - Conteúdo especializado</span>
             </div>
             
             <div className="flex gap-3">
               <button
                 onClick={handleWhatsAppRedirect}
-                className="px-5 py-2 border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                className="px-5 py-2 border border-[#535353] text-white rounded-full hover:border-green-500 hover:bg-[#333333] transition-colors font-medium"
               >
                 Solicitar tema
               </button>
               
               <button
                 onClick={step < totalSteps ? nextStep : onClose}
-                className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-colors shadow-md font-medium"
+                className="px-5 py-2 bg-green-500 hover:bg-green-400 text-black rounded-full transition-colors shadow-md font-medium"
               >
                 {step < totalSteps ? "Avançar" : "Entendi"}
               </button>
@@ -147,8 +169,21 @@ function InfoModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
   );
 }
 
-function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(false)
+function AudioPlayer({ 
+  audioSrc, 
+  title, 
+  description, 
+  icon, 
+  playlist, 
+  currentIndex, 
+  onPlayNext, 
+  onPlayPrevious,
+  onTogglePlaylist,
+  isPlaylistOpen,
+  isPlaying,
+  onTogglePlay,
+  spotifyMode
+}: AudioPlayerProps) {
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
   const [volume, setVolume] = useState(0.7)
@@ -158,6 +193,14 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
   const progressBarRef = useRef<HTMLDivElement>(null)
   const volumeBarRef = useRef<HTMLDivElement>(null)
   const previousVolume = useRef(volume)
+  
+  // Para modo interno (sem controle externo)
+  const [internalIsPlaying, setInternalIsPlaying] = useState(false)
+
+  const hasPlaylist = playlist && playlist.length > 0;
+  
+  // Determina qual estado de reprodução usar
+  const effectiveIsPlaying = isPlaying !== undefined ? isPlaying : internalIsPlaying;
 
   useEffect(() => {
     // Verifica se já existe uma instância global para este áudio
@@ -183,8 +226,17 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
     };
     
     const handleEnded = () => {
-      setIsPlaying(false);
+      if (onTogglePlay) {
+        onTogglePlay(); // Notifica o componente pai que o áudio acabou
+      } else {
+        setInternalIsPlaying(false);
+      }
       setCurrentTime(0);
+      
+      // Quando o áudio terminar, reproduz o próximo se estiver em uma playlist
+      if (hasPlaylist && onPlayNext) {
+        onPlayNext();
+      }
     };
 
     // Adiciona event listeners
@@ -205,32 +257,42 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
       
       // Não destruímos a instância do áudio para manter a reprodução entre navegações
     }
-  }, [audioSrc, volume])
+  }, [audioSrc, volume, hasPlaylist, onPlayNext, onTogglePlay])
+  
+  // Efeito para controlar a reprodução quando o estado externo ou interno muda
+  useEffect(() => {
+    if (!audioElement) return;
+    
+    // Pausar todos os outros áudios primeiro quando começar a tocar
+    if (effectiveIsPlaying) {
+      Object.entries(globalAudioInstances).forEach(([src, audio]) => {
+        if (src !== audioSrc && !audio.paused) {
+          audio.pause();
+        }
+      });
+      
+      audioElement.play().catch(error => {
+        console.error("Erro ao reproduzir áudio:", error);
+        // Reverter o estado em caso de erro
+        if (onTogglePlay) {
+          onTogglePlay();
+        } else {
+          setInternalIsPlaying(false);
+        }
+      });
+    } else {
+      audioElement.pause();
+    }
+  }, [effectiveIsPlaying, audioElement, audioSrc, onTogglePlay]);
 
   const togglePlay = () => {
-    if (!audioElement) return;
-
-    // Pausar todos os outros áudios primeiro
-    Object.entries(globalAudioInstances).forEach(([src, audio]) => {
-      if (src !== audioSrc && !audio.paused) {
-        audio.pause();
-      }
-    });
-
-    if (isPlaying) {
-      audioElement.pause();
+    if (onTogglePlay) {
+      // Modo controlado externamente (Spotify)
+      onTogglePlay();
     } else {
-      // Tenta reproduzir e lida com possíveis erros
-      const playPromise = audioElement.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          console.error("Erro ao reproduzir áudio:", error);
-        });
-      }
+      // Modo interno
+      setInternalIsPlaying(!internalIsPlaying);
     }
-    
-    setIsPlaying(!isPlaying);
   }
 
   const toggleMute = () => {
@@ -309,10 +371,37 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
     
     return `${minutes}:${seconds.toString().padStart(2, "0")}`
   }
+  
+  // Se estiver no modo Spotify, renderiza apenas os controles de áudio
+  if (spotifyMode) {
+    return (
+      <div className="mt-4">
+        {/* Barra de progresso */}
+        <div 
+          ref={progressBarRef}
+          onClick={handleProgressBarClick}
+          className="relative h-1.5 bg-[#535353] rounded-full mb-2 cursor-pointer group"
+        >
+          <div 
+            className="absolute top-0 left-0 h-full bg-green-500 rounded-full"
+            style={{ width: `${(currentTime / duration) * 100}%` }}
+          >
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 h-3 w-3 bg-white rounded-full scale-0 group-hover:scale-100 transition-transform" />
+          </div>
+        </div>
+        
+        {/* Tempo */}
+        <div className="flex justify-between text-xs text-gray-400 mb-4">
+          <span>{formatTime(currentTime)}</span>
+          <span>{formatTime(duration)}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div 
-      className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8"
+      className="bg-white rounded-2xl"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -324,8 +413,15 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
             {icon}
           </div>
           <div className="flex-1 text-center md:text-left">
-            <div className="text-sm font-medium text-blue-600 mb-2">
-              ÁUDIO EDUCACIONAL
+            <div className="text-sm font-medium text-blue-600 mb-2 flex items-center gap-2 flex-wrap">
+              <span>ÁUDIO EDUCACIONAL</span>
+              {hasPlaylist && (
+                <div className="flex items-center text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                  <Music className="h-3 w-3 mr-1" />
+                  <span>Playlist: Neonatal</span>
+                  <span className="ml-1">{currentIndex !== undefined ? `${currentIndex + 1}/${playlist.length}` : ""}</span>
+                </div>
+              )}
             </div>
             <h3 className="text-3xl font-bold text-gray-800 mb-3">
               {title}
@@ -337,12 +433,12 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
               <button
                 onClick={togglePlay}
                 className={`px-6 py-3 rounded-full font-medium flex items-center gap-2 transition-colors ${
-                  isPlaying
+                  effectiveIsPlaying
                     ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
                     : "bg-blue-600 text-white hover:bg-blue-700"
                 }`}
               >
-                {isPlaying ? (
+                {effectiveIsPlaying ? (
                   <>
                     <Pause className="h-5 w-5" />
                     <span>Pausar</span>
@@ -354,6 +450,20 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
                   </>
                 )}
               </button>
+              
+              {hasPlaylist && onTogglePlaylist && (
+                <button
+                  onClick={onTogglePlaylist}
+                  className={`px-6 py-3 rounded-full font-medium flex items-center gap-2 transition-colors ${
+                    isPlaylistOpen 
+                      ? "bg-indigo-200 text-indigo-800"
+                      : "bg-indigo-100 text-indigo-700 hover:bg-indigo-200"
+                  }`}
+                >
+                  <List className="h-5 w-5" />
+                  <span>{isPlaylistOpen ? "Fechar Playlist" : "Ver Playlist"}</span>
+                </button>
+              )}
               
               <button
                 onClick={toggleLike}
@@ -407,19 +517,30 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
         {/* Controles */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <button 
-              onClick={restart}
-              className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
-            >
-              <SkipBack className="h-5 w-5" />
-            </button>
+            {hasPlaylist && onPlayPrevious ? (
+              <button 
+                onClick={onPlayPrevious}
+                className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                title="Áudio anterior"
+              >
+                <SkipBack className="h-5 w-5" />
+              </button>
+            ) : (
+              <button 
+                onClick={restart}
+                className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                title="Reiniciar áudio"
+              >
+                <SkipBack className="h-5 w-5" />
+              </button>
+            )}
           </div>
           
           <button 
             onClick={togglePlay}
             className="p-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-md"
           >
-            {isPlaying ? (
+            {effectiveIsPlaying ? (
               <Pause className="h-6 w-6" />
             ) : (
               <Play className="h-6 w-6" />
@@ -427,6 +548,16 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
           </button>
           
           <div className="flex items-center gap-2">
+            {hasPlaylist && onPlayNext && (
+              <button 
+                onClick={onPlayNext}
+                className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                title="Próximo áudio"
+              >
+                <SkipForward className="h-5 w-5" />
+              </button>
+            )}
+            
             <button
               onClick={toggleMute}
               className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
@@ -455,6 +586,195 @@ function AudioPlayer({ audioSrc, title, description, icon }: AudioPlayerProps) {
   )
 }
 
+// Componente de playlist inspirado no Spotify
+function PlaylistPlayer({ playlist }: { playlist: AudioInfo[] }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaylistOpen, setIsPlaylistOpen] = useState(true); // Começar com a playlist aberta
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  const currentAudio = playlist[currentIndex];
+  
+  const handlePlayNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % playlist.length);
+    // Força o play do próximo áudio quando clica em próximo
+    setIsPlaying(true);
+  };
+  
+  const handlePlayPrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + playlist.length) % playlist.length);
+    // Força o play do áudio anterior quando clica em anterior
+    setIsPlaying(true);
+  };
+  
+  const handleSelectTrack = (index: number) => {
+    setCurrentIndex(index);
+    // Começa a tocar o áudio selecionado automaticamente
+    setIsPlaying(true);
+  };
+  
+  const togglePlaylist = () => {
+    setIsPlaylistOpen(!isPlaylistOpen);
+  };
+  
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+  
+  return (
+    <div className="rounded-2xl shadow-lg overflow-hidden mb-8 bg-gradient-to-b from-[#121212] to-[#181818] text-white">
+      <div className="flex flex-col md:flex-row">
+        {/* Lista de músicas (sidebar à esquerda) - visível em telas médias e grandes */}
+        <div className={`md:w-72 lg:w-80 md:block ${isPlaylistOpen ? 'block' : 'hidden'} bg-[#121212] border-r border-[#282828]`}>
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-xl font-bold flex items-center">
+                <Music className="h-5 w-5 mr-2 text-green-500" />
+                Playlist Neonatal
+              </h4>
+              <button 
+                onClick={togglePlaylist}
+                className="md:hidden p-2 text-gray-400 hover:text-white rounded-full transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <p className="text-sm text-gray-400 mb-6">5 áudios • Desenvolvimento infantil</p>
+            
+            <div className="space-y-1 max-h-[calc(100vh-300px)] overflow-y-auto custom-scrollbar pr-2">
+              {playlist.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSelectTrack(index)}
+                  className={`w-full p-3 rounded flex items-center gap-3 text-left transition-all ${
+                    index === currentIndex
+                      ? "bg-[#282828]"
+                      : "hover:bg-[#282828]/50"
+                  }`}
+                >
+                  <div className="flex-shrink-0 w-10 h-10 rounded bg-[#282828] flex items-center justify-center relative group">
+                    {index === currentIndex && isPlaying ? (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded">
+                        <span className="w-2 h-2 bg-white rounded-full animate-ping"></span>
+                      </div>
+                    ) : (
+                      <span className="text-gray-400 group-hover:hidden">{index + 1}</span>
+                    )}
+                    {index !== currentIndex && (
+                      <Play className="h-5 w-5 text-white hidden group-hover:block absolute inset-0 m-auto" />
+                    )}
+                    {index === currentIndex && !isPlaying && (
+                      <Play className="h-5 w-5 text-white hidden group-hover:block absolute inset-0 m-auto" />
+                    )}
+                    {index === currentIndex && isPlaying && (
+                      <Pause className="h-5 w-5 text-white hidden group-hover:block absolute inset-0 m-auto" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-medium truncate ${
+                      index === currentIndex ? "text-green-500" : "text-white"
+                    }`}>
+                      {item.title}
+                    </p>
+                    <p className="text-sm text-gray-400 truncate">{item.description.substring(0, 40)}...</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Player e detalhes do áudio atual (conteúdo principal) */}
+        <div className="flex-1 flex flex-col">
+          {/* Barra superior com toggle da playlist em mobile */}
+          <div className="bg-[#181818] p-4 flex items-center md:hidden">
+            <button 
+              onClick={togglePlaylist}
+              className="p-2 text-gray-400 hover:text-white rounded-full transition-colors"
+            >
+              <List className="h-5 w-5" />
+            </button>
+            <div className="ml-3">
+              <p className="font-medium text-sm">Playlist: Neonatal</p>
+              <p className="text-xs text-gray-400">{currentIndex + 1} de {playlist.length}</p>
+            </div>
+          </div>
+          
+          {/* Capa e detalhes do áudio atual */}
+          <div className="p-6 flex flex-col items-center md:items-start md:flex-row md:gap-8">
+            <div className="w-48 h-48 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-lg shadow-lg flex items-center justify-center flex-shrink-0 mb-6 md:mb-0">
+              {currentAudio.icon}
+            </div>
+            
+            <div className="flex-1 text-center md:text-left">
+              <h3 className="text-2xl font-bold mb-2">
+                {currentAudio.title}
+              </h3>
+              <p className="text-gray-400 mb-4">
+                {currentAudio.description}
+              </p>
+              
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                <button
+                  onClick={togglePlayPause}
+                  className="p-4 rounded-full bg-green-500 text-white hover:bg-green-400 transition-colors shadow-md"
+                >
+                  {isPlaying ? (
+                    <Pause className="h-6 w-6" />
+                  ) : (
+                    <Play className="h-6 w-6" />
+                  )}
+                </button>
+                
+                <div className="flex items-center">
+                  <button 
+                    onClick={handlePlayPrevious}
+                    className="p-2 text-gray-400 hover:text-white transition-colors"
+                  >
+                    <SkipBack className="h-5 w-5" />
+                  </button>
+                  
+                  <button 
+                    onClick={handlePlayNext}
+                    className="p-2 text-gray-400 hover:text-white transition-colors"
+                  >
+                    <SkipForward className="h-5 w-5" />
+                  </button>
+                </div>
+                
+                <button className="p-2 text-gray-400 hover:text-white transition-colors">
+                  <Heart className="h-5 w-5" />
+                </button>
+                
+                <button className="p-2 text-gray-400 hover:text-white transition-colors">
+                  <Download className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* Player de áudio real (invisível mas funcional) */}
+          <div className="px-6 pb-6">
+            <AudioPlayer 
+              audioSrc={currentAudio.src}
+              title={currentAudio.title}
+              description={currentAudio.description}
+              icon={currentAudio.icon}
+              playlist={playlist}
+              currentIndex={currentIndex}
+              onPlayNext={handlePlayNext}
+              onPlayPrevious={handlePlayPrevious}
+              isPlaying={isPlaying}
+              onTogglePlay={togglePlayPause}
+              spotifyMode={true}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AudiosPage() {
   const [showModal, setShowModal] = useState(false);
   
@@ -467,89 +787,155 @@ export default function AudiosPage() {
     return () => clearTimeout(timer);
   }, []);
   
+  // Definindo a playlist neonatal
+  const neonatalPlaylist: AudioInfo[] = [
+    {
+      src: "/audio/0-6-meses.mp3",
+      title: "Desenvolvimento Infantil: 0-6 meses",
+      description: "Guia completo sobre o desenvolvimento neuromotor do bebê durante os primeiros 6 meses de vida.",
+      icon: <Baby className="h-24 w-24 text-white" />
+    },
+    {
+      src: "/audio/7-15-meses.mp3",
+      title: "Desenvolvimento Infantil: 7-15 meses",
+      description: "Explicação detalhada das habilidades motoras e marcos de desenvolvimento esperados entre 7 e 15 meses de idade.",
+      icon: <Baby className="h-24 w-24 text-white" />
+    },
+    {
+      src: "/audio/padroes-motores.mp3",
+      title: "Padrões Motores do Bebê",
+      description: "Explicação sobre as etapas cruciais do desenvolvimento motor grosso nos primeiros anos de vida.",
+      icon: <Music className="h-24 w-24 text-white" />
+    },
+    {
+      src: "/audio/Reações de 0 a 15 meses.mp3",
+      title: "Reações de 0 a 15 meses",
+      description: "Informações sobre reações posturais e de equilíbrio durante o primeiro ano de vida do bebê.",
+      icon: <Baby className="h-24 w-24 text-white" />
+    },
+    {
+      src: "/audio/Escala de avaliação neonatal.mp3",
+      title: "Escala de Avaliação Neonatal",
+      description: "Guia detalhado sobre as principais escalas de avaliação utilizadas para recém-nascidos na prática fisioterapêutica.",
+      icon: <Headphones className="h-24 w-24 text-white" />
+    }
+  ];
+  
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#121212] to-[#181818] text-white">
       <Head>
         <title>Áudios - FisioNeo</title>
       </Head>
       
       <main className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-8 text-center">
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center">
           Biblioteca de Áudios
         </h1>
         
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="mb-12">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            <h2 className="text-2xl font-semibold text-white mb-6 flex items-center">
+              <Headphones className="h-6 w-6 mr-3 text-green-500" />
               Materiais em Áudio
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-300 mb-6">
               Bem-vindo à nossa biblioteca de áudios! Aqui você encontrará materiais educacionais 
               sobre fisioterapia neonatal e pediátrica em formato de áudio, perfeitos para estudar 
               durante deslocamentos ou enquanto realiza outras atividades.
-              <br />
-              <div className="bg-red-50 border-l-4 border-red-500 p-5 rounded-r mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                  Informação importante
-                </h4>
-                <p className="text-gray-700 mb-2">
-                  O download dos áudios está temporariamente desabilitado.
-                </p>
-              </div>
             </p>
+            <div className="bg-[#282828] border-l-4 border-red-500 p-5 rounded mb-8">
+              <h4 className="text-lg font-semibold text-white mb-2 flex items-center">
+                <span className="text-red-500 mr-2">⚠️</span>
+                Informação importante
+              </h4>
+              <p className="text-gray-300 mb-2">
+                O download dos áudios está temporariamente desabilitado.
+              </p>
+            </div>
           </div>
           
-          {/* Lista de áudios */}
-          <AudioPlayer 
-            audioSrc="/audio/0-6-meses.mp3"
-            title="Desenvolvimento Infantil: 0-6 meses"
-            description="Guia completo sobre o desenvolvimento neuromotor do bebê durante os primeiros 6 meses de vida."
-            icon={<Baby className="h-24 w-24 text-white" />}
-          />
-          
-          <AudioPlayer 
-            audioSrc="/audio/7-15-meses.mp3"
-            title="Desenvolvimento Infantil: 7-15 meses"
-            description="Explicação detalhada das habilidades motoras e marcos de desenvolvimento esperados entre 7 e 15 meses de idade."
-            icon={<Baby className="h-24 w-24 text-white" />}
-          />
-          
-          <AudioPlayer 
-            audioSrc="/audio/padroes-motores.mp3"
-            title="Padrões Motores do Bebê"
-            description="Explicação sobre as etapas cruciais do desenvolvimento motor grosso nos primeiros anos de vida."
-            icon={<Music className="h-24 w-24 text-white" />}
-          />
+          {/* Playlists */}
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-semibold text-white flex items-center">
+                <Music className="h-6 w-6 mr-3 text-green-500" />
+                Playlists
+              </h2>
+            </div>
+            
+            <div className="bg-gradient-to-r from-indigo-900 to-purple-900 rounded-xl p-6 shadow-lg mb-8 text-white">
+              <div className="flex flex-col md:flex-row gap-6 items-center">
+                <div className="w-40 h-40 bg-gradient-to-br from-indigo-600 via-blue-600 to-indigo-800 rounded-xl flex items-center justify-center shadow-xl">
+                  <Music className="h-20 w-20 text-white/80" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <div className="text-sm font-medium text-gray-300 mb-1">PLAYLIST</div>
+                  <h3 className="text-4xl font-bold mb-2">Neonatal</h3>
+                  <p className="text-gray-300 mb-4">
+                    Coleção completa com 5 áudios sobre desenvolvimento infantil e padrões motores.
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+                    <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
+                      5 áudios
+                    </div>
+                    <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
+                      Desenvolvimento infantil
+                    </div>
+                    <div className="bg-green-900/60 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-green-400">
+                      FisioNeo
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Player da playlist */}
+            <PlaylistPlayer playlist={neonatalPlaylist} />
+          </div>
           
           {/* Informações adicionais */}
-          <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r mb-8">
-            <h3 className="text-lg font-semibold text-blue-800 mb-3">
+          <div className="bg-[#282828] p-6 rounded-xl mb-8">
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
+              <span className="text-blue-400 mr-2">ℹ️</span>
               Sobre os áudios
             </h3>
-            <p className="text-gray-700 mb-4">
+            <p className="text-gray-300 mb-4">
               Nossos áudios educacionais são gerados com IA, utilizando o conteúdo neonatal e pediátrico do site Fisioneo.vercel.app,
               oferecendo explicações detalhadas sobre conceitos importantes do desenvolvimento infantil.
             </p>
-            <p className="text-gray-700">
+            <p className="text-gray-300">
               Ideal para estudantes de fisioterapia e profissionais que trabalham com desenvolvimento infantil.
             </p>
           </div>
           
-          <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-blue-800 mb-3">
+          <div className="bg-gradient-to-r from-[#3D3D3D] to-[#282828] rounded-xl p-6 shadow-md">
+            <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
+              <span className="text-green-500 mr-2">💡</span>
               Sugestões de uso:
             </h3>
-            <ul className="list-disc pl-5 space-y-2 text-gray-700">
-              <li>Ouça enquanto está ocupado com outras atividades</li>
-              <li>Use como material complementar de estudo</li>
-              <li>Baixe para ouvir offline quando necessário</li>
-              <li>Compartilhe com colegas que também estão estudando fisioterapia neonatal</li>
+            <ul className="space-y-2 text-gray-300">
+              <li className="flex items-start">
+                <span className="bg-green-900/30 p-1 rounded-full mr-2 mt-0.5"><ChevronRight className="h-3 w-3 text-green-500" /></span>
+                Ouça enquanto está ocupado com outras atividades
+              </li>
+              <li className="flex items-start">
+                <span className="bg-green-900/30 p-1 rounded-full mr-2 mt-0.5"><ChevronRight className="h-3 w-3 text-green-500" /></span>
+                Use como material complementar de estudo
+              </li>
+              <li className="flex items-start">
+                <span className="bg-green-900/30 p-1 rounded-full mr-2 mt-0.5"><ChevronRight className="h-3 w-3 text-green-500" /></span>
+                Baixe para ouvir offline quando necessário
+              </li>
+              <li className="flex items-start">
+                <span className="bg-green-900/30 p-1 rounded-full mr-2 mt-0.5"><ChevronRight className="h-3 w-3 text-green-500" /></span>
+                Compartilhe com colegas que também estão estudando fisioterapia neonatal
+              </li>
             </ul>
           </div>
         </div>
       </main>
       
-      {/* Modal de informações */}
+      {/* Modal de informações - estilo atualizado */}
       <InfoModal isOpen={showModal} onClose={() => setShowModal(false)} />
       
       <style jsx global>{`
@@ -566,6 +952,20 @@ export default function AudiosPage() {
         }
         .animate-fadeInRight {
           animation: fadeInRight 0.3s ease-out forwards;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background-color: rgba(59, 130, 246, 0.5);
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background-color: rgba(51, 51, 51, 0.8);
+          border-radius: 3px;
+        }
+        body {
+          scrollbar-color: rgba(59, 130, 246, 0.5) rgba(51, 51, 51, 0.8);
         }
       `}</style>
     </div>

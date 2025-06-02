@@ -327,7 +327,7 @@ export default function TemasPage() {
                 
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex gap-1">
                   {searchTerm && (
-                    <button 
+                    <button
                       onClick={() => {
                         setSearchTerm("");
                         setShowSuggestions(false);
@@ -340,47 +340,47 @@ export default function TemasPage() {
                   )}
                   <Search className="text-gray-400" size={20} />
                 </div>
-                
-                {/* Container de sugestões */}
-                <AnimatePresence>
-                  {showSuggestions && suggestions.length > 0 && (
-                    <motion.div
-                      ref={suggestionContainerRef}
-                      className="absolute top-full left-0 md:w-[120%] w-full mt-2 bg-black/70 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden z-20 shadow-lg"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <div className="max-h-60 overflow-y-auto styled-scrollbar">
-                        {suggestions.map((suggestion, index) => (
-                          <div
-                            key={suggestion.id}
-                            className={`px-4 py-3 flex items-center gap-3 cursor-pointer transition-colors hover:bg-[#6EC1E4]/20 ${focusedSuggestion === index ? 'bg-[#6EC1E4]/20' : ''}`}
-                            onClick={() => handleSuggestionClick(suggestion)}
-                            onMouseEnter={() => setFocusedSuggestion(index)}
-                          >
-                            <div className="p-2 rounded-full bg-[#F0F9FF]/10">
-                              {suggestion.icon}
-                            </div>
-                            <div className="flex-1">
-                              <div className="font-medium text-white">
-                                {highlightText(suggestion.title, searchTerm)}
-                              </div>
-                              <div className="text-xs text-gray-300 line-clamp-1">
-                                {suggestion.description}
-                              </div>
-                            </div>
-                            <span className="text-xs px-2 py-1 rounded-full bg-[#6EC1E4]/30 text-[#6EC1E4] capitalize">
-                              {suggestion.category}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
+              
+              {/* Container de sugestões */}
+              <AnimatePresence>
+                {showSuggestions && suggestions.length > 0 && (
+                  <motion.div
+                    ref={suggestionContainerRef}
+                    className="absolute top-full left-0 md:w-[120%] w-full mt-2 bg-black/70 backdrop-blur-md border border-white/20 rounded-2xl overflow-hidden z-20 shadow-lg"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="max-h-60 overflow-y-auto styled-scrollbar">
+                      {suggestions.map((suggestion, index) => (
+                        <div
+                          key={suggestion.id}
+                          className={`px-4 py-3 flex items-center gap-3 cursor-pointer transition-colors hover:bg-[#6EC1E4]/20 ${focusedSuggestion === index ? 'bg-[#6EC1E4]/20' : ''}`}
+                          onClick={() => handleSuggestionClick(suggestion)}
+                          onMouseEnter={() => setFocusedSuggestion(index)}
+                        >
+                          <div className="p-2 rounded-full bg-[#F0F9FF]/10">
+                            {suggestion.icon}
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium text-white">
+                              {highlightText(suggestion.title, searchTerm)}
+                            </div>
+                            <div className="text-xs text-gray-300 line-clamp-1">
+                              {suggestion.description}
+                            </div>
+                          </div>
+                          <span className="text-xs px-2 py-1 rounded-full bg-[#6EC1E4]/30 text-[#6EC1E4] capitalize">
+                            {suggestion.category}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         </div>
@@ -511,9 +511,9 @@ export default function TemasPage() {
                   </div>
                 </div>
               </Link>
-          </StaggerItem>
+            </StaggerItem>
         ))}
-      </StaggerContainer>
+        </StaggerContainer>
         
         {/* Mensagem quando não há resultados */}
         {filteredTopics.length === 0 && (
