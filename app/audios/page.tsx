@@ -1,10 +1,9 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
-import { Headphones, Volume2, VolumeX, Play, Pause, SkipBack, Heart, Share2, Download, Music, Baby, X, List, ChevronRight, SkipForward, ArrowLeft, Mic, Info, MenuIcon, Home } from "lucide-react"
+import { Headphones, Volume2, VolumeX, Play, Pause, SkipBack, Heart, Share2, Download, Music, Baby, X, List, ChevronRight, SkipForward, ArrowLeft } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Head from "next/head"
-import Link from 'next/link'
 
 interface AudioPlayerProps {
   audioSrc: string;
@@ -671,7 +670,7 @@ function PlaylistPlayer({ playlist }: { playlist: AudioInfo[] }) {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <p className="text-sm text-gray-400 mb-6">7 áudios • Desenvolvimento infantil</p>
+            <p className="text-sm text-gray-400 mb-6">9 áudios • Desenvolvimento infantil</p>
           </div>
           {/* Lista de faixas sem altura fixa e sem overflow */}
           <div className="px-6 pb-6 overflow-y-auto">
@@ -811,47 +810,15 @@ export default function AudiosPage() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Remover a navbar e footer originais do site
   useEffect(() => {
-    // Esconder elementos específicos ao carregar a página
-    const hideElements = () => {
-      // Selecionando elementos por seus seletores específicos
-      const elementsToHide = [
-        'body > header',
-        'header.sticky',
-        'nav',
-        'footer',
-        '.absolute.inset-0.bg-gradient-to-r'
-      ];
-      
-      elementsToHide.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => {
-          if (el.parentNode && !el.classList.contains('audio-player-navbar') && !el.classList.contains('audio-player-footer')) {
-            (el as HTMLElement).style.display = 'none';
-          }
-        });
-      });
-      
-      // Definir o background do body para o estilo Spotify
-      document.body.style.background = 'linear-gradient(to bottom, #121212, #181818)';
-      document.body.style.color = '#FFFFFF';
-    };
-    
-    // Executar assim que o componente montar
-    hideElements();
-    
-    // Definir um intervalo para continuar escondendo elementos que podem ser adicionados dinamicamente
-    const interval = setInterval(hideElements, 100);
-    
-    // Limpar o intervalo quando o componente desmontar
-    return () => clearInterval(interval);
-  }, []);
-  
-  // Simulação de carregamento
-  useEffect(() => {
-    setTimeout(() => {
+    // Apenas simular carregamento e remover a tela de loading após 2.5 segundos
+    const loadingTimer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 2500);
+    
+    return () => {
+      clearTimeout(loadingTimer);
+    };
   }, []);
   
   // Definindo a playlist neonatal
@@ -897,6 +864,18 @@ export default function AudiosPage() {
       title: "Dor Neonatal",
       description: "Estratégias para avaliação e manejo da dor em recém-nascidos durante procedimentos na UTI Neonatal.",
       icon: <Headphones className="h-24 w-24 text-white" />
+    },
+    {
+      src: "/audio/Sequela Neurologica em Prematuros.mp3",
+      title: "Sequela Neurológica em Prematuros",
+      description: "Análise das principais sequelas neurológicas em bebês prematuros, fatores de risco e abordagens terapêuticas.",
+      icon: <Headphones className="h-24 w-24 text-white" />
+    },
+    {
+      src: "/audio/Sequelas de doenças pulmonares em prematuros.mp3",
+      title: "Sequelas de Doenças Pulmonares em Prematuros",
+      description: "Estudo sobre as complicações respiratórias crônicas da prematuridade e intervenções fisioterapêuticas.",
+      icon: <Headphones className="h-24 w-24 text-white" />
     }
   ];
   
@@ -912,7 +891,7 @@ export default function AudiosPage() {
       </AnimatePresence>
       
       {/* Navbar personalizado estilo Spotify */}
-      <div className="bg-[#0A0A0A] border-b border-[#282828] sticky top-0 z-30">
+      <div className="bg-[#0A0A0A] border-b border-[#282828] sticky top-0 z-30" data-custom="audio-header">
         <div className="container mx-auto max-w-7xl px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
@@ -920,17 +899,17 @@ export default function AudiosPage() {
                 <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#1DB954] to-[#1ED760]">FisioNeo</span>
               </a>
               <nav className="hidden md:ml-10 md:flex space-x-8">
+                <a href="/temas" className="text-gray-300 hover:text-white transition-colors">
+                  Temas
+                </a>
                 <a href="/prova-pediatrica" className="text-gray-300 hover:text-white transition-colors">
-                  Prova pediatria
+                  Prova pediátrica
+                </a>
+                <a href="/audios" className="text-white border-b-2 border-[#1DB954] pb-1 font-medium">
+                  Áudios
                 </a>
                 <a href="/prova-geral" className="text-gray-300 hover:text-white transition-colors">
-                  Prova Neonatal
-                </a>
-                <a href="/temas" className="text-white border-b-2 border-[#1DB954] pb-1 font-medium">
-                  Neonatal
-                </a>
-                <a href="/pediatria" className="text-gray-300 hover:text-white transition-colors">
-                  Pediatria
+                  Prova neonatal
                 </a>
               </nav>
             </div>
@@ -981,11 +960,11 @@ export default function AudiosPage() {
                   <div className="text-sm font-medium text-gray-300 mb-1">PLAYLIST</div>
                   <h3 className="text-3xl md:text-4xl font-bold mb-2 truncate">Fisioterapia Neonatal</h3>
                   <p className="text-gray-300 mb-3 md:mb-4 text-sm md:text-base line-clamp-2">
-                    Coleção completa com 7 áudios sobre desenvolvimento infantil e avaliação neonatal.
+                    Coleção completa com 9 áudios sobre desenvolvimento infantil e avaliação neonatal.
                   </p>
                   <div className="flex flex-wrap gap-2 justify-center md:justify-start">
                     <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-xs md:text-sm">
-                      7 áudios
+                      9 áudios
                     </div>
                     <div className="bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full text-xs md:text-sm">
                       Desenvolvimento infantil
@@ -1058,7 +1037,7 @@ export default function AudiosPage() {
       </main>
       
       {/* Footer personalizado estilo Spotify */}
-      <div className="bg-[#121212] border-t border-[#282828] py-8 mt-8">
+      <div className="bg-[#121212] border-t border-[#282828] py-8 mt-8" data-custom="audio-footer">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
@@ -1070,10 +1049,10 @@ export default function AudiosPage() {
               <div>
                 <h4 className="text-white font-medium mb-3">Links rápidos</h4>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2">
-                  <a href="/prova-pediatrica" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Prova pediatrica</a>
-                  <a href="/prova-geral" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Prova neonato</a>
-                  <a href="/audios" className="text-[#1DB954] font-medium text-sm">Audio</a>
-                  <a href="/pediatria" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Pediatria</a>
+                  <a href="/temas" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Temas</a>
+                  <a href="/provas" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Provas</a>
+                  <a href="/audios" className="text-[#1DB954] font-medium text-sm">Áudios</a>
+                  <a href="/revisao" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Revisão</a>
                 </div>
               </div>
               
@@ -1146,20 +1125,22 @@ export default function AudiosPage() {
         }
         
         /* Esconder elementos específicos apenas nesta página */
-        body > header,
-        header.sticky,
         nav[data-component="navbar"],
         footer[data-component="footer"],
         div.absolute.inset-0.bg-gradient-to-r.from-\[#6EC1E4\]\/5.to-\[#B9A9FF\]\/5,
         footer.relative.bg-gradient-to-b.from-white.to-\[#F8FBFD\],
-        header.sticky.top-0.z-50.w-full,
         header.sticky.top-0.z-50.w-full.transition-all.duration-300.bg-transparent {
           display: none !important;
-          visibility: hidden !important;
-          opacity: 0 !important;
-          position: absolute !important;
-          top: -9999px !important;
-          left: -9999px !important;
+        }
+        
+        /* Esconder qualquer navbar padrão por seletor mais genérico também */
+        header:not([data-custom="audio-header"]) {
+          display: none !important;
+        }
+        
+        /* Esconder qualquer footer padrão, mas não o footer personalizado da página de áudios */
+        footer:not([data-custom="audio-footer"]) {
+          display: none !important;
         }
         
         /* Garantir que o body tenha o fundo correto e sem gradientes indesejados */
