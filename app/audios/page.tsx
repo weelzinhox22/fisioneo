@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
-import { Headphones, Volume2, VolumeX, Play, Pause, SkipBack, Heart, Share2, Download, Music, Baby, X, List, ChevronRight, SkipForward } from "lucide-react"
+import { Headphones, Volume2, VolumeX, Play, Pause, SkipBack, Heart, Share2, Download, Music, Baby, X, List, ChevronRight, SkipForward, ArrowLeft, Mic, Info, MenuIcon, Home } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Head from "next/head"
+import Link from 'next/link'
 
 interface AudioPlayerProps {
   audioSrc: string;
@@ -810,15 +811,47 @@ export default function AudiosPage() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
+  // Remover a navbar e footer originais do site
   useEffect(() => {
-    // Apenas simular carregamento e remover a tela de loading após 2.5 segundos
-    const loadingTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500);
-    
-    return () => {
-      clearTimeout(loadingTimer);
+    // Esconder elementos específicos ao carregar a página
+    const hideElements = () => {
+      // Selecionando elementos por seus seletores específicos
+      const elementsToHide = [
+        'body > header',
+        'header.sticky',
+        'nav',
+        'footer',
+        '.absolute.inset-0.bg-gradient-to-r'
+      ];
+      
+      elementsToHide.forEach(selector => {
+        document.querySelectorAll(selector).forEach(el => {
+          if (el.parentNode && !el.classList.contains('audio-player-navbar') && !el.classList.contains('audio-player-footer')) {
+            (el as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+      
+      // Definir o background do body para o estilo Spotify
+      document.body.style.background = 'linear-gradient(to bottom, #121212, #181818)';
+      document.body.style.color = '#FFFFFF';
     };
+    
+    // Executar assim que o componente montar
+    hideElements();
+    
+    // Definir um intervalo para continuar escondendo elementos que podem ser adicionados dinamicamente
+    const interval = setInterval(hideElements, 100);
+    
+    // Limpar o intervalo quando o componente desmontar
+    return () => clearInterval(interval);
+  }, []);
+  
+  // Simulação de carregamento
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
   }, []);
   
   // Definindo a playlist neonatal
@@ -877,6 +910,41 @@ export default function AudiosPage() {
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen />}
       </AnimatePresence>
+      
+      {/* Navbar personalizado estilo Spotify */}
+      <div className="bg-[#0A0A0A] border-b border-[#282828] sticky top-0 z-30">
+        <div className="container mx-auto max-w-7xl px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <a href="/" className="flex items-center">
+                <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#1DB954] to-[#1ED760]">FisioNeo</span>
+              </a>
+              <nav className="hidden md:ml-10 md:flex space-x-8">
+                <a href="/temas" className="text-gray-300 hover:text-white transition-colors">
+                  Temas
+                </a>
+                <a href="/provas" className="text-gray-300 hover:text-white transition-colors">
+                  Provas
+                </a>
+                <a href="/audios" className="text-white border-b-2 border-[#1DB954] pb-1 font-medium">
+                  Áudios
+                </a>
+                <a href="/revisao" className="text-gray-300 hover:text-white transition-colors">
+                  Revisão
+                </a>
+              </nav>
+            </div>
+            <div className="flex items-center">
+              <a 
+                href="/"
+                className="p-2 rounded-full hover:bg-[#282828] transition-colors"
+              >
+                <ArrowLeft className="h-5 w-5 text-gray-300" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <main className="pb-20 overflow-x-hidden max-w-full">
         {/* Header com gradiente e título - ajustado para mobile */}
@@ -989,6 +1057,39 @@ export default function AudiosPage() {
         </div>
       </main>
       
+      {/* Footer personalizado estilo Spotify */}
+      <div className="bg-[#121212] border-t border-[#282828] py-8 mt-8">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-6 md:mb-0">
+              <div className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#1DB954] to-[#1ED760] mb-2">FisioNeo</div>
+              <p className="text-gray-400 text-sm">© 2025 Todos os direitos reservados</p>
+            </div>
+            
+            <div className="flex flex-col md:flex-row gap-8 md:items-center">
+              <div>
+                <h4 className="text-white font-medium mb-3">Links rápidos</h4>
+                <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+                  <a href="/temas" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Temas</a>
+                  <a href="/provas" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Provas</a>
+                  <a href="/audios" className="text-[#1DB954] font-medium text-sm">Áudios</a>
+                  <a href="/revisao" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Revisão</a>
+                </div>
+              </div>
+              
+              <a 
+                href="https://wa.me/5571991373142"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-2.5 bg-[#1DB954] hover:bg-[#1ED760] text-black rounded-full font-medium text-sm transition-colors"
+              >
+                Contato
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       {/* Modal de informações - só será exibido se o usuário clicar em algum botão que ative showModal */}
       {showModal && <InfoModal isOpen={showModal} onClose={() => setShowModal(false)} />}
       
@@ -1042,6 +1143,28 @@ export default function AudiosPage() {
           word-wrap: break-word;
           -ms-word-break: break-all;
           word-break: break-word;
+        }
+        
+        /* Esconder elementos específicos apenas nesta página */
+        body > header,
+        header.sticky,
+        nav[data-component="navbar"],
+        footer[data-component="footer"],
+        div.absolute.inset-0.bg-gradient-to-r.from-\[#6EC1E4\]\/5.to-\[#B9A9FF\]\/5,
+        footer.relative.bg-gradient-to-b.from-white.to-\[#F8FBFD\],
+        header.sticky.top-0.z-50.w-full,
+        header.sticky.top-0.z-50.w-full.transition-all.duration-300.bg-transparent {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          position: absolute !important;
+          top: -9999px !important;
+          left: -9999px !important;
+        }
+        
+        /* Garantir que o body tenha o fundo correto e sem gradientes indesejados */
+        body {
+          background: linear-gradient(to bottom, #121212, #181818) !important;
         }
       `}</style>
     </div>

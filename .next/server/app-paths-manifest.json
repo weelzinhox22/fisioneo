@@ -1,5 +1,5 @@
 {
-  "/audios/page": "app/audios/page.js",
-  "/pediatria/page": "app/pediatria/page.js",
-  "/(protected)/documentos/page": "app/(protected)/documentos/page.js"
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/page": "app/page.js",
+  "/audios/page": "app/audios/page.js"
 }
