@@ -1,5 +1,7 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/audios/page": "app/audios/page.js",
   "/page": "app/page.js",
-  "/audios/page": "app/audios/page.js"
+  "/pediatria/page": "app/pediatria/page.js",
+  "/(protected)/prova-pediatrica/page": "app/(protected)/prova-pediatrica/page.js"
 }

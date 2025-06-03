@@ -920,17 +920,17 @@ export default function AudiosPage() {
                 <span className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#1DB954] to-[#1ED760]">FisioNeo</span>
               </a>
               <nav className="hidden md:ml-10 md:flex space-x-8">
-                <a href="/temas" className="text-gray-300 hover:text-white transition-colors">
-                  Temas
+                <a href="/prova-pediatrica" className="text-gray-300 hover:text-white transition-colors">
+                  Prova pediatria
                 </a>
-                <a href="/provas" className="text-gray-300 hover:text-white transition-colors">
-                  Provas
+                <a href="/prova-geral" className="text-gray-300 hover:text-white transition-colors">
+                  Prova Neonatal
                 </a>
-                <a href="/audios" className="text-white border-b-2 border-[#1DB954] pb-1 font-medium">
-                  Áudios
+                <a href="/temas" className="text-white border-b-2 border-[#1DB954] pb-1 font-medium">
+                  Neonatal
                 </a>
-                <a href="/revisao" className="text-gray-300 hover:text-white transition-colors">
-                  Revisão
+                <a href="/pediatria" className="text-gray-300 hover:text-white transition-colors">
+                  Pediatria
                 </a>
               </nav>
             </div>
@@ -1070,10 +1070,10 @@ export default function AudiosPage() {
               <div>
                 <h4 className="text-white font-medium mb-3">Links rápidos</h4>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2">
-                  <a href="/temas" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Temas</a>
-                  <a href="/provas" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Provas</a>
-                  <a href="/audios" className="text-[#1DB954] font-medium text-sm">Áudios</a>
-                  <a href="/revisao" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Revisão</a>
+                  <a href="/prova-pediatrica" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Prova pediatrica</a>
+                  <a href="/prova-geral" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Prova neonato</a>
+                  <a href="/audios" className="text-[#1DB954] font-medium text-sm">Audio</a>
+                  <a href="/pediatria" className="text-gray-400 hover:text-[#1DB954] transition-colors text-sm">Pediatria</a>
                 </div>
               </div>
               
