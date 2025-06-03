@@ -866,7 +866,7 @@ export default function AudiosPage() {
       icon: <Headphones className="h-24 w-24 text-white" />
     },
     {
-      src: "/audio/Sequela Neurologica em Prematuros.mp3",
+      src: "/audio/Sequela Neurológica em Prematuros.mp3",
       title: "Sequela Neurológica em Prematuros",
       description: "Análise das principais sequelas neurológicas em bebês prematuros, fatores de risco e abordagens terapêuticas.",
       icon: <Headphones className="h-24 w-24 text-white" />
